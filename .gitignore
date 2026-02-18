@@ -1,6 +1,22 @@
+# Secrets and credentials
 .env
 credentials.json
 token.json
+
+# Python
 __pycache__/
 *.pyc
 .venv/
+
+# Build and distribution
+dist/
+build/
+*.egg-info/
+
+# Test and coverage
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Linter cache
+.ruff_cache/
