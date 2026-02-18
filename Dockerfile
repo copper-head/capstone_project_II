@@ -9,4 +9,8 @@ COPY src/ src/
 # Install the package (no dev deps needed in production)
 RUN pip install --no-cache-dir .
 
-CMD ["python", "-m", "cal_ai"]
+# Copy sample transcripts so the default CMD works out of the box
+COPY samples/ samples/
+
+ENTRYPOINT ["python", "-m", "cal_ai"]
+CMD ["samples/simple_lunch.txt"]
