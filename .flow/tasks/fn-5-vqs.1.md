@@ -7,9 +7,8 @@ TBD
 - [ ] TBD
 
 ## Done summary
-TBD
-
+Created 6 sample transcript files in samples/ covering all specified scenarios: single event (simple_lunch), multiple events (multiple_events), cancellation, ambiguous time references, no-events casual conversation, and complex multi-speaker content with 4 speakers.
 ## Evidence
-- Commits:
-- Tests:
+- Commits: 19df1b071c6a8a9fe692b619bf3e92cbc9354b6e
+- Tests: Verified all 6 files parse with [Speaker]: text regex format, Validated speaker counts and utterance counts match spec requirements
 - PRs:
