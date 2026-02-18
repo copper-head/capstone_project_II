@@ -6,10 +6,13 @@ Parses text in the format ``[Speaker]: dialogue text`` into structured
 
 from __future__ import annotations
 
+import logging
 import re
 from pathlib import Path
 
 from cal_ai.models.transcript import ParseWarning, TranscriptParseResult, Utterance
+
+logger = logging.getLogger(__name__)
 
 # Matches lines like: [Speaker Name]: dialogue text
 # Non-greedy capture for speaker to stop at first ']'.
@@ -38,6 +41,7 @@ def parse_transcript(
     """
     # Fast path: empty or whitespace-only input.
     if not text or not text.strip():
+        logger.info("Empty transcript received")
         return TranscriptParseResult(source=source)
 
     lines = text.split("\n")
@@ -77,12 +81,17 @@ def parse_transcript(
 
             # Empty speaker name (e.g. "[]: Hello") is treated as malformed.
             if not cur_speaker:
-                warnings.append(
-                    ParseWarning(
-                        line_number=line_number,
-                        message="Empty speaker name",
-                        raw_line=raw_line,
-                    )
+                warning = ParseWarning(
+                    line_number=line_number,
+                    message="Empty speaker name",
+                    raw_line=raw_line,
+                )
+                warnings.append(warning)
+                logger.warning(
+                    "Parse warning at line %d: %s | raw: %s",
+                    warning.line_number,
+                    warning.message,
+                    warning.raw_line,
                 )
                 cur_speaker = None
                 cur_text_parts = []
@@ -96,12 +105,17 @@ def parse_transcript(
             cur_text_parts.append(raw_line.strip())
         else:
             # Orphan line before any speaker has appeared.
-            warnings.append(
-                ParseWarning(
-                    line_number=line_number,
-                    message="Line does not match expected format and no prior speaker context",
-                    raw_line=raw_line,
-                )
+            warning = ParseWarning(
+                line_number=line_number,
+                message="Line does not match expected format and no prior speaker context",
+                raw_line=raw_line,
+            )
+            warnings.append(warning)
+            logger.warning(
+                "Parse warning at line %d: %s | raw: %s",
+                warning.line_number,
+                warning.message,
+                warning.raw_line,
             )
 
     # Flush the last utterance.
@@ -109,6 +123,13 @@ def parse_transcript(
 
     # Build ordered-unique speakers list preserving first-appearance order.
     speakers = list(dict.fromkeys(u.speaker for u in utterances))
+
+    logger.info(
+        "Parsed transcript: %d utterance(s), %d speaker(s): %s",
+        len(utterances),
+        len(speakers),
+        speakers,
+    )
 
     return TranscriptParseResult(
         utterances=utterances,
@@ -136,6 +157,7 @@ def parse_transcript_file(file_path: str | Path) -> TranscriptParseResult:
         FileNotFoundError: If *file_path* does not exist.
     """
     path = Path(file_path)
+    logger.debug("Reading transcript from %s", path)
     if not path.exists():
         raise FileNotFoundError(f"Transcript file not found: {path}")
 
