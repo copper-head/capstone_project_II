@@ -7,9 +7,8 @@ TBD
 - [ ] TBD
 
 ## Done summary
-TBD
-
+Updated .gitignore with build/cache entries (.ruff_cache/, .pytest_cache/, *.egg-info/, dist/, build/, .coverage, htmlcov/) and organized existing entries with section comments.
 ## Evidence
-- Commits:
+- Commits: 3d66bff6c96aa238a59f5c625eff7619edc06116
 - Tests:
 - PRs:
