@@ -6,12 +6,15 @@ to Google Calendar.
 
 from __future__ import annotations
 
+from cal_ai.exceptions import ExtractionError, MalformedResponseError
 from cal_ai.models.transcript import ParseWarning, TranscriptParseResult, Utterance
 from cal_ai.parser import parse_transcript, parse_transcript_file
 
 __version__ = "0.1.0"
 
 __all__ = [
+    "ExtractionError",
+    "MalformedResponseError",
     "ParseWarning",
     "TranscriptParseResult",
     "Utterance",
