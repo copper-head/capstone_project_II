@@ -5,7 +5,7 @@ Summary: Conversation-to-Calendar AI: extracts calendar events from conversation
 License-Expression: MIT
 Requires-Python: >=3.12
 Requires-Dist: python-dotenv>=1.0
-Requires-Dist: google-genai>=1.0
+Requires-Dist: google-genai>=1.0.0
 Requires-Dist: google-api-python-client>=2.0
 Requires-Dist: google-auth-oauthlib>=1.0
 Requires-Dist: google-auth-httplib2>=0.2
