@@ -7,9 +7,8 @@ TBD
 - [ ] TBD
 
 ## Done summary
-TBD
-
+Created Dockerfile using python:3.12-slim base image with optimized layer caching. Copies only pyproject.toml and src/ (excludes .env, credentials.json, token.json), installs with pip --no-cache-dir, and runs python -m cal_ai.
 ## Evidence
-- Commits:
-- Tests:
+- Commits: e63844559c51d825678c5672a1a207e95aca3f60
+- Tests: docker build validation deferred to fn-1-fgh.10
 - PRs:
