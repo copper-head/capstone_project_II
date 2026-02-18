@@ -28,15 +28,28 @@ def test_package_version_is_semver() -> None:
 
 
 def test_main_module_exists() -> None:
-    """``python -m cal_ai`` must run and exit cleanly."""
+    """``python -m cal_ai --help`` must run and exit cleanly."""
     result = subprocess.run(
-        [sys.executable, "-m", "cal_ai"],
+        [sys.executable, "-m", "cal_ai", "--help"],
         capture_output=True,
         text=True,
         timeout=10,
     )
     assert result.returncode == 0
     assert "Traceback" not in result.stderr
+    assert "transcript_file" in result.stdout
+
+
+def test_main_module_no_args_exits_with_usage() -> None:
+    """``python -m cal_ai`` with no args must show usage and exit 2."""
+    result = subprocess.run(
+        [sys.executable, "-m", "cal_ai"],
+        capture_output=True,
+        text=True,
+        timeout=10,
+    )
+    assert result.returncode == 2
+    assert "usage:" in result.stderr
 
 
 def test_config_module_importable() -> None:
