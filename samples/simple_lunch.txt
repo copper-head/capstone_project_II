@@ -1,0 +1,9 @@
+[Alice]: Hey Bob, are you free for lunch on Thursday?
+
+[Bob]: Thursday works for me! What time were you thinking?
+
+[Alice]: How about noon? There's a new place on 5th I've been wanting to try.
+
+[Bob]: Sounds great. Let's meet there at 12. See you Thursday!
+
+[Alice]: Perfect, see you then!

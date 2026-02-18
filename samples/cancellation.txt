@@ -1,0 +1,13 @@
+[Alice]: Hey Bob, I need to talk to you about our meeting on Friday.
+
+[Bob]: Sure, what's up?
+
+[Alice]: I'm really sorry but I need to cancel. Something came up with the client and I'll be traveling all day Friday.
+
+[Bob]: No worries at all. Should we reschedule for next week?
+
+[Alice]: Let's just cancel for now. I'll reach out when my schedule clears up.
+
+[Bob]: Sounds good. Hope the client stuff goes well.
+
+[Alice]: Thanks, I appreciate it. Talk soon!

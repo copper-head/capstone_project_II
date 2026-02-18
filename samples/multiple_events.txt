@@ -1,0 +1,19 @@
+[Alice]: Good morning team. Let's go over this week's schedule.
+
+[Bob]: Sure. We have the daily standup tomorrow at 9 AM as usual, right?
+
+[Alice]: Yes, standup is at 9 AM in the main conference room. Also, I'd like to schedule a code review session for the new API module.
+
+[Carol]: I can do the code review Wednesday afternoon. How about 2 PM?
+
+[Alice]: Wednesday at 2 PM works. Let's book the small meeting room for that.
+
+[Bob]: Sounds good. Oh, and Carol, did you still want to grab lunch on Friday?
+
+[Carol]: Yes! Let's do Friday lunch at 12:30. How about that Thai place on Main Street?
+
+[Bob]: Love it. I'll be there.
+
+[Alice]: Great, so to recap: standup tomorrow at 9, code review Wednesday at 2, and you two have lunch Friday at 12:30.
+
+[Carol]: Perfect, all noted.

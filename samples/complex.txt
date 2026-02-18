@@ -1,0 +1,35 @@
+[Alice]: Alright everyone, thanks for jumping on this call. We have a few things to cover today.
+
+[Bob]: Happy to be here. What's first on the agenda?
+
+[Alice]: First, the sprint retrospective. Dave, can you set that up for Monday at 10 AM?
+
+[Dave]: Sure, I'll book the large conference room for Monday at 10.
+
+[Carol]: Can we keep it to an hour? I have a client call at 11.
+
+[Dave]: Absolutely, 10 to 11 AM it is.
+
+[Alice]: Great. Next item: Bob, how's the design review going?
+
+[Bob]: Good actually. Carol and I need to sit down and go over the mockups. Carol, how about Tuesday at 3 PM?
+
+[Carol]: Tuesday at 3 works. Let's do it in the design lab.
+
+[Alice]: Perfect. Now, I also want to flag that the quarterly all-hands is on Wednesday at 1 PM. That's company-wide so everyone should have it already, but just a reminder.
+
+[Dave]: Got it. I actually need to skip that one, I have a dentist appointment.
+
+[Alice]: No problem Dave. Oh, and one more thing - Bob, can you and I sync on the budget proposal? I was thinking Thursday morning.
+
+[Bob]: Thursday morning is open for me. How about 9:30?
+
+[Alice]: 9:30 on Thursday, my office. Done.
+
+[Carol]: Anything else? I need to hop off soon.
+
+[Alice]: That's everything. Good talk everyone. Have a great weekend.
+
+[Bob]: Thanks Alice. See everyone!
+
+[Dave]: Bye all.

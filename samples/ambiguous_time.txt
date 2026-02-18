@@ -1,0 +1,15 @@
+[Alice]: We should really get together and plan the product roadmap.
+
+[Bob]: Agreed. When were you thinking?
+
+[Alice]: Sometime next week maybe? I'm pretty flexible.
+
+[Bob]: Next week is a bit hectic for me. Maybe later in the week?
+
+[Alice]: Thursday or Friday could work. Let's say sometime in the afternoon.
+
+[Bob]: Sounds vague but let's aim for that. We'll probably need a couple of hours at least.
+
+[Alice]: Yeah, true. I'll try to pin down a more specific time and send you an invite.
+
+[Bob]: Works for me. Just let me know.

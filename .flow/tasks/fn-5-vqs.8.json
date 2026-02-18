@@ -1,0 +1,14 @@
+{
+  "assignee": null,
+  "claim_note": "",
+  "claimed_at": null,
+  "created_at": "2026-02-18T21:01:09.367131Z",
+  "depends_on": [],
+  "epic": "fn-5-vqs",
+  "id": "fn-5-vqs.8",
+  "priority": null,
+  "spec_path": ".flow/tasks/fn-5-vqs.8.md",
+  "status": "todo",
+  "title": "Write unit tests for demo output (10 tests)",
+  "updated_at": "2026-02-18T21:01:09.367144Z"
+}

@@ -1,0 +1,14 @@
+{
+  "assignee": null,
+  "claim_note": "",
+  "claimed_at": null,
+  "created_at": "2026-02-18T21:01:08.954051Z",
+  "depends_on": [],
+  "epic": "fn-5-vqs",
+  "id": "fn-5-vqs.4",
+  "priority": null,
+  "spec_path": ".flow/tasks/fn-5-vqs.4.md",
+  "status": "todo",
+  "title": "Update CLI entrypoint (__main__.py with argparse)",
+  "updated_at": "2026-02-18T21:01:08.954064Z"
+}
