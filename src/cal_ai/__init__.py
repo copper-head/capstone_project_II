@@ -7,6 +7,7 @@ to Google Calendar.
 from __future__ import annotations
 
 from cal_ai.exceptions import ExtractionError, MalformedResponseError
+from cal_ai.llm import GeminiClient
 from cal_ai.models.extraction import (
     ExtractedEvent,
     ExtractionResult,
@@ -24,6 +25,7 @@ __all__ = [
     "ExtractedEvent",
     "ExtractionResult",
     "ExtractionError",
+    "GeminiClient",
     "LLMResponseEvent",
     "LLMResponseSchema",
     "MalformedResponseError",
