@@ -16,6 +16,7 @@ from cal_ai.models.extraction import (
 )
 from cal_ai.models.transcript import ParseWarning, TranscriptParseResult, Utterance
 from cal_ai.parser import parse_transcript, parse_transcript_file
+from cal_ai.prompts import build_system_prompt, build_user_prompt, format_transcript_for_llm
 
 __version__ = "0.1.0"
 
@@ -30,6 +31,9 @@ __all__ = [
     "TranscriptParseResult",
     "Utterance",
     "ValidatedEvent",
+    "build_system_prompt",
+    "build_user_prompt",
+    "format_transcript_for_llm",
     "parse_transcript",
     "parse_transcript_file",
 ]
