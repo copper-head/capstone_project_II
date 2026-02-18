@@ -1,0 +1,14 @@
+{
+  "assignee": null,
+  "claim_note": "",
+  "claimed_at": null,
+  "created_at": "2026-02-18T20:30:26.353529Z",
+  "depends_on": [],
+  "epic": "fn-4-gyw",
+  "id": "fn-4-gyw.1",
+  "priority": null,
+  "spec_path": ".flow/tasks/fn-4-gyw.1.md",
+  "status": "todo",
+  "title": "Define shared event models (ExtractedEvent, SyncResult) if not already in models",
+  "updated_at": "2026-02-18T20:30:26.353550Z"
+}

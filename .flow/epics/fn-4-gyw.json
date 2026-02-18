@@ -1,0 +1,13 @@
+{
+  "branch_name": "fn-4-gyw",
+  "created_at": "2026-02-18T20:30:15.269487Z",
+  "depends_on_epics": [],
+  "id": "fn-4-gyw",
+  "next_task": 1,
+  "plan_review_status": "unknown",
+  "plan_reviewed_at": null,
+  "spec_path": ".flow/specs/fn-4-gyw.md",
+  "status": "open",
+  "title": "Google Calendar Integration",
+  "updated_at": "2026-02-18T20:30:26.230822Z"
+}

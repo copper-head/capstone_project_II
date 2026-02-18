@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from cal_ai.models.calendar import SyncResult
 from cal_ai.models.extraction import (
     ExtractedEvent,
     ExtractionResult,
@@ -17,6 +18,7 @@ __all__ = [
     "LLMResponseEvent",
     "LLMResponseSchema",
     "ParseWarning",
+    "SyncResult",
     "TranscriptParseResult",
     "Utterance",
     "ValidatedEvent",
