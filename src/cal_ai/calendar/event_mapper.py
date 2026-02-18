@@ -45,6 +45,12 @@ def map_to_google_event(
         A ``dict`` conforming to the Google Calendar Event resource schema,
         ready to be passed to ``events().insert()`` or ``events().update()``.
     """
+    if event.end_time <= event.start_time:
+        raise ValueError(
+            f"end_time ({event.end_time.isoformat()}) must be after "
+            f"start_time ({event.start_time.isoformat()})"
+        )
+
     body: dict = {
         "summary": event.title,
         "start": _format_datetime(event.start_time, timezone),
