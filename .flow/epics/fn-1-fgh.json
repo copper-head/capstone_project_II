@@ -1,0 +1,13 @@
+{
+  "branch_name": "fn-1-fgh",
+  "created_at": "2026-02-18T19:18:44.610316Z",
+  "depends_on_epics": [],
+  "id": "fn-1-fgh",
+  "next_task": 1,
+  "plan_review_status": "unknown",
+  "plan_reviewed_at": null,
+  "spec_path": ".flow/specs/fn-1-fgh.md",
+  "status": "open",
+  "title": "Project Scaffolding",
+  "updated_at": "2026-02-18T19:18:50.091607Z"
+}

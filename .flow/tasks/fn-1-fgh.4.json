@@ -1,0 +1,14 @@
+{
+  "assignee": null,
+  "claim_note": "",
+  "claimed_at": null,
+  "created_at": "2026-02-18T19:19:02.609642Z",
+  "depends_on": [],
+  "epic": "fn-1-fgh",
+  "id": "fn-1-fgh.4",
+  "priority": null,
+  "spec_path": ".flow/tasks/fn-1-fgh.4.md",
+  "status": "todo",
+  "title": "Implement log.py (setup_logging, get_logger)",
+  "updated_at": "2026-02-18T19:19:02.609657Z"
+}

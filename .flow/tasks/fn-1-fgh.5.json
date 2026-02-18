@@ -1,0 +1,14 @@
+{
+  "assignee": null,
+  "claim_note": "",
+  "claimed_at": null,
+  "created_at": "2026-02-18T19:19:02.740810Z",
+  "depends_on": [],
+  "epic": "fn-1-fgh",
+  "id": "fn-1-fgh.5",
+  "priority": null,
+  "spec_path": ".flow/tasks/fn-1-fgh.5.md",
+  "status": "todo",
+  "title": "Create Dockerfile (python:3.12-slim)",
+  "updated_at": "2026-02-18T19:19:02.740824Z"
+}
