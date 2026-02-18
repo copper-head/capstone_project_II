@@ -214,7 +214,10 @@ def run_pipeline(
                 )
             )
     else:
-        logger.info("Stage 3: Syncing %d event(s) to Google Calendar", len(result.events_extracted))
+        logger.info(
+            "Stage 3: Syncing %d event(s) to Google Calendar",
+            len(result.events_extracted),
+        )
 
         client = _build_calendar_client(settings)
 

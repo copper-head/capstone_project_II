@@ -8,23 +8,16 @@ owner forwarding, and current-datetime forwarding.
 
 from __future__ import annotations
 
-import time
 from datetime import datetime
 from pathlib import Path
 from unittest.mock import MagicMock, patch
-
-import pytest
 
 from cal_ai.exceptions import ExtractionError
 from cal_ai.models.extraction import ExtractedEvent, ExtractionResult, ValidatedEvent
 from cal_ai.models.transcript import TranscriptParseResult, Utterance
 from cal_ai.pipeline import (
-    EventSyncResult,
-    FailedEvent,
-    PipelineResult,
     run_pipeline,
 )
-
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -219,7 +212,7 @@ class TestPipeline:
         with _patch_pipeline_deps(
             extraction_result=extraction,
             validated_events=validated,
-        ) as ctx:
+        ):
             result = run_pipeline(
                 transcript_path=transcript,
                 owner="TestOwner",
@@ -283,7 +276,7 @@ class TestPipeline:
 
         with _patch_pipeline_deps(
             extract_side_effect=ExtractionError("API down"),
-        ) as ctx:
+        ):
             result = run_pipeline(
                 transcript_path=transcript,
                 owner="TestOwner",

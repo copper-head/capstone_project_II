@@ -9,8 +9,6 @@ from __future__ import annotations
 
 from pathlib import Path
 
-import pytest
-
 from cal_ai.parser import parse_transcript_file
 
 SAMPLES_DIR = Path("samples")

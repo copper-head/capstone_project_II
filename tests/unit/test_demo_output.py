@@ -9,12 +9,9 @@ from __future__ import annotations
 
 from pathlib import Path
 
-import pytest
-
 from cal_ai.demo_output import format_pipeline_result
 from cal_ai.models.extraction import ExtractedEvent
 from cal_ai.pipeline import EventSyncResult, FailedEvent, PipelineResult
-
 
 # ---------------------------------------------------------------------------
 # Helpers

@@ -45,10 +45,8 @@ Conflict Detection (4):
 
 from __future__ import annotations
 
-from datetime import datetime, timedelta
+from datetime import datetime
 from unittest.mock import MagicMock, patch
-
-import pytest
 
 from cal_ai.calendar.client import GoogleCalendarClient
 from cal_ai.calendar.sync import sync_events
@@ -273,8 +271,12 @@ class TestListEventsReturnsResults:
     def test_list_events_returns_results(self) -> None:
         """list_events returns the correct list of event dicts."""
         items = [
-            _make_google_event("Event A", datetime(2026, 3, 10, 9, 0), datetime(2026, 3, 10, 10, 0)),
-            _make_google_event("Event B", datetime(2026, 3, 10, 11, 0), datetime(2026, 3, 10, 12, 0)),
+            _make_google_event(
+                "Event A", datetime(2026, 3, 10, 9, 0), datetime(2026, 3, 10, 10, 0),
+            ),
+            _make_google_event(
+                "Event B", datetime(2026, 3, 10, 11, 0), datetime(2026, 3, 10, 12, 0),
+            ),
         ]
         service = _build_mock_service(list_items=items)
         client = _make_client(service)
@@ -312,13 +314,17 @@ class TestListEventsPagination:
         """All pages are combined into a single list."""
         page1 = {
             "items": [
-                _make_google_event("P1", datetime(2026, 3, 10, 9, 0), datetime(2026, 3, 10, 10, 0)),
+                _make_google_event(
+                    "P1", datetime(2026, 3, 10, 9, 0), datetime(2026, 3, 10, 10, 0),
+                ),
             ],
             "nextPageToken": "token-page2",
         }
         page2 = {
             "items": [
-                _make_google_event("P2", datetime(2026, 3, 10, 11, 0), datetime(2026, 3, 10, 12, 0)),
+                _make_google_event(
+                    "P2", datetime(2026, 3, 10, 11, 0), datetime(2026, 3, 10, 12, 0),
+                ),
             ],
         }
         service = _build_mock_service(list_pages=[page1, page2])
@@ -742,8 +748,6 @@ class TestSyncEventsContinuesOnPartialFailure:
 
         # First event will fail (set insert to raise), second should succeed.
         call_count = 0
-        original_execute = service.events.return_value.insert.return_value.execute
-
         def side_effect_insert(*args, **kwargs):
             nonlocal call_count
             call_count += 1

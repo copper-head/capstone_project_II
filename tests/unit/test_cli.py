@@ -8,15 +8,13 @@ from __future__ import annotations
 
 import os
 import stat
-import sys
 from pathlib import Path
-from unittest.mock import MagicMock, patch
+from unittest.mock import patch
 
 import pytest
 
 from cal_ai.__main__ import main
 from cal_ai.pipeline import PipelineResult
-
 
 # ---------------------------------------------------------------------------
 # Helpers

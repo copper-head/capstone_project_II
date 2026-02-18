@@ -4,25 +4,14 @@ Covers the exception hierarchy in :mod:`cal_ai.calendar.exceptions` and the
 ``@with_retry`` decorator's handling of transient HTTP errors, auth failures,
 network timeouts, and non-retryable 404 responses.
 
-Test matrix (9 tests):
-
-| Test | Scenario | Expected |
-|---|---|---|
-| test_api_rate_limit_429_retries | HTTP 429 once, then OK | Retries, succeeds on 2nd call |
-| test_api_rate_limit_429_max_retries_exceeded | HTTP 429 four times | Raises CalendarRateLimitError |
-| test_api_auth_expired_401_triggers_refresh | HTTP 401 once | Refreshes token, retries, succeeds |
-| test_api_auth_expired_401_refresh_fails | HTTP 401, refresh fails | Raises CalendarAuthError |
-| test_network_timeout_retries | Timeout once, then OK | Retries, succeeds |
-| test_network_timeout_max_retries_exceeded | Timeout four times | Raises CalendarAPIError |
-| test_event_not_found_404_on_delete | HTTP 404 on delete | Raises CalendarNotFoundError |
-| test_event_not_found_404_on_update | HTTP 404 on update | Raises CalendarNotFoundError |
-| test_invalid_event_data_raises_validation_error | start > end | Raises ValueError, no API call |
+Test matrix (9 tests): 429 retry, 429 max retries, 401 refresh,
+401 refresh fail, timeout retry, timeout max, 404 delete, 404 update,
+invalid event validation.
 """
 
 from __future__ import annotations
 
 from datetime import datetime
-from unittest.mock import MagicMock, patch
 
 import pytest
 from googleapiclient.errors import HttpError
@@ -35,7 +24,6 @@ from cal_ai.calendar.exceptions import (
     CalendarRateLimitError,
     with_retry,
 )
-
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -262,13 +250,12 @@ class TestInvalidEventDataRaisesValidationError:
 
     def test_invalid_event_data_raises_validation_error(self) -> None:
         """Creating a ValidatedEvent with start > end raises ValueError."""
-        from cal_ai.models.extraction import ValidatedEvent
-
         # Attempt to create an event where start is after end.
         # ValidatedEvent itself does not enforce this, so the validation
         # lives in the event_mapper or client layer.  We test that the
         # map_to_google_event function catches it.
         from cal_ai.calendar.event_mapper import map_to_google_event
+        from cal_ai.models.extraction import ValidatedEvent
 
         event = ValidatedEvent(
             title="Bad Event",
@@ -280,5 +267,8 @@ class TestInvalidEventDataRaisesValidationError:
             action="create",
         )
 
-        with pytest.raises(ValueError, match="start_time.*end_time|end.*before.*start|end_time.*start_time"):
+        with pytest.raises(
+            ValueError,
+            match="start_time.*end_time|end.*before.*start|end_time.*start_time",
+        ):
             map_to_google_event(event, "America/Vancouver", "owner@example.com")

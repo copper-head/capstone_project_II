@@ -12,8 +12,6 @@ from datetime import datetime
 from pathlib import Path
 from unittest.mock import MagicMock, patch
 
-import pytest
-
 from cal_ai.demo_output import format_pipeline_result
 from cal_ai.exceptions import ExtractionError
 from cal_ai.models.extraction import ExtractedEvent, ExtractionResult, ValidatedEvent

@@ -4,28 +4,16 @@ Covers the ``map_to_google_event`` function which converts
 :class:`~cal_ai.models.extraction.ValidatedEvent` instances into Google
 Calendar API event body dicts.
 
-Test matrix (7 tests):
-
-| Test | Scenario | Expected |
-|---|---|---|
-| test_map_full_event | All fields populated | Correct Google Calendar dict |
-| test_map_minimal_event_no_location_no_attendees | Required fields only | No location/attendees in output |
-| test_map_event_default_end_time | end_time defaulted to start+1hr | end = start + 1 hour |
-| test_map_event_with_attendees | Attendees list with owner | Owner mapped to email, others in description |
-| test_map_event_description_includes_reasoning | Reasoning + assumptions | Both in description field |
-| test_map_event_timezone_applied | Configured timezone | start/end timeZone matches config |
-| test_map_event_iso_format | Datetime serialization | ISO 8601 format |
+Test matrix (7 tests): full event, minimal, default end time,
+attendees, description reasoning, timezone, ISO format.
 """
 
 from __future__ import annotations
 
 from datetime import datetime, timedelta
 
-import pytest
-
 from cal_ai.calendar.event_mapper import map_to_google_event
 from cal_ai.models.extraction import ValidatedEvent
-
 
 # ---------------------------------------------------------------------------
 # Helpers

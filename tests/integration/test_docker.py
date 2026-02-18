@@ -8,8 +8,6 @@ from __future__ import annotations
 
 from pathlib import Path
 
-import pytest
-
 DOCKERFILE = Path("Dockerfile")
 DOCKER_COMPOSE = Path("docker-compose.yml")
 
