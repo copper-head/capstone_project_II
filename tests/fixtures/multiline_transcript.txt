@@ -1,0 +1,10 @@
+[Alice]: I was thinking we could meet up this weekend
+to discuss the project proposal.
+Maybe Saturday afternoon?
+
+[Bob]: Saturday works for me. I'll bring
+the latest draft and we can go over
+the budget section together.
+
+[Alice]: Great, let's meet at the coffee shop on Main Street
+around 2 PM.

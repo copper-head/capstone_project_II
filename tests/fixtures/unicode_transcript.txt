@@ -1,0 +1,3 @@
+[René]: Bonjour, comment allez-vous?
+[田中太郎]: 元気です。カフェで会いましょう。
+[René]: Parfait! À demain au café.

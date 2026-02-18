@@ -1,0 +1,7 @@
+This line has no speaker label at all.
+[Alice: Missing closing bracket
+Alice]: Missing opening bracket
+[Bob] No colon after brackets
+[Alice]: This line is correctly formatted.
+Another orphan line here.
+[Bob]: And this one is also correct.
