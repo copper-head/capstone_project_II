@@ -1,0 +1,13 @@
+[Carol]: Hey Dave, I need to talk to you about the code review we have scheduled for tomorrow afternoon.
+
+[Dave]: The one at 2 PM? Sure, what's going on?
+
+[Carol]: I need to cancel it. The feature branch isn't ready yet and there's no point reviewing incomplete code.
+
+[Dave]: That makes sense. No worries at all.
+
+[Carol]: I'll reschedule once the branch is in better shape. Probably sometime next week.
+
+[Dave]: Sounds good. Just let me know when you're ready and we'll set something up.
+
+[Carol]: Will do. Thanks for understanding!

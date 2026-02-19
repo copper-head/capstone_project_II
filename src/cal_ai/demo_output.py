@@ -140,15 +140,21 @@ def _append_sync_result(
     sync: EventSyncResult,
     dry_run: bool,
 ) -> None:
-    """Append a single sync result line."""
+    """Append sync result lines, including matched event info for updates/deletes."""
+    matched_info = _format_matched_info(sync)
+
     if dry_run:
         action_label = _dry_run_label(sync.action_taken)
         lines.append(f'  [DRY RUN] {action_label} "{sync.event.title}"')
+        if matched_info:
+            lines.append(f"    {matched_info}")
     else:
         tag = _action_tag(sync.action_taken)
         suffix = f" (ID: {sync.calendar_event_id})" if sync.calendar_event_id else ""
         status_word = _action_status_word(sync.action_taken)
         lines.append(f'  [{tag}] "{sync.event.title}" -> {status_word}{suffix}')
+        if matched_info:
+            lines.append(f"    {matched_info}")
 
 
 def _append_failed_event(lines: list[str], failed: FailedEvent) -> None:
@@ -271,3 +277,53 @@ def _dry_run_label(action_taken: str) -> str:
         "would_delete": "Would delete",
     }
     return mapping.get(action_taken, action_taken.replace("_", " ").title())
+
+
+def _format_matched_info(sync: EventSyncResult) -> str | None:
+    """Build a matched-event info string for UPDATE and DELETE actions.
+
+    For UPDATE actions, returns ``"Matched existing: <title> at <time>"``.
+    For DELETE actions, returns ``"Removing: <title> at <time>"``.
+    Returns ``None`` when no matched event info is available or the action
+    is CREATE.
+
+    Args:
+        sync: The sync result to inspect.
+
+    Returns:
+        A descriptive string, or ``None`` if not applicable.
+    """
+    if sync.matched_event_title is None:
+        return None
+
+    time_str = _format_matched_time(sync.matched_event_time)
+    title = sync.matched_event_title
+
+    action = sync.action_taken
+    if action in ("updated", "would_update"):
+        return f"Matched existing: {title} at {time_str}"
+    elif action in ("deleted", "would_delete"):
+        return f"Removing: {title} at {time_str}"
+
+    return None
+
+
+def _format_matched_time(time_str: str | None) -> str:
+    """Format a matched event's start time for display.
+
+    Attempts to parse an ISO 8601 string into a human-readable form.
+    Falls back to the raw string if parsing fails.
+
+    Args:
+        time_str: ISO 8601 datetime string, or ``None``.
+
+    Returns:
+        A formatted time string, or ``"unknown time"`` if ``None``.
+    """
+    if not time_str:
+        return "unknown time"
+    try:
+        dt = datetime.fromisoformat(time_str)
+        return dt.strftime("%A %Y-%m-%d, %I:%M %p")
+    except (ValueError, TypeError):
+        return time_str

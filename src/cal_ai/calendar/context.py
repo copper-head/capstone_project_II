@@ -36,11 +36,16 @@ class CalendarContext:
             Calendar event UUIDs.  Enables reverse lookup after LLM
             response: ``id_map[3] -> "abc123googleeventid"``.
         event_count: Number of events in the context window.
+        event_meta: Mapping from integer IDs to event metadata dicts
+            containing ``title`` and ``start_time`` keys.  Used by the
+            demo output formatter to show matched event info for
+            update/delete actions.
     """
 
     events_text: str = ""
     id_map: dict[int, str] = field(default_factory=dict)
     event_count: int = 0
+    event_meta: dict[int, dict[str, str]] = field(default_factory=dict)
 
 
 def _format_event_line(idx: int, event: dict) -> str:
@@ -140,13 +145,23 @@ def fetch_calendar_context(
     # Sort chronologically.
     sorted_events = sorted(raw_events, key=_parse_sort_key)
 
-    # Build ID map and formatted lines.
+    # Build ID map, event metadata, and formatted lines.
     id_map: dict[int, str] = {}
+    event_meta: dict[int, dict[str, str]] = {}
     lines: list[str] = []
 
     for i, event in enumerate(sorted_events, start=1):
         event_id = event.get("id", "")
         id_map[i] = event_id
+
+        # Store metadata for demo output (title + start time).
+        start_obj = event.get("start", {})
+        start_str = start_obj.get("dateTime") or start_obj.get("date", "")
+        event_meta[i] = {
+            "title": event.get("summary", "(No title)"),
+            "start_time": start_str,
+        }
+
         lines.append(_format_event_line(i, event))
 
     events_text = "\n".join(lines)
@@ -155,4 +170,5 @@ def fetch_calendar_context(
         events_text=events_text,
         id_map=id_map,
         event_count=len(sorted_events),
+        event_meta=event_meta,
     )

@@ -43,6 +43,10 @@ class EventSyncResult:
         calendar_event_id: The Google Calendar event ID if available.
         success: Whether the sync succeeded.
         error: Error message if the sync failed.
+        matched_event_title: Title of the existing calendar event that
+            was matched for update/delete actions, or ``None``.
+        matched_event_time: Start time of the matched existing event
+            as an ISO 8601 string, or ``None``.
     """
 
     event: ExtractedEvent
@@ -50,6 +54,8 @@ class EventSyncResult:
     calendar_event_id: str | None = None
     success: bool = True
     error: str | None = None
+    matched_event_title: str | None = None
+    matched_event_time: str | None = None
 
 
 @dataclass(frozen=True)
@@ -84,6 +90,9 @@ class PipelineResult:
         dry_run: Whether the pipeline ran in dry-run mode.
         id_map: Mapping from integer IDs (used in LLM context) to
             Google Calendar event UUIDs for reverse lookup during sync.
+        event_meta: Mapping from integer IDs to event metadata dicts
+            (``title``, ``start_time``).  Used by the demo output
+            formatter to show matched event info.
     """
 
     transcript_path: Path
@@ -96,6 +105,7 @@ class PipelineResult:
     duration_seconds: float = 0.0
     dry_run: bool = False
     id_map: dict[int, str] = field(default_factory=dict)
+    event_meta: dict[int, dict[str, str]] = field(default_factory=dict)
 
 
 # ---------------------------------------------------------------------------
@@ -183,6 +193,7 @@ def run_pipeline(
         client = _build_calendar_client(settings)
         calendar_context = fetch_calendar_context(client, now)
         result.id_map = calendar_context.id_map
+        result.event_meta = calendar_context.event_meta
         logger.info(
             "Calendar context fetched: %d event(s) in window",
             calendar_context.event_count,
@@ -232,11 +243,16 @@ def run_pipeline(
     if dry_run:
         logger.info("Stage 3: Dry-run mode -- skipping calendar sync")
         for event in result.events_extracted:
+            matched_title, matched_time = _lookup_matched_event(
+                event.existing_event_id, result.event_meta
+            )
             result.events_synced.append(
                 EventSyncResult(
                     event=event,
                     action_taken=f"would_{event.action}",
                     success=True,
+                    matched_event_title=matched_title,
+                    matched_event_time=matched_time,
                 )
             )
     else:
@@ -266,12 +282,17 @@ def run_pipeline(
                 sync_result = _sync_single_event(
                     validated, client, result.id_map
                 )
+                matched_title, matched_time = _lookup_matched_event(
+                    event.existing_event_id, result.event_meta
+                )
                 result.events_synced.append(
                     EventSyncResult(
                         event=event,
                         action_taken=sync_result["action_taken"],
                         calendar_event_id=sync_result.get("calendar_event_id"),
                         success=True,
+                        matched_event_title=matched_title,
+                        matched_event_time=matched_time,
                     )
                 )
             except Exception as exc:
@@ -302,6 +323,31 @@ def run_pipeline(
 # ---------------------------------------------------------------------------
 # Internal helpers
 # ---------------------------------------------------------------------------
+
+
+def _lookup_matched_event(
+    existing_event_id: int | None,
+    event_meta: dict[int, dict[str, str]],
+) -> tuple[str | None, str | None]:
+    """Look up matched event title and start time from event metadata.
+
+    Args:
+        existing_event_id: The remapped integer ID from the LLM, or ``None``.
+        event_meta: Mapping from integer IDs to metadata dicts with
+            ``title`` and ``start_time`` keys.
+
+    Returns:
+        A tuple of ``(matched_title, matched_start_time)``, both ``None``
+        if the event ID is not found or not provided.
+    """
+    if existing_event_id is None or not event_meta:
+        return None, None
+
+    meta = event_meta.get(existing_event_id)
+    if meta is None:
+        return None, None
+
+    return meta.get("title"), meta.get("start_time")
 
 
 def _build_transcript_text(utterances: list) -> str:

@@ -3,7 +3,7 @@
 Covers :class:`~cal_ai.calendar.context.CalendarContext` and
 :func:`~cal_ai.calendar.context.fetch_calendar_context`:
 
-Test matrix (8 tests):
+Test matrix (9 tests):
 
 Normal Fetch (3):
 | test_fetch_with_events             | Multi events  | Text + ID map |
@@ -19,6 +19,9 @@ Fetch Error (1):
 ID Mapping (2):
 | test_id_map_integers_start_at_one  | Multi events  | Keys 1,2,3    |
 | test_id_map_reverse_lookup         | Known IDs     | Correct UUID  |
+
+Event Metadata (1):
+| test_event_meta_populated          | Multi events  | Title + time  |
 
 Edge Cases (1):
 | test_all_day_event_formatting      | All-day event | Date field OK |
@@ -286,6 +289,42 @@ class TestIdMapReverseLookup:
         # Alpha is chronologically first, Beta second.
         assert ctx.id_map[1] == "uuid-alpha-123"
         assert ctx.id_map[2] == "uuid-beta-456"
+
+
+# ===========================================================================
+# Event Metadata (1 test)
+# ===========================================================================
+
+
+class TestEventMetaPopulated:
+    """event_meta contains title and start_time for each event."""
+
+    def test_event_meta_populated(self) -> None:
+        """event_meta maps integer IDs to title and start_time dicts."""
+        events = [
+            _make_google_event(
+                "Team Standup",
+                datetime(2026, 3, 10, 9, 0),
+                datetime(2026, 3, 10, 10, 0),
+                event_id="gcal-abc",
+            ),
+            _make_google_event(
+                "Lunch with Alice",
+                datetime(2026, 3, 10, 12, 0),
+                datetime(2026, 3, 10, 13, 0),
+                event_id="gcal-def",
+            ),
+        ]
+        client = _make_mock_client(events=events)
+        now = datetime(2026, 3, 10, 0, 0)
+
+        ctx = fetch_calendar_context(client, now)
+
+        assert set(ctx.event_meta.keys()) == {1, 2}
+        assert ctx.event_meta[1]["title"] == "Team Standup"
+        assert "09:00" in ctx.event_meta[1]["start_time"]
+        assert ctx.event_meta[2]["title"] == "Lunch with Alice"
+        assert "12:00" in ctx.event_meta[2]["start_time"]
 
 
 # ===========================================================================

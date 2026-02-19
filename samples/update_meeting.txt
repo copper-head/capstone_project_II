@@ -1,0 +1,11 @@
+[Alice]: Hey Bob, about our team standup tomorrow morning.
+
+[Bob]: Yeah, the 9 AM one? What about it?
+
+[Alice]: Can we push it to 10 AM instead? I have a dentist appointment first thing in the morning.
+
+[Bob]: Sure, 10 AM works for me. Same conference room?
+
+[Alice]: Yep, same room. Just one hour later. Thanks for being flexible!
+
+[Bob]: No problem. I'll update my calendar. See you at 10.

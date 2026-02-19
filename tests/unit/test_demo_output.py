@@ -1,8 +1,10 @@
-"""Unit tests for the demo output formatter (10 tests).
+"""Unit tests for the demo output formatter (14 tests).
 
 Tests cover: transcript info display, extracted event details, AI reasoning,
 calendar operation markers, summary counts, zero-events message, dry-run
-markers, failed event errors, assumptions rendering, and pipeline duration.
+markers, failed event errors, assumptions rendering, pipeline duration,
+matched event info for updates, matched event info for deletes, dry-run
+update display, and dry-run delete display.
 """
 
 from __future__ import annotations
@@ -47,6 +49,8 @@ def _make_sync_result(
     event: ExtractedEvent | None = None,
     action_taken: str = "created",
     calendar_event_id: str | None = "abc123",
+    matched_event_title: str | None = None,
+    matched_event_time: str | None = None,
 ) -> EventSyncResult:
     """Build a stub ``EventSyncResult``."""
     return EventSyncResult(
@@ -54,6 +58,8 @@ def _make_sync_result(
         action_taken=action_taken,
         calendar_event_id=calendar_event_id,
         success=True,
+        matched_event_title=matched_event_title,
+        matched_event_time=matched_event_time,
     )
 
 
@@ -288,3 +294,92 @@ class TestDemoOutput:
 
         assert "Pipeline duration:" in output
         assert "2.3s" in output
+
+    def test_output_update_shows_matched_event(self) -> None:
+        """UPDATE action displays 'Matched existing: <title> at <time>'."""
+        event = _make_event(title="Team Standup", action="update")
+        result = _make_result(
+            events=[event],
+            synced=[
+                _make_sync_result(
+                    event=event,
+                    action_taken="updated",
+                    matched_event_title="Team Standup",
+                    matched_event_time="2026-02-19T09:00:00",
+                ),
+            ],
+        )
+
+        output = format_pipeline_result(result)
+
+        assert "[UPDATE]" in output
+        assert "Matched existing: Team Standup at" in output
+        assert "09:00 AM" in output
+
+    def test_output_delete_shows_removing_event(self) -> None:
+        """DELETE action displays 'Removing: <title> at <time>'."""
+        event = _make_event(title="Code Review", action="delete")
+        result = _make_result(
+            events=[event],
+            synced=[
+                _make_sync_result(
+                    event=event,
+                    action_taken="deleted",
+                    calendar_event_id=None,
+                    matched_event_title="Code Review",
+                    matched_event_time="2026-02-20T14:00:00",
+                ),
+            ],
+        )
+
+        output = format_pipeline_result(result)
+
+        assert "[DELETE]" in output
+        assert "Removing: Code Review at" in output
+        assert "02:00 PM" in output
+
+    def test_output_dry_run_update_shows_matched_event(self) -> None:
+        """Dry-run UPDATE shows matched event info below the action line."""
+        event = _make_event(title="Sprint Planning", action="update")
+        result = _make_result(
+            events=[event],
+            synced=[
+                EventSyncResult(
+                    event=event,
+                    action_taken="would_update",
+                    success=True,
+                    matched_event_title="Sprint Planning",
+                    matched_event_time="2026-02-21T09:00:00",
+                ),
+            ],
+            dry_run=True,
+        )
+
+        output = format_pipeline_result(result)
+
+        assert "[DRY RUN]" in output
+        assert "Would update" in output
+        assert "Matched existing: Sprint Planning at" in output
+
+    def test_output_dry_run_delete_shows_removing_event(self) -> None:
+        """Dry-run DELETE shows removing info below the action line."""
+        event = _make_event(title="Retrospective", action="delete")
+        result = _make_result(
+            events=[event],
+            synced=[
+                EventSyncResult(
+                    event=event,
+                    action_taken="would_delete",
+                    success=True,
+                    matched_event_title="Retrospective",
+                    matched_event_time="2026-02-21T15:00:00",
+                ),
+            ],
+            dry_run=True,
+        )
+
+        output = format_pipeline_result(result)
+
+        assert "[DRY RUN]" in output
+        assert "Would delete" in output
+        assert "Removing: Retrospective at" in output

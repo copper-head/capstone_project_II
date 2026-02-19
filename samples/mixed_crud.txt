@@ -1,0 +1,23 @@
+[Alice]: Alright team, a few scheduling changes for this week.
+
+[Bob]: Go ahead, I'm listening.
+
+[Alice]: First, let's set up a new design review on Wednesday at 2 PM in the design lab. Bob and Carol, you're both needed.
+
+[Carol]: Wednesday at 2 works for me.
+
+[Bob]: Same here. Design lab, got it.
+
+[Alice]: Second, we need to move the sprint planning from Thursday at 9 AM to Friday at 10 AM. The product team needs more time to finalize the backlog.
+
+[Bob]: Friday at 10 it is. That actually works better for me anyway.
+
+[Alice]: And lastly, cancel the retrospective that was on Friday at 3 PM. We'll roll it into next week's session instead.
+
+[Carol]: Fine by me. That frees up my Friday afternoon.
+
+[Alice]: Great. So to summarize: new design review Wednesday at 2, sprint planning moved to Friday at 10, and retro on Friday is cancelled.
+
+[Bob]: Got it all. Thanks for the heads up.
+
+[Carol]: Thanks Alice!

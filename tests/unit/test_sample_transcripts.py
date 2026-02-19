@@ -1,8 +1,8 @@
-"""Unit tests for sample transcript validation (6 tests).
+"""Unit tests for sample transcript validation (10 tests).
 
 Tests verify: all sample files exist, each is parseable by the transcript
-parser, expected speaker counts, utterance counts, and content
-characteristics.
+parser, expected speaker counts, utterance counts, content
+characteristics, and new CRUD sample transcripts.
 """
 
 from __future__ import annotations
@@ -20,6 +20,9 @@ EXPECTED_FILES = [
     "ambiguous_time.txt",
     "no_events.txt",
     "complex.txt",
+    "update_meeting.txt",
+    "cancel_event.txt",
+    "mixed_crud.txt",
 ]
 
 
@@ -27,7 +30,7 @@ class TestSampleTranscripts:
     """Validate that all sample transcript files are present and well-formed."""
 
     def test_all_sample_files_exist(self) -> None:
-        """All 6 sample transcript files are present in samples/."""
+        """All 9 sample transcript files are present in samples/."""
         for name in EXPECTED_FILES:
             assert (SAMPLES_DIR / name).exists(), f"Missing sample file: {name}"
 
@@ -71,3 +74,63 @@ class TestSampleTranscripts:
             assert keyword not in full_text, (
                 f"Casual conversation file should not contain scheduling keyword '{keyword}'"
             )
+
+    def test_update_meeting_has_rescheduling_language(self) -> None:
+        """update_meeting.txt contains rescheduling/update language."""
+        result = parse_transcript_file(SAMPLES_DIR / "update_meeting.txt")
+        assert len(result.utterances) > 0, "update_meeting.txt should have utterances"
+        assert len(result.speakers) >= 2, (
+            f"Expected at least 2 speakers, got {len(result.speakers)}"
+        )
+        full_text = " ".join(u.text.lower() for u in result.utterances)
+        # Should reference rescheduling an existing event.
+        assert "push" in full_text or "move" in full_text or "instead" in full_text, (
+            "update_meeting.txt should contain rescheduling language"
+        )
+
+    def test_cancel_event_has_cancellation_language(self) -> None:
+        """cancel_event.txt contains cancellation language."""
+        result = parse_transcript_file(SAMPLES_DIR / "cancel_event.txt")
+        assert len(result.utterances) > 0, "cancel_event.txt should have utterances"
+        assert len(result.speakers) >= 2, (
+            f"Expected at least 2 speakers, got {len(result.speakers)}"
+        )
+        full_text = " ".join(u.text.lower() for u in result.utterances)
+        assert "cancel" in full_text, (
+            "cancel_event.txt should contain cancellation language"
+        )
+
+    def test_mixed_crud_has_all_action_types(self) -> None:
+        """mixed_crud.txt contains create, update, and delete language."""
+        result = parse_transcript_file(SAMPLES_DIR / "mixed_crud.txt")
+        assert len(result.utterances) >= 6, (
+            f"Expected at least 6 utterances, got {len(result.utterances)}"
+        )
+        assert len(result.speakers) >= 2, (
+            f"Expected at least 2 speakers, got {len(result.speakers)}"
+        )
+        full_text = " ".join(u.text.lower() for u in result.utterances)
+        # Should contain language for all three CRUD actions.
+        assert "set up" in full_text or "new" in full_text, (
+            "mixed_crud.txt should contain create language"
+        )
+        assert "move" in full_text or "push" in full_text, (
+            "mixed_crud.txt should contain update/reschedule language"
+        )
+        assert "cancel" in full_text, (
+            "mixed_crud.txt should contain cancellation language"
+        )
+
+    def test_new_crud_samples_use_speaker_format(self) -> None:
+        """All new CRUD sample files use [Speaker]: text format."""
+        crud_files = ["update_meeting.txt", "cancel_event.txt", "mixed_crud.txt"]
+        for name in crud_files:
+            result = parse_transcript_file(SAMPLES_DIR / name)
+            assert len(result.utterances) > 0, (
+                f"{name} should have parseable utterances"
+            )
+            # Verify all utterances have non-empty speakers.
+            for utterance in result.utterances:
+                assert utterance.speaker, (
+                    f"{name}: utterance has empty speaker: {utterance.text!r}"
+                )
