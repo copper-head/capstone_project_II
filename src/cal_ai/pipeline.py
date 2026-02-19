@@ -17,6 +17,7 @@ from pathlib import Path
 from cal_ai.calendar.auth import get_calendar_credentials
 from cal_ai.calendar.client import GoogleCalendarClient
 from cal_ai.calendar.context import CalendarContext, fetch_calendar_context
+from cal_ai.calendar.exceptions import CalendarNotFoundError
 from cal_ai.config import load_settings
 from cal_ai.exceptions import ExtractionError
 from cal_ai.llm import GeminiClient
@@ -262,7 +263,9 @@ def run_pipeline(
             validated = validated_list[i]
 
             try:
-                sync_result = _sync_single_event(validated, client)
+                sync_result = _sync_single_event(
+                    validated, client, result.id_map
+                )
                 result.events_synced.append(
                     EventSyncResult(
                         event=event,
@@ -357,15 +360,31 @@ def _validate_events(gemini, extraction, now):
 def _sync_single_event(
     event: ValidatedEvent,
     client: GoogleCalendarClient,
+    id_map: dict[int, str] | None = None,
 ) -> dict:
     """Sync a single validated event to Google Calendar.
 
     Dispatches to the appropriate client method based on the event's
-    ``action`` field.
+    ``action`` field and the presence of ``existing_event_id``.
+
+    When ``existing_event_id`` is set and found in *id_map*, direct
+    event-ID API calls are used (``update_event`` / ``delete_event``).
+    On HTTP 404 (``CalendarNotFoundError``):
+
+    - **update** falls back to ``create_event`` (the original event was
+      deleted since the context was fetched).
+    - **delete** is treated as success (idempotent -- the event is already
+      gone).
+
+    When ``existing_event_id`` is absent, the search-based methods
+    (``find_and_update_event`` / ``find_and_delete_event``) are used
+    as before.
 
     Args:
         event: The validated event to sync.
         client: The Google Calendar client.
+        id_map: Mapping from integer IDs (used in LLM context) to
+            Google Calendar event UUIDs.  May be ``None`` or empty.
 
     Returns:
         A dict with ``action_taken`` and optional ``calendar_event_id``.
@@ -375,6 +394,26 @@ def _sync_single_event(
         Exception: Any error from the calendar client.
     """
     action = event.action
+    id_map = id_map or {}
+
+    # Resolve the real Google Calendar event ID from the integer mapping.
+    real_id: str | None = None
+    if event.existing_event_id is not None:
+        real_id = id_map.get(event.existing_event_id)
+        if real_id is not None:
+            logger.info(
+                "Resolved existing_event_id %d -> %s for '%s'",
+                event.existing_event_id,
+                real_id,
+                event.title,
+            )
+        else:
+            logger.warning(
+                "existing_event_id %d not found in id_map for '%s', "
+                "falling back to search-based method",
+                event.existing_event_id,
+                event.title,
+            )
 
     if action == "create":
         response = client.create_event(event)
@@ -385,6 +424,9 @@ def _sync_single_event(
             "calendar_event_id": response.get("id"),
         }
     elif action == "update":
+        if real_id is not None:
+            return _update_by_id(event, client, real_id)
+        # No existing_event_id -- fall back to search-based update.
         response = client.find_and_update_event(event)
         if response is None:
             return {"action_taken": "skipped_no_match", "calendar_event_id": None}
@@ -393,9 +435,83 @@ def _sync_single_event(
             "calendar_event_id": response.get("id"),
         }
     elif action == "delete":
+        if real_id is not None:
+            return _delete_by_id(event, client, real_id)
+        # No existing_event_id -- fall back to search-based delete.
         deleted = client.find_and_delete_event(event)
         if not deleted:
             return {"action_taken": "skipped_no_match", "calendar_event_id": None}
         return {"action_taken": "deleted", "calendar_event_id": None}
     else:
         raise ValueError(f"Unknown event action: {action!r}")
+
+
+def _update_by_id(
+    event: ValidatedEvent,
+    client: GoogleCalendarClient,
+    real_id: str,
+) -> dict:
+    """Update an event by its Google Calendar ID with 404 fallback.
+
+    On ``CalendarNotFoundError`` (the event was deleted since the context
+    was fetched), falls back to ``create_event`` and logs a warning.
+
+    Args:
+        event: The validated event with updated data.
+        client: The Google Calendar client.
+        real_id: The real Google Calendar event UUID.
+
+    Returns:
+        A dict with ``action_taken`` and ``calendar_event_id``.
+    """
+    try:
+        response = client.update_event(real_id, event)
+        return {
+            "action_taken": "updated",
+            "calendar_event_id": response.get("id"),
+        }
+    except CalendarNotFoundError:
+        logger.warning(
+            "Event '%s' (id=%s) not found for update (404), "
+            "falling back to create",
+            event.title,
+            real_id,
+        )
+        response = client.create_event(event)
+        if response is None:
+            return {"action_taken": "skipped_duplicate", "calendar_event_id": None}
+        return {
+            "action_taken": "created",
+            "calendar_event_id": response.get("id"),
+        }
+
+
+def _delete_by_id(
+    event: ValidatedEvent,
+    client: GoogleCalendarClient,
+    real_id: str,
+) -> dict:
+    """Delete an event by its Google Calendar ID with 404 fallback.
+
+    On ``CalendarNotFoundError`` (the event is already gone), treats
+    the operation as successful (idempotent) and logs a warning.
+
+    Args:
+        event: The validated event being deleted.
+        client: The Google Calendar client.
+        real_id: The real Google Calendar event UUID.
+
+    Returns:
+        A dict with ``action_taken`` and ``calendar_event_id``.
+    """
+    try:
+        client.delete_event(real_id)
+        return {"action_taken": "deleted", "calendar_event_id": None}
+    except CalendarNotFoundError:
+        logger.warning(
+            "Event '%s' (id=%s) not found for delete (404), "
+            "treating as already deleted (idempotent)",
+            event.title,
+            real_id,
+        )
+        return {"action_taken": "deleted", "calendar_event_id": None}

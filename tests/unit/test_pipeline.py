@@ -1,11 +1,14 @@
-"""Unit tests for the pipeline orchestrator (18 tests).
+"""Unit tests for the pipeline orchestrator (25 tests).
 
 Tests cover: full-flow success, empty parse, no-events extraction,
 extraction failure, partial sync failure, all sync failures, dry-run,
 duration tracking, create/update/delete action dispatch, speakers list,
 owner forwarding, current-datetime forwarding, calendar context passing,
-graceful degradation on credential failure, id_map storage, and
-dry-run with context fetch.
+graceful degradation on credential failure, id_map storage,
+dry-run with context fetch, direct ID-based update/delete dispatch,
+404 fallback on update (falls back to create), 404 fallback on delete
+(idempotent success), fallback to search when existing_event_id not in
+id_map, and id_map reverse lookup correctness.
 """
 
 from __future__ import annotations
@@ -15,6 +18,7 @@ from pathlib import Path
 from unittest.mock import MagicMock, patch
 
 from cal_ai.calendar.context import CalendarContext
+from cal_ai.calendar.exceptions import CalendarNotFoundError
 from cal_ai.exceptions import ExtractionError
 from cal_ai.models.extraction import ExtractedEvent, ExtractionResult, ValidatedEvent
 from cal_ai.models.transcript import TranscriptParseResult, Utterance
@@ -55,6 +59,7 @@ def _make_extracted_event(
     title: str = "Lunch with Bob",
     action: str = "create",
     confidence: str = "high",
+    existing_event_id: int | None = None,
 ) -> ExtractedEvent:
     """Build a stub ``ExtractedEvent``."""
     return ExtractedEvent(
@@ -67,6 +72,7 @@ def _make_extracted_event(
         reasoning="Alice proposed lunch and Bob confirmed.",
         assumptions=["Duration assumed 1 hour"],
         action=action,
+        existing_event_id=existing_event_id,
     )
 
 
@@ -82,6 +88,7 @@ def _make_extraction_result(
 def _make_validated_event(
     title: str = "Lunch with Bob",
     action: str = "create",
+    existing_event_id: int | None = None,
 ) -> ValidatedEvent:
     """Build a stub ``ValidatedEvent``."""
     return ValidatedEvent(
@@ -94,6 +101,7 @@ def _make_validated_event(
         reasoning="Alice proposed lunch and Bob confirmed.",
         assumptions=["Duration assumed 1 hour"],
         action=action,
+        existing_event_id=existing_event_id,
     )
 
 
@@ -164,6 +172,8 @@ def _patch_pipeline_deps(
         mock_client.create_event.return_value = {"id": "evt-1"}
         mock_client.find_and_update_event.return_value = {"id": "evt-2"}
         mock_client.find_and_delete_event.return_value = True
+        mock_client.update_event.return_value = {"id": "evt-updated"}
+        mock_client.delete_event.return_value = None
 
     mock_cal_cls = MagicMock(return_value=mock_client)
     mock_get_creds = MagicMock(return_value=mock_creds)
@@ -627,3 +637,227 @@ class TestPipeline:
         assert any("context unavailable" in w.lower() for w in result.warnings)
         call_kwargs = ctx.gemini.extract_events.call_args
         assert call_kwargs.kwargs["calendar_context"] == ""
+
+    # ------------------------------------------------------------------
+    # ID-based sync dispatch tests
+    # ------------------------------------------------------------------
+
+    def test_pipeline_update_with_existing_event_id_calls_update_event(
+        self, tmp_path: Path
+    ) -> None:
+        """update + existing_event_id -> direct update_event(real_id, event)."""
+        transcript = tmp_path / "sample.txt"
+        transcript.write_text("[Alice]: Move standup to 10\n")
+
+        events = [_make_extracted_event("Standup", action="update", existing_event_id=1)]
+        extraction = _make_extraction_result(events)
+        validated = [_make_validated_event("Standup", action="update", existing_event_id=1)]
+        ctx_data = _make_calendar_context(
+            events_text="[1] Standup | ...",
+            id_map={1: "real-uuid-standup"},
+            event_count=1,
+        )
+
+        with _patch_pipeline_deps(
+            extraction_result=extraction,
+            validated_events=validated,
+            calendar_context=ctx_data,
+        ) as ctx:
+            result = run_pipeline(
+                transcript_path=transcript,
+                owner="TestOwner",
+            )
+
+        # Direct update_event should be called with the real UUID.
+        ctx.client.update_event.assert_called_once_with(
+            "real-uuid-standup", validated[0]
+        )
+        # Search-based method should NOT be called.
+        ctx.client.find_and_update_event.assert_not_called()
+        assert result.events_synced[0].action_taken == "updated"
+        assert result.events_synced[0].calendar_event_id == "evt-updated"
+
+    def test_pipeline_delete_with_existing_event_id_calls_delete_event(
+        self, tmp_path: Path
+    ) -> None:
+        """delete + existing_event_id -> direct delete_event(real_id)."""
+        transcript = tmp_path / "sample.txt"
+        transcript.write_text("[Alice]: Cancel standup\n")
+
+        events = [_make_extracted_event("Standup", action="delete", existing_event_id=2)]
+        extraction = _make_extraction_result(events)
+        validated = [_make_validated_event("Standup", action="delete", existing_event_id=2)]
+        ctx_data = _make_calendar_context(
+            events_text="[2] Standup | ...",
+            id_map={2: "real-uuid-standup-2"},
+            event_count=1,
+        )
+
+        with _patch_pipeline_deps(
+            extraction_result=extraction,
+            validated_events=validated,
+            calendar_context=ctx_data,
+        ) as ctx:
+            result = run_pipeline(
+                transcript_path=transcript,
+                owner="TestOwner",
+            )
+
+        # Direct delete_event should be called with the real UUID.
+        ctx.client.delete_event.assert_called_once_with("real-uuid-standup-2")
+        # Search-based method should NOT be called.
+        ctx.client.find_and_delete_event.assert_not_called()
+        assert result.events_synced[0].action_taken == "deleted"
+
+    def test_pipeline_update_404_falls_back_to_create(
+        self, tmp_path: Path
+    ) -> None:
+        """update + existing_event_id + 404 -> fallback to create_event."""
+        transcript = tmp_path / "sample.txt"
+        transcript.write_text("[Alice]: Move standup to 10\n")
+
+        events = [_make_extracted_event("Standup", action="update", existing_event_id=1)]
+        extraction = _make_extraction_result(events)
+        validated = [_make_validated_event("Standup", action="update", existing_event_id=1)]
+        ctx_data = _make_calendar_context(
+            events_text="[1] Standup | ...",
+            id_map={1: "real-uuid-gone"},
+            event_count=1,
+        )
+
+        with _patch_pipeline_deps(
+            extraction_result=extraction,
+            validated_events=validated,
+            calendar_context=ctx_data,
+        ) as ctx:
+            # update_event raises 404 -> should fallback to create.
+            ctx.client.update_event.side_effect = CalendarNotFoundError(
+                "Event not found"
+            )
+            result = run_pipeline(
+                transcript_path=transcript,
+                owner="TestOwner",
+            )
+
+        # update_event was attempted first.
+        ctx.client.update_event.assert_called_once_with("real-uuid-gone", validated[0])
+        # Fallback to create_event.
+        ctx.client.create_event.assert_called_once_with(validated[0])
+        # Action should report "created" (the fallback).
+        assert result.events_synced[0].action_taken == "created"
+
+    def test_pipeline_delete_404_treated_as_success(
+        self, tmp_path: Path
+    ) -> None:
+        """delete + existing_event_id + 404 -> idempotent success (deleted)."""
+        transcript = tmp_path / "sample.txt"
+        transcript.write_text("[Alice]: Cancel standup\n")
+
+        events = [_make_extracted_event("Standup", action="delete", existing_event_id=3)]
+        extraction = _make_extraction_result(events)
+        validated = [_make_validated_event("Standup", action="delete", existing_event_id=3)]
+        ctx_data = _make_calendar_context(
+            events_text="[3] Standup | ...",
+            id_map={3: "real-uuid-already-gone"},
+            event_count=1,
+        )
+
+        with _patch_pipeline_deps(
+            extraction_result=extraction,
+            validated_events=validated,
+            calendar_context=ctx_data,
+        ) as ctx:
+            # delete_event raises 404 -> should be treated as success.
+            ctx.client.delete_event.side_effect = CalendarNotFoundError(
+                "Event not found"
+            )
+            result = run_pipeline(
+                transcript_path=transcript,
+                owner="TestOwner",
+            )
+
+        ctx.client.delete_event.assert_called_once_with("real-uuid-already-gone")
+        # No failure -- treated as idempotent delete.
+        assert len(result.events_failed) == 0
+        assert result.events_synced[0].action_taken == "deleted"
+
+    def test_pipeline_update_no_existing_id_uses_search(
+        self, tmp_path: Path
+    ) -> None:
+        """update + no existing_event_id -> find_and_update_event (search)."""
+        transcript = tmp_path / "sample.txt"
+        transcript.write_text("[Alice]: Move standup to 10\n")
+
+        events = [_make_extracted_event("Standup", action="update")]
+        extraction = _make_extraction_result(events)
+        validated = [_make_validated_event("Standup", action="update")]
+
+        with _patch_pipeline_deps(
+            extraction_result=extraction,
+            validated_events=validated,
+        ) as ctx:
+            result = run_pipeline(
+                transcript_path=transcript,
+                owner="TestOwner",
+            )
+
+        # Search-based method used when no existing_event_id.
+        ctx.client.find_and_update_event.assert_called_once()
+        ctx.client.update_event.assert_not_called()
+        assert result.events_synced[0].action_taken == "updated"
+
+    def test_pipeline_delete_no_existing_id_uses_search(
+        self, tmp_path: Path
+    ) -> None:
+        """delete + no existing_event_id -> find_and_delete_event (search)."""
+        transcript = tmp_path / "sample.txt"
+        transcript.write_text("[Alice]: Cancel standup\n")
+
+        events = [_make_extracted_event("Standup", action="delete")]
+        extraction = _make_extraction_result(events)
+        validated = [_make_validated_event("Standup", action="delete")]
+
+        with _patch_pipeline_deps(
+            extraction_result=extraction,
+            validated_events=validated,
+        ) as ctx:
+            result = run_pipeline(
+                transcript_path=transcript,
+                owner="TestOwner",
+            )
+
+        ctx.client.find_and_delete_event.assert_called_once()
+        ctx.client.delete_event.assert_not_called()
+        assert result.events_synced[0].action_taken == "deleted"
+
+    def test_pipeline_existing_id_not_in_id_map_falls_back_to_search(
+        self, tmp_path: Path
+    ) -> None:
+        """existing_event_id=99 not in id_map -> fallback to search method."""
+        transcript = tmp_path / "sample.txt"
+        transcript.write_text("[Alice]: Move standup to 10\n")
+
+        # Event references id=99, but id_map only has id=1.
+        events = [_make_extracted_event("Standup", action="update", existing_event_id=99)]
+        extraction = _make_extraction_result(events)
+        validated = [_make_validated_event("Standup", action="update", existing_event_id=99)]
+        ctx_data = _make_calendar_context(
+            events_text="[1] Other | ...",
+            id_map={1: "real-uuid-other"},
+            event_count=1,
+        )
+
+        with _patch_pipeline_deps(
+            extraction_result=extraction,
+            validated_events=validated,
+            calendar_context=ctx_data,
+        ) as ctx:
+            result = run_pipeline(
+                transcript_path=transcript,
+                owner="TestOwner",
+            )
+
+        # Should fall back to search-based method since id=99 not in map.
+        ctx.client.find_and_update_event.assert_called_once()
+        ctx.client.update_event.assert_not_called()
+        assert result.events_synced[0].action_taken == "updated"
