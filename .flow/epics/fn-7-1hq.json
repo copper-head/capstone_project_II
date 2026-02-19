@@ -1,0 +1,13 @@
+{
+  "branch_name": "fn-7-1hq",
+  "created_at": "2026-02-19T22:36:51.408662Z",
+  "depends_on_epics": [],
+  "id": "fn-7-1hq",
+  "next_task": 1,
+  "plan_review_status": "unknown",
+  "plan_reviewed_at": null,
+  "spec_path": ".flow/specs/fn-7-1hq.md",
+  "status": "open",
+  "title": "Comprehensive Regression Test Suite: 40+ Stress-Test Samples",
+  "updated_at": "2026-02-19T22:37:26.847536Z"
+}
