@@ -73,17 +73,22 @@ Return a JSON object with the following structure:
 - "events": an array of event objects (may be empty)
 - "summary": a brief human-readable summary of the extraction outcome
 
-Each event object must have ALL of the following fields (all required):
+Each event object must have the following fields:
 
+**Required fields:**
 - "title": a short descriptive title for the event
 - "start_time": ISO 8601 datetime string (e.g. "2026-02-19T12:00:00")
-- "end_time": ISO 8601 datetime string, or "none" if unknown
-- "location": event location string, or "none" if unknown
-- "attendees": comma-separated list of attendee names, or "none" if unknown
 - "confidence": one of "high", "medium", or "low"
 - "reasoning": explanation of why this event was extracted and how confidence was determined
-- "assumptions": comma-separated list of assumptions made, or "none" if no assumptions
 - "action": one of "create", "update", or "delete" (default to "create" for new events)
+
+**Optional fields (omit or set to null if unknown):**
+- "end_time": ISO 8601 datetime string, or null if unknown
+- "location": event location string, or null if unknown
+- "attendees": comma-separated list of attendee names, or null if unknown
+- "assumptions": comma-separated list of assumptions made, or null if none
+- "existing_event_id": integer ID of an existing calendar event being
+  updated or deleted, or null for new events
 
 ## Confidence Level Guidelines
 
@@ -101,12 +106,15 @@ events array with a summary explaining why no events were found.
 
 ## Important Notes
 
-- Use "none" (the literal string) for any optional field where the value is
-  not available. Do NOT use null or omit the field.
+- For optional fields where the value is not available, omit the field or
+  set it to null. Do NOT use the string "none" as a placeholder.
 - For the "attendees" field, use a comma-separated string of names.
   Include {owner_name} in the attendees list when they are participating.
 - For the "assumptions" field, use a comma-separated string of assumptions.
-  Use "none" if no assumptions were made.
+  Omit or set to null if no assumptions were made.
+- For the "existing_event_id" field, only provide an integer ID when the
+  action is "update" or "delete" and a matching existing event has been
+  identified. For "create" actions, omit or set to null.
 """
 
 

@@ -1,0 +1,16 @@
+{
+  "assignee": null,
+  "claim_note": "",
+  "claimed_at": null,
+  "created_at": "2026-02-19T00:57:36.798126Z",
+  "depends_on": [
+    "fn-6-m69.6"
+  ],
+  "epic": "fn-6-m69",
+  "id": "fn-6-m69.7",
+  "priority": null,
+  "spec_path": ".flow/tasks/fn-6-m69.7.md",
+  "status": "todo",
+  "title": "Integration tests for full CRUD flows & documentation updates",
+  "updated_at": "2026-02-19T00:59:41.316958Z"
+}

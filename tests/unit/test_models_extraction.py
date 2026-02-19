@@ -78,6 +78,24 @@ class TestExtractedEventValid:
         assert event.attendees == []
         assert event.assumptions == []
         assert event.action == "create"
+        assert event.existing_event_id is None
+
+    def test_extracted_event_with_existing_event_id(self) -> None:
+        """existing_event_id is stored when provided."""
+        kwargs = _complete_event_kwargs()
+        kwargs["action"] = "update"
+        kwargs["existing_event_id"] = 3
+
+        event = ExtractedEvent(**kwargs)
+
+        assert event.existing_event_id == 3
+        assert event.action == "update"
+
+    def test_extracted_event_existing_event_id_none_by_default(self) -> None:
+        """existing_event_id defaults to None when not provided."""
+        event = ExtractedEvent(**_complete_event_kwargs())
+
+        assert event.existing_event_id is None
 
 
 class TestExtractedEventInvalid:
@@ -192,3 +210,22 @@ class TestValidatedEvent:
 
         with pytest.raises(ValueError):
             ValidatedEvent.from_extracted(extracted)
+
+    def test_validated_event_preserves_existing_event_id(self) -> None:
+        """from_extracted passes existing_event_id through to ValidatedEvent."""
+        kwargs = _complete_event_kwargs()
+        kwargs["action"] = "update"
+        kwargs["existing_event_id"] = 7
+
+        extracted = ExtractedEvent(**kwargs)
+        validated = ValidatedEvent.from_extracted(extracted)
+
+        assert validated.existing_event_id == 7
+        assert validated.action == "update"
+
+    def test_validated_event_existing_event_id_none_by_default(self) -> None:
+        """from_extracted sets existing_event_id to None when not provided."""
+        extracted = ExtractedEvent(**_minimal_event_kwargs())
+        validated = ValidatedEvent.from_extracted(extracted)
+
+        assert validated.existing_event_id is None

@@ -1,0 +1,14 @@
+{
+  "assignee": null,
+  "claim_note": "",
+  "claimed_at": null,
+  "created_at": "2026-02-19T00:57:30.254298Z",
+  "depends_on": [],
+  "epic": "fn-6-m69",
+  "id": "fn-6-m69.1",
+  "priority": null,
+  "spec_path": ".flow/tasks/fn-6-m69.1.md",
+  "status": "todo",
+  "title": "Schema & model updates: add existing_event_id, migrate sentinel\u2192Optional",
+  "updated_at": "2026-02-19T00:58:12.270662Z"
+}

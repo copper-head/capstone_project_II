@@ -1,0 +1,16 @@
+{
+  "assignee": null,
+  "claim_note": "",
+  "claimed_at": null,
+  "created_at": "2026-02-19T00:57:36.707041Z",
+  "depends_on": [
+    "fn-6-m69.5"
+  ],
+  "epic": "fn-6-m69",
+  "id": "fn-6-m69.6",
+  "priority": null,
+  "spec_path": ".flow/tasks/fn-6-m69.6.md",
+  "status": "todo",
+  "title": "Demo output enhancements & new CRUD sample transcripts",
+  "updated_at": "2026-02-19T00:59:27.438228Z"
+}

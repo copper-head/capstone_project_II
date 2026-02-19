@@ -7,9 +7,8 @@ Defines the structured data types used in the Gemini extraction pipeline:
 - :class:`ExtractionResult` -- wrapper for the full LLM response.
 - :class:`ValidatedEvent` -- post-validation model with parsed ``datetime``
   objects and a default 1-hour duration applied when ``end_time`` is missing.
-- :class:`LLMResponseSchema` -- simplified all-required-strings schema for
-  Gemini's ``response_schema`` parameter, using ``"none"`` sentinels in place
-  of ``Optional`` fields (works around SDK type limitations).
+- :class:`LLMResponseSchema` -- schema for Gemini's ``response_schema``
+  parameter, using proper ``Optional`` fields (SDK v1.63.0+).
 """
 
 from __future__ import annotations
@@ -45,6 +44,8 @@ class ExtractedEvent(BaseModel):
         reasoning: Free-text explanation of why this event was extracted.
         assumptions: Any assumptions the LLM made to fill gaps.
         action: Calendar action (``"create"``, ``"update"``, or ``"delete"``).
+        existing_event_id: Remapped integer ID of an existing calendar event
+            for update/delete actions, or ``None`` for create actions.
     """
 
     title: str
@@ -56,6 +57,7 @@ class ExtractedEvent(BaseModel):
     reasoning: str
     assumptions: list[str] = Field(default_factory=list)
     action: Literal["create", "update", "delete"] = "create"
+    existing_event_id: int | None = None
 
 
 # ---------------------------------------------------------------------------
@@ -101,6 +103,8 @@ class ValidatedEvent(BaseModel):
         reasoning: Free-text extraction reasoning.
         assumptions: Assumptions made during extraction.
         action: Calendar action.
+        existing_event_id: Remapped integer ID of an existing calendar event,
+            or ``None``.
     """
 
     title: str
@@ -112,6 +116,7 @@ class ValidatedEvent(BaseModel):
     reasoning: str
     assumptions: list[str] = Field(default_factory=list)
     action: Literal["create", "update", "delete"] = "create"
+    existing_event_id: int | None = None
 
     @field_validator("start_time", "end_time", mode="before")
     @classmethod
@@ -153,49 +158,54 @@ class ValidatedEvent(BaseModel):
             reasoning=event.reasoning,
             assumptions=event.assumptions,
             action=event.action,
+            existing_event_id=event.existing_event_id,
         )
 
 
 # ---------------------------------------------------------------------------
-# LLMResponseSchema -- simplified schema for Gemini response_schema
+# LLMResponseSchema -- schema for Gemini response_schema (SDK v1.63.0+)
 # ---------------------------------------------------------------------------
 
 
 class LLMResponseEvent(BaseModel):
     """Single-event schema for Gemini's ``response_schema`` parameter.
 
-    All fields are **required strings** (no ``Optional``) to work around
-    the Gemini SDK's limitations with optional types. The sentinel value
-    ``"none"`` is used in place of ``null`` for fields that may be absent.
+    Uses proper ``Optional`` fields (supported by SDK v1.63.0+) instead of
+    ``"none"`` sentinel strings.  Comma-separated string fields
+    (``attendees``, ``assumptions``) are still strings because Gemini's
+    structured output handles them more reliably that way; they are split
+    into lists during post-processing in :meth:`GeminiClient._convert_event`.
 
     Attributes:
         title: Event title.
         start_time: ISO 8601 datetime string.
-        end_time: ISO 8601 datetime string or ``"none"``.
-        location: Location string or ``"none"``.
-        attendees: Comma-separated attendee names.
+        end_time: ISO 8601 datetime string, or ``None`` if unknown.
+        location: Location string, or ``None`` if unknown.
+        attendees: Comma-separated attendee names, or ``None`` if unknown.
         confidence: ``"high"``, ``"medium"``, or ``"low"``.
         reasoning: Extraction reasoning.
-        assumptions: Comma-separated assumptions.
+        assumptions: Comma-separated assumptions, or ``None`` if none.
         action: ``"create"``, ``"update"``, or ``"delete"``.
+        existing_event_id: Remapped integer ID of an existing calendar
+            event for update/delete, or ``None`` for create.
     """
 
     title: str
     start_time: str
-    end_time: str
-    location: str
-    attendees: str
+    end_time: str | None = None
+    location: str | None = None
+    attendees: str | None = None
     confidence: str
     reasoning: str
-    assumptions: str
+    assumptions: str | None = None
     action: str
+    existing_event_id: int | None = None
 
 
 class LLMResponseSchema(BaseModel):
     """Top-level schema passed to Gemini's ``response_schema`` parameter.
 
-    All fields are required strings (with ``"none"`` sentinels for absent
-    values) to avoid SDK issues with ``Optional`` types.
+    Uses proper ``Optional`` fields where appropriate (SDK v1.63.0+).
 
     Attributes:
         events: List of event objects.

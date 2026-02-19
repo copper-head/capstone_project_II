@@ -27,14 +27,14 @@ from cal_ai.models.extraction import LLMResponseSchema
 def _make_llm_response_json(events: list[dict], summary: str = "Extraction complete.") -> str:
     """Build a JSON string mimicking the raw Gemini response.
 
-    Uses the LLMResponseSchema convention: all fields are required strings
-    with ``"none"`` sentinels for absent optional values.
+    Uses the LLMResponseSchema convention: optional fields use ``null``
+    (Python ``None``) when absent.
     """
     return json.dumps({"events": events, "summary": summary})
 
 
 def _single_lunch_event() -> dict:
-    """Return a single valid LLM-response event dict (all-strings schema)."""
+    """Return a single valid LLM-response event dict (Optional schema)."""
     return {
         "title": "Lunch with Bob",
         "start_time": "2026-02-19T12:00:00",
@@ -43,7 +43,7 @@ def _single_lunch_event() -> dict:
         "attendees": "Alice, Bob",
         "confidence": "high",
         "reasoning": "Both speakers explicitly agreed to lunch at noon.",
-        "assumptions": "none",
+        "assumptions": None,
         "action": "create",
     }
 
@@ -123,7 +123,7 @@ class TestHappyPath:
                 "attendees": "Alice, Bob, Charlie",
                 "confidence": "high",
                 "reasoning": "Standup explicitly scheduled.",
-                "assumptions": "none",
+                "assumptions": None,
                 "action": "create",
             },
         ]
@@ -171,8 +171,8 @@ class TestAmbiguousEvents:
         event = {
             "title": "Meet up with Bob",
             "start_time": "2026-02-20T09:00:00",
-            "end_time": "none",
-            "location": "none",
+            "end_time": None,
+            "location": None,
             "attendees": "Alice, Bob",
             "confidence": "low",
             "reasoning": "Vague mention of meeting sometime this week.",
@@ -198,7 +198,7 @@ class TestAmbiguousEvents:
             "title": "Coffee with Carol",
             "start_time": "2026-02-19T15:00:00",
             "end_time": "2026-02-19T16:00:00",
-            "location": "none",
+            "location": None,
             "attendees": "Alice, Carol",
             "confidence": "medium",
             "reasoning": "Carol suggested coffee at 3pm but no location given.",
@@ -237,7 +237,7 @@ class TestOwnerPerspective:
             "attendees": "Alice, Bob",
             "confidence": "high",
             "reasoning": "Alice directly agreed to lunch with Bob.",
-            "assumptions": "none",
+            "assumptions": None,
             "action": "create",
         }
         response = _make_llm_response_json([event])
@@ -258,14 +258,14 @@ class TestOwnerPerspective:
             "title": "Bob and Carol meeting",
             "start_time": "2026-02-19T14:00:00",
             "end_time": "2026-02-19T15:00:00",
-            "location": "none",
+            "location": None,
             "attendees": "Bob, Carol",
             "confidence": "low",
             "reasoning": (
                 "Alice overheard Bob and Carol scheduling a meeting."
                 " Alice is not involved."
             ),
-            "assumptions": "none",
+            "assumptions": None,
             "action": "create",
         }
         response = _make_llm_response_json([event])
@@ -319,8 +319,8 @@ class TestRelativeTimeResolution:
         event = {
             "title": "Coffee with Bob",
             "start_time": "2026-02-19T09:00:00",
-            "end_time": "none",
-            "location": "none",
+            "end_time": None,
+            "location": None,
             "attendees": "Alice, Bob",
             "confidence": "medium",
             "reasoning": "Bob suggested coffee tomorrow.",
@@ -431,12 +431,12 @@ class TestMalformedResponseHandling:
         """Valid JSON but missing required 'title' field -- schema validation fails, retry."""
         bad_event = {
             "start_time": "2026-02-19T12:00:00",
-            "end_time": "none",
-            "location": "none",
+            "end_time": None,
+            "location": None,
             "attendees": "Alice",
             "confidence": "high",
             "reasoning": "Missing title.",
-            "assumptions": "none",
+            "assumptions": None,
             "action": "create",
             # no "title" field
         }
@@ -485,8 +485,8 @@ class TestConfidenceLevels:
         event = {
             "title": "Possible meetup",
             "start_time": "2026-02-20T09:00:00",
-            "end_time": "none",
-            "location": "none",
+            "end_time": None,
+            "location": None,
             "attendees": "Alice, Bob",
             "confidence": "low",
             "reasoning": "Very vague suggestion with no commitment.",
@@ -509,8 +509,8 @@ class TestConfidenceLevels:
         event = {
             "title": "Meeting on Friday",
             "start_time": "2026-02-20T09:00:00",
-            "end_time": "none",
-            "location": "none",
+            "end_time": None,
+            "location": None,
             "attendees": "Alice, Bob",
             "confidence": "medium",
             "reasoning": "Day is specified but no time given.",
@@ -676,17 +676,17 @@ class TestEdgeCases:
                 current_datetime=_CURRENT_DT,
             )
 
-    def test_none_string_conversion(self) -> None:
-        """'none' sentinel strings are converted to Python None for optional fields."""
+    def test_null_optional_fields_passthrough(self) -> None:
+        """JSON null values for optional fields are passed through as Python None."""
         event = {
             "title": "Meeting",
             "start_time": "2026-02-19T10:00:00",
-            "end_time": "none",
-            "location": "none",
+            "end_time": None,
+            "location": None,
             "attendees": "Alice",
             "confidence": "high",
             "reasoning": "Test event.",
-            "assumptions": "none",
+            "assumptions": None,
             "action": "create",
         }
         response = _make_llm_response_json([event])
@@ -706,12 +706,12 @@ class TestEdgeCases:
         event = {
             "title": "Quick chat",
             "start_time": "2026-02-19T14:00:00",
-            "end_time": "none",
-            "location": "none",
+            "end_time": None,
+            "location": None,
             "attendees": "Alice",
             "confidence": "high",
             "reasoning": "Quick chat scheduled.",
-            "assumptions": "none",
+            "assumptions": None,
             "action": "create",
         }
         response = _make_llm_response_json([event])
@@ -728,3 +728,45 @@ class TestEdgeCases:
         assert len(validated) == 1
         assert validated[0].start_time == datetime(2026, 2, 19, 14, 0, 0)
         assert validated[0].end_time == datetime(2026, 2, 19, 14, 0, 0) + timedelta(hours=1)
+
+    def test_existing_event_id_present(self) -> None:
+        """existing_event_id is extracted from LLM response for update actions."""
+        event = {
+            "title": "Updated meeting",
+            "start_time": "2026-02-19T14:00:00",
+            "end_time": "2026-02-19T15:00:00",
+            "location": "Room A",
+            "attendees": "Alice, Bob",
+            "confidence": "high",
+            "reasoning": "Rescheduled existing meeting.",
+            "assumptions": None,
+            "action": "update",
+            "existing_event_id": 3,
+        }
+        response = _make_llm_response_json([event])
+        client = _mock_client(response)
+
+        result = client.extract_events(
+            transcript_text="test",
+            owner_name="Alice",
+            current_datetime=_CURRENT_DT,
+        )
+
+        assert len(result.events) == 1
+        assert result.events[0].existing_event_id == 3
+        assert result.events[0].action == "update"
+
+    def test_existing_event_id_absent(self) -> None:
+        """existing_event_id defaults to None when not in LLM response."""
+        event = _single_lunch_event()
+        response = _make_llm_response_json([event])
+        client = _mock_client(response)
+
+        result = client.extract_events(
+            transcript_text="test",
+            owner_name="Alice",
+            current_datetime=_CURRENT_DT,
+        )
+
+        assert len(result.events) == 1
+        assert result.events[0].existing_event_id is None

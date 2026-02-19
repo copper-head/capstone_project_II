@@ -203,9 +203,9 @@ class GeminiClient:
     def _parse_response(self, raw_text: str) -> ExtractionResult:
         """Parse raw JSON text into an :class:`ExtractionResult`.
 
-        Handles the ``"none"`` sentinel → ``None`` conversion for optional
-        fields (``end_time``, ``location``) and splits comma-separated
-        ``attendees`` and ``assumptions`` strings into lists.
+        Splits comma-separated ``attendees`` and ``assumptions`` strings
+        into lists.  Optional fields (``end_time``, ``location``) are
+        natively ``None`` from the LLM schema and require no conversion.
 
         Args:
             raw_text: The raw JSON string from the Gemini response.
@@ -245,8 +245,9 @@ class GeminiClient:
     def _convert_event(event_data: dict) -> dict:
         """Convert a single event dict from LLM schema to internal schema.
 
-        Converts ``"none"`` sentinels to ``None`` and splits
-        comma-separated strings into lists.
+        Splits comma-separated ``attendees`` and ``assumptions`` strings
+        into Python lists.  Optional fields are already ``None`` from the
+        LLM schema (no sentinel conversion needed).
 
         Args:
             event_data: A single event dictionary from the LLM response.
@@ -256,30 +257,25 @@ class GeminiClient:
         """
         result = dict(event_data)
 
-        # Convert "none" sentinels to None for optional fields.
-        for field in ("end_time", "location"):
-            if result.get(field, "").lower() == "none":
-                result[field] = None
-
         # Split comma-separated attendees into a list.
-        attendees = result.get("attendees", "")
-        if isinstance(attendees, str):
-            if attendees.lower() == "none" or not attendees.strip():
-                result["attendees"] = []
-            else:
-                result["attendees"] = [
-                    name.strip() for name in attendees.split(",") if name.strip()
-                ]
+        attendees = result.get("attendees")
+        if attendees is None or (isinstance(attendees, str) and not attendees.strip()):
+            result["attendees"] = []
+        elif isinstance(attendees, str):
+            result["attendees"] = [
+                name.strip() for name in attendees.split(",") if name.strip()
+            ]
 
         # Split comma-separated assumptions into a list.
-        assumptions = result.get("assumptions", "")
-        if isinstance(assumptions, str):
-            if assumptions.lower() == "none" or not assumptions.strip():
-                result["assumptions"] = []
-            else:
-                result["assumptions"] = [
-                    a.strip() for a in assumptions.split(",") if a.strip()
-                ]
+        assumptions = result.get("assumptions")
+        if assumptions is None or (
+            isinstance(assumptions, str) and not assumptions.strip()
+        ):
+            result["assumptions"] = []
+        elif isinstance(assumptions, str):
+            result["assumptions"] = [
+                a.strip() for a in assumptions.split(",") if a.strip()
+            ]
 
         return result
 

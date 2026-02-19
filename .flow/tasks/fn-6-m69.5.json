@@ -1,0 +1,16 @@
+{
+  "assignee": null,
+  "claim_note": "",
+  "claimed_at": null,
+  "created_at": "2026-02-19T00:57:36.608261Z",
+  "depends_on": [
+    "fn-6-m69.4"
+  ],
+  "epic": "fn-6-m69",
+  "id": "fn-6-m69.5",
+  "priority": null,
+  "spec_path": ".flow/tasks/fn-6-m69.5.md",
+  "status": "todo",
+  "title": "Sync dispatch with direct event-ID calls & 404 fallback",
+  "updated_at": "2026-02-19T00:59:13.875591Z"
+}
