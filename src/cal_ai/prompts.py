@@ -11,24 +11,36 @@ from __future__ import annotations
 from cal_ai.models.transcript import Utterance
 
 
-def build_system_prompt(owner_name: str, current_datetime: str) -> str:
+def build_system_prompt(
+    owner_name: str,
+    current_datetime: str,
+    calendar_context: str = "",
+) -> str:
     """Build the system prompt for the Gemini extraction call.
 
     The prompt establishes the LLM's role, injects the current date/time
-    for resolving relative references, and provides detailed instructions
-    on owner-perspective filtering, ambiguity handling, confidence levels,
-    and output format.
+    for resolving relative references, provides detailed CRUD decision
+    rules, few-shot examples, negative examples, and optionally appends
+    existing calendar context for update/delete intelligence.
 
     Args:
         owner_name: Display name of the calendar owner (e.g. ``"Alice"``).
         current_datetime: ISO 8601 string representing "now", used by the
             LLM to resolve relative time references such as "tomorrow" or
             "next Thursday".
+        calendar_context: Pre-formatted calendar context text (from
+            :func:`~cal_ai.calendar.context.fetch_calendar_context`).
+            When non-empty, it is appended near the end of the prompt
+            so the LLM can match conversation references to existing
+            events.  Defaults to ``""`` (no context).
 
     Returns:
         The complete system prompt string.
     """
-    return f"""\
+    # ------------------------------------------------------------------
+    # Core: role, datetime, owner perspective, ambiguity, relative time
+    # ------------------------------------------------------------------
+    prompt = f"""\
 You are an AI assistant that extracts calendar events from conversation transcripts.
 You are extracting calendar events for {owner_name}. All events should be evaluated
 from {owner_name}'s perspective as the calendar owner.
@@ -66,6 +78,110 @@ Use this to resolve any relative time references in the conversation.
 - If only a time is mentioned without a date, assume the next occurrence of that
   time and note the assumption.
 
+## CRUD Decision Rules
+
+Determine the correct action for each event based on the conversation content
+and the existing calendar (if provided below).
+
+### CREATE
+Use action "create" when:
+- The conversation describes a NEW event that does not match any existing event
+  in "Your Calendar" below.
+- No calendar context is available (default to create).
+- You are uncertain whether the event matches an existing one (create is the safe
+  default).
+
+Do NOT set "existing_event_id" for create actions.
+
+### UPDATE
+Use action "update" when:
+- The conversation explicitly references a SPECIFIC existing event from
+  "Your Calendar" AND proposes changes to it (new time, new location, added
+  attendees, etc.).
+- You MUST set "existing_event_id" to the integer ID from "Your Calendar".
+- In "reasoning", state what changed compared to the original event.
+
+### DELETE
+Use action "delete" when:
+- The conversation explicitly or implicitly cancels an existing event from
+  "Your Calendar".
+- Cancellation signals: "cancel", "remove", "not happening", "skip it",
+  "won't make it", "call it off", "scratch that meeting".
+- You MUST set "existing_event_id" to the integer ID from "Your Calendar".
+- In "reasoning", explain why this event is being cancelled.
+
+## Confidence Guidance (Asymmetric)
+
+Apply asymmetric confidence thresholds based on the action:
+
+- **create**: Confidence "medium" is acceptable. When in doubt, create the event
+  and let the user review it.
+- **update**: Only use confidence "high" when there is a clear, unambiguous match
+  between the conversation reference and an existing calendar event. If the match
+  is uncertain, prefer action "create" instead.
+- **delete**: Only use confidence "high" when the cancellation intent is clear and
+  the target event is unambiguously identified. If uncertain, do NOT delete.
+
+## Conflicting Instructions (Last Statement Wins)
+
+If the conversation contains conflicting information about the same event (e.g.
+"Let's meet at 2pm" followed by "Actually, make it 3pm"), use the FINAL version
+of the information. The last statement in the conversation takes precedence.
+Produce a single event with the final details, not multiple conflicting events.
+
+## Few-Shot Examples
+
+### Example 1: CREATE (new event, no match in calendar)
+Conversation: "Hey Alice, want to grab lunch tomorrow at noon at Mario's?"
+Calendar: No matching event.
+Result:
+- action: "create"
+- title: "Lunch at Mario's"
+- start_time: (tomorrow at 12:00)
+- location: "Mario's"
+- confidence: "high"
+- existing_event_id: null
+- reasoning: "Alice is directly invited to a new lunch. No matching event in calendar."
+
+### Example 2: UPDATE (reschedule existing event)
+Conversation: "Alice, can we move our Thursday standup to 10am instead of 9am?"
+Calendar: [3] Team Standup | 2026-02-19T09:00:00 - 2026-02-19T10:00:00
+Result:
+- action: "update"
+- title: "Team Standup"
+- start_time: 2026-02-19T10:00:00
+- end_time: 2026-02-19T11:00:00
+- confidence: "high"
+- existing_event_id: 3
+- reasoning: "Matches existing event [3] 'Team Standup'. Changed start time from 09:00 to 10:00."
+
+### Example 3: DELETE (implicit cancellation)
+Conversation: "Hey team, I'm sick today so let's skip the design review."
+Calendar: [5] Design Review | 2026-02-18T14:00:00 - 2026-02-18T15:00:00
+Result:
+- action: "delete"
+- title: "Design Review"
+- confidence: "high"
+- existing_event_id: 5
+- reasoning: "Speaker is cancelling the Design Review [5] due to illness. \
+'Skip' indicates cancellation."
+
+## Negative Examples (Do NOT Do This)
+
+### Negative Example 1: Do NOT update when the event is merely similar
+Conversation: "Let's schedule a team standup for Friday at 9am."
+Calendar: [3] Team Standup | 2026-02-19T09:00:00 (Thursday)
+WRONG: action "update" with existing_event_id 3.
+CORRECT: action "create" -- this is a NEW Friday standup, not a modification
+of the Thursday one. Different day means different event.
+
+### Negative Example 2: Do NOT delete without clear cancellation intent
+Conversation: "I might not be able to make the Friday meeting."
+Calendar: [7] Friday All-Hands | 2026-02-21T10:00:00
+WRONG: action "delete" with existing_event_id 7.
+CORRECT: No action for this event, or note with low confidence. "Might not
+make it" expresses uncertainty, not cancellation of the event itself.
+
 ## Output Format
 
 Return a JSON object with the following structure:
@@ -80,7 +196,7 @@ Each event object must have the following fields:
 - "start_time": ISO 8601 datetime string (e.g. "2026-02-19T12:00:00")
 - "confidence": one of "high", "medium", or "low"
 - "reasoning": explanation of why this event was extracted and how confidence was determined
-- "action": one of "create", "update", or "delete" (default to "create" for new events)
+- "action": one of "create", "update", or "delete"
 
 **Optional fields (omit or set to null if unknown):**
 - "end_time": ISO 8601 datetime string, or null if unknown
@@ -88,7 +204,7 @@ Each event object must have the following fields:
 - "attendees": comma-separated list of attendee names, or null if unknown
 - "assumptions": comma-separated list of assumptions made, or null if none
 - "existing_event_id": integer ID of an existing calendar event being
-  updated or deleted, or null for new events
+  updated or deleted (from "Your Calendar" section), or null for new events
 
 ## Confidence Level Guidelines
 
@@ -114,8 +230,31 @@ events array with a summary explaining why no events were found.
   Omit or set to null if no assumptions were made.
 - For the "existing_event_id" field, only provide an integer ID when the
   action is "update" or "delete" and a matching existing event has been
-  identified. For "create" actions, omit or set to null.
+  identified from "Your Calendar". For "create" actions, omit or set to null.
 """
+
+    # ------------------------------------------------------------------
+    # Calendar context (placed near end -- lost-in-the-middle effect)
+    # ------------------------------------------------------------------
+    if calendar_context:
+        prompt += f"""
+## Your Calendar
+
+The following are {owner_name}'s existing calendar events. Use these to decide
+whether to create, update, or delete. Reference events by their integer ID
+(the number in square brackets).
+
+{calendar_context}
+"""
+    else:
+        prompt += """
+## Your Calendar
+
+No existing calendar events are available. Default to action "create" for
+all extracted events.
+"""
+
+    return prompt
 
 
 def build_user_prompt(transcript_text: str) -> str:
