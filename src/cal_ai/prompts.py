@@ -122,6 +122,19 @@ Apply asymmetric confidence thresholds based on the action:
 - **delete**: Only use confidence "high" when the cancellation intent is clear and
   the target event is unambiguously identified. If uncertain, do NOT delete.
 
+## Bulk Operations
+
+A single statement can produce MULTIPLE event actions. When the conversation says
+things like "clear my schedule", "cancel all my meetings", "free up my day", or
+"wipe the next 3 days", you MUST emit a separate DELETE action for EACH existing
+event in "Your Calendar" that falls within the specified time window. Do NOT create
+a single event called "Clear Schedule" or similar — that is wrong.
+
+Similarly, if someone says "reschedule all my Thursday meetings to Friday", emit a
+separate UPDATE for each affected event.
+
+Always map bulk requests to individual per-event actions.
+
 ## Conflicting Instructions (Last Statement Wins)
 
 If the conversation contains conflicting information about the same event (e.g.
@@ -165,6 +178,19 @@ Result:
 - existing_event_id: 5
 - reasoning: "Speaker is cancelling the Design Review [5] due to illness. \
 'Skip' indicates cancellation."
+
+### Example 4: BULK DELETE (clear schedule = multiple deletes)
+Conversation: "I need to clear my schedule for tomorrow, something came up."
+Calendar:
+[2] Team Standup | 2026-02-19T09:00:00 - 2026-02-19T09:30:00
+[4] Lunch with Bob | 2026-02-19T12:00:00 - 2026-02-19T13:00:00
+[6] Code Review | 2026-02-19T14:00:00 - 2026-02-19T15:00:00
+Result: THREE separate delete actions:
+- action: "delete", title: "Team Standup", existing_event_id: 2
+- action: "delete", title: "Lunch with Bob", existing_event_id: 4
+- action: "delete", title: "Code Review", existing_event_id: 6
+- reasoning for each: "Clearing schedule for tomorrow. This event falls within the requested window."
+WRONG: Creating a single event called "Clear Schedule". That is never correct.
 
 ## Negative Examples (Do NOT Do This)
 

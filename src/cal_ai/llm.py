@@ -35,13 +35,13 @@ class GeminiClient:
     Args:
         api_key: Google Gemini API key.
         model: Model identifier to use for generation.  Defaults to
-            ``"gemini-2.0-flash"``.
+            ``"gemini-2.5-pro"``.
     """
 
     def __init__(
         self,
         api_key: str,
-        model: str = "gemini-2.0-flash",
+        model: str = "gemini-2.5-pro",
     ) -> None:
         self._client = genai.Client(api_key=api_key)
         self._model = model

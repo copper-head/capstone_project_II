@@ -668,7 +668,7 @@ class TestAPIIntegration:
         """generate_content is called with the configured model name."""
         response = _make_llm_response_json([_single_lunch_event()])
         with patch("cal_ai.llm.genai.Client"):
-            client = GeminiClient(api_key="fake-key", model="gemini-2.0-flash")
+            client = GeminiClient(api_key="fake-key", model="gemini-2.5-pro")
 
         mock_resp = MagicMock()
         mock_resp.text = response
@@ -681,7 +681,7 @@ class TestAPIIntegration:
         )
 
         call_kwargs = client._client.models.generate_content.call_args
-        assert call_kwargs.kwargs.get("model") == "gemini-2.0-flash"
+        assert call_kwargs.kwargs.get("model") == "gemini-2.5-pro"
 
 
 # ---------------------------------------------------------------------------
