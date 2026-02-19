@@ -501,9 +501,14 @@ def _parse_event_times(
     if start_str is not None:
         with contextlib.suppress(ValueError):
             start_dt = datetime.fromisoformat(start_str)
+            # Strip tzinfo so comparisons with naive ValidatedEvent datetimes work.
+            if start_dt.tzinfo is not None:
+                start_dt = start_dt.replace(tzinfo=None)
 
     if end_str is not None:
         with contextlib.suppress(ValueError):
             end_dt = datetime.fromisoformat(end_str)
+            if end_dt.tzinfo is not None:
+                end_dt = end_dt.replace(tzinfo=None)
 
     return start_dt, end_dt
