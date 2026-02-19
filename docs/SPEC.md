@@ -70,22 +70,31 @@ The AI has full CRUD control over the owner's Google Calendar:
 Transcript (text file)
         |
         v
-  [Transcript Parser]
+  [Stage 1: Transcript Parser]
         |
         v
-  [LLM Event Extractor]  <-- Gemini Flash 3
-        |
+  [Stage 1.5: Calendar Context Fetch]  <-- 14-day window via Google Calendar API
+        |                                    Integer ID remapping applied
+        v
+  [Stage 2: LLM Event Extractor]  <-- Gemini Flash 3
+        |                              Receives transcript + calendar context
+        |                              Outputs action (create/update/delete)
+        |                              References existing events by integer ID
         v
   [Event Validator/Formatter]
         |
         v
-  [Google Calendar Client]  <-- google-api-python-client
-        |
+  [Stage 3: Sync Dispatch]  <-- google-api-python-client
+        |                        Direct ID calls for update/delete
+        |                        Search-based fallback when no ID
+        |                        404 fallback: update->create, delete->skip
         v
   Google Calendar API
 ```
 
 The system follows a **structured extraction pipeline** — the LLM produces structured event data (JSON), and deterministic Python code handles validation and calendar operations. The LLM does not interact with Google Calendar directly.
+
+**Stage 1.5 (Calendar Context Fetch)** injects the owner's upcoming calendar events into the LLM prompt so it can make intelligent CRUD decisions. Events are formatted with remapped integer IDs (1, 2, 3...) instead of Google Calendar UUIDs to reduce LLM hallucination rates. The reverse mapping is used during sync dispatch to resolve real event IDs for direct API calls. If context fetch fails (e.g., no credentials), the pipeline degrades gracefully to create-only behavior.
 
 This design was chosen over an agentic/MCP approach because:
 - Easier to debug (inspect extracted JSON before calendar operations)

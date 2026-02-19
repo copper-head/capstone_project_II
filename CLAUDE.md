@@ -62,12 +62,37 @@ Required in `.env`:
 - `GOOGLE_ACCOUNT_EMAIL` — Calendar owner's email
 - `OWNER_NAME` — Name used for event perspective (e.g., "Alice")
 
+## Architecture: Calendar-Aware CRUD Intelligence
+
+The pipeline uses a multi-stage flow with calendar context injection:
+
+```
+Transcript -> Parser -> Calendar Context Fetch (14-day window)
+  -> LLM Extraction (transcript + calendar context) -> Sync Dispatch -> Google Calendar
+```
+
+**CRUD intelligence:** Before calling the LLM, the pipeline fetches the owner's
+upcoming 14 days of calendar events and injects them into the prompt as compact
+context with integer ID remapping (reduces LLM error rates from ~50% with UUIDs
+to ~5% with integers). The LLM then makes intelligent create/update/delete
+decisions by matching conversation references to existing events and outputting
+the appropriate action with the matched event's integer ID.
+
+**Sync dispatch:** When `existing_event_id` is present and found in the ID map,
+direct API calls (`update_event`/`delete_event`) are used. On HTTP 404: updates
+fall back to create, deletes are treated as idempotent success. Without an event
+ID, search-based methods are used as fallback.
+
+**Graceful degradation:** If calendar credentials are unavailable or context
+fetch fails, the pipeline continues without context (current create-only behavior).
+
 ## Key Conventions
 - Pipeline architecture: LLM outputs structured JSON, Python handles calendar ops
 - All AI reasoning must be logged (demo requirement)
 - All calendar operations must be logged
 - Ambiguous events get created anyway with notes on assumptions
 - Input format: `[Speaker Name]: dialogue text`
+- Integer ID remapping for calendar context (never expose UUIDs to LLM)
 
 ## Security
 - Never commit `.env`, `credentials.json`, or `token.json`
