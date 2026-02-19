@@ -55,6 +55,7 @@ class GeminiClient:
         transcript_text: str,
         owner_name: str,
         current_datetime: datetime,
+        calendar_context: str = "",
     ) -> ExtractionResult:
         """Extract calendar events from a conversation transcript.
 
@@ -68,6 +69,11 @@ class GeminiClient:
             owner_name: Display name of the calendar owner.
             current_datetime: The current date/time, used by the LLM to
                 resolve relative time references.
+            calendar_context: Pre-formatted calendar context text (from
+                :func:`~cal_ai.calendar.context.fetch_calendar_context`).
+                When non-empty, the LLM can match conversation references
+                to existing calendar events for update/delete decisions.
+                Defaults to ``""`` (no context).
 
         Returns:
             An :class:`ExtractionResult` with extracted events (possibly
@@ -80,6 +86,7 @@ class GeminiClient:
         system_prompt = build_system_prompt(
             owner_name=owner_name,
             current_datetime=current_datetime.isoformat(),
+            calendar_context=calendar_context,
         )
         user_prompt = build_user_prompt(transcript_text)
 

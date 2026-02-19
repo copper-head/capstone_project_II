@@ -1,9 +1,11 @@
-"""Unit tests for the pipeline orchestrator (14 tests).
+"""Unit tests for the pipeline orchestrator (18 tests).
 
 Tests cover: full-flow success, empty parse, no-events extraction,
 extraction failure, partial sync failure, all sync failures, dry-run,
 duration tracking, create/update/delete action dispatch, speakers list,
-owner forwarding, and current-datetime forwarding.
+owner forwarding, current-datetime forwarding, calendar context passing,
+graceful degradation on credential failure, id_map storage, and
+dry-run with context fetch.
 """
 
 from __future__ import annotations
@@ -12,6 +14,7 @@ from datetime import datetime
 from pathlib import Path
 from unittest.mock import MagicMock, patch
 
+from cal_ai.calendar.context import CalendarContext
 from cal_ai.exceptions import ExtractionError
 from cal_ai.models.extraction import ExtractedEvent, ExtractionResult, ValidatedEvent
 from cal_ai.models.transcript import TranscriptParseResult, Utterance
@@ -103,6 +106,19 @@ def _make_settings() -> MagicMock:
     return settings
 
 
+def _make_calendar_context(
+    events_text: str = "",
+    id_map: dict[int, str] | None = None,
+    event_count: int = 0,
+) -> CalendarContext:
+    """Build a stub ``CalendarContext``."""
+    return CalendarContext(
+        events_text=events_text,
+        id_map=id_map or {},
+        event_count=event_count,
+    )
+
+
 def _patch_pipeline_deps(
     parse_result: TranscriptParseResult | None = None,
     extraction_result: ExtractionResult | None = None,
@@ -110,6 +126,8 @@ def _patch_pipeline_deps(
     settings: MagicMock | None = None,
     extract_side_effect: Exception | None = None,
     sync_side_effects: list[dict | Exception] | None = None,
+    calendar_context: CalendarContext | None = None,
+    context_side_effect: Exception | None = None,
 ):
     """Return a context manager that patches all pipeline external deps.
 
@@ -119,6 +137,7 @@ def _patch_pipeline_deps(
     extraction_result = extraction_result or _make_extraction_result()
     validated_events = validated_events or [_make_validated_event()]
     settings = settings or _make_settings()
+    calendar_context = calendar_context or _make_calendar_context()
 
     mock_parse = MagicMock(return_value=parse_result)
 
@@ -149,6 +168,13 @@ def _patch_pipeline_deps(
     mock_cal_cls = MagicMock(return_value=mock_client)
     mock_get_creds = MagicMock(return_value=mock_creds)
 
+    # Calendar context mock
+    mock_fetch_context = MagicMock()
+    if context_side_effect:
+        mock_fetch_context.side_effect = context_side_effect
+    else:
+        mock_fetch_context.return_value = calendar_context
+
     class _Ctx:
         """Holds all mocks for the patched pipeline dependencies."""
 
@@ -162,6 +188,7 @@ def _patch_pipeline_deps(
             self.client = mock_client
             self.cal_cls = mock_cal_cls
             self.get_creds = mock_get_creds
+            self.fetch_context = mock_fetch_context
             self._patches = []
             self._started = []
 
@@ -172,6 +199,7 @@ def _patch_pipeline_deps(
                 ("cal_ai.pipeline.load_settings", self.settings_fn),
                 ("cal_ai.pipeline.get_calendar_credentials", self.get_creds),
                 ("cal_ai.pipeline.GoogleCalendarClient", self.cal_cls),
+                ("cal_ai.pipeline.fetch_calendar_context", self.fetch_context),
             ]
             for target, mock_obj in targets:
                 p = patch(target, mock_obj)
@@ -195,7 +223,7 @@ class TestPipeline:
     """Unit tests for ``cal_ai.pipeline.run_pipeline``."""
 
     def test_pipeline_full_flow_success(self, tmp_path: Path) -> None:
-        """Happy path: parse -> extract -> sync all succeed."""
+        """Happy path: parse -> context fetch -> extract -> sync all succeed."""
         transcript = tmp_path / "sample.txt"
         transcript.write_text("[Alice]: Hi\n[Bob]: Hello\n")
 
@@ -250,7 +278,7 @@ class TestPipeline:
     def test_pipeline_extraction_returns_no_events(
         self, tmp_path: Path
     ) -> None:
-        """Parser succeeds, LLM finds nothing -> no events, no calendar calls."""
+        """Parser succeeds, LLM finds nothing -> no events, no sync calls."""
         transcript = tmp_path / "sample.txt"
         transcript.write_text("[Alice]: Nice weather\n")
 
@@ -264,8 +292,8 @@ class TestPipeline:
 
         assert result.events_extracted == []
         assert result.events_synced == []
-        # Calendar client should never have been constructed.
-        ctx.cal_cls.assert_not_called()
+        # Calendar client IS constructed for context fetch, but no sync calls.
+        ctx.client.create_event.assert_not_called()
 
     def test_pipeline_extraction_failure_does_not_crash(
         self, tmp_path: Path
@@ -352,21 +380,30 @@ class TestPipeline:
         assert len(result.events_synced) == 0
         assert len(result.events_failed) == 2
 
-    def test_pipeline_dry_run_skips_calendar(self, tmp_path: Path) -> None:
-        """dry_run=True -> calendar client methods never called."""
+    def test_pipeline_dry_run_skips_sync(self, tmp_path: Path) -> None:
+        """dry_run=True -> calendar sync methods never called, context still fetched."""
         transcript = tmp_path / "sample.txt"
         transcript.write_text("[Alice]: Hi\n")
 
-        with _patch_pipeline_deps() as ctx:
+        ctx_data = _make_calendar_context(
+            events_text="[1] Standup | 2026-02-19T09:00 - 2026-02-19T10:00",
+            id_map={1: "real-uuid-1"},
+            event_count=1,
+        )
+
+        with _patch_pipeline_deps(calendar_context=ctx_data) as ctx:
             result = run_pipeline(
                 transcript_path=transcript,
                 owner="TestOwner",
                 dry_run=True,
             )
 
-        # Calendar client should not be constructed in dry-run.
-        ctx.cal_cls.assert_not_called()
-        ctx.get_creds.assert_not_called()
+        # Context should be fetched even in dry-run.
+        ctx.fetch_context.assert_called_once()
+        # Sync methods should NOT be called.
+        ctx.client.create_event.assert_not_called()
+        ctx.client.find_and_update_event.assert_not_called()
+        ctx.client.find_and_delete_event.assert_not_called()
         # Events should still be extracted and listed as "would_*" synced.
         assert len(result.events_synced) >= 1
         for sync in result.events_synced:
@@ -501,3 +538,92 @@ class TestPipeline:
 
         call_kwargs = ctx.gemini.extract_events.call_args
         assert call_kwargs.kwargs["current_datetime"] == frozen_dt
+
+    def test_pipeline_passes_calendar_context_to_extractor(
+        self, tmp_path: Path
+    ) -> None:
+        """Calendar context text forwarded to extract_events call."""
+        transcript = tmp_path / "sample.txt"
+        transcript.write_text("[Alice]: Hi\n")
+
+        ctx_data = _make_calendar_context(
+            events_text="[1] Standup | 2026-02-19T09:00 - 2026-02-19T10:00",
+            id_map={1: "real-uuid-1"},
+            event_count=1,
+        )
+
+        with _patch_pipeline_deps(calendar_context=ctx_data) as ctx:
+            run_pipeline(
+                transcript_path=transcript,
+                owner="TestOwner",
+                dry_run=True,
+            )
+
+        call_kwargs = ctx.gemini.extract_events.call_args
+        assert call_kwargs.kwargs["calendar_context"] == ctx_data.events_text
+
+    def test_pipeline_stores_id_map(self, tmp_path: Path) -> None:
+        """id_map from calendar context stored in PipelineResult."""
+        transcript = tmp_path / "sample.txt"
+        transcript.write_text("[Alice]: Hi\n")
+
+        expected_map = {1: "uuid-aaa", 2: "uuid-bbb"}
+        ctx_data = _make_calendar_context(
+            events_text="[1] A | ... \n[2] B | ...",
+            id_map=expected_map,
+            event_count=2,
+        )
+
+        with _patch_pipeline_deps(calendar_context=ctx_data):
+            result = run_pipeline(
+                transcript_path=transcript,
+                owner="TestOwner",
+                dry_run=True,
+            )
+
+        assert result.id_map == expected_map
+
+    def test_pipeline_graceful_degradation_no_credentials(
+        self, tmp_path: Path
+    ) -> None:
+        """Credential failure -> extract without context, warning recorded."""
+        transcript = tmp_path / "sample.txt"
+        transcript.write_text("[Alice]: Hi\n")
+
+        with _patch_pipeline_deps() as ctx:
+            # Make credential fetch raise so calendar client construction fails.
+            ctx.get_creds.side_effect = RuntimeError("No credentials")
+            result = run_pipeline(
+                transcript_path=transcript,
+                owner="TestOwner",
+                dry_run=True,
+            )
+
+        # Pipeline should still succeed (graceful degradation).
+        assert len(result.events_extracted) >= 1
+        # Warning about context unavailability should be recorded.
+        assert any("context unavailable" in w.lower() for w in result.warnings)
+        # Calendar context should be empty (default).
+        call_kwargs = ctx.gemini.extract_events.call_args
+        assert call_kwargs.kwargs["calendar_context"] == ""
+
+    def test_pipeline_context_fetch_failure_degrades_gracefully(
+        self, tmp_path: Path
+    ) -> None:
+        """fetch_calendar_context raises -> extract without context, warning."""
+        transcript = tmp_path / "sample.txt"
+        transcript.write_text("[Alice]: Hi\n")
+
+        with _patch_pipeline_deps() as ctx:
+            ctx.fetch_context.side_effect = RuntimeError("API timeout")
+            result = run_pipeline(
+                transcript_path=transcript,
+                owner="TestOwner",
+                dry_run=True,
+            )
+
+        # Pipeline should still succeed.
+        assert len(result.events_extracted) >= 1
+        assert any("context unavailable" in w.lower() for w in result.warnings)
+        call_kwargs = ctx.gemini.extract_events.call_args
+        assert call_kwargs.kwargs["calendar_context"] == ""

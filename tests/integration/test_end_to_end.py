@@ -12,6 +12,7 @@ from datetime import datetime
 from pathlib import Path
 from unittest.mock import MagicMock, patch
 
+from cal_ai.calendar.context import CalendarContext
 from cal_ai.demo_output import format_pipeline_result
 from cal_ai.exceptions import ExtractionError
 from cal_ai.models.extraction import ExtractedEvent, ExtractionResult, ValidatedEvent
@@ -131,17 +132,22 @@ def _run_e2e(
 
     mock_cal_cls = MagicMock(return_value=mock_client)
 
+    # -- Mock fetch_calendar_context -----------------------------------------
+    mock_fetch_context = MagicMock(return_value=CalendarContext())
+
     class _Mocks:
         gemini = mock_gemini
         gemini_cls = mock_gemini_cls
         client = mock_client
         cal_cls = mock_cal_cls
+        fetch_context = mock_fetch_context
 
     with (
         patch("cal_ai.pipeline.GeminiClient", mock_gemini_cls),
         patch("cal_ai.pipeline.load_settings", mock_settings_fn),
         patch("cal_ai.pipeline.get_calendar_credentials", mock_get_creds),
         patch("cal_ai.pipeline.GoogleCalendarClient", mock_cal_cls),
+        patch("cal_ai.pipeline.fetch_calendar_context", mock_fetch_context),
     ):
         result = run_pipeline(
             transcript_path=Path(sample_file),
@@ -285,8 +291,10 @@ class TestEndToEnd:
         assert len(result.events_synced) == 0
         assert len(result.events_failed) == 0
 
-        # Calendar client should never have been constructed.
-        mocks.cal_cls.assert_not_called()
+        # Calendar client is constructed for context fetch, but no sync calls.
+        mocks.client.create_event.assert_not_called()
+        mocks.client.find_and_update_event.assert_not_called()
+        mocks.client.find_and_delete_event.assert_not_called()
 
         # Demo output should contain the "no events" message.
         output = format_pipeline_result(result)
@@ -397,8 +405,10 @@ class TestEndToEnd:
         assert len(result.warnings) >= 1
         assert any("LLM extraction failed" in w for w in result.warnings)
 
-        # Calendar client should never have been constructed.
-        mocks.cal_cls.assert_not_called()
+        # Calendar client is constructed for context fetch, but no sync calls.
+        mocks.client.create_event.assert_not_called()
+        mocks.client.find_and_update_event.assert_not_called()
+        mocks.client.find_and_delete_event.assert_not_called()
 
     def test_e2e_output_structure_has_all_stages(self) -> None:
         """Demo output contains 'STAGE 1', 'STAGE 2', 'STAGE 3', and 'SUMMARY'."""

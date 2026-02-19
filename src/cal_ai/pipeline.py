@@ -16,6 +16,7 @@ from pathlib import Path
 
 from cal_ai.calendar.auth import get_calendar_credentials
 from cal_ai.calendar.client import GoogleCalendarClient
+from cal_ai.calendar.context import CalendarContext, fetch_calendar_context
 from cal_ai.config import load_settings
 from cal_ai.exceptions import ExtractionError
 from cal_ai.llm import GeminiClient
@@ -80,6 +81,8 @@ class PipelineResult:
         warnings: Non-fatal warnings from any pipeline stage.
         duration_seconds: Wall-clock time for the full pipeline.
         dry_run: Whether the pipeline ran in dry-run mode.
+        id_map: Mapping from integer IDs (used in LLM context) to
+            Google Calendar event UUIDs for reverse lookup during sync.
     """
 
     transcript_path: Path
@@ -91,6 +94,7 @@ class PipelineResult:
     warnings: list[str] = field(default_factory=list)
     duration_seconds: float = 0.0
     dry_run: bool = False
+    id_map: dict[int, str] = field(default_factory=dict)
 
 
 # ---------------------------------------------------------------------------
@@ -167,11 +171,31 @@ def run_pipeline(
         return result
 
     # ------------------------------------------------------------------
+    # Stage 1b: Build calendar client and fetch context
+    # ------------------------------------------------------------------
+    settings = load_settings()
+
+    calendar_context = CalendarContext()
+    client: GoogleCalendarClient | None = None
+
+    try:
+        client = _build_calendar_client(settings)
+        calendar_context = fetch_calendar_context(client, now)
+        result.id_map = calendar_context.id_map
+        logger.info(
+            "Calendar context fetched: %d event(s) in window",
+            calendar_context.event_count,
+        )
+    except Exception as exc:
+        msg = f"Calendar context unavailable, extracting without context: {exc}"
+        result.warnings.append(msg)
+        logger.warning(msg)
+
+    # ------------------------------------------------------------------
     # Stage 2: Extract Events
     # ------------------------------------------------------------------
     logger.info("Stage 2: Extracting events via LLM")
 
-    settings = load_settings()
     gemini = GeminiClient(api_key=settings.gemini_api_key)
 
     # Build the transcript text for the LLM from the parsed utterances.
@@ -182,6 +206,7 @@ def run_pipeline(
             transcript_text=transcript_text,
             owner_name=owner,
             current_datetime=now,
+            calendar_context=calendar_context.events_text,
         )
         result.events_extracted = list(extraction.events)
     except ExtractionError as exc:
@@ -219,18 +244,22 @@ def run_pipeline(
             len(result.events_extracted),
         )
 
-        client = _build_calendar_client(settings)
+        # If we don't have a client yet (context fetch was skipped/failed),
+        # build one now for the sync stage.
+        if client is None:
+            client = _build_calendar_client(settings)
 
-        # Validate extracted events to get parsed datetimes for the calendar client.
-        validated_map = _validate_events(gemini, extraction, now)
+        # Validate extracted events and correlate by index position.
+        validated_list = _validate_events(gemini, extraction, now)
 
-        for event in result.events_extracted:
-            validated = validated_map.get(event.title)
-            if validated is None:
+        for i, event in enumerate(result.events_extracted):
+            if i >= len(validated_list):
                 result.events_failed.append(
                     FailedEvent(event=event, error="Event validation failed")
                 )
                 continue
+
+            validated = validated_list[i]
 
             try:
                 sync_result = _sync_single_event(validated, client)
@@ -306,7 +335,13 @@ def _build_calendar_client(settings) -> GoogleCalendarClient:
 
 
 def _validate_events(gemini, extraction, now):
-    """Validate extracted events and return a title-to-validated mapping.
+    """Validate extracted events and return them as a list for index-based correlation.
+
+    The returned list preserves the same order as the input
+    ``extraction.events`` so that ``validated[i]`` corresponds to
+    ``extraction.events[i]``.  Events that fail validation are skipped
+    by :meth:`GeminiClient.validate_events` (logged and omitted), so the
+    returned list may be shorter than the input.
 
     Args:
         gemini: The :class:`GeminiClient` instance.
@@ -314,10 +349,9 @@ def _validate_events(gemini, extraction, now):
         now: Current datetime for validation.
 
     Returns:
-        A dict mapping event titles to :class:`ValidatedEvent` instances.
+        A list of :class:`ValidatedEvent` instances in extraction order.
     """
-    validated_list = gemini.validate_events(extraction, current_datetime=now)
-    return {v.title: v for v in validated_list}
+    return gemini.validate_events(extraction, current_datetime=now)
 
 
 def _sync_single_event(

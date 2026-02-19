@@ -1,4 +1,4 @@
-"""Unit tests for GeminiClient (23 tests).
+"""Unit tests for GeminiClient (25 tests).
 
 All tests use mocks -- no real Gemini API calls are made.  The tests cover
 happy-path extraction, ambiguous events, owner perspective, relative time
@@ -611,6 +611,42 @@ class TestAPIIntegration:
         system_instruction = config.system_instruction
         assert "Alice" in system_instruction
         assert "2026-02-18" in system_instruction
+
+    def test_calendar_context_forwarded_to_system_prompt(self) -> None:
+        """calendar_context text appears in the system prompt sent to Gemini."""
+        response = _make_llm_response_json([_single_lunch_event()])
+        client = _mock_client(response)
+
+        context_text = "[1] Team Standup | 2026-02-19T09:00 - 2026-02-19T10:00"
+        client.extract_events(
+            transcript_text="test",
+            owner_name="Alice",
+            current_datetime=_CURRENT_DT,
+            calendar_context=context_text,
+        )
+
+        call_kwargs = client._client.models.generate_content.call_args
+        config = call_kwargs.kwargs.get("config") or call_kwargs[1].get("config")
+        system_instruction = config.system_instruction
+        assert "Team Standup" in system_instruction
+        assert "[1]" in system_instruction
+
+    def test_empty_calendar_context_shows_no_events_message(self) -> None:
+        """Empty calendar_context produces 'No existing calendar events' in prompt."""
+        response = _make_llm_response_json([_single_lunch_event()])
+        client = _mock_client(response)
+
+        client.extract_events(
+            transcript_text="test",
+            owner_name="Alice",
+            current_datetime=_CURRENT_DT,
+            calendar_context="",
+        )
+
+        call_kwargs = client._client.models.generate_content.call_args
+        config = call_kwargs.kwargs.get("config") or call_kwargs[1].get("config")
+        system_instruction = config.system_instruction
+        assert "No existing calendar events" in system_instruction
 
     def test_response_schema_sent_to_gemini(self) -> None:
         """Generation config includes response_mime_type and response_schema."""
