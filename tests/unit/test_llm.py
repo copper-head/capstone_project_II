@@ -48,24 +48,38 @@ def _single_lunch_event() -> dict:
     }
 
 
+def _mock_usage_metadata() -> MagicMock:
+    """Return a mock ``usage_metadata`` with realistic token counts."""
+    usage = MagicMock()
+    usage.prompt_token_count = 100
+    usage.candidates_token_count = 50
+    usage.total_token_count = 150
+    usage.thoughts_token_count = 0
+    return usage
+
+
 def _mock_client(response_text: str) -> GeminiClient:
     """Create a ``GeminiClient`` with a mocked ``genai.Client``.
 
     The mock's ``models.generate_content`` returns *response_text* on every
-    call.
+    call, including ``usage_metadata``.
     """
     with patch("cal_ai.llm.genai.Client"):
         client = GeminiClient(api_key="fake-key")
 
     mock_response = MagicMock()
     mock_response.text = response_text
-    client._client.models.generate_content = MagicMock(return_value=mock_response)
+    mock_response.usage_metadata = _mock_usage_metadata()
+    client._client.models.generate_content = MagicMock(
+        return_value=mock_response,
+    )
     return client
 
 
 def _mock_client_multi(response_texts: list[str]) -> GeminiClient:
     """Create a ``GeminiClient`` whose ``generate_content`` returns different
-    text on successive calls (using ``side_effect``).
+    text on successive calls (using ``side_effect``), including
+    ``usage_metadata``.
     """
     with patch("cal_ai.llm.genai.Client"):
         client = GeminiClient(api_key="fake-key")
@@ -74,6 +88,7 @@ def _mock_client_multi(response_texts: list[str]) -> GeminiClient:
     for text in response_texts:
         mock_resp = MagicMock()
         mock_resp.text = text
+        mock_resp.usage_metadata = _mock_usage_metadata()
         responses.append(mock_resp)
 
     client._client.models.generate_content = MagicMock(side_effect=responses)

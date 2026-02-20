@@ -37,7 +37,9 @@ def test_main_module_exists() -> None:
     )
     assert result.returncode == 0
     assert "Traceback" not in result.stderr
-    assert "transcript_file" in result.stdout
+    # Top-level help shows subcommands; transcript_file is in "run" help.
+    assert "run" in result.stdout
+    assert "benchmark" in result.stdout
 
 
 def test_main_module_no_args_exits_with_usage() -> None:
