@@ -1,0 +1,36 @@
+{
+  "description": "Simple two-speaker lunch event with explicit time and location.",
+  "category": "crud",
+  "tolerance": "strict",
+  "owner": "Alice",
+  "reference_datetime": "2026-02-20T10:00:00",
+  "calendar_context": [],
+  "expected_events": [
+    {
+      "action": "create",
+      "title": "Lunch with Bob",
+      "start_time": "2026-02-26T12:00:00",
+      "end_time": "2026-02-26T13:00:00",
+      "location": "5th",
+      "attendees_contain": ["Alice", "Bob"]
+    }
+  ],
+  "mock_llm_response": {
+    "events": [
+      {
+        "title": "Lunch with Bob",
+        "start_time": "2026-02-26T12:00:00",
+        "end_time": "2026-02-26T13:00:00",
+        "location": "New place on 5th",
+        "attendees": "Alice, Bob",
+        "confidence": "high",
+        "reasoning": "Alice and Bob explicitly agreed to lunch at noon on Thursday at a restaurant on 5th.",
+        "assumptions": null,
+        "action": "create",
+        "existing_event_id": null
+      }
+    ],
+    "summary": "Found 1 lunch event for Thursday at noon."
+  },
+  "notes": "Reference datetime is 2026-02-20 (Friday), so 'Thursday' resolves to 2026-02-26."
+}

@@ -44,3 +44,8 @@ indent-style = "space"
 testpaths = ["tests"]
 pythonpath = ["src"]
 addopts = "-v --tb=short --cov=cal_ai --cov-report=term-missing"
+markers = [
+    "live: requires real Gemini API credentials",
+    "regression: regression test suite",
+    "slow: long-running test",
+]

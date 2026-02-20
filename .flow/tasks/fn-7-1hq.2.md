@@ -45,9 +45,8 @@ Build the sidecar JSON schema (Pydantic model), a loader utility that pairs `.tx
 - [ ] Unit tests for tolerance engine (at least 6 tests: 2 per level)
 - [ ] `ruff check .` passes
 ## Done summary
-TBD
-
+Built the regression test sidecar JSON schema (Pydantic models), loader utility for discovering .txt/.expected.json pairs and building CalendarContext, and the three-tier tolerance assertion engine (strict/moderate/relaxed) with Hungarian optimal matching, rapidfuzz fuzzy title comparison, delete-action time resolution from calendar context, and context-aware existing_event_id validation. Added 34 unit tests covering all modules and tolerance levels.
 ## Evidence
-- Commits:
-- Tests:
+- Commits: 0703a3ae80d5a5f4af4366b32f15f1f0e194b6f3, 4627629e6edff5e94fb25e26b7e6b50f3b58d75e, 5f82e3749683da0895cce4f3269d7d0a5f7ddf77
+- Tests: pytest tests/unit/ -v --tb=short, ruff check tests/regression/ tests/unit/test_regression_utils.py
 - PRs:
