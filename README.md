@@ -93,7 +93,7 @@ Samples are organized by category under `samples/`:
 | `crud/cancel_event.txt` | crud | Cancelling an existing event |
 | `crud/cancellation.txt` | crud | Event cancellation |
 | `crud/mixed_crud.txt` | crud | Create + update + delete in one conversation |
-| `crud/clear_schedule.txt` | crud | Bulk delete -- clear all events for 3 days |
+| `crud/clear_schedule.txt` | crud | Bulk delete --- clear all events for 3 days |
 | `multi_speaker/complex.txt` | multi_speaker | 4 speakers, mixed content |
 | `multi_speaker/multiple_events.txt` | multi_speaker | Several events in one conversation |
 | `adversarial/no_events.txt` | adversarial | Conversation with no calendar-relevant content |
