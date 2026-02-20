@@ -1,105 +1,128 @@
 # Benchmark Suite: Precision/Recall Scoring with AI-Summarized Reports
 
-## Problem
+## Overview
 
-There is no way to quantitatively measure the AI extraction pipeline's accuracy. We need a benchmarking tool that scores the system across sample transcripts using precision/recall/F1, produces detailed markdown reports with full expected-vs-actual diffs, tracks performance history across model/prompt changes, and uses the AI itself to generate a reasoning summary of the results.
+Build a CLI benchmark tool (`python -m cal_ai benchmark`) that scores the AI extraction pipeline across all fn-7 regression samples using Precision/Recall/F1 metrics. Produces console summaries, detailed markdown reports with per-sample diffs, confidence calibration stats, latency/cost tracking, run history, and an AI-generated summary where Gemini reasons about its own performance.
 
-## Key Decisions
+## Scope
 
-1. **Metrics: Precision + Recall + F1** — standard information retrieval metrics per sample and aggregate.
-2. **Data source: reuse fn-7 samples** — no duplication. Runs against the same samples/sidecars from the regression suite.
-3. **Custom directory support** — `python -m cal_ai benchmark /path/to/any/samples/`. If sidecars (.expected.json) are present, score against them. If missing, run extraction and log output with a warning.
-4. **Live Gemini calls only** — benchmarking is meaningless without real model output. No mock mode.
-5. **CLI: subcommand of cal-ai** — `python -m cal_ai benchmark [dir] [--output path]`.
-6. **Output: console summary + detailed markdown report + log file.**
-   - Console: table with overall scores and per-category breakdown.
-   - Markdown report: full diff per sample (expected vs actual events side-by-side, field-by-field comparison, AI reasoning excerpt).
-   - Log file: detailed pipeline logs for each sample.
-7. **Output path: default `reports/` with `--output` override.**
-8. **History tracking** — each run appends a summary row to `reports/benchmark_history.json`. Enables charting improvement over time.
-9. **Latency + cost tracking** — record wall-clock time per sample and estimate API cost (tokens * price).
-10. **Confidence calibration** — check whether the AI's confidence ratings (high/medium/low) correlate with actual accuracy. Report calibration stats (e.g., "high confidence events were correct 95% of the time").
-11. **AI-generated summary** — at the end of the markdown report, call Gemini to summarize the benchmark results: what went well, what failed, patterns in failures, suggestions for improvement. The AI reasons about its own performance.
+**In scope:**
+- Modify `GeminiClient._call_api()` to surface `response.usage_metadata` (token counts)
+- Convert `__main__.py` CLI to argparse subparsers (`run` + `benchmark`) with backward compatibility
+- Build scoring engine: P/R/F1, confidence calibration, event matching (reuses fn-7 tolerance engine)
+- Build benchmark runner: sample discovery, live Gemini extraction, report generation
+- Console summary + detailed markdown report + JSONL history file
+- AI-generated summary (Gemini self-evaluation of benchmark results)
+- Progress indicator during benchmark execution
+- Add `reports/` to `.gitignore`, `make benchmark` Makefile target
+- Update README.md, CLAUDE.md
 
-## Output Structure
+**Out of scope:**
+- Mock mode for benchmark (benchmarking requires real LLM output)
+- Side-by-side run comparison (future enhancement)
+- Cost confirmation prompts
+- Precision/recall dashboards or visualization
 
-### Console Output
-```
-Benchmark Results — 2026-02-19T14:30:00
-========================================
-Samples: 45 | Scored: 42 | No ground truth: 3
+## Key Design Decisions
 
-Overall:  P=0.91  R=0.87  F1=0.89
-Category breakdown:
-  crud:          P=0.95  R=0.90  F1=0.92  (12 samples)
-  adversarial:   P=0.82  R=0.75  F1=0.78  (8 samples)
-  multi_speaker: P=0.88  R=0.85  F1=0.86  (7 samples)
-  realistic:     P=0.93  R=0.91  F1=0.92  (9 samples)
-  long:          P=0.90  R=0.84  F1=0.87  (6 samples)
+1. **Call `extract_events()` directly, NOT `run_pipeline()`**: The benchmark measures extraction accuracy, not calendar sync. Calling `extract_events()` avoids needing Google Calendar OAuth credentials, allows injecting sidecar `calendar_context` for reproducible scoring, and avoids accidental calendar mutations. The sidecar provides `owner`, `reference_datetime`, and `calendar_context` — all passed to `extract_events()`.
 
-Confidence calibration:
-  high:   94% correct
-  medium: 71% correct
-  low:    45% correct
+2. **Token usage surfacing**: Modify `_call_api()` to return a small dataclass `LLMCallResult(text: str, usage: UsageMetadata | None)` instead of bare `str`. Update `extract_events()` to pass through and accumulate token counts. This is a cross-cutting change that affects `test_llm.py` mocks.
 
-Avg latency: 2.3s/sample | Est. cost: $0.12
-```
+3. **CLI backward compatibility**: Use `argparse.add_subparsers()` with `default` subparser routing. `python -m cal_ai file.txt` continues to work by defaulting to the `run` subcommand. `python -m cal_ai benchmark [dir]` invokes the benchmark. All existing CLI tests must pass after migration.
 
-### Markdown Report (reports/benchmark_YYYY-MM-DDTHH-MM.md)
-- Header with run metadata (model, timestamp, sample count)
-- Per-category summary table
-- Per-sample detail: expected vs actual diff, field comparisons, tolerance applied, AI reasoning
-- Confidence calibration breakdown
-- Latency + cost stats
-- AI-generated summary section at the end (Gemini reasons about the results)
+4. **True Positive definition**: An actual event paired by the fn-7 best-match algorithm where action matches AND all scored fields (title, start_time, end_time) fall within the sidecar's declared tolerance level. This reuses fn-7's tolerance engine directly.
 
-### History File (reports/benchmark_history.json)
-```json
-[
-  {
-    "timestamp": "2026-02-19T14:30:00",
-    "model": "gemini-2.5-pro",
-    "samples": 45,
-    "precision": 0.91,
-    "recall": 0.87,
-    "f1": 0.89,
-    "avg_latency_s": 2.3,
-    "est_cost_usd": 0.12
-  }
-]
+5. **P/R edge cases**: When both actual and expected are empty (e.g., `no_events.txt`), P=1.0, R=1.0, F1=1.0 (vacuous truth). When actual is empty but expected is not, P=1.0 (no false positives), R=0.0. When expected is empty but actual is not, P=0.0, R=1.0 (no missed events).
+
+6. **Category determination**: Derived from subdirectory name (e.g., `samples/crud/` → category `crud`). If a custom flat directory is used, category defaults to `"uncategorized"`.
+
+7. **History format: JSONL** (not JSON array): Eliminates concurrent-write corruption risk, O(1) append, no need to parse entire file. File: `reports/benchmark_history.jsonl`.
+
+8. **`reference_datetime` in live mode**: Use sidecar's `reference_datetime` for reproducible scoring. Live mode tests extraction accuracy against known ground truth, not time resolution.
+
+9. **Gemini pricing**: Hardcode current Gemini 2.5 Pro pricing ($1.25/1M input, $10.00/1M output for ≤200k context) as constants. Cost estimation is approximate — the AI summary call's cost is included in the total.
+
+10. **Progress indicator**: Print `[N/M] category/sample_name... P=0.91 R=0.87 (2.3s)` per sample to stderr, keeping stdout clean for the final summary.
+
+## Architecture & Data Flow
+
+```mermaid
+graph TD
+    A[CLI: python -m cal_ai benchmark] --> B[Discover samples in dir]
+    B --> C[Load .expected.json sidecars]
+    C --> D{Has sidecar?}
+    D -->|No| E[Run extraction, log warning, skip scoring]
+    D -->|Yes| F[Build CalendarContext from sidecar]
+    F --> G[GeminiClient.extract_events with sidecar context]
+    G --> H[LLMCallResult: text + usage_metadata]
+    H --> I[Score: best-match events via fn-7 tolerance engine]
+    I --> J[Calculate P/R/F1 per sample]
+    J --> K[Aggregate: per-category + overall]
+    K --> L[Confidence calibration stats]
+    L --> M[Console summary to stdout]
+    L --> N[Detailed markdown report]
+    L --> O[Append to JSONL history]
+    N --> P[AI summary: Gemini self-evaluation]
+    P --> Q[Append AI summary to markdown report]
 ```
 
-## Dependencies
+## Risks & Mitigations
 
-- **Depends on fn-7-1hq** (regression test suite) — needs the samples, sidecars, and subdirectory structure to exist first.
-- Reuses fn-7's tolerance system for scoring flexibility.
+| Risk | Impact | Mitigation |
+|------|--------|------------|
+| fn-7 not complete | Benchmark cannot run | fn-8 depends_on fn-7; implement fn-7 first |
+| `_call_api()` change breaks mocks | Test failures | Update all mocks in test_llm.py atomically in same task |
+| CLI subparser breaks existing tests | 7 CLI tests fail | Preserve `python -m cal_ai file.txt` via default subparser |
+| Gemini rate limiting (15 RPM free tier) | Benchmark hangs or errors | Add configurable delay between samples; Gemini SDK has retry logic |
+| Report filename collision (same minute) | Overwrite | Include seconds in filename: `benchmark_YYYY-MM-DDTHH-MM-SS.md` |
+| AI summary call fails after 45+ calls | No summary | Graceful degradation: write report without summary, add note |
+| Token counts unavailable (older SDK) | Cost tracking broken | Guard with `hasattr(response, 'usage_metadata')`, default to None |
 
-## Edge Cases
+## Quick commands
 
-- Samples without sidecars: run extraction, log output, warn, exclude from scoring.
-- Empty sample directory: exit with clear error message.
-- Gemini API failure mid-benchmark: log the failure for that sample, continue with remaining samples, mark failed samples in report.
-- AI summary generation failure: still produce the full report, just skip the AI summary section with a note.
-- History file doesn't exist yet: create it on first run.
-- Custom directory with different sidecar schema: validate schema on load, skip malformed sidecars with warning.
+```bash
+# Run benchmark against built-in samples
+python -m cal_ai benchmark
 
-## Open Questions
+# Run benchmark against custom directory
+python -m cal_ai benchmark /path/to/samples/ --output /tmp/reports/
 
-- Token counting for cost estimation — use the Gemini API's usage metadata if available, or estimate from prompt/response length.
-- Whether to support comparing two specific runs side-by-side in the report (vs just tracking history).
+# Run existing pipeline (backward compatible)
+python -m cal_ai samples/crud/simple_lunch.txt
+
+# Make target
+make benchmark
+```
 
 ## Acceptance
 
-- [ ] `python -m cal_ai benchmark` subcommand works
-- [ ] Accepts optional directory argument (defaults to built-in samples)
-- [ ] `--output` flag for custom report location
-- [ ] Precision/Recall/F1 calculated per sample and aggregate
-- [ ] Per-category breakdown in console and report
-- [ ] Full expected vs actual diff per sample in markdown report
+- [ ] `python -m cal_ai benchmark` subcommand discovers samples and runs live extraction
+- [ ] `python -m cal_ai file.txt` still works (backward compatible)
+- [ ] `GeminiClient._call_api()` returns token usage metadata
+- [ ] P/R/F1 calculated per sample and aggregate with correct edge case handling
+- [ ] Per-category breakdown in console and markdown report
 - [ ] Confidence calibration stats (high/medium/low accuracy correlation)
-- [ ] Latency per sample tracked
-- [ ] API cost estimated
-- [ ] History appended to benchmark_history.json
-- [ ] AI-generated summary at end of markdown report
-- [ ] Graceful handling of samples without sidecars
+- [ ] Latency per sample tracked, cost estimated from token counts
+- [ ] JSONL history appended per run to `reports/benchmark_history.jsonl`
+- [ ] AI-generated summary at end of markdown report (graceful failure)
+- [ ] Progress indicator on stderr during execution
+- [ ] Samples without sidecars: extracted, warned, excluded from scoring
+- [ ] `reports/` in `.gitignore`, `make benchmark` in Makefile
 - [ ] ruff clean, all existing tests pass
+- [ ] README.md and CLAUDE.md updated
+
+## References
+
+- Existing CLI: `src/cal_ai/__main__.py:25-59` (flat argparse)
+- LLM client: `src/cal_ai/llm.py:198-208` (`_call_api()` discards usage_metadata)
+- Pipeline entry: `src/cal_ai/pipeline.py:116` (`run_pipeline()`)
+- Extraction models: `src/cal_ai/models/extraction.py`
+- Calendar context: `src/cal_ai/calendar/context.py` (`CalendarContext`)
+- Report pattern: `src/cal_ai/demo_output.py:32-58` (`format_pipeline_result()`)
+- CLI tests: `tests/unit/test_cli.py` (7 tests)
+- LLM mocks: `tests/unit/test_llm.py:51-63` (`_mock_client()`)
+- fn-7 sidecar schema: `.flow/tasks/fn-7-1hq.2.md`
+- fn-7 tolerance engine: `.flow/tasks/fn-7-1hq.2.md`
+- Gemini pricing: $1.25/1M input, $10.00/1M output (≤200k context)
+- Gemini usage_metadata fields: `prompt_token_count`, `candidates_token_count`, `total_token_count`, `thoughts_token_count`

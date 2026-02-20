@@ -1,0 +1,16 @@
+{
+  "assignee": null,
+  "claim_note": "",
+  "claimed_at": null,
+  "created_at": "2026-02-20T08:46:23.254923Z",
+  "depends_on": [
+    "fn-8-vyv.3"
+  ],
+  "epic": "fn-8-vyv",
+  "id": "fn-8-vyv.4",
+  "priority": null,
+  "spec_path": ".flow/tasks/fn-8-vyv.4.md",
+  "status": "todo",
+  "title": "AI summary generation, docs, Makefile, and final validation",
+  "updated_at": "2026-02-20T08:47:45.719596Z"
+}

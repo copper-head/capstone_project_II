@@ -14,15 +14,16 @@ from cal_ai.parser import parse_transcript_file
 SAMPLES_DIR = Path("samples")
 
 EXPECTED_FILES = [
-    "simple_lunch.txt",
-    "multiple_events.txt",
-    "cancellation.txt",
-    "ambiguous_time.txt",
-    "no_events.txt",
-    "complex.txt",
-    "update_meeting.txt",
-    "cancel_event.txt",
-    "mixed_crud.txt",
+    "crud/simple_lunch.txt",
+    "crud/update_meeting.txt",
+    "crud/cancel_event.txt",
+    "crud/cancellation.txt",
+    "crud/mixed_crud.txt",
+    "crud/clear_schedule.txt",
+    "multi_speaker/complex.txt",
+    "multi_speaker/multiple_events.txt",
+    "adversarial/no_events.txt",
+    "realistic/ambiguous_time.txt",
 ]
 
 
@@ -30,7 +31,7 @@ class TestSampleTranscripts:
     """Validate that all sample transcript files are present and well-formed."""
 
     def test_all_sample_files_exist(self) -> None:
-        """All 9 sample transcript files are present in samples/."""
+        """All 10 sample transcript files are present in samples/."""
         for name in EXPECTED_FILES:
             assert (SAMPLES_DIR / name).exists(), f"Missing sample file: {name}"
 
@@ -43,28 +44,28 @@ class TestSampleTranscripts:
 
     def test_simple_lunch_has_expected_speakers(self) -> None:
         """simple_lunch.txt has at least 2 distinct speakers."""
-        result = parse_transcript_file(SAMPLES_DIR / "simple_lunch.txt")
+        result = parse_transcript_file(SAMPLES_DIR / "crud/simple_lunch.txt")
         assert len(result.speakers) >= 2, (
             f"Expected at least 2 speakers, got {len(result.speakers)}: {result.speakers}"
         )
 
     def test_multiple_events_has_enough_content(self) -> None:
         """multiple_events.txt has at least 6 utterances."""
-        result = parse_transcript_file(SAMPLES_DIR / "multiple_events.txt")
+        result = parse_transcript_file(SAMPLES_DIR / "multi_speaker/multiple_events.txt")
         assert len(result.utterances) >= 6, (
             f"Expected at least 6 utterances, got {len(result.utterances)}"
         )
 
     def test_complex_has_multiple_speakers(self) -> None:
         """complex.txt has at least 3 distinct speakers."""
-        result = parse_transcript_file(SAMPLES_DIR / "complex.txt")
+        result = parse_transcript_file(SAMPLES_DIR / "multi_speaker/complex.txt")
         assert len(result.speakers) >= 3, (
             f"Expected at least 3 speakers, got {len(result.speakers)}: {result.speakers}"
         )
 
     def test_no_events_is_casual_conversation(self) -> None:
         """no_events.txt parses successfully and contains no scheduling keywords."""
-        result = parse_transcript_file(SAMPLES_DIR / "no_events.txt")
+        result = parse_transcript_file(SAMPLES_DIR / "adversarial/no_events.txt")
         assert len(result.utterances) > 0, "no_events.txt should have utterances"
 
         # Combine all utterance text and check for scheduling-related keywords.
@@ -77,7 +78,7 @@ class TestSampleTranscripts:
 
     def test_update_meeting_has_rescheduling_language(self) -> None:
         """update_meeting.txt contains rescheduling/update language."""
-        result = parse_transcript_file(SAMPLES_DIR / "update_meeting.txt")
+        result = parse_transcript_file(SAMPLES_DIR / "crud/update_meeting.txt")
         assert len(result.utterances) > 0, "update_meeting.txt should have utterances"
         assert len(result.speakers) >= 2, (
             f"Expected at least 2 speakers, got {len(result.speakers)}"
@@ -90,7 +91,7 @@ class TestSampleTranscripts:
 
     def test_cancel_event_has_cancellation_language(self) -> None:
         """cancel_event.txt contains cancellation language."""
-        result = parse_transcript_file(SAMPLES_DIR / "cancel_event.txt")
+        result = parse_transcript_file(SAMPLES_DIR / "crud/cancel_event.txt")
         assert len(result.utterances) > 0, "cancel_event.txt should have utterances"
         assert len(result.speakers) >= 2, (
             f"Expected at least 2 speakers, got {len(result.speakers)}"
@@ -102,7 +103,7 @@ class TestSampleTranscripts:
 
     def test_mixed_crud_has_all_action_types(self) -> None:
         """mixed_crud.txt contains create, update, and delete language."""
-        result = parse_transcript_file(SAMPLES_DIR / "mixed_crud.txt")
+        result = parse_transcript_file(SAMPLES_DIR / "crud/mixed_crud.txt")
         assert len(result.utterances) >= 6, (
             f"Expected at least 6 utterances, got {len(result.utterances)}"
         )
@@ -123,7 +124,7 @@ class TestSampleTranscripts:
 
     def test_new_crud_samples_use_speaker_format(self) -> None:
         """All new CRUD sample files use [Speaker]: text format."""
-        crud_files = ["update_meeting.txt", "cancel_event.txt", "mixed_crud.txt"]
+        crud_files = ["crud/update_meeting.txt", "crud/cancel_event.txt", "crud/mixed_crud.txt"]
         for name in crud_files:
             result = parse_transcript_file(SAMPLES_DIR / name)
             assert len(result.utterances) > 0, (

@@ -41,16 +41,16 @@ Place your Google OAuth `credentials.json` in the project root. On first run, a 
 
 ```bash
 # Run on a transcript
-python -m cal_ai samples/simple_lunch.txt
+python -m cal_ai samples/crud/simple_lunch.txt
 
 # Dry run (extract events without syncing to calendar)
-python -m cal_ai samples/mixed_crud.txt --dry-run
+python -m cal_ai samples/crud/mixed_crud.txt --dry-run
 
 # Verbose logging (shows AI reasoning, API calls)
-python -m cal_ai samples/clear_schedule.txt -v
+python -m cal_ai samples/crud/clear_schedule.txt -v
 
 # Override the calendar owner name
-python -m cal_ai samples/multiple_events.txt --owner "Alice"
+python -m cal_ai samples/multi_speaker/multiple_events.txt --owner "Alice"
 ```
 
 ### Docker
@@ -60,10 +60,10 @@ docker compose build
 docker compose up
 ```
 
-The default entrypoint runs `samples/simple_lunch.txt`. Mount a different transcript:
+The default entrypoint runs `samples/crud/simple_lunch.txt`. Mount a different transcript:
 
 ```bash
-docker compose run cal-ai samples/mixed_crud.txt
+docker compose run cal-ai samples/crud/mixed_crud.txt
 ```
 
 ## How It Works
@@ -84,17 +84,20 @@ The prompt includes:
 
 ### Sample Transcripts
 
-| File | Scenario |
-|---|---|
-| `simple_lunch.txt` | Basic lunch event between two people |
-| `multiple_events.txt` | Several events in one conversation |
-| `ambiguous_time.txt` | Vague time references the AI must resolve |
-| `cancellation.txt` | Event cancellation |
-| `update_meeting.txt` | Rescheduling an existing meeting |
-| `cancel_event.txt` | Cancelling an existing event |
-| `mixed_crud.txt` | Create + update + delete in one conversation |
-| `clear_schedule.txt` | Bulk delete — clear all events for 3 days |
-| `no_events.txt` | Conversation with no calendar-relevant content |
+Samples are organized by category under `samples/`:
+
+| File | Category | Scenario |
+|---|---|---|
+| `crud/simple_lunch.txt` | crud | Basic lunch event between two people |
+| `crud/update_meeting.txt` | crud | Rescheduling an existing meeting |
+| `crud/cancel_event.txt` | crud | Cancelling an existing event |
+| `crud/cancellation.txt` | crud | Event cancellation |
+| `crud/mixed_crud.txt` | crud | Create + update + delete in one conversation |
+| `crud/clear_schedule.txt` | crud | Bulk delete -- clear all events for 3 days |
+| `multi_speaker/complex.txt` | multi_speaker | 4 speakers, mixed content |
+| `multi_speaker/multiple_events.txt` | multi_speaker | Several events in one conversation |
+| `adversarial/no_events.txt` | adversarial | Conversation with no calendar-relevant content |
+| `realistic/ambiguous_time.txt` | realistic | Vague time references the AI must resolve |
 
 ## Development
 

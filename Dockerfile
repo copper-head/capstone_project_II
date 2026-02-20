@@ -13,4 +13,4 @@ RUN pip install --no-cache-dir .
 COPY samples/ samples/
 
 ENTRYPOINT ["python", "-m", "cal_ai"]
-CMD ["samples/simple_lunch.txt"]
+CMD ["samples/crud/simple_lunch.txt"]

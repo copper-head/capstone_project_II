@@ -1,0 +1,14 @@
+{
+  "assignee": null,
+  "claim_note": "",
+  "claimed_at": null,
+  "created_at": "2026-02-20T08:46:23.056159Z",
+  "depends_on": [],
+  "epic": "fn-8-vyv",
+  "id": "fn-8-vyv.2",
+  "priority": null,
+  "spec_path": ".flow/tasks/fn-8-vyv.2.md",
+  "status": "todo",
+  "title": "Build scoring engine \u2014 P/R/F1, confidence calibration, event matching",
+  "updated_at": "2026-02-20T08:47:45.510121Z"
+}
