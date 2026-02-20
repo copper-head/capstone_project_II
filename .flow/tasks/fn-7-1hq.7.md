@@ -51,9 +51,8 @@ Update all project documentation, add Makefile targets for the regression suite,
 - [ ] fn-8-vyv dependency on fn-7-1hq set in .flow
 - [ ] `ruff check .` clean
 ## Done summary
-TBD
-
+Updated CLAUDE.md (project structure tree with samples/ and tests/regression/, regression commands, sidecar conventions), README.md (expanded sample table with all 40 samples by category, regression testing subsection, updated test count), and Makefile (test-regression and test-regression-live targets). Added one realistic sample (callback_rescheduling) to reach 40 total. Verified fn-8-vyv dependency already set. All 387 tests pass, 40 live-mode tests correctly skip without --live.
 ## Evidence
-- Commits:
-- Tests:
+- Commits: 8ca4c687d7e1c3794aabc032a1d1584fbc994ba9
+- Tests: pytest (387 passed, 40 skipped), ruff check (no new errors)
 - PRs:
