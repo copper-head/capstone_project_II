@@ -4,10 +4,9 @@ Provides three tolerance levels (strict, moderate, relaxed) for comparing
 actual :class:`~cal_ai.models.extraction.ExtractionResult` objects against
 expected :class:`~tests.regression.schema.SidecarSpec` definitions.
 
-Uses greedy best-match event pairing to avoid false failures from event
-reordering, and ``rapidfuzz.fuzz.token_set_ratio`` for fuzzy title
-matching.  The greedy approach is sufficient for regression tests with
-typical event counts (1-10 events per sample).
+Uses minimum-cost bipartite matching (Hungarian algorithm) for optimal
+event pairing to avoid false failures from event reordering, and
+``rapidfuzz.fuzz.token_set_ratio`` for fuzzy title matching.
 """
 
 from __future__ import annotations
@@ -121,21 +120,105 @@ def _event_pair_distance(actual: ExtractedEvent, expected: SidecarExpectedEvent)
 
 
 # ---------------------------------------------------------------------------
-# Best-match event pairing (greedy)
+# Minimum-cost bipartite matching (Hungarian algorithm)
 # ---------------------------------------------------------------------------
+
+
+def _hungarian_assignment(cost_matrix: list[list[float]]) -> list[tuple[int, int]]:
+    """Solve the linear assignment problem using the Hungarian algorithm.
+
+    Given an n x m cost matrix, finds the assignment of rows to columns
+    that minimizes total cost.  Handles rectangular matrices by padding
+    to square with high-cost dummy entries.
+
+    This is an O(n^3) implementation suitable for the small matrices
+    encountered in regression tests (typically < 10x10).
+
+    Args:
+        cost_matrix: An n x m matrix of costs, where ``cost_matrix[i][j]``
+            is the cost of assigning row *i* to column *j*.
+
+    Returns:
+        A list of ``(row, col)`` pairs representing the optimal assignment.
+        Only includes pairs where both row and col are within the original
+        (non-padded) matrix dimensions.
+    """
+    if not cost_matrix or not cost_matrix[0]:
+        return []
+
+    n_rows = len(cost_matrix)
+    n_cols = len(cost_matrix[0])
+    n = max(n_rows, n_cols)
+
+    # Pad to square with large dummy costs.
+    pad_cost = 1e9
+    matrix = [[pad_cost] * n for _ in range(n)]
+    for i in range(n_rows):
+        for j in range(n_cols):
+            matrix[i][j] = cost_matrix[i][j]
+
+    # Hungarian algorithm (Kuhn-Munkres).
+    u = [0.0] * (n + 1)  # Row potentials.
+    v = [0.0] * (n + 1)  # Column potentials.
+    p = [0] * (n + 1)  # Column assignment: p[j] = row assigned to col j.
+    way = [0] * (n + 1)  # Augmenting path backtrack.
+
+    for i in range(1, n + 1):
+        p[0] = i
+        j0 = 0
+        min_v = [float("inf")] * (n + 1)
+        used = [False] * (n + 1)
+
+        while True:
+            used[j0] = True
+            i0 = p[j0]
+            delta = float("inf")
+            j1 = -1
+
+            for j in range(1, n + 1):
+                if not used[j]:
+                    cur = matrix[i0 - 1][j - 1] - u[i0] - v[j]
+                    if cur < min_v[j]:
+                        min_v[j] = cur
+                        way[j] = j0
+                    if min_v[j] < delta:
+                        delta = min_v[j]
+                        j1 = j
+
+            for j in range(n + 1):
+                if used[j]:
+                    u[p[j]] += delta
+                    v[j] -= delta
+                else:
+                    min_v[j] -= delta
+
+            j0 = j1
+            if p[j0] == 0:
+                break
+
+        # Backtrack to update assignment.
+        while j0:
+            p[j0] = p[way[j0]]
+            j0 = way[j0]
+
+    # Extract assignments (filter out dummy rows/cols).
+    result: list[tuple[int, int]] = []
+    for j in range(1, n + 1):
+        if p[j] != 0 and p[j] - 1 < n_rows and j - 1 < n_cols:
+            result.append((p[j] - 1, j - 1))
+
+    return result
 
 
 def _best_match_pairs(
     actual_events: list[ExtractedEvent],
     expected_events: list[SidecarExpectedEvent],
 ) -> list[tuple[ExtractedEvent, SidecarExpectedEvent, float]]:
-    """Pair actual events with expected events using greedy best-match.
+    """Pair actual events with expected events using minimum-cost matching.
 
-    For each expected event (in order), selects the closest unmatched
-    actual event by composite distance (action + title + start_time).
-    This greedy approach is not globally optimal but is sufficient for
-    regression test suites where event counts are small (typically 1-10)
-    and events are well-separated by action+title+time.
+    Builds a cost matrix of composite distances (action + title + start_time)
+    and solves the linear assignment problem using the Hungarian algorithm
+    to find the globally optimal pairing that minimizes total distance.
 
     Returns a list of ``(actual, expected, distance)`` tuples.  If there
     are fewer actual events than expected, some expected events will be
@@ -148,25 +231,23 @@ def _best_match_pairs(
     Returns:
         List of matched ``(actual, expected, distance)`` triples.
     """
-    available = list(range(len(actual_events)))
+    if not actual_events or not expected_events:
+        return []
+
+    # Build cost matrix: rows = actual, cols = expected.
+    cost_matrix: list[list[float]] = []
+    for act in actual_events:
+        row = [_event_pair_distance(act, exp) for exp in expected_events]
+        cost_matrix.append(row)
+
+    # Solve assignment.
+    assignment = _hungarian_assignment(cost_matrix)
+
+    # Build result pairs.
     pairs: list[tuple[ExtractedEvent, SidecarExpectedEvent, float]] = []
-
-    for exp in expected_events:
-        if not available:
-            break
-
-        best_idx = -1
-        best_dist = float("inf")
-
-        for idx in available:
-            dist = _event_pair_distance(actual_events[idx], exp)
-            if dist < best_dist:
-                best_dist = dist
-                best_idx = idx
-
-        if best_idx >= 0:
-            pairs.append((actual_events[best_idx], exp, best_dist))
-            available.remove(best_idx)
+    for act_idx, exp_idx in assignment:
+        dist = cost_matrix[act_idx][exp_idx]
+        pairs.append((actual_events[act_idx], expected_events[exp_idx], dist))
 
     return pairs
 
@@ -295,38 +376,6 @@ def _build_context_id_set(sidecar: SidecarSpec) -> set[int]:
         A set of valid integer IDs (e.g., ``{1, 2, 3}``).
     """
     return set(range(1, len(sidecar.calendar_context) + 1))
-
-
-def _resolve_delete_expected_time(
-    expected_event: SidecarExpectedEvent,
-    sidecar: SidecarSpec,
-) -> tuple[str | None, str | None]:
-    """Resolve expected start/end times for delete actions.
-
-    For delete actions, the tolerance check should compare against the
-    referenced calendar event's time (from ``calendar_context``), not
-    the sidecar's expected event time.  If the expected event specifies
-    ``existing_event_id_required`` and the sidecar has calendar context,
-    look up the referenced event's times from the context.
-
-    Falls back to the expected event's own times if no context match.
-
-    Args:
-        expected_event: The expected event from the sidecar.
-        sidecar: The full sidecar spec (for calendar context lookup).
-
-    Returns:
-        A tuple of ``(start_time, end_time)`` ISO strings to compare against.
-    """
-    if expected_event.action != "delete" or not expected_event.existing_event_id_required:
-        return expected_event.start_time, expected_event.end_time
-
-    # Look up the calendar context event by its 1-based index.
-    # The expected_event doesn't carry the integer ID directly, but the
-    # actual event will.  We fall back to the sidecar's expected times.
-    # The actual resolution happens in the main loop where we have the
-    # actual_event's existing_event_id.
-    return expected_event.start_time, expected_event.end_time
 
 
 def _resolve_delete_time_from_context(
@@ -471,7 +520,12 @@ def assert_extraction_result(
                 errors.append(
                     f"{pair_label}: existing_event_id is required but was None"
                 )
-            elif valid_context_ids and actual_event.existing_event_id not in valid_context_ids:
+            elif not valid_context_ids:
+                errors.append(
+                    f"{pair_label}: existing_event_id_required=True but "
+                    f"calendar_context is empty (no valid IDs to match against)"
+                )
+            elif actual_event.existing_event_id not in valid_context_ids:
                 errors.append(
                     f"{pair_label}: existing_event_id={actual_event.existing_event_id} "
                     f"is not in valid context IDs {sorted(valid_context_ids)}"

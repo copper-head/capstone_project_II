@@ -305,6 +305,43 @@ class TestBestMatchPairing:
         pairs = _best_match_pairs(actual, expected)
         assert len(pairs) == 1
 
+    def test_hungarian_beats_greedy(self):
+        """Optimal matching should handle cases where greedy would fail.
+
+        Setup: Two actual events A1 (close to E1, somewhat close to E2) and
+        A2 (far from E1, close to E2).  Greedy iterating E1 first would grab
+        A1, leaving A2-E2 with a suboptimal total.  Hungarian should find
+        the globally optimal pairing.
+        """
+        # A1 is "Team Standup" at 09:00 -- close match to E1 and E2.
+        # A2 is "Lunch Meeting" at 12:00 -- only close to E2.
+        actual = [
+            _make_extracted_event(
+                title="Lunch Meeting",
+                start_time="2026-02-20T12:00:00",
+            ),
+            _make_extracted_event(
+                title="Team Standup",
+                start_time="2026-02-20T09:00:00",
+            ),
+        ]
+        expected = [
+            _make_expected_event(
+                title="Team Standup",
+                start_time="2026-02-20T09:00:00",
+            ),
+            _make_expected_event(
+                title="Lunch Meeting",
+                start_time="2026-02-20T12:00:00",
+            ),
+        ]
+        pairs = _best_match_pairs(actual, expected)
+        assert len(pairs) == 2
+        # Optimal pairing: A1<->E2, A2<->E1 (both exact matches).
+        titles_paired = {(p[0].title, p[1].title) for p in pairs}
+        assert ("Team Standup", "Team Standup") in titles_paired
+        assert ("Lunch Meeting", "Lunch Meeting") in titles_paired
+
 
 # ===========================================================================
 # Tolerance assertion: STRICT (2 tests)
@@ -580,3 +617,23 @@ class TestToleranceCrossCutting:
         )
         # Should pass: no context, so expected times are used directly.
         assert_extraction_result(result, sidecar)
+
+    def test_existing_event_id_required_empty_context_fails(self):
+        """existing_event_id_required=True with empty context should fail."""
+        event = _make_extracted_event(
+            action="update",
+            existing_event_id=1,
+        )
+        result = _make_extraction_result([event])
+        sidecar = _make_sidecar(
+            tolerance="moderate",
+            # No calendar_context, but existing_event_id_required=True.
+            expected_events=[
+                _make_expected_event(
+                    action="update",
+                    existing_event_id_required=True,
+                ),
+            ],
+        )
+        with pytest.raises(AssertionError, match="calendar_context is empty"):
+            assert_extraction_result(result, sidecar)
