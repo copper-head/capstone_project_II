@@ -1,0 +1,19 @@
+[Alice]: Hey Carol, I just realized the client call we have on Monday at 3 won't work for me anymore. Something came up.
+
+[Carol]: Oh no, what happened?
+
+[Alice]: I have a dentist appointment at 2:30 that I totally forgot about. It'll probably run until 3:30.
+
+[Carol]: No worries. Can we push the client call to 4 PM instead?
+
+[Alice]: That works perfectly. Same conference room?
+
+[Carol]: Yep, Room B. I'll update the invite.
+
+[Alice]: Thanks Carol. Oh also, can we add a 30-minute prep call before? Like at 3:30?
+
+[Carol]: Sure, I'll set that up too. Just you and me for the prep, right?
+
+[Alice]: Yeah, just us two. The actual client call has the full team though.
+
+[Carol]: Got it. I'll send both updates now.

@@ -84,25 +84,20 @@ The prompt includes:
 
 ### Sample Transcripts
 
-Samples are organized by category under `samples/`:
+40 sample transcripts organized by category under `samples/`, each paired with a `.expected.json` sidecar for regression testing:
 
-| File | Category | Scenario |
+| Category | Count | Examples |
 |---|---|---|
-| `crud/simple_lunch.txt` | crud | Basic lunch event between two people |
-| `crud/update_meeting.txt` | crud | Rescheduling an existing meeting |
-| `crud/cancel_event.txt` | crud | Cancelling an existing event |
-| `crud/cancellation.txt` | crud | Event cancellation |
-| `crud/mixed_crud.txt` | crud | Create + update + delete in one conversation |
-| `crud/clear_schedule.txt` | crud | Bulk delete --- clear all events for 3 days |
-| `multi_speaker/complex.txt` | multi_speaker | 4 speakers, mixed content |
-| `multi_speaker/multiple_events.txt` | multi_speaker | Several events in one conversation |
-| `adversarial/no_events.txt` | adversarial | Conversation with no calendar-relevant content |
-| `realistic/ambiguous_time.txt` | realistic | Vague time references the AI must resolve |
+| `crud/` | 14 | `simple_lunch` (basic create), `update_meeting` (reschedule), `cancel_event` (single delete), `mixed_crud` (create+update+delete), `clear_schedule` (bulk delete), `conflicting_instructions` (last-statement-wins), `partial_update`, `bulk_delete` |
+| `multi_speaker/` | 7 | `complex` (4 speakers), `five_speakers_crosstalk` (5 speakers, cross-talk), `multiple_pairs_events` (4 pairs plan separately), `speakers_disagree` (conflict resolution), `side_conversation` |
+| `adversarial/` | 7 | `no_events` (no calendar content), `sarcasm` (absurd suggestions), `negation` (all events declined), `hypothetical` (no concrete plans), `past_tense` (already happened), `vague_reference` |
+| `realistic/` | 7 | `ambiguous_time` (vague times), `typos_informal` (heavy typos), `slang_abbreviations` (internet slang), `interruptions` (incomplete sentences), `filler_tangents` (off-topic noise), `callback_rescheduling` |
+| `long/` | 5 | `long_meeting_notes` (80+ lines, 3 events), `long_many_events` (100+ lines, 11 events), `long_circular_planning` (plans change mid-conversation), `long_noise_few_events` (mostly small talk) |
 
 ## Development
 
 ```bash
-# Run tests (313 tests, 92% coverage)
+# Run all tests including regression suite (mock mode)
 make test
 
 # Lint
@@ -114,6 +109,25 @@ make format
 # Coverage report
 make test-cov
 ```
+
+### Regression Testing
+
+The regression test suite validates the AI extraction pipeline against all 40 sample transcripts. Each sample has a `.expected.json` sidecar that defines expected events, tolerance level, and a mock LLM response.
+
+**Mock mode** (default) patches the Gemini API with pre-recorded responses for fast, deterministic testing:
+
+```bash
+make test-regression              # Run regression suite (mock mode)
+pytest tests/regression/ -k crud  # Run only CRUD category
+```
+
+**Live mode** calls the real Gemini API (requires `GEMINI_API_KEY`):
+
+```bash
+make test-regression-live         # Run regression suite (live mode)
+```
+
+Tolerance levels per sample: **strict** (exact match), **moderate** (fuzzy titles, +/-2hr times), **relaxed** (broad matching, +/-1day times).
 
 ### Project Structure
 
@@ -149,7 +163,7 @@ src/cal_ai/
 | Auth | OAuth 2.0 (Desktop app flow) |
 | Models | Pydantic v2 |
 | Container | Docker |
-| Testing | pytest (313 tests, 92% coverage) |
+| Testing | pytest (386+ tests, 92% coverage) |
 | Linting | ruff |
 
 ## License

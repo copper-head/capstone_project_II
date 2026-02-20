@@ -21,7 +21,19 @@ src/cal_ai/           # Main package (src layout)
   log.py               # setup_logging(), get_logger()
 tests/                # Test suite (pytest)
   unit/                # Unit tests (test_config, test_log, test_package)
-  integration/         # Integration tests (future)
+  integration/         # Integration tests
+  regression/          # Regression test suite (mock + live modes)
+    conftest.py        # --live flag, auto-parametrize from samples
+    schema.py          # SidecarSpec Pydantic model
+    loader.py          # Sample discovery and sidecar loading
+    tolerance.py       # Tolerance assertion engine (strict/moderate/relaxed)
+    test_regression.py # Parametrized regression tests
+samples/              # Test transcripts organized by category
+  crud/                # Basic CRUD operations (create, update, delete)
+  multi_speaker/       # Multi-speaker conversations
+  adversarial/         # Edge cases (sarcasm, negation, hypotheticals)
+  realistic/           # Real-world patterns (typos, slang, interruptions)
+  long/                # Long transcripts (80+ lines)
 docs/SPEC.md          # System specification
 pyproject.toml        # Metadata, deps, ruff/pytest config
 Makefile              # Dev workflow targets
@@ -36,21 +48,26 @@ token.json            # Cached OAuth tokens (gitignored, auto-generated)
 ## Commands
 All dev workflow commands are available via `make`:
 ```bash
-make install    # Install package in editable mode with dev deps
-make lint       # Run ruff check and format check
-make format     # Auto-format with ruff (format + fix)
-make test       # Run pytest
-make test-cov   # Run pytest with coverage report
-make build      # Build Docker image (docker compose build)
-make run        # Run container (docker compose up)
-make clean      # Remove caches, coverage, build artifacts
+make install             # Install package in editable mode with dev deps
+make lint                # Run ruff check and format check
+make format              # Auto-format with ruff (format + fix)
+make test                # Run pytest (all tests including regression mock mode)
+make test-cov            # Run pytest with coverage report
+make test-regression     # Run regression suite only (mock mode)
+make test-regression-live # Run regression suite with live Gemini API
+make build               # Build Docker image (docker compose build)
+make run                 # Run container (docker compose up)
+make clean               # Remove caches, coverage, build artifacts
 ```
 
 Direct commands (without make):
 ```bash
 python -m cal_ai              # Run the application
 pip install -e ".[dev]"       # Install editable with dev deps
-pytest                        # Run tests
+pytest                        # Run tests (all including regression mock mode)
+pytest tests/regression/ -v   # Run regression suite only (mock mode)
+pytest tests/regression/ --live -v  # Run regression suite (live Gemini API)
+pytest tests/regression/ -k crud -v # Run only CRUD category tests
 ruff check .                  # Lint
 ruff format --check .         # Check formatting
 docker compose up             # Run in Docker
@@ -93,6 +110,8 @@ fetch fails, the pipeline continues without context (current create-only behavio
 - Ambiguous events get created anyway with notes on assumptions
 - Input format: `[Speaker Name]: dialogue text`
 - Integer ID remapping for calendar context (never expose UUIDs to LLM)
+- Each sample transcript (`samples/<category>/<name>.txt`) has a sidecar `<name>.expected.json` containing: tolerance level (strict/moderate/relaxed), calendar context, expected events, and a `mock_llm_response` for deterministic mock-mode testing
+- Regression tests auto-discover samples via `pytest_generate_tests`; mock mode is the default, `--live` flag enables real Gemini API calls
 
 ## Security
 - Never commit `.env`, `credentials.json`, or `token.json`

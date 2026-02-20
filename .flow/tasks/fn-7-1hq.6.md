@@ -39,9 +39,8 @@ Create sidecar `.expected.json` files for the 10 existing samples that were migr
 - [ ] Tolerance levels appropriate: strict for simple cases, moderate for complex, relaxed for ambiguous
 - [ ] `owner` and `reference_datetime` fields present in all sidecars
 ## Done summary
-TBD
-
+Created 9 sidecar .expected.json files for migrated samples (simple_lunch already had one from task 4). Each sidecar includes description, category, tolerance level, owner, reference_datetime, calendar_context (for CRUD samples), expected_events, and mock_llm_response. All 10 migrated samples now have sidecars and all 39 regression mock tests pass.
 ## Evidence
-- Commits:
-- Tests:
+- Commits: 94ecec8eb9f18b37b048dede14db430e7a0047cd
+- Tests: pytest tests/ (386 passed, 39 skipped), pytest tests/regression/ (39 passed, 39 skipped), SidecarSpec Pydantic validation on all 9 new sidecars
 - PRs:

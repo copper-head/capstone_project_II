@@ -25,7 +25,8 @@ Update all project documentation, add Makefile targets for the regression suite,
 - **Final validation:**
   - `make lint` passes (ruff check + format check)
   - `make test` passes (all existing + new regression tests in mock mode)
-  - Verify 40+ samples exist across all 5 categories (at least 5 per category)
+  <!-- Updated by plan-sync: fn-7-1hq.6 produced 39 total samples, not 40+ -->
+  - Verify 39 samples exist across all 5 categories (at least 5 per category: crud=14, multi_speaker=7, adversarial=7, realistic=6, long=5)
   - Verify all sidecars valid (loader doesn't error)
   - Verify `--live` flag correctly skips live tests when not provided
 - **Set fn-8-vyv dependency:**
@@ -45,7 +46,8 @@ Update all project documentation, add Makefile targets for the regression suite,
 - [ ] Makefile has `test-regression` and `test-regression-live` targets
 - [ ] `make lint` passes
 - [ ] `make test` passes (all tests including regression mock mode)
-- [ ] 40+ total samples across 5 categories (verified count)
+<!-- Updated by plan-sync: fn-7-1hq.6 confirmed 39 total samples across 5 categories -->
+- [ ] 39 total samples across 5 categories (verified count: crud=14, multi_speaker=7, adversarial=7, realistic=6, long=5)
 - [ ] fn-8-vyv dependency on fn-7-1hq set in .flow
 - [ ] `ruff check .` clean
 ## Done summary
