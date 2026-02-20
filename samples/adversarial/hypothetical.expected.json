@@ -1,0 +1,14 @@
+{
+  "description": "Hypothetical discussion about a team retreat or cooking class. No concrete plans are made.",
+  "category": "adversarial",
+  "tolerance": "moderate",
+  "owner": "Alice",
+  "reference_datetime": "2026-02-20T10:00:00",
+  "calendar_context": [],
+  "expected_events": [],
+  "mock_llm_response": {
+    "events": [],
+    "summary": "No actionable calendar events found. All scheduling references are hypothetical (what if, could be, would need approval)."
+  },
+  "notes": "Keywords like 'what if', 'hypothetical', 'we'd need approval' indicate no firm plans. 0 events expected."
+}

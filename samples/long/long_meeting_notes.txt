@@ -1,0 +1,141 @@
+[Alice]: Alright everyone, let's get started. Thanks for joining the Q1 product review. I know we have a lot to cover.
+
+[Bob]: Ready when you are.
+
+[Carol]: Same here. Dave, are you on the line?
+
+[Dave]: Yep, I'm here. Just dialed in from the airport lounge. Might have some background noise, sorry.
+
+[Alice]: No worries. Okay, first item: feature adoption numbers. Bob, can you walk us through those?
+
+[Bob]: Sure. So the dashboard redesign we shipped in January saw a 34% increase in daily active usage within the first two weeks.
+
+[Carol]: That's great. Was that across all user segments?
+
+[Bob]: Mostly enterprise. SMB adoption was closer to 15%, which is still decent but below our target of 25%.
+
+[Alice]: Why the gap?
+
+[Bob]: We think it's a discoverability issue. The new features are behind a settings toggle that SMB users don't tend to explore.
+
+[Dave]: Could we do an onboarding tooltip? We used that for the analytics feature last year and it bumped adoption by 20%.
+
+[Bob]: That's a great idea. We should look into that.
+
+[Alice]: Agreed. Let's table the specifics on that for now and come back to it. Second item: the API migration status.
+
+[Carol]: I can take that. We're about 60% through the v2 migration. The auth endpoints are done, user management is done, and we're currently working on the billing endpoints.
+
+[Bob]: What's the timeline looking like?
+
+[Carol]: If things go well, we should be code-complete by end of March. Then two weeks of testing before we flip the switch.
+
+[Dave]: Are we deprecating v1 right away?
+
+[Carol]: No, we'll run both in parallel for 90 days. That gives customers time to migrate.
+
+[Alice]: Makes sense. Any blockers?
+
+[Carol]: One thing. The legacy webhook system is tightly coupled with v1 and we need to figure out the compatibility layer. I've been going back and forth with the platform team on it.
+
+[Alice]: How long do you think that'll take?
+
+[Carol]: Hard to say. A week, maybe two? It depends on how cooperative the platform team is.
+
+[Bob]: They've been pretty responsive lately. I talked to their lead last week and she said our migration is a priority for them.
+
+[Carol]: Good to know. I'll follow up with her directly.
+
+[Alice]: Okay, let's move on. Third item: the customer feedback survey results. Dave, this is yours.
+
+[Dave]: Right. So we sent the survey out to our top 200 accounts and got a 42% response rate, which is actually really good.
+
+[Carol]: What were the highlights?
+
+[Dave]: Overall satisfaction is at 8.1 out of 10, up from 7.6 last quarter. The biggest pain point is still the reporting module. About 65% of respondents said it's either "difficult" or "very difficult" to create custom reports.
+
+[Bob]: That's consistent with the support ticket data. Reporting is our number one ticket category.
+
+[Alice]: We've known about this for a while. What's the plan?
+
+[Dave]: I've been working on a proposal for a reporting overhaul. I'd like to present it at the next product council meeting.
+
+[Alice]: When is that? This Thursday?
+
+[Dave]: No, the product council meets every other week. Next one is a week from Wednesday, the 25th.
+
+[Alice]: Okay. Can you have the proposal ready by then?
+
+[Dave]: It's mostly done. I just need to add the cost estimates and timeline. I'll have it finalized by Tuesday.
+
+[Alice]: Perfect. Let's make sure that's on the agenda. I'll add it.
+
+[Bob]: Should we also loop in the UX team for that discussion?
+
+[Alice]: Definitely. Carol, can you ping the UX lead?
+
+[Carol]: Will do.
+
+[Alice]: Great. Now, fourth item. We need to talk about the hiring pipeline. We have three open positions: two backend engineers and a product designer.
+
+[Bob]: The backend candidates look promising. I did phone screens with five people last week. Two stood out.
+
+[Carol]: Who were they?
+
+[Bob]: One is a senior dev from a fintech company, really strong on distributed systems. The other is a mid-level from a startup but has amazing problem-solving skills. I think we should bring both in for onsites.
+
+[Alice]: I agree. Can we schedule the onsites for next week?
+
+[Bob]: I'll reach out to them today and try to set something up.
+
+[Dave]: What about the designer role?
+
+[Alice]: That one's been harder. We've only had two applicants so far and neither was a good fit. I'm going to post on some additional job boards this week.
+
+[Carol]: Have you tried the design-specific platforms? Like Dribbble or the AIGA job board?
+
+[Alice]: Not yet, that's a good suggestion. I'll look into those.
+
+[Dave]: We could also reach out to the local design school. They have a pretty good graduate program.
+
+[Alice]: That's worth exploring. Okay, any other business before we wrap up?
+
+[Bob]: One quick thing. The staging server has been flaky this week. Random 502 errors.
+
+[Carol]: I noticed that too. DevOps is looking into it.
+
+[Alice]: Anything we need to escalate?
+
+[Carol]: Not yet. They think it's a memory leak in the load balancer config. Should be patched by end of day.
+
+[Alice]: Okay, keep me posted. Anything else?
+
+[Dave]: Nope, I think we're good.
+
+[Alice]: Alright, let's wrap up with action items. First, I need everyone to block off Wednesday March 4th from 1 to 4 PM for the quarterly planning offsite. We'll be at the Riverside Conference Center.
+
+[Bob]: March 4th, 1 to 4. Got it.
+
+[Carol]: Noted.
+
+[Dave]: I'll be back from travel by then so that works.
+
+[Alice]: Second, Bob, please schedule a sprint demo for this Friday at 2 PM. We need to show the stakeholders what we shipped this sprint.
+
+[Bob]: Friday at 2, sprint demo. I'll book the all-hands room and send out invites.
+
+[Alice]: Third, Carol, can you set up a tech debt review session for next Tuesday at 11 AM? Invite the full engineering team.
+
+[Carol]: Tuesday at 11, tech debt review. Will do. How long should I block?
+
+[Alice]: Make it 90 minutes. We have a lot of debt to prioritize.
+
+[Carol]: 11 to 12:30, got it.
+
+[Alice]: Great. I think that covers everything. Good meeting, everyone. Talk soon.
+
+[Bob]: Thanks Alice. Later everyone.
+
+[Carol]: Bye!
+
+[Dave]: See you all later. Boarding my flight now.

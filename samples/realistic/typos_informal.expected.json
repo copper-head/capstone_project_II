@@ -1,0 +1,35 @@
+{
+  "description": "Very informal conversation with heavy typos and abbreviations (tmr, prolly, wrks, def). One budget review meeting at 2 PM tomorrow.",
+  "category": "realistic",
+  "tolerance": "moderate",
+  "owner": "Alice",
+  "reference_datetime": "2026-02-20T10:00:00",
+  "calendar_context": [],
+  "expected_events": [
+    {
+      "action": "create",
+      "title": "Budget Review",
+      "start_time": "2026-02-21T14:00:00",
+      "end_time": "2026-02-21T15:00:00",
+      "attendees_contain": ["Alice", "Bob"]
+    }
+  ],
+  "mock_llm_response": {
+    "events": [
+      {
+        "title": "Budget Review",
+        "start_time": "2026-02-21T14:00:00",
+        "end_time": "2026-02-21T15:00:00",
+        "location": "Alice's Office",
+        "attendees": "Alice, Bob",
+        "confidence": "high",
+        "reasoning": "Despite heavy use of informal language and typos, Alice and Bob agree to meet tomorrow at 2 PM in Alice's office to review budget materials. Duration approximately 1 hour.",
+        "assumptions": "Duration assumed 1 hour based on 'prolly like an hour'",
+        "action": "create",
+        "existing_event_id": null
+      }
+    ],
+    "summary": "Found 1 event: budget review tomorrow at 2 PM in Alice's office."
+  },
+  "notes": "Reference datetime is Friday 2026-02-20, so 'tmr' (tomorrow) is 2026-02-21. Tests the model's ability to parse through typos and abbreviations."
+}

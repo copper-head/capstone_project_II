@@ -1,0 +1,14 @@
+{
+  "description": "Multiple events mentioned but all explicitly declined or negated. Speakers say 'NOT going', 'not attending', 'can't make it', 'said no'.",
+  "category": "adversarial",
+  "tolerance": "moderate",
+  "owner": "Alice",
+  "reference_datetime": "2026-02-20T10:00:00",
+  "calendar_context": [],
+  "expected_events": [],
+  "mock_llm_response": {
+    "events": [],
+    "summary": "No actionable calendar events found. All mentioned events were explicitly declined: party (NOT going), workshop (not attending), lunch (can't make it)."
+  },
+  "notes": "Events are mentioned with specific times but every single one is negated. The model should not create events for things the speakers explicitly decline."
+}

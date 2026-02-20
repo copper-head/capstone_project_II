@@ -1,0 +1,15 @@
+[Alice]: Are you going to the team party on Friday?
+
+[Bob]: No, I'm definitely NOT going to the party. I have way too much work to do.
+
+[Alice]: What about the workshop next Wednesday? Dave said it's mandatory.
+
+[Bob]: I'm not attending that either. I already talked to Dave and he said I could skip it since I did the online version.
+
+[Alice]: Lucky you. Carol was trying to set up a lunch meeting on Thursday but I told her I can't make it.
+
+[Bob]: Yeah she asked me too. I said no. We're both swamped this week.
+
+[Alice]: Pretty much. I'm not committing to anything until this project ships.
+
+[Bob]: Same. No meetings, no lunches, no nothing until next month.

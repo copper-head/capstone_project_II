@@ -1,0 +1,14 @@
+{
+  "description": "Conversation about events that already happened (last Thursday meeting, dinner, yesterday coffee). No future events should be created.",
+  "category": "adversarial",
+  "tolerance": "strict",
+  "owner": "Alice",
+  "reference_datetime": "2026-02-20T10:00:00",
+  "calendar_context": [],
+  "expected_events": [],
+  "mock_llm_response": {
+    "events": [],
+    "summary": "No actionable calendar events found. All referenced events occurred in the past (last Thursday, yesterday)."
+  },
+  "notes": "All events are past tense: 'last Thursday' meeting, dinner 'afterward', coffee 'yesterday morning'. Strict tolerance: 0 events expected."
+}

@@ -1,0 +1,13 @@
+[Alice]: Hey Bob, how's the workload this week?
+
+[Bob]: Oh you know, just drowning in spreadsheets. Living the dream.
+
+[Alice]: Yeah totally. Hey, let's definitely have a meeting at 3 AM to discuss the TPS reports. That sounds super productive.
+
+[Bob]: Oh absolutely. And after that we should schedule a team retreat to the moon. I hear the conference rooms there are out of this world.
+
+[Alice]: Ha! You crack me up. But seriously, did you finish the quarterly report?
+
+[Bob]: Yeah, sent it over an hour ago. Should be in your inbox.
+
+[Alice]: Great, I'll take a look. Talk later.

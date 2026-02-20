@@ -1,0 +1,17 @@
+[Alice]: How was the client meeting last Thursday?
+
+[Bob]: It went well actually. We met at their downtown office at 2 PM and went over the proposal for about an hour.
+
+[Alice]: Nice. Did they seem receptive?
+
+[Bob]: Very much so. We also had dinner afterward at that Italian place on Main Street. Started around 7, didn't leave until almost 10.
+
+[Alice]: Wow, long dinner. Was the whole team there?
+
+[Bob]: Just me, Carol, and the two leads from their side. Oh, and we had a quick coffee catch-up with Dave yesterday morning at 9.
+
+[Alice]: I heard about that. He mentioned you guys talked about the timeline.
+
+[Bob]: Yeah, we went over everything. Good meeting overall.
+
+[Alice]: Great to hear. Thanks for the update.

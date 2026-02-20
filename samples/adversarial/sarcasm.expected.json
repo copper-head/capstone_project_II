@@ -1,0 +1,14 @@
+{
+  "description": "Sarcastic conversation with absurd scheduling suggestions (3 AM meeting, moon retreat). No real events should be extracted.",
+  "category": "adversarial",
+  "tolerance": "moderate",
+  "owner": "Alice",
+  "reference_datetime": "2026-02-20T10:00:00",
+  "calendar_context": [],
+  "expected_events": [],
+  "mock_llm_response": {
+    "events": [],
+    "summary": "No actionable calendar events found. The scheduling references (3 AM meeting, moon retreat) are clearly sarcastic."
+  },
+  "notes": "Both the 3 AM meeting and moon retreat are obviously sarcastic. A good model should extract 0 events."
+}

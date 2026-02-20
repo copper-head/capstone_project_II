@@ -46,8 +46,7 @@ Write 8+ CRUD category samples and 5+ Multi-Speaker category samples, each with 
 - [ ] Even mix of conversation lengths (short/medium)
 - [ ] Scenarios from spec are all covered: bulk deletes, partial updates, conflicting, ambiguous, no-match, already-deleted, 5+ speakers, side conversations, cross-calendar references
 ## Done summary
-TBD
-
+- Task completed
 ## Evidence
 - Commits:
 - Tests:

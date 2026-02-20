@@ -1,0 +1,36 @@
+{
+  "description": "65+ line conversation with extensive small talk (weekend activities, TV shows, restaurants, office renovation). Only 1 real event buried in the noise: client demo next Friday at 11 AM.",
+  "category": "long",
+  "tolerance": "relaxed",
+  "owner": "Alice",
+  "reference_datetime": "2026-02-20T10:00:00",
+  "calendar_context": [],
+  "expected_events": [
+    {
+      "action": "create",
+      "title": "Client Demo",
+      "start_time": "2026-02-27T11:00:00",
+      "end_time": "2026-02-27T12:00:00",
+      "location": "Big Conference Room",
+      "attendees_contain": ["Alice", "Bob", "Carol"]
+    }
+  ],
+  "mock_llm_response": {
+    "events": [
+      {
+        "title": "Client Demo",
+        "start_time": "2026-02-27T11:00:00",
+        "end_time": "2026-02-27T12:00:00",
+        "location": "Big Conference Room",
+        "attendees": "Alice, Bob, Carol, Dave",
+        "confidence": "high",
+        "reasoning": "Alice proposes a client demo for next Friday at 11 AM in the big conference room. Both Bob and Carol confirm availability. Dave from engineering will also be invited.",
+        "assumptions": "Duration assumed 1 hour",
+        "action": "create",
+        "existing_event_id": null
+      }
+    ],
+    "summary": "Found 1 event: client demo next Friday at 11 AM. The rest of the conversation was social chat and status updates with no scheduling."
+  },
+  "notes": "Reference datetime is Friday 2026-02-20, so 'next Friday' is 2026-02-27. 65+ lines of conversation with only 1 event. Tests ability to find signal in noise."
+}

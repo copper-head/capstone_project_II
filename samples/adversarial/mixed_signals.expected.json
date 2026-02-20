@@ -1,0 +1,55 @@
+{
+  "description": "Mix of sarcastic/absurd suggestions (5 AM yoga, bowling alley board meeting, skydiving) and 2 real events (quarterly review Tuesday 2 PM, design sync Wednesday 10 AM).",
+  "category": "adversarial",
+  "tolerance": "relaxed",
+  "owner": "Alice",
+  "reference_datetime": "2026-02-20T10:00:00",
+  "calendar_context": [],
+  "expected_events": [
+    {
+      "action": "create",
+      "title": "Quarterly Review",
+      "start_time": "2026-02-24T14:00:00",
+      "end_time": "2026-02-24T15:00:00",
+      "location": "Conference Room B",
+      "attendees_contain": ["Alice", "Bob"]
+    },
+    {
+      "action": "create",
+      "title": "Design Team Sync",
+      "start_time": "2026-02-25T10:00:00",
+      "end_time": "2026-02-25T10:30:00",
+      "attendees_contain": ["Bob"]
+    }
+  ],
+  "mock_llm_response": {
+    "events": [
+      {
+        "title": "Quarterly Review",
+        "start_time": "2026-02-24T14:00:00",
+        "end_time": "2026-02-24T15:00:00",
+        "location": "Conference Room B",
+        "attendees": "Alice, Bob",
+        "confidence": "high",
+        "reasoning": "Alice and Bob agreed on a quarterly review for next Tuesday at 2 PM in Conference Room B. This is a concrete plan.",
+        "assumptions": "Duration assumed 1 hour",
+        "action": "create",
+        "existing_event_id": null
+      },
+      {
+        "title": "Design Team Sync",
+        "start_time": "2026-02-25T10:00:00",
+        "end_time": "2026-02-25T10:30:00",
+        "location": "Small Meeting Room",
+        "attendees": "Alice, Bob, Design Team",
+        "confidence": "high",
+        "reasoning": "Alice asked Bob to set up a 30-minute sync with the design team for Wednesday morning at 10 AM.",
+        "assumptions": null,
+        "action": "create",
+        "existing_event_id": null
+      }
+    ],
+    "summary": "Found 2 real events: quarterly review (Tuesday 2 PM) and design sync (Wednesday 10 AM). Ignored sarcastic suggestions (5 AM yoga, bowling alley, skydiving)."
+  },
+  "notes": "Reference datetime is Friday 2026-02-20, so 'next Tuesday' is 2026-02-24 and 'Wednesday' is 2026-02-25. Three sarcastic suggestions should be ignored. Relaxed tolerance due to mixed signals."
+}

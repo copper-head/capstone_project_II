@@ -1,0 +1,36 @@
+{
+  "description": "Speakers constantly interrupt each other with incomplete sentences. One event emerges: presentation rehearsal Thursday 4-5:30 PM.",
+  "category": "realistic",
+  "tolerance": "moderate",
+  "owner": "Alice",
+  "reference_datetime": "2026-02-20T10:00:00",
+  "calendar_context": [],
+  "expected_events": [
+    {
+      "action": "create",
+      "title": "Presentation Rehearsal",
+      "start_time": "2026-02-26T16:00:00",
+      "end_time": "2026-02-26T17:30:00",
+      "location": "Main Conference Room",
+      "attendees_contain": ["Alice", "Bob"]
+    }
+  ],
+  "mock_llm_response": {
+    "events": [
+      {
+        "title": "Presentation Rehearsal",
+        "start_time": "2026-02-26T16:00:00",
+        "end_time": "2026-02-26T17:30:00",
+        "location": "Main Conference Room",
+        "attendees": "Alice, Bob",
+        "confidence": "high",
+        "reasoning": "Despite constant interruptions, Alice and Bob agree on a presentation rehearsal on Thursday at 4 PM (shifted from initial 3 PM) for 90 minutes in the main conference room. They will also discuss the vendor contract.",
+        "assumptions": null,
+        "action": "create",
+        "existing_event_id": null
+      }
+    ],
+    "summary": "Found 1 event: presentation rehearsal Thursday 4-5:30 PM in the main conference room."
+  },
+  "notes": "Reference datetime is Friday 2026-02-20, so 'Thursday' is 2026-02-26. Time was initially 3 PM but shifted to 4 PM due to conflict. Duration explicitly stated as 90 minutes (4 to 5:30)."
+}

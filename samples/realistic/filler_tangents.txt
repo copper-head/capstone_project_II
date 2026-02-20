@@ -1,0 +1,31 @@
+[Alice]: So, um, I was talking to Dave the other day, and he was saying, you know, that the project is, like, kind of behind schedule.
+
+[Bob]: Yeah, I mean, it's... it's been a tough month. The whole thing with the server migration really, um, threw us off.
+
+[Alice]: Totally, totally. And then, like, Carol was out for a week with that flu thing, and, you know, things just piled up.
+
+[Bob]: Right. So, uh, have you tried that new coffee place on Third Street? Oh my god, their lattes are incredible.
+
+[Alice]: No! Is it the one next to the bookstore?
+
+[Bob]: Yeah, that one. They do this, like, oat milk thing that's just... chef's kiss. You gotta try it.
+
+[Alice]: I definitely will. Okay but, um, back to the project thing. I think we should, you know, like, probably do a catch-up meeting.
+
+[Bob]: Yeah, for sure, for sure. When were you thinking?
+
+[Alice]: Um, maybe, like, Monday afternoon? Around 3? Just to, you know, get everyone on the same page.
+
+[Bob]: Monday at 3, yeah, that works. Should we, like, book a room or just do it at your desk?
+
+[Alice]: Let's book the, um, the small huddle room. More, like, focused that way.
+
+[Bob]: Makes sense. Cool, cool.
+
+[Alice]: And then, oh, that reminds me. Did you see that video Dave shared in Slack? The one with the cat? So funny.
+
+[Bob]: Oh my god yes. I watched it like five times. The part where it falls off the table...
+
+[Alice]: I know! I was dying. Okay well I should get back to work. See you Monday!
+
+[Bob]: Later!

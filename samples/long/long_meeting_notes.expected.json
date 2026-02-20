@@ -1,0 +1,74 @@
+{
+  "description": "80+ line meeting discussion with status updates, feedback review, hiring talk, and 3 concrete action items scheduled at the end: quarterly planning offsite, sprint demo, and tech debt review.",
+  "category": "long",
+  "tolerance": "moderate",
+  "owner": "Alice",
+  "reference_datetime": "2026-02-20T10:00:00",
+  "calendar_context": [],
+  "expected_events": [
+    {
+      "action": "create",
+      "title": "Quarterly Planning Offsite",
+      "start_time": "2026-03-04T13:00:00",
+      "end_time": "2026-03-04T16:00:00",
+      "location": "Riverside Conference Center",
+      "attendees_contain": ["Alice", "Bob", "Carol", "Dave"]
+    },
+    {
+      "action": "create",
+      "title": "Sprint Demo",
+      "start_time": "2026-02-27T14:00:00",
+      "end_time": "2026-02-27T15:00:00",
+      "attendees_contain": ["Bob"]
+    },
+    {
+      "action": "create",
+      "title": "Tech Debt Review",
+      "start_time": "2026-02-24T11:00:00",
+      "end_time": "2026-02-24T12:30:00",
+      "attendees_contain": ["Carol"]
+    }
+  ],
+  "mock_llm_response": {
+    "events": [
+      {
+        "title": "Quarterly Planning Offsite",
+        "start_time": "2026-03-04T13:00:00",
+        "end_time": "2026-03-04T16:00:00",
+        "location": "Riverside Conference Center",
+        "attendees": "Alice, Bob, Carol, Dave",
+        "confidence": "high",
+        "reasoning": "Alice explicitly asks everyone to block off Wednesday March 4th from 1 to 4 PM for the quarterly planning offsite at the Riverside Conference Center. All attendees confirm.",
+        "assumptions": null,
+        "action": "create",
+        "existing_event_id": null
+      },
+      {
+        "title": "Sprint Demo",
+        "start_time": "2026-02-27T14:00:00",
+        "end_time": "2026-02-27T15:00:00",
+        "location": "All-Hands Room",
+        "attendees": "Alice, Bob, Carol, Dave, Stakeholders",
+        "confidence": "high",
+        "reasoning": "Alice asks Bob to schedule a sprint demo for this Friday at 2 PM to show stakeholders the sprint's work. Bob agrees to book the all-hands room.",
+        "assumptions": "Duration assumed 1 hour",
+        "action": "create",
+        "existing_event_id": null
+      },
+      {
+        "title": "Tech Debt Review",
+        "start_time": "2026-02-24T11:00:00",
+        "end_time": "2026-02-24T12:30:00",
+        "location": null,
+        "attendees": "Carol, Engineering Team",
+        "confidence": "high",
+        "reasoning": "Alice asks Carol to set up a tech debt review session for next Tuesday at 11 AM, 90 minutes long, with the full engineering team.",
+        "assumptions": null,
+        "action": "create",
+        "existing_event_id": null
+      }
+    ],
+    "summary": "Found 3 action items from the Q1 product review meeting: quarterly planning offsite (March 4, 1-4 PM), sprint demo (this Friday at 2 PM), and tech debt review (next Tuesday at 11 AM for 90 minutes)."
+  },
+  "notes": "Reference datetime is Friday 2026-02-20, so 'this Friday' is 2026-02-27, 'next Tuesday' is 2026-02-24, and 'Wednesday March 4th' is 2026-03-04. The meeting has extensive discussion but only 3 concrete scheduling actions at the end. Moderate tolerance since the events are explicitly stated with clear times."
+}
