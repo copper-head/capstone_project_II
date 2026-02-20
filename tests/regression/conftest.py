@@ -71,7 +71,7 @@ def pytest_generate_tests(metafunc: pytest.Metafunc) -> None:
     cases = discover_samples(_SAMPLES_DIR)
 
     if not cases:
-        pytest.skip("No sample/sidecar pairs found")
+        metafunc.parametrize("sample_case", [], ids=[])
         return
 
     ids: list[str] = []

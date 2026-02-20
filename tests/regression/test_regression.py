@@ -114,7 +114,7 @@ def test_mock_extraction(
 @pytest.mark.live
 def test_live_extraction(
     sample_case: tuple[Path, SidecarSpec],
-    monkeypatch_env: dict[str, str],
+    monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     """Live mode: real Gemini API call, then assert extraction with tolerance.
 
@@ -125,19 +125,26 @@ def test_live_extraction(
 
     Calendar context is still built from the sidecar (not a real Google
     Calendar) so tests remain reproducible.
+
+    Note: This test uses ``monkeypatch`` directly (not ``monkeypatch_env``)
+    so the real ``GEMINI_API_KEY`` from the environment is preserved.
     """
     import os
 
     api_key = os.environ.get("GEMINI_API_KEY", "")
-    if not api_key or api_key == "test-gemini-key-12345":
+    if not api_key:
         pytest.skip("Real GEMINI_API_KEY required for live tests")
+
+    # Patch load_dotenv so .env file does not override test env.
+    monkeypatch.setattr("cal_ai.config.load_dotenv", lambda *_a, **_kw: None)
+    # Set required env vars that load_settings() needs.
+    monkeypatch.setenv("GEMINI_API_KEY", api_key)
+    monkeypatch.setenv("GOOGLE_ACCOUNT_EMAIL", "test@example.com")
+    monkeypatch.setenv("OWNER_NAME", "Test User")
 
     txt_path, sidecar = sample_case
     ref_dt = datetime.fromisoformat(sidecar.reference_datetime)
     cal_ctx = build_calendar_context(sidecar)
-
-    # Override the monkeypatch_env GEMINI_API_KEY with the real one.
-    monkeypatch_env["GEMINI_API_KEY"] = api_key
 
     with (
         patch(
