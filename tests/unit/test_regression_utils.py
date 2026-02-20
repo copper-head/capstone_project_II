@@ -491,3 +491,92 @@ class TestToleranceCrossCutting:
         result = _make_extraction_result([])
         sidecar = _make_sidecar(tolerance="strict", expected_events=[])
         assert_extraction_result(result, sidecar)
+
+    def test_existing_event_id_out_of_range_fails(self):
+        """An existing_event_id outside the context domain should fail."""
+        event = _make_extracted_event(
+            action="update",
+            existing_event_id=99,  # Out of range.
+        )
+        result = _make_extraction_result([event])
+        sidecar = _make_sidecar(
+            tolerance="moderate",
+            calendar_context=[
+                SidecarCalendarEvent(
+                    id="uuid-1",
+                    summary="Meeting",
+                    start="2026-02-20T10:00:00",
+                    end="2026-02-20T11:00:00",
+                ),
+            ],
+            expected_events=[
+                _make_expected_event(
+                    action="update",
+                    existing_event_id_required=True,
+                ),
+            ],
+        )
+        with pytest.raises(AssertionError, match="not in valid context IDs"):
+            assert_extraction_result(result, sidecar)
+
+    def test_delete_time_resolved_from_calendar_context(self):
+        """Delete actions should compare against calendar context event times."""
+        # The calendar context event is at 10:00-11:00.
+        # The actual delete event references it and also reports 10:00-11:00.
+        # The sidecar expected event has different times (09:00) but since
+        # the delete resolves from context, it should still pass.
+        event = _make_extracted_event(
+            action="delete",
+            title="Meeting",
+            start_time="2026-02-20T10:00:00",
+            end_time="2026-02-20T11:00:00",
+            existing_event_id=1,
+        )
+        result = _make_extraction_result([event])
+        sidecar = _make_sidecar(
+            tolerance="strict",
+            calendar_context=[
+                SidecarCalendarEvent(
+                    id="uuid-1",
+                    summary="Meeting",
+                    start="2026-02-20T10:00:00",
+                    end="2026-02-20T11:00:00",
+                ),
+            ],
+            expected_events=[
+                _make_expected_event(
+                    action="delete",
+                    title="Meeting",
+                    # The expected times here differ from context, but
+                    # for delete actions the context times should be used.
+                    start_time="2026-02-20T09:00:00",
+                    existing_event_id_required=True,
+                ),
+            ],
+        )
+        # Should pass: delete resolves times from context (10:00),
+        # and actual is also 10:00, so it is within strict tolerance.
+        assert_extraction_result(result, sidecar)
+
+    def test_delete_without_context_uses_expected_times(self):
+        """Delete actions without calendar context should use expected times."""
+        event = _make_extracted_event(
+            action="delete",
+            title="Meeting",
+            start_time="2026-02-20T09:00:00",
+            existing_event_id=None,
+        )
+        result = _make_extraction_result([event])
+        sidecar = _make_sidecar(
+            tolerance="moderate",
+            # No calendar_context.
+            expected_events=[
+                _make_expected_event(
+                    action="delete",
+                    title="Meeting",
+                    start_time="2026-02-20T09:00:00",
+                ),
+            ],
+        )
+        # Should pass: no context, so expected times are used directly.
+        assert_extraction_result(result, sidecar)
