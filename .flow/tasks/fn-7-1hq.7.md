@@ -9,8 +9,9 @@ Update all project documentation, add Makefile targets for the regression suite,
 ## Approach
 
 - **README.md updates:**
-  - Update "Sample Transcripts" table (lines 87-98) with new subdirectory paths and expanded categories
-  - Update Run section examples (lines 44-66) with new paths like `samples/crud/simple_lunch.txt`
+  <!-- Updated by plan-sync: fn-7-1hq.1 already updated table and run examples -->
+  - Sample Transcripts table and Run section examples already use subdirectory paths (done in fn-7-1hq.1)
+  - Expand table with new samples added by fn-7-1hq.4 and fn-7-1hq.5
   - Add "Regression Testing" subsection in Development section documenting mock/live modes
   - Update test count if mentioned
 - **CLAUDE.md updates:**
@@ -32,7 +33,9 @@ Update all project documentation, add Makefile targets for the regression suite,
 
 ## Key context
 
-- README currently has a "Sample Transcripts" table at lines 87-98 with 9 entries in flat format
+<!-- Updated by plan-sync: fn-7-1hq.1 already updated README with subdirectory paths -->
+- README already has a "Sample Transcripts" table at lines 89-100 with 10 entries in subdirectory format (updated by fn-7-1hq.1)
+- README run examples at lines 44-66 already use subdirectory paths (e.g., `samples/crud/simple_lunch.txt`)
 - CLAUDE.md Project Structure tree at lines 16-34 does not show `samples/` at all
 - Makefile at root has `test`, `test-cov`, `lint`, `format`, `build`, `run`, `clean` targets
 - Follow existing Makefile tab-indentation style

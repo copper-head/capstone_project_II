@@ -39,9 +39,8 @@ Migrate the existing 11 sample transcripts from the flat `samples/` directory in
 - [ ] `ruff check .` passes
 - [ ] No orphan references to flat `samples/*.txt` paths remain
 ## Done summary
-TBD
-
+Migrated 10 sample transcripts from flat samples/ directory into category-based subdirectories (crud, multi_speaker, adversarial, realistic, long). Updated all hardcoded paths across Dockerfile, 5 test files, and README. Removed orphan duplicate and untracked build artifacts.
 ## Evidence
-- Commits:
-- Tests:
+- Commits: 30535dc, 9f75816
+- Tests: pytest (313 passed), ruff check . (no new errors)
 - PRs:
