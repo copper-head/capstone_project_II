@@ -13,8 +13,10 @@ Build the benchmark runner that discovers samples, executes live Gemini extracti
 - `run_benchmark(directory, output_path, gemini_client)` → `BenchmarkResult` dataclass
 - For each sample with sidecar:
   1. Load sidecar, build `CalendarContext` from sidecar's `calendar_context` field
-  2. Call `gemini_client.extract_events(transcript_text, calendar_context, owner, reference_datetime)`
-  3. Capture `LLMCallResult.usage` for token counting, `time.monotonic()` for latency
+  2. Call `gemini_client.extract_events(transcript_text, owner_name, current_datetime, calendar_context=context_text)`
+  <!-- Updated by plan-sync: fn-8-vyv.1 used extract_events(transcript_text, owner_name, current_datetime, calendar_context="") not extract_events(text, calendar_context, owner, reference_datetime) -->
+  3. Capture `ExtractionResult.usage_metadata` (list of usage objects, one per API attempt) for token counting, `time.monotonic()` for latency
+  <!-- Updated by plan-sync: fn-8-vyv.1 stores usage as ExtractionResult.usage_metadata (list[Any]) not LLMCallResult.usage -->
   4. Score via `score_sample()` from Task 2
 - For samples without sidecars: extract only, log warning, skip scoring
 - Progress indicator: print `[N/M] category/name... P=X.XX R=X.XX (Xs)` to stderr
@@ -38,7 +40,8 @@ Build the benchmark runner that discovers samples, executes live Gemini extracti
 
 ## Key context
 
-- `extract_events()` signature: `extract_events(text, calendar_context, owner, current_datetime)` at `llm.py:96-103`
+- `extract_events()` signature: `extract_events(transcript_text, owner_name, current_datetime, calendar_context="")` at `llm.py:74-169`
+<!-- Updated by plan-sync: fn-8-vyv.1 used extract_events(transcript_text, owner_name, current_datetime, calendar_context="") not extract_events(text, calendar_context, owner, current_datetime); line range updated from 96-103 to 74-169 -->
 - `CalendarContext` has `events_text`, `id_map`, `event_count`, `event_meta` at `calendar/context.py`
 - Sidecar `calendar_context` from fn-7 is a dict with `events_text` and `id_map` — must be converted to `CalendarContext` dataclass
 - Gemini free tier: 15 RPM. Add `time.sleep()` between samples if needed (configurable)
@@ -47,7 +50,8 @@ Build the benchmark runner that discovers samples, executes live Gemini extracti
 - [ ] `discover_samples()` finds all `.txt` files across category subdirectories
 - [ ] Samples with sidecars are scored; samples without sidecars are extracted and warned
 - [ ] Live Gemini extraction called with sidecar's calendar context, owner, and reference_datetime
-- [ ] Token counts collected from `LLMCallResult.usage` and used for cost estimation
+- [ ] Token counts collected from `ExtractionResult.usage_metadata` (list of usage objects) and used for cost estimation
+<!-- Updated by plan-sync: fn-8-vyv.1 stores usage on ExtractionResult.usage_metadata not LLMCallResult.usage -->
 - [ ] Latency tracked per sample via `time.monotonic()`
 - [ ] Console summary printed to stdout with overall P/R/F1 and per-category breakdown
 - [ ] Detailed markdown report written with per-sample expected vs actual diff
