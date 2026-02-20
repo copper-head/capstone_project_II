@@ -380,6 +380,46 @@ class TestFormatMarkdownReport:
         assert "Team Meeting" in output
 
 
+    def test_ai_summary_section_included(self) -> None:
+        """Markdown report includes AI summary when present."""
+        agg = AggregateScore(
+            overall_tp=1,
+            overall_fp=0,
+            overall_fn=0,
+            overall_precision=1.0,
+            overall_recall=1.0,
+            overall_f1=1.0,
+            sample_count=1,
+        )
+        result = _make_benchmark_result(aggregate=agg)
+        result.ai_summary = "The pipeline shows excellent performance."
+        result.summary_prompt_tokens = 300
+        result.summary_output_tokens = 150
+        output = format_markdown_report(result)
+
+        assert "## AI Self-Evaluation" in output
+        assert "The pipeline shows excellent performance." in output
+        assert "300 prompt tokens" in output
+        assert "150 output tokens" in output
+
+    def test_ai_summary_section_absent_when_empty(self) -> None:
+        """Markdown report omits AI summary when empty."""
+        agg = AggregateScore(
+            overall_tp=1,
+            overall_fp=0,
+            overall_fn=0,
+            overall_precision=1.0,
+            overall_recall=1.0,
+            overall_f1=1.0,
+            sample_count=1,
+        )
+        result = _make_benchmark_result(aggregate=agg)
+        result.ai_summary = ""
+        output = format_markdown_report(result)
+
+        assert "AI Self-Evaluation" not in output
+
+
 class TestGenerateReportFilename:
     """Tests for generate_report_filename."""
 

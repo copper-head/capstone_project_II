@@ -16,9 +16,15 @@ Single-user demo product. See `docs/SPEC.md` for full specification.
 ```
 src/cal_ai/           # Main package (src layout)
   __init__.py          # Package init, __version__
-  __main__.py          # python -m cal_ai entrypoint
+  __main__.py          # python -m cal_ai entrypoint (run + benchmark subcommands)
   config.py            # Settings dataclass, load_settings(), ConfigError
   log.py               # setup_logging(), get_logger()
+  benchmark/           # Benchmark suite (P/R/F1 scoring, reports, AI summary)
+    __init__.py        # Public API exports
+    scoring.py         # Event matching, P/R/F1, confidence calibration
+    runner.py          # Sample discovery, live extraction, aggregation
+    report.py          # Console + markdown report formatters
+    summary.py         # AI-generated self-evaluation via Gemini
 tests/                # Test suite (pytest)
   unit/                # Unit tests (test_config, test_log, test_package)
   integration/         # Integration tests
@@ -40,6 +46,7 @@ Makefile              # Dev workflow targets
 Dockerfile            # Python 3.12-slim container
 docker-compose.yml    # Service definition with mounts
 .env.example          # Environment variable template
+reports/              # Benchmark output (gitignored)
 credentials.json      # OAuth 2.0 client credentials (gitignored)
 token.json            # Cached OAuth tokens (gitignored, auto-generated)
 .env                  # Environment variables (gitignored)
@@ -55,6 +62,7 @@ make test                # Run pytest (all tests including regression mock mode)
 make test-cov            # Run pytest with coverage report
 make test-regression     # Run regression suite only (mock mode)
 make test-regression-live # Run regression suite with live Gemini API
+make benchmark           # Run benchmark suite (live Gemini, writes to reports/)
 make build               # Build Docker image (docker compose build)
 make run                 # Run container (docker compose up)
 make clean               # Remove caches, coverage, build artifacts
@@ -63,6 +71,8 @@ make clean               # Remove caches, coverage, build artifacts
 Direct commands (without make):
 ```bash
 python -m cal_ai              # Run the application
+python -m cal_ai benchmark    # Run benchmark suite (default: samples/)
+python -m cal_ai benchmark /path/to/samples/ --output /tmp/reports/
 pip install -e ".[dev]"       # Install editable with dev deps
 pytest                        # Run tests (all including regression mock mode)
 pytest tests/regression/ -v   # Run regression suite only (mock mode)
@@ -102,6 +112,34 @@ ID, search-based methods are used as fallback.
 
 **Graceful degradation:** If calendar credentials are unavailable or context
 fetch fails, the pipeline continues without context (current create-only behavior).
+
+## Architecture: Benchmark Suite
+
+The benchmark suite (`python -m cal_ai benchmark`) measures extraction accuracy
+across all sample transcripts using live Gemini API calls.
+
+```
+Discover samples -> Load sidecars -> For each sample:
+  Build calendar context from sidecar -> extract_events() via Gemini
+  -> Score actual vs expected (P/R/F1) using tolerance engine
+-> Aggregate scores -> Console summary + Markdown report + JSONL history
+-> AI summary (Gemini self-evaluation of own performance)
+```
+
+**Scoring**: Reuses the regression test tolerance engine (Hungarian algorithm
+best-match pairing). True positives must match on action AND pass title/time
+tolerance checks. P/R edge cases: both empty = vacuous truth (P=R=F1=1.0).
+
+**Cost tracking**: Token usage surfaced from `GeminiClient._call_api()` via
+`LLMCallResult`. Gemini 2.5 pricing: $1.25/1M input, $10.00/1M output.
+
+**AI summary**: After scoring, Gemini self-evaluates the benchmark results --
+identifies strengths, failure patterns, and suggests improvements. Graceful
+failure: if the summary call fails, the report is still complete.
+
+**Output**: Console summary (stdout), detailed markdown report with per-sample
+diffs (`reports/benchmark_YYYY-MM-DDTHH-MM-SS.md`), and JSONL history
+(`reports/benchmark_history.jsonl`).
 
 ## Key Conventions
 - Pipeline architecture: LLM outputs structured JSON, Python handles calendar ops

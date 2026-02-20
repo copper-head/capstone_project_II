@@ -129,11 +129,34 @@ make test-regression-live         # Run regression suite (live mode)
 
 Tolerance levels per sample: **strict** (exact match), **moderate** (fuzzy titles, +/-2hr times), **relaxed** (broad matching, +/-1day times).
 
+### Benchmarking
+
+The benchmark suite runs live Gemini extraction across all sample transcripts and scores results using Precision/Recall/F1 metrics. It also generates an AI self-evaluation where Gemini analyzes its own performance.
+
+```bash
+# Run benchmark (requires GEMINI_API_KEY)
+make benchmark
+
+# Or directly
+python -m cal_ai benchmark
+
+# Custom sample directory and output
+python -m cal_ai benchmark /path/to/samples/ --output /tmp/reports/
+```
+
+**Output:**
+- Console summary (stdout) with overall and per-category P/R/F1
+- Detailed markdown report in `reports/benchmark_YYYY-MM-DDTHH-MM-SS.md`
+- JSONL run history in `reports/benchmark_history.jsonl`
+- AI-generated summary: Gemini self-evaluates its extraction performance, identifies failure patterns, and suggests improvements
+
+**Metrics:** Per-sample and aggregate Precision/Recall/F1, confidence calibration (high/medium/low accuracy correlation), token usage, and cost estimation (Gemini 2.5 pricing).
+
 ### Project Structure
 
 ```
 src/cal_ai/
-├── __main__.py          # CLI entrypoint
+├── __main__.py          # CLI entrypoint (run + benchmark subcommands)
 ├── pipeline.py          # 4-stage orchestrator
 ├── llm.py               # Gemini client + response parsing
 ├── prompts.py           # System/user prompt builders
@@ -144,6 +167,11 @@ src/cal_ai/
 │   ├── extraction.py    # Pydantic models (ExtractedEvent, ValidatedEvent)
 │   ├── transcript.py    # Utterance, TranscriptParseResult
 │   └── calendar.py      # SyncResult
+├── benchmark/
+│   ├── scoring.py       # P/R/F1 metrics, event matching, confidence calibration
+│   ├── runner.py        # Sample discovery, live extraction, cost tracking
+│   ├── report.py        # Console + markdown report formatters
+│   └── summary.py       # AI self-evaluation via Gemini
 └── calendar/
     ├── client.py         # Google Calendar CRUD client
     ├── context.py        # Calendar context fetcher + ID remapping

@@ -209,6 +209,20 @@ def format_markdown_report(result: BenchmarkResult) -> str:
         lines.append("")
         _append_sample_detail(lines, sr)
 
+    # AI summary section.
+    if result.ai_summary:
+        lines.append("")
+        lines.append("## AI Self-Evaluation")
+        lines.append("")
+        lines.append(result.ai_summary)
+        if result.summary_prompt_tokens or result.summary_output_tokens:
+            lines.append("")
+            lines.append(
+                f"*Summary generation: "
+                f"{result.summary_prompt_tokens:,} prompt tokens, "
+                f"{result.summary_output_tokens:,} output tokens*"
+            )
+
     lines.append("")
     return "\n".join(lines)
 

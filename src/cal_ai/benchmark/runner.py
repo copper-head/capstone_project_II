@@ -90,6 +90,9 @@ class BenchmarkResult:
         est_cost_usd: Estimated total cost in USD.
         model: Model name used for extraction.
         timestamp: ISO 8601 timestamp of the run.
+        summary_prompt_tokens: Prompt tokens for AI summary call.
+        summary_output_tokens: Output tokens for AI summary call.
+        ai_summary: AI-generated self-evaluation text.
     """
 
     sample_results: list[SampleResult] = field(default_factory=list)
@@ -102,6 +105,9 @@ class BenchmarkResult:
     est_cost_usd: float = 0.0
     model: str = "gemini-2.5-pro"
     timestamp: str = ""
+    summary_prompt_tokens: int = 0
+    summary_output_tokens: int = 0
+    ai_summary: str = ""
 
 
 # ---------------------------------------------------------------------------

@@ -67,9 +67,8 @@ Build the benchmark runner that discovers samples, executes live Gemini extracti
 - [ ] `ruff check .` passes
 - [ ] `pytest` passes with 0 failures
 ## Done summary
-TBD
-
+Built the benchmark runner (discover_samples, run_benchmark with live Gemini extraction, latency/token tracking, rate limiting), report generator (console summary and markdown report with per-category P/R/F1 breakdown and cost estimates), and JSONL history append. Wired _handle_benchmark() in __main__.py to replace the stub. Added 14 unit tests for report formatters.
 ## Evidence
-- Commits:
-- Tests:
+- Commits: 906984c2195dabb57a5e9350eada20018c93d87d
+- Tests: pytest tests/ -x -q (432 passed), ruff check . (all passed)
 - PRs:

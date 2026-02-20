@@ -246,14 +246,22 @@ def _handle_benchmark(args: argparse.Namespace) -> int:
         print(f"Error: Benchmark failed: {exc}", file=sys.stderr)
         return 1
 
+    # Generate AI summary (graceful failure -- report is still complete).
+    from cal_ai.benchmark.summary import generate_ai_summary
+
+    print("\nGenerating AI summary...", file=sys.stderr)
+    result.ai_summary = generate_ai_summary(result, gemini_client)
+
     # Print console summary to stdout.
     print(format_console_summary(result))
 
-    # Write detailed markdown report.
+    # Write detailed markdown report (includes AI summary).
     output_path.mkdir(parents=True, exist_ok=True)
     report_filename = generate_report_filename()
     report_path = output_path / report_filename
-    report_path.write_text(format_markdown_report(result), encoding="utf-8")
+    report_path.write_text(
+        format_markdown_report(result), encoding="utf-8"
+    )
     print(f"\nDetailed report: {report_path}", file=sys.stderr)
 
     return 0
