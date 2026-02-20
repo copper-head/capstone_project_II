@@ -168,11 +168,7 @@ def _compute_prf(tp: int, fp: int, fn: int) -> tuple[float, float, float]:
     recall = tp / (tp + fn) if (tp + fn) > 0 else 1.0
 
     # F1: harmonic mean.
-    f1 = (
-        2.0 * precision * recall / (precision + recall)
-        if (precision + recall) > 0
-        else 0.0
-    )
+    f1 = 2.0 * precision * recall / (precision + recall) if (precision + recall) > 0 else 0.0
 
     return precision, recall, f1
 
@@ -200,17 +196,14 @@ def _check_event_match(
 
     # Action match (always exact).
     if actual.action != expected.action:
-        reasons.append(
-            f"action: expected {expected.action!r}, got {actual.action!r}"
-        )
+        reasons.append(f"action: expected {expected.action!r}, got {actual.action!r}")
         return reasons  # Skip further checks if action is wrong.
 
     # Title match: exact for strict, fuzzy otherwise.
     if tolerance == "strict":
         if actual.title.strip().lower() != expected.title.strip().lower():
             reasons.append(
-                f"title (strict exact): "
-                f"expected {expected.title!r}, got {actual.title!r}"
+                f"title (strict exact): expected {expected.title!r}, got {actual.title!r}"
             )
     else:
         ratio = token_set_ratio(actual.title, expected.title)
@@ -222,16 +215,20 @@ def _check_event_match(
 
     # Start time tolerance.
     start_reason = _check_time_tolerance(
-        actual.start_time, expected.start_time,
-        thresholds.time_tolerance, "start_time",
+        actual.start_time,
+        expected.start_time,
+        thresholds.time_tolerance,
+        "start_time",
     )
     if start_reason:
         reasons.append(start_reason)
 
     # End time tolerance.
     end_reason = _check_time_tolerance(
-        actual.end_time, expected.end_time,
-        thresholds.time_tolerance, "end_time",
+        actual.end_time,
+        expected.end_time,
+        thresholds.time_tolerance,
+        "end_time",
     )
     if end_reason:
         reasons.append(end_reason)
@@ -323,8 +320,12 @@ def score_sample(
             sample_name=sample_name,
             category=category,
             tolerance=tolerance_level,
-            tp=0, fp=0, fn=0,
-            precision=precision, recall=recall, f1=f1,
+            tp=0,
+            fp=0,
+            fn=0,
+            precision=precision,
+            recall=recall,
+            f1=f1,
             per_event_details=details,
         )
 
@@ -348,53 +349,65 @@ def score_sample(
 
         # Check if the pair is within tolerance.
         mismatch_reasons = _check_event_match(
-            actual_event, expected_event, tolerance_level,
+            actual_event,
+            expected_event,
+            tolerance_level,
         )
 
         if not mismatch_reasons:
             # True positive: matched and within tolerance.
             tp += 1
-            details.append(EventMatchDetail(
-                classification="tp",
-                actual_event=actual_event,
-                expected_event=expected_event,
-            ))
+            details.append(
+                EventMatchDetail(
+                    classification="tp",
+                    actual_event=actual_event,
+                    expected_event=expected_event,
+                )
+            )
         else:
             # Paired but outside tolerance: counts as both FP and FN.
             fp_from_mismatch += 1
             fn_from_mismatch += 1
-            details.append(EventMatchDetail(
-                classification="fp",
-                actual_event=actual_event,
-                expected_event=expected_event,
-                mismatch_reasons=mismatch_reasons,
-            ))
-            details.append(EventMatchDetail(
-                classification="fn",
-                actual_event=None,
-                expected_event=expected_event,
-                mismatch_reasons=mismatch_reasons,
-            ))
+            details.append(
+                EventMatchDetail(
+                    classification="fp",
+                    actual_event=actual_event,
+                    expected_event=expected_event,
+                    mismatch_reasons=mismatch_reasons,
+                )
+            )
+            details.append(
+                EventMatchDetail(
+                    classification="fn",
+                    actual_event=None,
+                    expected_event=expected_event,
+                    mismatch_reasons=mismatch_reasons,
+                )
+            )
 
     # Unmatched actual events are FP.
     fp_unmatched = 0
     for i, actual_event in enumerate(actual_events):
         if i not in paired_actual_indices:
             fp_unmatched += 1
-            details.append(EventMatchDetail(
-                classification="fp",
-                actual_event=actual_event,
-            ))
+            details.append(
+                EventMatchDetail(
+                    classification="fp",
+                    actual_event=actual_event,
+                )
+            )
 
     # Unmatched expected events are FN.
     fn_unmatched = 0
     for i, expected_event in enumerate(expected_events):
         if i not in paired_expected_indices:
             fn_unmatched += 1
-            details.append(EventMatchDetail(
-                classification="fn",
-                expected_event=expected_event,
-            ))
+            details.append(
+                EventMatchDetail(
+                    classification="fn",
+                    expected_event=expected_event,
+                )
+            )
 
     total_fp = fp_from_mismatch + fp_unmatched
     total_fn = fn_from_mismatch + fn_unmatched
@@ -404,8 +417,12 @@ def score_sample(
         sample_name=sample_name,
         category=category,
         tolerance=tolerance_level,
-        tp=tp, fp=total_fp, fn=total_fn,
-        precision=precision, recall=recall, f1=f1,
+        tp=tp,
+        fp=total_fp,
+        fn=total_fn,
+        precision=precision,
+        recall=recall,
+        f1=f1,
         per_event_details=details,
     )
 
@@ -426,8 +443,12 @@ def aggregate_scores(
     """
     if not sample_scores:
         return AggregateScore(
-            overall_tp=0, overall_fp=0, overall_fn=0,
-            overall_precision=1.0, overall_recall=1.0, overall_f1=1.0,
+            overall_tp=0,
+            overall_fp=0,
+            overall_fn=0,
+            overall_precision=1.0,
+            overall_recall=1.0,
+            overall_f1=1.0,
             sample_count=0,
         )
 
@@ -449,12 +470,18 @@ def aggregate_scores(
         cat_fp = sum(s.fp for s in cat_samples)
         cat_fn = sum(s.fn for s in cat_samples)
         cat_p, cat_r, cat_f1 = _compute_prf(cat_tp, cat_fp, cat_fn)
-        per_category.append(CategoryScore(
-            category=cat_name,
-            tp=cat_tp, fp=cat_fp, fn=cat_fn,
-            precision=cat_p, recall=cat_r, f1=cat_f1,
-            sample_count=len(cat_samples),
-        ))
+        per_category.append(
+            CategoryScore(
+                category=cat_name,
+                tp=cat_tp,
+                fp=cat_fp,
+                fn=cat_fn,
+                precision=cat_p,
+                recall=cat_r,
+                f1=cat_f1,
+                sample_count=len(cat_samples),
+            )
+        )
 
     return AggregateScore(
         overall_tp=total_tp,
@@ -496,9 +523,7 @@ def calibrate_confidence(
             conf = detail.actual_event.confidence
             confidence_counts[conf] = confidence_counts.get(conf, 0) + 1
             if detail.classification == "tp":
-                confidence_correct[conf] = (
-                    confidence_correct.get(conf, 0) + 1
-                )
+                confidence_correct[conf] = confidence_correct.get(conf, 0) + 1
 
     result: dict[str, float] = {}
     for conf_level in ("high", "medium", "low"):

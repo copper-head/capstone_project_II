@@ -285,9 +285,7 @@ class TestPipeline:
         # LLM should not be called when there are no utterances.
         ctx.gemini.extract_events.assert_not_called()
 
-    def test_pipeline_extraction_returns_no_events(
-        self, tmp_path: Path
-    ) -> None:
+    def test_pipeline_extraction_returns_no_events(self, tmp_path: Path) -> None:
         """Parser succeeds, LLM finds nothing -> no events, no sync calls."""
         transcript = tmp_path / "sample.txt"
         transcript.write_text("[Alice]: Nice weather\n")
@@ -305,9 +303,7 @@ class TestPipeline:
         # Calendar client IS constructed for context fetch, but no sync calls.
         ctx.client.create_event.assert_not_called()
 
-    def test_pipeline_extraction_failure_does_not_crash(
-        self, tmp_path: Path
-    ) -> None:
+    def test_pipeline_extraction_failure_does_not_crash(self, tmp_path: Path) -> None:
         """LLM raises ExtractionError -> pipeline returns 0 events, warning logged."""
         transcript = tmp_path / "sample.txt"
         transcript.write_text("[Alice]: Hey\n")
@@ -324,9 +320,7 @@ class TestPipeline:
         assert len(result.warnings) >= 1
         assert any("LLM extraction failed" in w for w in result.warnings)
 
-    def test_pipeline_single_event_sync_failure_continues(
-        self, tmp_path: Path
-    ) -> None:
+    def test_pipeline_single_event_sync_failure_continues(self, tmp_path: Path) -> None:
         """1 of 3 events fails sync -> 2 synced, 1 failed."""
         transcript = tmp_path / "sample.txt"
         transcript.write_text("[Alice]: Hi\n")
@@ -512,9 +506,7 @@ class TestPipeline:
 
         assert result.speakers_found == ["Alice", "Bob"]
 
-    def test_pipeline_passes_owner_to_extractor(
-        self, tmp_path: Path
-    ) -> None:
+    def test_pipeline_passes_owner_to_extractor(self, tmp_path: Path) -> None:
         """Owner forwarded -> extractor called with owner='TestOwner'."""
         transcript = tmp_path / "sample.txt"
         transcript.write_text("[Alice]: Hi\n")
@@ -529,9 +521,7 @@ class TestPipeline:
         call_kwargs = ctx.gemini.extract_events.call_args
         assert call_kwargs.kwargs["owner_name"] == "TestOwner"
 
-    def test_pipeline_passes_current_datetime_to_extractor(
-        self, tmp_path: Path
-    ) -> None:
+    def test_pipeline_passes_current_datetime_to_extractor(self, tmp_path: Path) -> None:
         """Datetime forwarded -> extractor called with frozen datetime."""
         transcript = tmp_path / "sample.txt"
         transcript.write_text("[Alice]: Hi\n")
@@ -549,9 +539,7 @@ class TestPipeline:
         call_kwargs = ctx.gemini.extract_events.call_args
         assert call_kwargs.kwargs["current_datetime"] == frozen_dt
 
-    def test_pipeline_passes_calendar_context_to_extractor(
-        self, tmp_path: Path
-    ) -> None:
+    def test_pipeline_passes_calendar_context_to_extractor(self, tmp_path: Path) -> None:
         """Calendar context text forwarded to extract_events call."""
         transcript = tmp_path / "sample.txt"
         transcript.write_text("[Alice]: Hi\n")
@@ -593,9 +581,7 @@ class TestPipeline:
 
         assert result.id_map == expected_map
 
-    def test_pipeline_graceful_degradation_no_credentials(
-        self, tmp_path: Path
-    ) -> None:
+    def test_pipeline_graceful_degradation_no_credentials(self, tmp_path: Path) -> None:
         """Credential failure -> extract without context, warning recorded."""
         transcript = tmp_path / "sample.txt"
         transcript.write_text("[Alice]: Hi\n")
@@ -617,9 +603,7 @@ class TestPipeline:
         call_kwargs = ctx.gemini.extract_events.call_args
         assert call_kwargs.kwargs["calendar_context"] == ""
 
-    def test_pipeline_context_fetch_failure_degrades_gracefully(
-        self, tmp_path: Path
-    ) -> None:
+    def test_pipeline_context_fetch_failure_degrades_gracefully(self, tmp_path: Path) -> None:
         """fetch_calendar_context raises -> extract without context, warning."""
         transcript = tmp_path / "sample.txt"
         transcript.write_text("[Alice]: Hi\n")
@@ -669,9 +653,7 @@ class TestPipeline:
             )
 
         # Direct update_event should be called with the real UUID.
-        ctx.client.update_event.assert_called_once_with(
-            "real-uuid-standup", validated[0]
-        )
+        ctx.client.update_event.assert_called_once_with("real-uuid-standup", validated[0])
         # Search-based method should NOT be called.
         ctx.client.find_and_update_event.assert_not_called()
         assert result.events_synced[0].action_taken == "updated"
@@ -709,9 +691,7 @@ class TestPipeline:
         ctx.client.find_and_delete_event.assert_not_called()
         assert result.events_synced[0].action_taken == "deleted"
 
-    def test_pipeline_update_404_falls_back_to_create(
-        self, tmp_path: Path
-    ) -> None:
+    def test_pipeline_update_404_falls_back_to_create(self, tmp_path: Path) -> None:
         """update + existing_event_id + 404 -> fallback to create_event."""
         transcript = tmp_path / "sample.txt"
         transcript.write_text("[Alice]: Move standup to 10\n")
@@ -731,9 +711,7 @@ class TestPipeline:
             calendar_context=ctx_data,
         ) as ctx:
             # update_event raises 404 -> should fallback to create.
-            ctx.client.update_event.side_effect = CalendarNotFoundError(
-                "Event not found"
-            )
+            ctx.client.update_event.side_effect = CalendarNotFoundError("Event not found")
             result = run_pipeline(
                 transcript_path=transcript,
                 owner="TestOwner",
@@ -746,9 +724,7 @@ class TestPipeline:
         # Action should report "created" (the fallback).
         assert result.events_synced[0].action_taken == "created"
 
-    def test_pipeline_delete_404_treated_as_success(
-        self, tmp_path: Path
-    ) -> None:
+    def test_pipeline_delete_404_treated_as_success(self, tmp_path: Path) -> None:
         """delete + existing_event_id + 404 -> idempotent success (deleted)."""
         transcript = tmp_path / "sample.txt"
         transcript.write_text("[Alice]: Cancel standup\n")
@@ -768,9 +744,7 @@ class TestPipeline:
             calendar_context=ctx_data,
         ) as ctx:
             # delete_event raises 404 -> should be treated as success.
-            ctx.client.delete_event.side_effect = CalendarNotFoundError(
-                "Event not found"
-            )
+            ctx.client.delete_event.side_effect = CalendarNotFoundError("Event not found")
             result = run_pipeline(
                 transcript_path=transcript,
                 owner="TestOwner",
@@ -781,9 +755,7 @@ class TestPipeline:
         assert len(result.events_failed) == 0
         assert result.events_synced[0].action_taken == "deleted"
 
-    def test_pipeline_update_no_existing_id_uses_search(
-        self, tmp_path: Path
-    ) -> None:
+    def test_pipeline_update_no_existing_id_uses_search(self, tmp_path: Path) -> None:
         """update + no existing_event_id -> find_and_update_event (search)."""
         transcript = tmp_path / "sample.txt"
         transcript.write_text("[Alice]: Move standup to 10\n")
@@ -806,9 +778,7 @@ class TestPipeline:
         ctx.client.update_event.assert_not_called()
         assert result.events_synced[0].action_taken == "updated"
 
-    def test_pipeline_delete_no_existing_id_uses_search(
-        self, tmp_path: Path
-    ) -> None:
+    def test_pipeline_delete_no_existing_id_uses_search(self, tmp_path: Path) -> None:
         """delete + no existing_event_id -> find_and_delete_event (search)."""
         transcript = tmp_path / "sample.txt"
         transcript.write_text("[Alice]: Cancel standup\n")
@@ -830,9 +800,7 @@ class TestPipeline:
         ctx.client.delete_event.assert_not_called()
         assert result.events_synced[0].action_taken == "deleted"
 
-    def test_pipeline_existing_id_not_in_id_map_falls_back_to_search(
-        self, tmp_path: Path
-    ) -> None:
+    def test_pipeline_existing_id_not_in_id_map_falls_back_to_search(self, tmp_path: Path) -> None:
         """existing_event_id=99 not in id_map -> fallback to search method."""
         transcript = tmp_path / "sample.txt"
         transcript.write_text("[Alice]: Move standup to 10\n")

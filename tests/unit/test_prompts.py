@@ -147,9 +147,7 @@ class TestCrudDecisionRules:
         prompt = _prompt()
 
         for action_heading in ("### CREATE", "### UPDATE", "### DELETE"):
-            assert action_heading in prompt, (
-                f"Expected '{action_heading}' section in prompt"
-            )
+            assert action_heading in prompt, f"Expected '{action_heading}' section in prompt"
 
 
 # ---------------------------------------------------------------------------
@@ -190,9 +188,7 @@ class TestFewShotExamples:
 
         # Count example sections
         example_count = prompt.count("### Example")
-        assert example_count >= 2, (
-            f"Expected at least 2 few-shot examples, found {example_count}"
-        )
+        assert example_count >= 2, f"Expected at least 2 few-shot examples, found {example_count}"
 
         # Should have a CREATE example and an UPDATE or DELETE example
         prompt_lower = prompt.lower()
@@ -217,9 +213,7 @@ class TestNegativeExamples:
 
         # Count negative example sections
         negative_count = prompt.count("### Negative Example")
-        assert negative_count >= 1, (
-            f"Expected at least 1 negative example, found {negative_count}"
-        )
+        assert negative_count >= 1, f"Expected at least 1 negative example, found {negative_count}"
 
         # Should explicitly say "do not" or "wrong"
         prompt_lower = prompt.lower()
@@ -252,9 +246,7 @@ class TestCalendarContext:
         # (near end of prompt -- lost-in-the-middle effect)
         examples_pos = prompt.find("## Few-Shot Examples")
         calendar_pos = prompt.find("## Your Calendar")
-        assert calendar_pos > examples_pos, (
-            "Calendar context must appear after examples section"
-        )
+        assert calendar_pos > examples_pos, "Calendar context must appear after examples section"
 
     def test_calendar_context_default_message_when_empty(self) -> None:
         """Without calendar context, prompt says 'default to create'."""
@@ -293,9 +285,7 @@ class TestCalendarContextParameter:
     def test_accepts_calendar_context_parameter(self) -> None:
         """Function signature accepts calendar_context with default empty string."""
         # Call with no calendar_context -- should use default
-        prompt_no_ctx = build_system_prompt(
-            owner_name=_OWNER, current_datetime=_DATETIME
-        )
+        prompt_no_ctx = build_system_prompt(owner_name=_OWNER, current_datetime=_DATETIME)
         assert isinstance(prompt_no_ctx, str)
 
         # Call with calendar_context -- should include it
@@ -347,11 +337,7 @@ class TestFormatTranscriptForLlm:
 
         result = format_transcript_for_llm(utterances)
 
-        expected = (
-            "Alice: Hey, want to grab lunch?\n"
-            "Bob: Sure, how about noon?\n"
-            "Alice: Perfect."
-        )
+        expected = "Alice: Hey, want to grab lunch?\nBob: Sure, how about noon?\nAlice: Perfect."
         assert result == expected
 
     def test_format_transcript_for_llm_empty_list(self) -> None:

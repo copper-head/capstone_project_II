@@ -53,9 +53,8 @@ Add AI-generated summary to benchmark reports (Gemini self-evaluation), update d
 - [ ] `python -m cal_ai benchmark --help` shows benchmark usage
 - [ ] Backward compatibility verified: `python -m cal_ai file.txt` still works
 ## Done summary
-TBD
-
+Added AI-generated summary module (summary.py) that uses Gemini to self-evaluate benchmark results with structured criteria (overall quality, category weaknesses, failure patterns, confidence calibration, actionable improvements). Integrated into benchmark runner and markdown report with graceful failure handling and cost tracking. Updated Makefile (benchmark target), CLAUDE.md (benchmark architecture and commands), and README.md (benchmarking section). Added 14 unit tests.
 ## Evidence
-- Commits:
-- Tests:
+- Commits: b426a659b755d4845a60346e30779cb9a249bb1d
+- Tests: pytest (446 passed, 40 skipped), ruff check . (all passed)
 - PRs:

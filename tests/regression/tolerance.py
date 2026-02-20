@@ -290,9 +290,7 @@ def _assert_time_within_tolerance(
     try:
         expected_dt = datetime.fromisoformat(expected_iso)
     except ValueError as exc:
-        raise AssertionError(
-            f"{label}: cannot parse expected {expected_iso!r}: {exc}"
-        ) from exc
+        raise AssertionError(f"{label}: cannot parse expected {expected_iso!r}: {exc}") from exc
 
     diff = abs(actual_dt - expected_dt)
     if diff > tolerance:
@@ -524,9 +522,7 @@ def assert_extraction_result(
         # Existing event ID required check: must be non-None AND valid.
         if expected_event.existing_event_id_required:
             if actual_event.existing_event_id is None:
-                errors.append(
-                    f"{pair_label}: existing_event_id is required but was None"
-                )
+                errors.append(f"{pair_label}: existing_event_id is required but was None")
             elif not valid_context_ids:
                 errors.append(
                     f"{pair_label}: existing_event_id_required=True but "
@@ -561,6 +557,5 @@ def assert_extraction_result(
     if errors:
         error_text = "\n  ".join(errors)
         raise AssertionError(
-            f"Extraction assertion failures [{level}] "
-            f"({len(errors)} issue(s)):\n  {error_text}"
+            f"Extraction assertion failures [{level}] ({len(errors)} issue(s)):\n  {error_text}"
         )

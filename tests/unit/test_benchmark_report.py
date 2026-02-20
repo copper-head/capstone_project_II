@@ -379,7 +379,6 @@ class TestFormatMarkdownReport:
         assert "[TP]" in output
         assert "Team Meeting" in output
 
-
     def test_ai_summary_section_included(self) -> None:
         """Markdown report includes AI summary when present."""
         agg = AggregateScore(

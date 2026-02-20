@@ -171,18 +171,19 @@ class TestBuildSummaryPrompt:
 
     def test_includes_worst_performing_samples(self) -> None:
         """Prompt includes bottom 5 samples by F1."""
-        score_good = _make_sample_score(
-            name="crud/good", f1=1.0, tp=1
-        )
+        score_good = _make_sample_score(name="crud/good", f1=1.0, tp=1)
         score_bad = _make_sample_score(
-            name="adversarial/bad", category="adversarial",
-            f1=0.0, tp=0, fp=1, fn=1,
+            name="adversarial/bad",
+            category="adversarial",
+            f1=0.0,
+            tp=0,
+            fp=1,
+            fn=1,
         )
-        sr_good = _make_sample_result(
-            name="crud/good", score=score_good
-        )
+        sr_good = _make_sample_result(name="crud/good", score=score_good)
         sr_bad = _make_sample_result(
-            name="adversarial/bad", category="adversarial",
+            name="adversarial/bad",
+            category="adversarial",
             score=score_bad,
         )
         agg = AggregateScore(
@@ -255,9 +256,7 @@ class TestGenerateAiSummary:
 
     def test_returns_summary_text(self) -> None:
         """Successful call returns the summary text."""
-        client = _make_mock_gemini_client(
-            response_text="The pipeline shows strong performance."
-        )
+        client = _make_mock_gemini_client(response_text="The pipeline shows strong performance.")
         result = _make_benchmark_result()
         summary = generate_ai_summary(result, client)
 
@@ -266,9 +265,7 @@ class TestGenerateAiSummary:
 
     def test_tracks_summary_token_usage(self) -> None:
         """Summary call's token usage is tracked on the result."""
-        client = _make_mock_gemini_client(
-            prompt_tokens=300, output_tokens=150
-        )
+        client = _make_mock_gemini_client(prompt_tokens=300, output_tokens=150)
         result = _make_benchmark_result()
         original_prompt = result.total_prompt_tokens
         original_output = result.total_output_tokens
@@ -282,9 +279,7 @@ class TestGenerateAiSummary:
 
     def test_recalculates_cost(self) -> None:
         """Summary call updates the estimated cost."""
-        client = _make_mock_gemini_client(
-            prompt_tokens=1000, output_tokens=500
-        )
+        client = _make_mock_gemini_client(prompt_tokens=1000, output_tokens=500)
         result = _make_benchmark_result()
         original_cost = result.est_cost_usd
 

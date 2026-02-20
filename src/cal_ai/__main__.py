@@ -259,9 +259,7 @@ def _handle_benchmark(args: argparse.Namespace) -> int:
     output_path.mkdir(parents=True, exist_ok=True)
     report_filename = generate_report_filename()
     report_path = output_path / report_filename
-    report_path.write_text(
-        format_markdown_report(result), encoding="utf-8"
-    )
+    report_path.write_text(format_markdown_report(result), encoding="utf-8")
     print(f"\nDetailed report: {report_path}", file=sys.stderr)
 
     return 0

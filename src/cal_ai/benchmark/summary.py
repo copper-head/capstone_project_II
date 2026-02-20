@@ -45,18 +45,11 @@ def _build_summary_prompt(result: BenchmarkResult) -> str:
     agg = result.aggregate
     if agg is not None and agg.sample_count > 0:
         lines.append("## Overall Metrics")
-        lines.append(
-            f"- Precision: {agg.overall_precision:.4f}"
-        )
+        lines.append(f"- Precision: {agg.overall_precision:.4f}")
         lines.append(f"- Recall: {agg.overall_recall:.4f}")
         lines.append(f"- F1: {agg.overall_f1:.4f}")
-        lines.append(
-            f"- TP: {agg.overall_tp}  FP: {agg.overall_fp}  "
-            f"FN: {agg.overall_fn}"
-        )
-        lines.append(
-            f"- Samples scored: {agg.sample_count}"
-        )
+        lines.append(f"- TP: {agg.overall_tp}  FP: {agg.overall_fp}  FN: {agg.overall_fn}")
+        lines.append(f"- Samples scored: {agg.sample_count}")
         lines.append("")
 
         # Per-category breakdown.
@@ -72,10 +65,7 @@ def _build_summary_prompt(result: BenchmarkResult) -> str:
             lines.append("")
 
     # Worst-performing samples (bottom 5 by F1).
-    scored = [
-        sr for sr in result.sample_results
-        if sr.score is not None
-    ]
+    scored = [sr for sr in result.sample_results if sr.score is not None]
     if scored:
         scored_sorted = sorted(scored, key=lambda s: s.score.f1)
         bottom = scored_sorted[:5]
@@ -106,15 +96,9 @@ def _build_summary_prompt(result: BenchmarkResult) -> str:
 
     # Cost info.
     lines.append("## Cost")
-    lines.append(
-        f"- Prompt tokens: {result.total_prompt_tokens:,}"
-    )
-    lines.append(
-        f"- Output tokens: {result.total_output_tokens:,}"
-    )
-    lines.append(
-        f"- Estimated cost: ${result.est_cost_usd:.4f}"
-    )
+    lines.append(f"- Prompt tokens: {result.total_prompt_tokens:,}")
+    lines.append(f"- Output tokens: {result.total_output_tokens:,}")
+    lines.append(f"- Estimated cost: ${result.est_cost_usd:.4f}")
     lines.append("")
 
     # Instructions.
@@ -149,8 +133,7 @@ def _build_summary_prompt(result: BenchmarkResult) -> str:
     )
     lines.append("")
     lines.append(
-        "Keep your response concise (under 500 words). Use markdown "
-        "headers for each criterion."
+        "Keep your response concise (under 500 words). Use markdown headers for each criterion."
     )
 
     return "\n".join(lines)
@@ -198,15 +181,8 @@ def generate_ai_summary(
 
         # Track the summary call's token usage.
         if call_result.usage is not None:
-            prompt_tokens = (
-                getattr(call_result.usage, "prompt_token_count", 0) or 0
-            )
-            output_tokens = (
-                getattr(
-                    call_result.usage, "candidates_token_count", 0
-                )
-                or 0
-            )
+            prompt_tokens = getattr(call_result.usage, "prompt_token_count", 0) or 0
+            output_tokens = getattr(call_result.usage, "candidates_token_count", 0) or 0
             result.summary_prompt_tokens = prompt_tokens
             result.summary_output_tokens = output_tokens
 

@@ -279,9 +279,7 @@ def run_pipeline(
             validated = validated_list[i]
 
             try:
-                sync_result = _sync_single_event(
-                    validated, client, result.id_map
-                )
+                sync_result = _sync_single_event(validated, client, result.id_map)
                 matched_title, matched_time = _lookup_matched_event(
                     event.existing_event_id, result.event_meta
                 )
@@ -301,9 +299,7 @@ def run_pipeline(
                     event.title,
                     exc,
                 )
-                result.events_failed.append(
-                    FailedEvent(event=event, error=str(exc))
-                )
+                result.events_failed.append(FailedEvent(event=event, error=str(exc)))
 
     logger.info(
         "Stage 3 complete: %d synced, %d failed",
@@ -518,8 +514,7 @@ def _update_by_id(
         }
     except CalendarNotFoundError:
         logger.warning(
-            "Event '%s' (id=%s) not found for update (404), "
-            "falling back to create",
+            "Event '%s' (id=%s) not found for update (404), falling back to create",
             event.title,
             real_id,
         )

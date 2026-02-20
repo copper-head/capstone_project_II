@@ -128,9 +128,7 @@ class GeminiClient:
             raw_text = call_result.text
             if call_result.usage is not None:
                 accumulated_usage.append(call_result.usage)
-            logger.debug(
-                "Raw LLM response (attempt %d):\n%s", attempt, raw_text
-            )
+            logger.debug("Raw LLM response (attempt %d):\n%s", attempt, raw_text)
 
             try:
                 result = self._parse_response(raw_text)
@@ -152,8 +150,7 @@ class GeminiClient:
 
         # Both attempts failed -- return graceful empty result.
         logger.error(
-            "LLM response malformed after 2 attempts. "
-            "Raw response: %s | Error: %s",
+            "LLM response malformed after 2 attempts. Raw response: %s | Error: %s",
             last_error.raw_response if last_error else "<unknown>",
             last_error,
         )
@@ -255,16 +252,12 @@ class GeminiClient:
                 conform to the expected schema.
         """
         if not raw_text or not raw_text.strip():
-            raise MalformedResponseError(
-                "Empty response from LLM", raw_response=raw_text or ""
-            )
+            raise MalformedResponseError("Empty response from LLM", raw_response=raw_text or "")
 
         try:
             data = json.loads(raw_text)
         except json.JSONDecodeError as exc:
-            raise MalformedResponseError(
-                f"Invalid JSON: {exc}", raw_response=raw_text
-            ) from exc
+            raise MalformedResponseError(f"Invalid JSON: {exc}", raw_response=raw_text) from exc
 
         try:
             # Convert "none" sentinels and comma-separated strings.
@@ -299,20 +292,14 @@ class GeminiClient:
         if attendees is None or (isinstance(attendees, str) and not attendees.strip()):
             result["attendees"] = []
         elif isinstance(attendees, str):
-            result["attendees"] = [
-                name.strip() for name in attendees.split(",") if name.strip()
-            ]
+            result["attendees"] = [name.strip() for name in attendees.split(",") if name.strip()]
 
         # Split comma-separated assumptions into a list.
         assumptions = result.get("assumptions")
-        if assumptions is None or (
-            isinstance(assumptions, str) and not assumptions.strip()
-        ):
+        if assumptions is None or (isinstance(assumptions, str) and not assumptions.strip()):
             result["assumptions"] = []
         elif isinstance(assumptions, str):
-            result["assumptions"] = [
-                a.strip() for a in assumptions.split(",") if a.strip()
-            ]
+            result["assumptions"] = [a.strip() for a in assumptions.split(",") if a.strip()]
 
         return result
 

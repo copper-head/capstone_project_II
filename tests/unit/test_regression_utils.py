@@ -467,9 +467,7 @@ class TestToleranceCrossCutting:
 
     def test_event_count_too_many_fails_strict(self):
         """Three extra events should fail strict (0 tolerance)."""
-        events = [
-            _make_extracted_event(title=f"Event {i}") for i in range(4)
-        ]
+        events = [_make_extracted_event(title=f"Event {i}") for i in range(4)]
         result = _make_extraction_result(events)
         sidecar = _make_sidecar(
             tolerance="strict",

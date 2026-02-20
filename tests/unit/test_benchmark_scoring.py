@@ -161,8 +161,7 @@ class TestScoreSample:
         """One event, exact match => TP=1."""
         actual = [_make_actual("Lunch")]
         expected = [_make_expected("Lunch")]
-        result = score_sample(actual, expected, "strict",
-                              sample_name="crud/simple_lunch")
+        result = score_sample(actual, expected, "strict", sample_name="crud/simple_lunch")
         assert result.tp == 1
         assert result.fp == 0
         assert result.fn == 0
@@ -176,13 +175,11 @@ class TestScoreSample:
         """Multiple events, all matching."""
         actual = [
             _make_actual("Lunch"),
-            _make_actual("Dinner", start="2026-02-20T18:00:00",
-                         end="2026-02-20T19:00:00"),
+            _make_actual("Dinner", start="2026-02-20T18:00:00", end="2026-02-20T19:00:00"),
         ]
         expected = [
             _make_expected("Lunch"),
-            _make_expected("Dinner", start="2026-02-20T18:00:00",
-                           end="2026-02-20T19:00:00"),
+            _make_expected("Dinner", start="2026-02-20T18:00:00", end="2026-02-20T19:00:00"),
         ]
         result = score_sample(actual, expected, "moderate")
         assert result.tp == 2
@@ -241,16 +238,13 @@ class TestScoreSample:
         """2 of 3 events match, 1 extra actual, 1 missed expected."""
         actual = [
             _make_actual("Lunch"),
-            _make_actual("Dinner", start="2026-02-20T18:00:00",
-                         end="2026-02-20T19:00:00"),
+            _make_actual("Dinner", start="2026-02-20T18:00:00", end="2026-02-20T19:00:00"),
             _make_actual("Phantom Event", start="2026-02-20T20:00:00"),
         ]
         expected = [
             _make_expected("Lunch"),
-            _make_expected("Dinner", start="2026-02-20T18:00:00",
-                           end="2026-02-20T19:00:00"),
-            _make_expected("Meeting", start="2026-02-20T09:00:00",
-                           end="2026-02-20T10:00:00"),
+            _make_expected("Dinner", start="2026-02-20T18:00:00", end="2026-02-20T19:00:00"),
+            _make_expected("Meeting", start="2026-02-20T09:00:00", end="2026-02-20T10:00:00"),
         ]
         result = score_sample(actual, expected, "moderate")
         # Lunch matches, Dinner matches, Phantom paired with Meeting
@@ -263,21 +257,33 @@ class TestScoreSample:
         """Create, update, and delete actions all scored correctly."""
         actual = [
             _make_actual("New Event", action="create"),
-            _make_actual("Updated Event", action="update",
-                         start="2026-02-21T10:00:00",
-                         end="2026-02-21T11:00:00"),
-            _make_actual("Cancelled Event", action="delete",
-                         start="2026-02-22T09:00:00",
-                         end="2026-02-22T10:00:00"),
+            _make_actual(
+                "Updated Event",
+                action="update",
+                start="2026-02-21T10:00:00",
+                end="2026-02-21T11:00:00",
+            ),
+            _make_actual(
+                "Cancelled Event",
+                action="delete",
+                start="2026-02-22T09:00:00",
+                end="2026-02-22T10:00:00",
+            ),
         ]
         expected = [
             _make_expected("New Event", action="create"),
-            _make_expected("Updated Event", action="update",
-                           start="2026-02-21T10:00:00",
-                           end="2026-02-21T11:00:00"),
-            _make_expected("Cancelled Event", action="delete",
-                           start="2026-02-22T09:00:00",
-                           end="2026-02-22T10:00:00"),
+            _make_expected(
+                "Updated Event",
+                action="update",
+                start="2026-02-21T10:00:00",
+                end="2026-02-21T11:00:00",
+            ),
+            _make_expected(
+                "Cancelled Event",
+                action="delete",
+                start="2026-02-22T09:00:00",
+                end="2026-02-22T10:00:00",
+            ),
         ]
         result = score_sample(actual, expected, "strict")
         assert result.tp == 3
@@ -302,18 +308,14 @@ class TestScoreSample:
         actual = [_make_actual("Lunch", action="delete")]
         expected = [_make_expected("Lunch", action="create")]
         result = score_sample(actual, expected, "moderate")
-        fp_details = [
-            d for d in result.per_event_details
-            if d.classification == "fp"
-        ]
+        fp_details = [d for d in result.per_event_details if d.classification == "fp"]
         assert len(fp_details) == 1
         assert len(fp_details[0].mismatch_reasons) > 0
         assert "action" in fp_details[0].mismatch_reasons[0]
 
     def test_category_passed_through(self) -> None:
         """Category is stored in the SampleScore."""
-        result = score_sample([], [], "moderate",
-                              sample_name="test", category="crud")
+        result = score_sample([], [], "moderate", sample_name="test", category="crud")
         assert result.category == "crud"
 
     def test_relaxed_tolerance_allows_wider_time(self) -> None:
@@ -345,9 +347,15 @@ class TestAggregateScores:
     def test_single_sample(self) -> None:
         """One sample's metrics pass through to aggregate."""
         sample = SampleScore(
-            sample_name="test", category="crud", tolerance="moderate",
-            tp=3, fp=1, fn=0,
-            precision=3 / 4, recall=1.0, f1=6 / 7,
+            sample_name="test",
+            category="crud",
+            tolerance="moderate",
+            tp=3,
+            fp=1,
+            fn=0,
+            precision=3 / 4,
+            recall=1.0,
+            f1=6 / 7,
         )
         result = aggregate_scores([sample])
         assert result.overall_tp == 3
@@ -363,19 +371,37 @@ class TestAggregateScores:
         """Multiple categories are tracked separately."""
         samples = [
             SampleScore(
-                sample_name="s1", category="crud", tolerance="moderate",
-                tp=2, fp=0, fn=0,
-                precision=1.0, recall=1.0, f1=1.0,
+                sample_name="s1",
+                category="crud",
+                tolerance="moderate",
+                tp=2,
+                fp=0,
+                fn=0,
+                precision=1.0,
+                recall=1.0,
+                f1=1.0,
             ),
             SampleScore(
-                sample_name="s2", category="crud", tolerance="moderate",
-                tp=1, fp=1, fn=0,
-                precision=0.5, recall=1.0, f1=2 / 3,
+                sample_name="s2",
+                category="crud",
+                tolerance="moderate",
+                tp=1,
+                fp=1,
+                fn=0,
+                precision=0.5,
+                recall=1.0,
+                f1=2 / 3,
             ),
             SampleScore(
-                sample_name="s3", category="adversarial", tolerance="relaxed",
-                tp=0, fp=0, fn=2,
-                precision=1.0, recall=0.0, f1=0.0,
+                sample_name="s3",
+                category="adversarial",
+                tolerance="relaxed",
+                tp=0,
+                fp=0,
+                fn=2,
+                precision=1.0,
+                recall=0.0,
+                f1=0.0,
             ),
         ]
         result = aggregate_scores(samples)
@@ -400,14 +426,26 @@ class TestAggregateScores:
         """Aggregate uses micro-averaging (sum TP/FP/FN then compute)."""
         samples = [
             SampleScore(
-                sample_name="s1", category="a", tolerance="strict",
-                tp=1, fp=0, fn=1,
-                precision=1.0, recall=0.5, f1=2 / 3,
+                sample_name="s1",
+                category="a",
+                tolerance="strict",
+                tp=1,
+                fp=0,
+                fn=1,
+                precision=1.0,
+                recall=0.5,
+                f1=2 / 3,
             ),
             SampleScore(
-                sample_name="s2", category="a", tolerance="strict",
-                tp=3, fp=1, fn=0,
-                precision=0.75, recall=1.0, f1=6 / 7,
+                sample_name="s2",
+                category="a",
+                tolerance="strict",
+                tp=3,
+                fp=1,
+                fn=0,
+                precision=0.75,
+                recall=1.0,
+                f1=6 / 7,
             ),
         ]
         result = aggregate_scores(samples)
@@ -476,9 +514,15 @@ class TestCalibrateConfidence:
             ),
         ]
         sample = SampleScore(
-            sample_name="test", category="mixed", tolerance="moderate",
-            tp=3, fp=2, fn=1,
-            precision=0.6, recall=0.75, f1=0.667,
+            sample_name="test",
+            category="mixed",
+            tolerance="moderate",
+            tp=3,
+            fp=2,
+            fn=1,
+            precision=0.6,
+            recall=0.75,
+            f1=0.667,
             per_event_details=details,
         )
         result = calibrate_confidence([sample])
@@ -501,9 +545,15 @@ class TestCalibrateConfidence:
             ),
         ]
         sample = SampleScore(
-            sample_name="t", category="a", tolerance="moderate",
-            tp=0, fp=1, fn=0,
-            precision=0.0, recall=1.0, f1=0.0,
+            sample_name="t",
+            category="a",
+            tolerance="moderate",
+            tp=0,
+            fp=1,
+            fn=0,
+            precision=0.0,
+            recall=1.0,
+            f1=0.0,
             per_event_details=details,
         )
         result = calibrate_confidence([sample])
@@ -514,9 +564,15 @@ class TestCalibrateConfidence:
         from cal_ai.benchmark.scoring import EventMatchDetail
 
         sample1 = SampleScore(
-            sample_name="s1", category="a", tolerance="moderate",
-            tp=1, fp=0, fn=0,
-            precision=1.0, recall=1.0, f1=1.0,
+            sample_name="s1",
+            category="a",
+            tolerance="moderate",
+            tp=1,
+            fp=0,
+            fn=0,
+            precision=1.0,
+            recall=1.0,
+            f1=1.0,
             per_event_details=[
                 EventMatchDetail(
                     classification="tp",
@@ -526,9 +582,15 @@ class TestCalibrateConfidence:
             ],
         )
         sample2 = SampleScore(
-            sample_name="s2", category="b", tolerance="moderate",
-            tp=0, fp=1, fn=0,
-            precision=0.0, recall=1.0, f1=0.0,
+            sample_name="s2",
+            category="b",
+            tolerance="moderate",
+            tp=0,
+            fp=1,
+            fn=0,
+            precision=0.0,
+            recall=1.0,
+            f1=0.0,
             per_event_details=[
                 EventMatchDetail(
                     classification="fp",

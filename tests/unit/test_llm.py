@@ -277,8 +277,7 @@ class TestOwnerPerspective:
             "attendees": "Bob, Carol",
             "confidence": "low",
             "reasoning": (
-                "Alice overheard Bob and Carol scheduling a meeting."
-                " Alice is not involved."
+                "Alice overheard Bob and Carol scheduling a meeting. Alice is not involved."
             ),
             "assumptions": None,
             "action": "create",
@@ -293,8 +292,10 @@ class TestOwnerPerspective:
         )
 
         assert result.events[0].confidence == "low"
-        assert "overheard" in result.events[0].reasoning.lower() or \
-               "not involved" in result.events[0].reasoning.lower()
+        assert (
+            "overheard" in result.events[0].reasoning.lower()
+            or "not involved" in result.events[0].reasoning.lower()
+        )
 
 
 # ---------------------------------------------------------------------------
@@ -391,9 +392,7 @@ class TestMalformedResponseHandling:
 
     def test_malformed_json_retry_success(self, caplog: pytest.LogCaptureFixture) -> None:
         """First call returns invalid JSON, second call succeeds -- retry works."""
-        valid_response = _make_llm_response_json(
-            [_single_lunch_event()], summary="Found 1 event."
-        )
+        valid_response = _make_llm_response_json([_single_lunch_event()], summary="Found 1 event.")
         client = _mock_client_multi(["NOT VALID JSON {{", valid_response])
 
         with caplog.at_level(logging.WARNING, logger="cal_ai.llm"):
@@ -405,8 +404,11 @@ class TestMalformedResponseHandling:
 
         assert len(result.events) == 1
         assert client._client.models.generate_content.call_count == 2
-        assert any("retry" in r.message.lower() or "malformed" in r.message.lower()
-                    for r in caplog.records if r.levelno >= logging.WARNING)
+        assert any(
+            "retry" in r.message.lower() or "malformed" in r.message.lower()
+            for r in caplog.records
+            if r.levelno >= logging.WARNING
+        )
 
     def test_malformed_json_retry_still_bad_graceful_failure(
         self, caplog: pytest.LogCaptureFixture
@@ -428,9 +430,7 @@ class TestMalformedResponseHandling:
 
     def test_llm_returns_empty_response(self) -> None:
         """Empty string response triggers retry (treated as malformed)."""
-        valid_response = _make_llm_response_json(
-            [_single_lunch_event()], summary="Found 1 event."
-        )
+        valid_response = _make_llm_response_json([_single_lunch_event()], summary="Found 1 event.")
         client = _mock_client_multi(["", valid_response])
 
         result = client.extract_events(
@@ -456,9 +456,7 @@ class TestMalformedResponseHandling:
             # no "title" field
         }
         bad_response = _make_llm_response_json([bad_event])
-        good_response = _make_llm_response_json(
-            [_single_lunch_event()], summary="Found 1 event."
-        )
+        good_response = _make_llm_response_json([_single_lunch_event()], summary="Found 1 event.")
         client = _mock_client_multi([bad_response, good_response])
 
         result = client.extract_events(
