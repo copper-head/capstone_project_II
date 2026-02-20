@@ -50,9 +50,8 @@ Build the regression test infrastructure: conftest.py with `pytest_generate_test
 - [ ] All existing tests still pass
 - [ ] `ruff check .` passes
 ## Done summary
-TBD
-
+Built regression test infrastructure: conftest.py with pytest_generate_tests auto-discovery from samples/**/*.expected.json sidecars, --live CLI flag for live Gemini API tests, marker registration (live/regression/slow) in pyproject.toml, auto-tagging of samples/long/ tests with @pytest.mark.slow, and parametrized test_mock_extraction/test_live_extraction functions in test_regression.py.
 ## Evidence
-- Commits:
-- Tests:
+- Commits: b7ceeb1, aae5da3
+- Tests: pytest tests/ -v --tb=short, pytest tests/regression/ -v --tb=long, pytest tests/regression/ --live -v, ruff check tests/regression/conftest.py tests/regression/test_regression.py
 - PRs:

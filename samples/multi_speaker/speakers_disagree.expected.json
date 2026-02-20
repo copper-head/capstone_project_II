@@ -1,0 +1,36 @@
+{
+  "description": "Speakers disagree on event day (Thursday vs Friday), eventually resolve to Friday. Tests that final consensus is used, not initial preferences.",
+  "category": "multi_speaker",
+  "tolerance": "relaxed",
+  "owner": "Alice",
+  "reference_datetime": "2026-02-16T10:00:00",
+  "calendar_context": [],
+  "expected_events": [
+    {
+      "action": "create",
+      "title": "Team Offsite",
+      "start_time": "2026-02-20T09:00:00",
+      "end_time": "2026-02-20T15:00:00",
+      "location": "Riverside Conference Center",
+      "attendees_contain": ["Alice", "Bob", "Carol"]
+    }
+  ],
+  "mock_llm_response": {
+    "events": [
+      {
+        "title": "Team Offsite",
+        "start_time": "2026-02-20T09:00:00",
+        "end_time": "2026-02-20T15:00:00",
+        "location": "Riverside Conference Center",
+        "attendees": "Alice, Bob, Carol",
+        "confidence": "high",
+        "reasoning": "Speakers initially disagreed on the day (Thursday vs Friday) but reached consensus on Friday due to venue availability. Alice confirmed booking for 9 AM to 3 PM at Riverside Conference Center.",
+        "assumptions": null,
+        "action": "create",
+        "existing_event_id": null
+      }
+    ],
+    "summary": "Team offsite scheduled for Friday 9 AM to 3 PM after resolving day disagreement."
+  },
+  "notes": "Reference datetime is Monday 2026-02-16, so 'next Friday' is 2026-02-20. Medium conversation (11 lines). Relaxed tolerance because the LLM must follow the full negotiation to determine the final day."
+}

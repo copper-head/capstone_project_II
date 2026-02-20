@@ -1,0 +1,92 @@
+{
+  "description": "Four distinct speaker pairs each plan separate events in the same conversation. Tests that the system correctly attributes events to the right pairs.",
+  "category": "multi_speaker",
+  "tolerance": "moderate",
+  "owner": "Alice",
+  "reference_datetime": "2026-02-16T10:00:00",
+  "calendar_context": [],
+  "expected_events": [
+    {
+      "action": "create",
+      "title": "Test Results Review",
+      "start_time": "2026-02-17T15:00:00",
+      "end_time": "2026-02-17T16:00:00",
+      "attendees_contain": ["Bob", "Carol"]
+    },
+    {
+      "action": "create",
+      "title": "Budget Spreadsheet Review",
+      "start_time": "2026-02-18T09:00:00",
+      "end_time": "2026-02-18T10:00:00",
+      "attendees_contain": ["Dave", "Eve"]
+    },
+    {
+      "action": "create",
+      "title": "Client Prep",
+      "start_time": "2026-02-19T14:00:00",
+      "end_time": "2026-02-19T15:00:00",
+      "attendees_contain": ["Alice", "Bob"]
+    },
+    {
+      "action": "create",
+      "title": "Pull Request Review",
+      "start_time": "2026-02-19T10:00:00",
+      "end_time": "2026-02-19T11:00:00",
+      "attendees_contain": ["Carol", "Dave"]
+    }
+  ],
+  "mock_llm_response": {
+    "events": [
+      {
+        "title": "Test Results Review",
+        "start_time": "2026-02-17T15:00:00",
+        "end_time": "2026-02-17T16:00:00",
+        "location": "Engineering Lab",
+        "attendees": "Bob, Carol",
+        "confidence": "high",
+        "reasoning": "Bob and Carol agreed to review test results on Tuesday at 3 PM in the engineering lab.",
+        "assumptions": "Duration assumed 1 hour",
+        "action": "create",
+        "existing_event_id": null
+      },
+      {
+        "title": "Budget Spreadsheet Finalization",
+        "start_time": "2026-02-18T09:00:00",
+        "end_time": "2026-02-18T10:00:00",
+        "location": "Finance Room",
+        "attendees": "Dave, Eve",
+        "confidence": "high",
+        "reasoning": "Dave and Eve agreed to finalize the budget spreadsheet on Wednesday at 9 AM in the finance room.",
+        "assumptions": "Duration assumed 1 hour",
+        "action": "create",
+        "existing_event_id": null
+      },
+      {
+        "title": "Client Prep Meeting",
+        "start_time": "2026-02-19T14:00:00",
+        "end_time": "2026-02-19T15:00:00",
+        "location": "Alice's Office",
+        "attendees": "Alice, Bob",
+        "confidence": "high",
+        "reasoning": "Alice asked Bob for a client prep meeting on Thursday at 2 PM in her office.",
+        "assumptions": "Duration assumed 1 hour",
+        "action": "create",
+        "existing_event_id": null
+      },
+      {
+        "title": "Pull Request Code Review",
+        "start_time": "2026-02-19T10:00:00",
+        "end_time": "2026-02-19T11:00:00",
+        "location": "Carol's Desk",
+        "attendees": "Carol, Dave",
+        "confidence": "high",
+        "reasoning": "Carol asked Dave to review her pull request on Thursday at 10 AM at her desk.",
+        "assumptions": "Duration assumed 1 hour",
+        "action": "create",
+        "existing_event_id": null
+      }
+    ],
+    "summary": "Found 4 events with different speaker pairs: test review (Bob/Carol), budget work (Dave/Eve), client prep (Alice/Bob), PR review (Carol/Dave)."
+  },
+  "notes": "Reference datetime is Monday 2026-02-16. Tuesday=02-17, Wednesday=02-18, Thursday=02-19. Medium-length conversation (18 lines) with 5 speakers and 4 distinct events."
+}

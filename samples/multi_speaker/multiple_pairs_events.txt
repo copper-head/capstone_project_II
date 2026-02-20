@@ -1,0 +1,27 @@
+[Alice]: Team, let's finalize this week's meetings.
+
+[Bob]: Carol, we need to review the test results. Tuesday at 3 PM?
+
+[Carol]: Tuesday 3 PM, sure. Engineering lab?
+
+[Bob]: Perfect.
+
+[Dave]: Eve, let's finalize the budget spreadsheet. Can you meet Wednesday at 9?
+
+[Eve]: Wednesday 9 AM works. Finance room?
+
+[Dave]: Yes.
+
+[Alice]: Bob, you and I need to do the client prep. Thursday at 2 PM in my office.
+
+[Bob]: Thursday 2 PM with you, got it.
+
+[Carol]: Dave, one more thing - can you review my pull request Thursday morning? Say 10 AM?
+
+[Dave]: 10 AM Thursday, sure Carol. I'll come to your desk.
+
+[Alice]: Great, that's four meetings locked in. Anything else?
+
+[Eve]: I'm good.
+
+[Bob]: All set.

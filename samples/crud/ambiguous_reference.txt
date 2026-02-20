@@ -1,0 +1,11 @@
+[Alice]: Carol, I need to push back the meeting with the marketing team.
+
+[Carol]: Which one? We have the campaign review on Tuesday and the brand sync on Wednesday. Both are with marketing.
+
+[Alice]: Oh right, I forgot there were two. The one on Tuesday - the campaign review. Can we move that to Thursday at the same time?
+
+[Carol]: Sure, the Tuesday 2 PM campaign review moves to Thursday 2 PM. The Wednesday brand sync stays as is?
+
+[Alice]: Yes, Wednesday stays. Just the Tuesday one needs to move.
+
+[Carol]: Done. Campaign review is now Thursday at 2.

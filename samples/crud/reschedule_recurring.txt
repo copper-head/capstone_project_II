@@ -1,0 +1,15 @@
+[Alice]: Hey Carol, about tomorrow's weekly team sync at 10 AM.
+
+[Carol]: The recurring one? What about it?
+
+[Alice]: I have a dentist appointment at 10 tomorrow so I need to push it back. Can we do 11:30 instead, just for this week?
+
+[Carol]: 11:30 works for me. I'll let the rest of the team know.
+
+[Alice]: Thanks. Same room, same agenda, just an hour and a half later.
+
+[Carol]: Got it. Just this week's instance, the regular 10 AM slot stays for next week.
+
+[Alice]: Exactly. You're the best, Carol.
+
+[Carol]: No problem!

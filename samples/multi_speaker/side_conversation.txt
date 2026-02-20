@@ -1,0 +1,25 @@
+[Alice]: Alright, let's talk about the Q3 roadmap.
+
+[Bob]: Before that, Carol - want to grab coffee after this?
+
+[Carol]: Sure Bob, meet me at the lobby cafe at 3?
+
+[Bob]: 3 works.
+
+[Alice]: Okay, back to the roadmap. Dave, we need to schedule the architecture deep dive.
+
+[Dave]: How about Friday at 1 PM? We'll need at least 2 hours.
+
+[Alice]: Friday at 1 works. Let's book the large conference room.
+
+[Carol]: Bob, actually make it 3:30 for coffee. I have a call at 2:45 that might run over.
+
+[Bob]: 3:30 it is.
+
+[Dave]: Alice, should we invite the backend team to the deep dive?
+
+[Alice]: Yes, good idea. Loop in the backend leads.
+
+[Carol]: Are we done here? I need to prep for my call.
+
+[Alice]: Yes, we're done. Thanks everyone.

@@ -1,0 +1,29 @@
+[Alice]: Good morning everyone. Quick round of updates before we dive in.
+
+[Bob]: I'll go first. Carol, we still need to finish the API docs. Can we pair up tomorrow at 10?
+
+[Carol]: Tomorrow at 10 works. Let's use the quiet room.
+
+[Dave]: While they're doing that, Eve and I should sync on the database migration.
+
+[Eve]: Yeah, Dave. How about tomorrow afternoon, say 2 PM?
+
+[Dave]: 2 PM is good. My desk or yours?
+
+[Eve]: Let's grab the small meeting room.
+
+[Alice]: Good. Bob, I also need you for a budget review on Thursday at 11.
+
+[Bob]: Thursday at 11, sure. Where?
+
+[Alice]: My office.
+
+[Carol]: Oh Alice, before I forget - can you and I do a quick 1-on-1 on Wednesday? Maybe 9 AM?
+
+[Alice]: Wednesday 9 AM, sure. Let's do it in the break room, it's usually quiet then.
+
+[Dave]: Eve, should we invite Alice to the migration sync?
+
+[Eve]: Nah, let's keep it small. Just us two.
+
+[Alice]: Alright, sounds like everyone has their action items. Let's wrap up.

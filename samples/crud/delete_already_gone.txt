@@ -1,0 +1,5 @@
+[Alice]: Bob, did you cancel the vendor demo that was on Thursday?
+
+[Bob]: I think Carol already removed it yesterday.
+
+[Alice]: Okay good. Just wanted to make sure it's off the calendar. We definitely don't need it.

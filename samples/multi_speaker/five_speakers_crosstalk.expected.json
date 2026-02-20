@@ -1,0 +1,92 @@
+{
+  "description": "5 speakers with cross-talk planning multiple events in different pairs. Tests multi-speaker extraction with diverse pairings.",
+  "category": "multi_speaker",
+  "tolerance": "relaxed",
+  "owner": "Alice",
+  "reference_datetime": "2026-02-17T10:00:00",
+  "calendar_context": [],
+  "expected_events": [
+    {
+      "action": "create",
+      "title": "API Docs Pairing",
+      "start_time": "2026-02-18T10:00:00",
+      "end_time": "2026-02-18T11:00:00",
+      "attendees_contain": ["Bob", "Carol"]
+    },
+    {
+      "action": "create",
+      "title": "Database Migration Sync",
+      "start_time": "2026-02-18T14:00:00",
+      "end_time": "2026-02-18T15:00:00",
+      "attendees_contain": ["Dave", "Eve"]
+    },
+    {
+      "action": "create",
+      "title": "Budget Review",
+      "start_time": "2026-02-19T11:00:00",
+      "end_time": "2026-02-19T12:00:00",
+      "attendees_contain": ["Alice", "Bob"]
+    },
+    {
+      "action": "create",
+      "title": "1-on-1 with Carol",
+      "start_time": "2026-02-18T09:00:00",
+      "end_time": "2026-02-18T10:00:00",
+      "attendees_contain": ["Alice", "Carol"]
+    }
+  ],
+  "mock_llm_response": {
+    "events": [
+      {
+        "title": "API Docs Pairing Session",
+        "start_time": "2026-02-18T10:00:00",
+        "end_time": "2026-02-18T11:00:00",
+        "location": "Quiet Room",
+        "attendees": "Bob, Carol",
+        "confidence": "high",
+        "reasoning": "Bob and Carol agreed to pair up tomorrow at 10 AM in the quiet room to finish the API docs.",
+        "assumptions": "Duration assumed 1 hour",
+        "action": "create",
+        "existing_event_id": null
+      },
+      {
+        "title": "Database Migration Sync",
+        "start_time": "2026-02-18T14:00:00",
+        "end_time": "2026-02-18T15:00:00",
+        "location": "Small Meeting Room",
+        "attendees": "Dave, Eve",
+        "confidence": "high",
+        "reasoning": "Dave and Eve agreed to sync on the database migration tomorrow at 2 PM in the small meeting room.",
+        "assumptions": "Duration assumed 1 hour",
+        "action": "create",
+        "existing_event_id": null
+      },
+      {
+        "title": "Budget Review",
+        "start_time": "2026-02-19T11:00:00",
+        "end_time": "2026-02-19T12:00:00",
+        "location": "Alice's Office",
+        "attendees": "Alice, Bob",
+        "confidence": "high",
+        "reasoning": "Alice asked Bob for a budget review on Thursday at 11 AM in her office.",
+        "assumptions": "Duration assumed 1 hour",
+        "action": "create",
+        "existing_event_id": null
+      },
+      {
+        "title": "1-on-1 Alice and Carol",
+        "start_time": "2026-02-18T09:00:00",
+        "end_time": "2026-02-18T10:00:00",
+        "location": "Break Room",
+        "attendees": "Alice, Carol",
+        "confidence": "high",
+        "reasoning": "Carol asked Alice for a quick 1-on-1 on Wednesday at 9 AM in the break room.",
+        "assumptions": "Duration assumed 1 hour",
+        "action": "create",
+        "existing_event_id": null
+      }
+    ],
+    "summary": "Found 4 events: API docs pairing (Bob/Carol), migration sync (Dave/Eve), budget review (Alice/Bob), and 1-on-1 (Alice/Carol)."
+  },
+  "notes": "Reference datetime is Tuesday 2026-02-17, so 'tomorrow' is Wednesday 2026-02-18, 'Thursday' is 2026-02-19, 'Wednesday' is 2026-02-18. Medium conversation (17 lines). Relaxed tolerance due to cross-talk and multiple events."
+}

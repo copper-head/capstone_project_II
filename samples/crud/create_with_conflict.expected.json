@@ -1,0 +1,51 @@
+{
+  "description": "Create new event that overlaps with an existing calendar event. Tests that the system creates anyway when speakers acknowledge the conflict.",
+  "category": "crud",
+  "tolerance": "strict",
+  "owner": "Alice",
+  "reference_datetime": "2026-02-16T10:00:00",
+  "calendar_context": [
+    {
+      "id": "gcal-evt-design-001",
+      "summary": "Design Review",
+      "start": "2026-02-18T14:00:00",
+      "end": "2026-02-18T15:00:00",
+      "location": "Design Lab"
+    },
+    {
+      "id": "gcal-evt-standup-002",
+      "summary": "Morning Standup",
+      "start": "2026-02-18T09:00:00",
+      "end": "2026-02-18T09:30:00",
+      "location": "Main Room"
+    }
+  ],
+  "expected_events": [
+    {
+      "action": "create",
+      "title": "Product Demo",
+      "start_time": "2026-02-18T14:00:00",
+      "end_time": "2026-02-18T14:45:00",
+      "location": "Demo Room",
+      "attendees_contain": ["Alice", "Bob"]
+    }
+  ],
+  "mock_llm_response": {
+    "events": [
+      {
+        "title": "Product Demo",
+        "start_time": "2026-02-18T14:00:00",
+        "end_time": "2026-02-18T14:45:00",
+        "location": "Demo Room",
+        "attendees": "Alice, Bob",
+        "confidence": "high",
+        "reasoning": "Alice wants to schedule a product demo on Wednesday at 2 PM. Both speakers acknowledge this conflicts with the existing Design Review [1] but agree the demo takes priority. Duration is 45 minutes as specified.",
+        "assumptions": null,
+        "action": "create",
+        "existing_event_id": null
+      }
+    ],
+    "summary": "Created product demo for Wednesday at 2 PM (knowingly conflicts with design review)."
+  },
+  "notes": "Reference datetime is Monday 2026-02-16, so 'Wednesday' resolves to 2026-02-18. Event [1] (design review) overlaps but should NOT be deleted or updated - just a new create."
+}
