@@ -1,0 +1,14 @@
+{
+  "description": "Casual sports discussion between Alice and Bob. No calendar events should be extracted.",
+  "category": "adversarial",
+  "tolerance": "strict",
+  "owner": "Alice",
+  "reference_datetime": "2026-02-20T10:00:00",
+  "calendar_context": [],
+  "expected_events": [],
+  "mock_llm_response": {
+    "events": [],
+    "summary": "No calendar events detected. The conversation is a casual discussion about a recent sports game with no scheduling or event references."
+  },
+  "notes": "This is a pure adversarial test. The conversation contains no calendar-relevant content whatsoever - just sports commentary. Expected output is zero events."
+}

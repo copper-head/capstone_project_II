@@ -1,0 +1,45 @@
+{
+  "description": "Alice asks Bob to move the team standup from 9 AM to 10 AM tomorrow. Single update event with calendar context.",
+  "category": "crud",
+  "tolerance": "strict",
+  "owner": "Alice",
+  "reference_datetime": "2026-02-20T10:00:00",
+  "calendar_context": [
+    {
+      "id": "gcal-evt-standup-001",
+      "summary": "Team Standup",
+      "start": "2026-02-21T09:00:00",
+      "end": "2026-02-21T09:30:00",
+      "location": "Main conf room"
+    }
+  ],
+  "expected_events": [
+    {
+      "action": "update",
+      "title": "Team Standup",
+      "start_time": "2026-02-21T10:00:00",
+      "end_time": "2026-02-21T10:30:00",
+      "existing_event_id_required": true,
+      "location": "Main conf room",
+      "attendees_contain": ["Alice", "Bob"]
+    }
+  ],
+  "mock_llm_response": {
+    "events": [
+      {
+        "title": "Team Standup",
+        "start_time": "2026-02-21T10:00:00",
+        "end_time": "2026-02-21T10:30:00",
+        "location": "Main conf room",
+        "attendees": "Alice, Bob",
+        "confidence": "high",
+        "reasoning": "Alice asks to push the team standup from 9 AM to 10 AM tomorrow due to a dentist appointment. Bob confirms. Same conference room, just one hour later. Matches calendar event [1].",
+        "assumptions": "Duration kept the same as original (30 minutes)",
+        "action": "update",
+        "existing_event_id": 1
+      }
+    ],
+    "summary": "Moved the team standup from 9 AM to 10 AM tomorrow."
+  },
+  "notes": "Reference datetime is Friday 2026-02-20, so 'tomorrow morning' resolves to Saturday 2026-02-21. The 9 AM standup is pushed to 10 AM with the same 30-minute duration."
+}

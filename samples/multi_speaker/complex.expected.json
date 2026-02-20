@@ -1,0 +1,94 @@
+{
+  "description": "Four-speaker planning call: sprint retrospective (Monday 10 AM), design review (Tuesday 3 PM), quarterly all-hands reminder (Wednesday 1 PM), and budget proposal sync (Thursday 9:30 AM).",
+  "category": "multi_speaker",
+  "tolerance": "moderate",
+  "owner": "Alice",
+  "reference_datetime": "2026-02-20T10:00:00",
+  "calendar_context": [],
+  "expected_events": [
+    {
+      "action": "create",
+      "title": "Sprint Retrospective",
+      "start_time": "2026-02-23T10:00:00",
+      "end_time": "2026-02-23T11:00:00",
+      "location": "Large conference room",
+      "attendees_contain": ["Alice", "Bob", "Carol", "Dave"]
+    },
+    {
+      "action": "create",
+      "title": "Design Review",
+      "start_time": "2026-02-24T15:00:00",
+      "end_time": "2026-02-24T16:00:00",
+      "location": "design lab",
+      "attendees_contain": ["Bob", "Carol"]
+    },
+    {
+      "action": "create",
+      "title": "Quarterly All-Hands",
+      "start_time": "2026-02-25T13:00:00",
+      "end_time": "2026-02-25T14:00:00"
+    },
+    {
+      "action": "create",
+      "title": "Budget Proposal Sync",
+      "start_time": "2026-02-26T09:30:00",
+      "end_time": "2026-02-26T10:30:00",
+      "location": "Alice's office",
+      "attendees_contain": ["Alice", "Bob"]
+    }
+  ],
+  "mock_llm_response": {
+    "events": [
+      {
+        "title": "Sprint Retrospective",
+        "start_time": "2026-02-23T10:00:00",
+        "end_time": "2026-02-23T11:00:00",
+        "location": "Large conference room",
+        "attendees": "Alice, Bob, Carol, Dave",
+        "confidence": "high",
+        "reasoning": "Alice asks Dave to set up the sprint retrospective for Monday at 10 AM. Dave confirms and will book the large conference room. Carol requests it be kept to 1 hour.",
+        "assumptions": null,
+        "action": "create",
+        "existing_event_id": null
+      },
+      {
+        "title": "Design Review",
+        "start_time": "2026-02-24T15:00:00",
+        "end_time": "2026-02-24T16:00:00",
+        "location": "Design lab",
+        "attendees": "Bob, Carol",
+        "confidence": "high",
+        "reasoning": "Bob proposes he and Carol sit down to review mockups on Tuesday at 3 PM. Carol confirms and suggests the design lab.",
+        "assumptions": "Assumed 1-hour duration as no end time was specified",
+        "action": "create",
+        "existing_event_id": null
+      },
+      {
+        "title": "Quarterly All-Hands",
+        "start_time": "2026-02-25T13:00:00",
+        "end_time": "2026-02-25T14:00:00",
+        "location": null,
+        "attendees": "Alice, Bob, Carol",
+        "confidence": "high",
+        "reasoning": "Alice reminds the team that the quarterly all-hands is on Wednesday at 1 PM. It is company-wide. Dave notes he will skip due to a dentist appointment.",
+        "assumptions": "Assumed 1-hour duration for company-wide all-hands",
+        "action": "create",
+        "existing_event_id": null
+      },
+      {
+        "title": "Budget Proposal Sync",
+        "start_time": "2026-02-26T09:30:00",
+        "end_time": "2026-02-26T10:30:00",
+        "location": "Alice's office",
+        "attendees": "Alice, Bob",
+        "confidence": "high",
+        "reasoning": "Alice asks Bob to sync on the budget proposal Thursday morning. Bob suggests 9:30. Alice confirms Thursday at 9:30 in her office.",
+        "assumptions": "Assumed 1-hour duration as no end time was specified",
+        "action": "create",
+        "existing_event_id": null
+      }
+    ],
+    "summary": "Found 4 events: sprint retrospective Monday 10 AM, design review Tuesday 3 PM, quarterly all-hands Wednesday 1 PM, and budget sync Thursday 9:30 AM."
+  },
+  "notes": "Reference datetime is Friday 2026-02-20. 'Monday' = Feb 23, 'Tuesday' = Feb 24, 'Wednesday' = Feb 25, 'Thursday' = Feb 26. The quarterly all-hands is a reminder but still creates an event. Dave skips the all-hands but that does not affect event creation."
+}

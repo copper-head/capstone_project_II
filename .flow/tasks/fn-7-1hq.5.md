@@ -47,9 +47,8 @@ Write 5+ Adversarial/Tricky samples, 5+ Real-World Messy samples, and 5+ Long Co
 - [ ] mock_llm_response in each sidecar is valid LLMResponseSchema JSON
 - [ ] All spec scenarios covered: sarcasm, hypotheticals, past-tense, vague, negation, typos, slang, tangents, timezone, noise, circular planning
 ## Done summary
-TBD
-
+Added 16 sample transcript + sidecar pairs across 3 categories: 6 adversarial (sarcasm, hypothetical, past_tense, negation, vague_reference, mixed_signals), 5 realistic (typos_informal, interruptions, slang_abbreviations, filler_tangents, timezone_casual), and 5 long (long_noise_few_events, long_many_events, long_tangent_end, long_circular_planning, long_meeting_notes). All sidecars validate against SidecarSpec and LLMResponseSchema; long samples range from 83-141 lines with 4 of 5 exceeding 100 lines.
 ## Evidence
-- Commits:
-- Tests:
+- Commits: 08f5a68dfba9139f7531a67a1065f2e8caff8498
+- Tests: pytest tests/ -v --tb=short (377 passed, 30 skipped), python3 schema validation: all 30 sidecars valid against SidecarSpec, python3 mock validation: all 16 adversarial/realistic/long mock_llm_response valid against LLMResponseSchema
 - PRs:

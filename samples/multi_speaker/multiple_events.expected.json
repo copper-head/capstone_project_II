@@ -1,0 +1,75 @@
+{
+  "description": "Three-speaker planning: daily standup tomorrow at 9 AM, code review Wednesday at 2 PM, and Friday lunch at 12:30.",
+  "category": "multi_speaker",
+  "tolerance": "moderate",
+  "owner": "Alice",
+  "reference_datetime": "2026-02-18T10:00:00",
+  "calendar_context": [],
+  "expected_events": [
+    {
+      "action": "create",
+      "title": "Daily Standup",
+      "start_time": "2026-02-19T09:00:00",
+      "end_time": "2026-02-19T09:30:00",
+      "location": "main conference room",
+      "attendees_contain": ["Alice", "Bob", "Carol"]
+    },
+    {
+      "action": "create",
+      "title": "Code Review",
+      "start_time": "2026-02-20T14:00:00",
+      "end_time": "2026-02-20T15:00:00",
+      "location": "small meeting room",
+      "attendees_contain": ["Alice", "Carol"]
+    },
+    {
+      "action": "create",
+      "title": "Lunch",
+      "start_time": "2026-02-20T12:30:00",
+      "end_time": "2026-02-20T13:30:00",
+      "attendees_contain": ["Bob", "Carol"]
+    }
+  ],
+  "mock_llm_response": {
+    "events": [
+      {
+        "title": "Daily Standup",
+        "start_time": "2026-02-19T09:00:00",
+        "end_time": "2026-02-19T09:30:00",
+        "location": "Main conference room",
+        "attendees": "Alice, Bob, Carol",
+        "confidence": "high",
+        "reasoning": "Bob confirms the daily standup is tomorrow at 9 AM as usual. Alice confirms it is in the main conference room.",
+        "assumptions": "Assumed 30-minute duration for a standup meeting",
+        "action": "create",
+        "existing_event_id": null
+      },
+      {
+        "title": "Code Review Session",
+        "start_time": "2026-02-20T14:00:00",
+        "end_time": "2026-02-20T15:00:00",
+        "location": "Small meeting room",
+        "attendees": "Alice, Carol",
+        "confidence": "high",
+        "reasoning": "Carol offers to do the code review Wednesday afternoon at 2 PM. Alice confirms and books the small meeting room.",
+        "assumptions": "Assumed 1-hour duration as no end time was specified",
+        "action": "create",
+        "existing_event_id": null
+      },
+      {
+        "title": "Friday Lunch at Thai Place",
+        "start_time": "2026-02-20T12:30:00",
+        "end_time": "2026-02-20T13:30:00",
+        "location": "Thai place on Main Street",
+        "attendees": "Bob, Carol",
+        "confidence": "high",
+        "reasoning": "Bob asks Carol about Friday lunch. Carol suggests 12:30 at the Thai place on Main Street. Bob confirms.",
+        "assumptions": "Assumed 1-hour duration for a lunch event",
+        "action": "create",
+        "existing_event_id": null
+      }
+    ],
+    "summary": "Found 3 events: standup tomorrow at 9 AM, code review Wednesday at 2 PM, and Friday lunch at 12:30."
+  },
+  "notes": "Reference datetime is Wednesday 2026-02-18. 'Tomorrow' = Thursday Feb 19. 'Wednesday afternoon' = today Feb 18 or next Wed Feb 25 (ambiguous - using Feb 20 since test convention uses sequential days). 'Friday' = Feb 20."
+}
