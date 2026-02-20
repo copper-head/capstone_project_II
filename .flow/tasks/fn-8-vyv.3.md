@@ -17,10 +17,16 @@ Build the benchmark runner that discovers samples, executes live Gemini extracti
   <!-- Updated by plan-sync: fn-8-vyv.1 used extract_events(transcript_text, owner_name, current_datetime, calendar_context="") not extract_events(text, calendar_context, owner, reference_datetime) -->
   3. Capture `ExtractionResult.usage_metadata` (list of usage objects, one per API attempt) for token counting, `time.monotonic()` for latency
   <!-- Updated by plan-sync: fn-8-vyv.1 stores usage as ExtractionResult.usage_metadata (list[Any]) not LLMCallResult.usage -->
-  4. Score via `score_sample()` from Task 2
+  4. Score via `score_sample(actual_events, expected_events, tolerance_level, sample_name="category/name", category="category")` from Task 2 — must pass `sample_name` and `category` kwargs for per-category aggregation to work
+  <!-- Updated by plan-sync: fn-8-vyv.2 added sample_name and category keyword args to score_sample() -->
 - For samples without sidecars: extract only, log warning, skip scoring
 - Progress indicator: print `[N/M] category/name... P=X.XX R=X.XX (Xs)` to stderr
 - `BenchmarkResult`: list of `SampleResult`, aggregate scores, total tokens, total cost, total duration
+- Task 2's scoring API exports: `score_sample()`, `aggregate_scores()`, `calibrate_confidence()`, and dataclasses `SampleScore`, `AggregateScore`, `CategoryScore`, `EventMatchDetail` — all importable from `cal_ai.benchmark`
+- `AggregateScore` has fields: `overall_tp`, `overall_fp`, `overall_fn`, `overall_precision`, `overall_recall`, `overall_f1`, `per_category: list[CategoryScore]`, `sample_count`
+- `CategoryScore` has fields: `category`, `tp`, `fp`, `fn`, `precision`, `recall`, `f1`, `sample_count`
+- `SampleScore` has fields: `sample_name`, `category`, `tolerance`, `tp`, `fp`, `fn`, `precision`, `recall`, `f1`, `per_event_details: list[EventMatchDetail]`
+<!-- Updated by plan-sync: fn-8-vyv.2 built CategoryScore dataclass and EventMatchDetail dataclass; AggregateScore uses list[CategoryScore] for per_category; SampleScore includes sample_name, category, tolerance fields -->
 
 ### Report (`report.py`)
 - `format_console_summary(result: BenchmarkResult) → str` — follows `demo_output.py` pattern (list of strings)

@@ -20,3 +20,6 @@ htmlcov/
 
 # Linter cache
 .ruff_cache/
+
+# Benchmark reports
+reports/

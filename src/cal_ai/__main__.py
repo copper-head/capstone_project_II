@@ -17,6 +17,7 @@ Exit codes:
 from __future__ import annotations
 
 import argparse
+import os
 import sys
 from pathlib import Path
 
@@ -35,9 +36,7 @@ def build_parser() -> argparse.ArgumentParser:
     """
     parser = argparse.ArgumentParser(
         prog="cal-ai",
-        description=(
-            "Extract calendar events from a conversation transcript."
-        ),
+        description=("Extract calendar events from a conversation transcript."),
     )
 
     subparsers = parser.add_subparsers(dest="command")
@@ -69,10 +68,7 @@ def build_parser() -> argparse.ArgumentParser:
         "--owner",
         type=str,
         default=None,
-        help=(
-            "Override the calendar owner name "
-            "(defaults to OWNER_NAME from config)."
-        ),
+        help=("Override the calendar owner name (defaults to OWNER_NAME from config)."),
     )
 
     # --- "benchmark" subcommand ---------------------------------------
@@ -84,10 +80,7 @@ def build_parser() -> argparse.ArgumentParser:
         "directory",
         nargs="?",
         default="samples/",
-        help=(
-            "Directory containing sample transcripts "
-            "(default: samples/)."
-        ),
+        help=("Directory containing sample transcripts (default: samples/)."),
     )
     bench_parser.add_argument(
         "--output",
@@ -152,9 +145,7 @@ def _handle_run(args: argparse.Namespace) -> int:
     transcript_path = Path(args.transcript_file)
 
     if not transcript_path.exists():
-        print(
-            f"Error: File not found: {transcript_path}", file=sys.stderr
-        )
+        print(f"Error: File not found: {transcript_path}", file=sys.stderr)
         return 1
 
     if not transcript_path.is_file():
@@ -199,18 +190,72 @@ def _handle_run(args: argparse.Namespace) -> int:
     return 0
 
 
-def _handle_benchmark(args: argparse.Namespace) -> int:  # noqa: ARG001
-    """Execute the ``benchmark`` subcommand (stub).
+def _handle_benchmark(args: argparse.Namespace) -> int:
+    """Execute the ``benchmark`` subcommand.
 
-    The actual benchmark logic will be implemented in a later task.
+    Discovers samples, runs live Gemini extraction, scores results,
+    prints a console summary, and writes a detailed markdown report.
+
+    Only requires ``GEMINI_API_KEY`` (not calendar credentials).
 
     Args:
         args: Parsed arguments from the ``benchmark`` subparser.
 
     Returns:
-        Exit code: ``0``.
+        Exit code: ``0`` on success, ``1`` on error.
     """
-    print("Benchmark: Not implemented yet.")
+    from dotenv import load_dotenv
+
+    from cal_ai.benchmark.report import (
+        format_console_summary,
+        format_markdown_report,
+        generate_report_filename,
+    )
+    from cal_ai.benchmark.runner import run_benchmark
+    from cal_ai.llm import GeminiClient
+
+    load_dotenv()
+
+    api_key = os.environ.get("GEMINI_API_KEY", "").strip()
+    if not api_key:
+        print(
+            "Error: GEMINI_API_KEY environment variable is required for benchmark.",
+            file=sys.stderr,
+        )
+        return 1
+
+    directory = Path(args.directory)
+    if not directory.is_dir():
+        print(
+            f"Error: Not a directory: {directory}",
+            file=sys.stderr,
+        )
+        return 1
+
+    output_path = Path(args.output) if args.output else Path("reports")
+
+    gemini_client = GeminiClient(api_key=api_key)
+
+    try:
+        result = run_benchmark(
+            directory=directory,
+            output_path=output_path,
+            gemini_client=gemini_client,
+        )
+    except Exception as exc:
+        print(f"Error: Benchmark failed: {exc}", file=sys.stderr)
+        return 1
+
+    # Print console summary to stdout.
+    print(format_console_summary(result))
+
+    # Write detailed markdown report.
+    output_path.mkdir(parents=True, exist_ok=True)
+    report_filename = generate_report_filename()
+    report_path = output_path / report_filename
+    report_path.write_text(format_markdown_report(result), encoding="utf-8")
+    print(f"\nDetailed report: {report_path}", file=sys.stderr)
+
     return 0
 
 
