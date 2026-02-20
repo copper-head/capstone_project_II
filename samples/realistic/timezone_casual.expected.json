@@ -11,14 +11,20 @@
       "title": "London Team Call",
       "start_time": "2026-02-24T10:00:00",
       "end_time": "2026-02-24T11:00:00",
-      "attendees_contain": ["Alice", "Carol"]
+      "attendees_contain": [
+        "Alice",
+        "Carol"
+      ]
     },
     {
       "action": "create",
       "title": "Tokyo Sync",
       "start_time": "2026-02-25T19:00:00",
       "end_time": "2026-02-25T19:30:00",
-      "attendees_contain": ["Alice", "Carol"]
+      "attendees_contain": [
+        "Alice",
+        "Carol"
+      ]
     }
   ],
   "mock_llm_response": {
@@ -43,7 +49,7 @@
         "attendees": "Alice, Carol, Dave",
         "confidence": "high",
         "reasoning": "Dave from the Tokyo office requested a 30-minute sync on Wednesday at 9 AM Tokyo time, which is 7 PM local time. Alice and Carol both confirmed.",
-        "assumptions": null,
+        "assumptions": "",
         "action": "create",
         "existing_event_id": null
       }

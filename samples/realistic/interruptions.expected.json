@@ -12,7 +12,10 @@
       "start_time": "2026-02-26T16:00:00",
       "end_time": "2026-02-26T17:30:00",
       "location": "Main Conference Room",
-      "attendees_contain": ["Alice", "Bob"]
+      "attendees_contain": [
+        "Alice",
+        "Bob"
+      ]
     }
   ],
   "mock_llm_response": {
@@ -25,7 +28,7 @@
         "attendees": "Alice, Bob",
         "confidence": "high",
         "reasoning": "Despite constant interruptions, Alice and Bob agree on a presentation rehearsal on Thursday at 4 PM (shifted from initial 3 PM) for 90 minutes in the main conference room. They will also discuss the vendor contract.",
-        "assumptions": null,
+        "assumptions": "",
         "action": "create",
         "existing_event_id": null
       }

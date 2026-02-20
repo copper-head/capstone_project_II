@@ -64,7 +64,7 @@
         "attendees": "Alice, Bob",
         "confidence": "high",
         "reasoning": "Alice explicitly asked to cancel the client presentation at 10 AM on Friday. Matches calendar event [1].",
-        "assumptions": null,
+        "assumptions": "",
         "action": "delete",
         "existing_event_id": 1
       },
@@ -76,7 +76,7 @@
         "attendees": "Alice, Bob",
         "confidence": "high",
         "reasoning": "Alice asked to cancel the working lunch at noon on Friday. Matches calendar event [2].",
-        "assumptions": null,
+        "assumptions": "",
         "action": "delete",
         "existing_event_id": 2
       },
@@ -88,7 +88,7 @@
         "attendees": "Alice, Bob",
         "confidence": "high",
         "reasoning": "Alice asked to cancel the follow-up debrief at 3 PM on Friday. Matches calendar event [3].",
-        "assumptions": null,
+        "assumptions": "",
         "action": "delete",
         "existing_event_id": 3
       }

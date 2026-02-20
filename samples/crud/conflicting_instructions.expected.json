@@ -38,7 +38,7 @@
         "attendees": "Alice, Bob",
         "confidence": "high",
         "reasoning": "Alice initially asked to reschedule sprint planning to Friday at 11, but then changed her mind and asked to cancel it entirely. Last instruction wins: cancel the event.",
-        "assumptions": null,
+        "assumptions": "",
         "action": "delete",
         "existing_event_id": 1
       }

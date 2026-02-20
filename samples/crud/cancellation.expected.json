@@ -32,7 +32,7 @@
         "attendees": "Alice, Bob",
         "confidence": "high",
         "reasoning": "Alice explicitly cancels 'our meeting on Friday' due to client travel. She declines Bob's offer to reschedule, saying 'let's just cancel for now.' Matches calendar event [1].",
-        "assumptions": null,
+        "assumptions": "",
         "action": "delete",
         "existing_event_id": 1
       }

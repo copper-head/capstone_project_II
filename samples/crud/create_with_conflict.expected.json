@@ -27,7 +27,10 @@
       "start_time": "2026-02-18T14:00:00",
       "end_time": "2026-02-18T14:45:00",
       "location": "Demo Room",
-      "attendees_contain": ["Alice", "Bob"]
+      "attendees_contain": [
+        "Alice",
+        "Bob"
+      ]
     }
   ],
   "mock_llm_response": {
@@ -40,7 +43,7 @@
         "attendees": "Alice, Bob",
         "confidence": "high",
         "reasoning": "Alice wants to schedule a product demo on Wednesday at 2 PM. Both speakers acknowledge this conflicts with the existing Design Review [1] but agree the demo takes priority. Duration is 45 minutes as specified.",
-        "assumptions": null,
+        "assumptions": "",
         "action": "create",
         "existing_event_id": null
       }

@@ -26,7 +26,10 @@
       "title": "Client Call Prep",
       "start_time": "2026-02-23T15:30:00",
       "end_time": "2026-02-23T16:00:00",
-      "attendees_contain": ["Alice", "Carol"]
+      "attendees_contain": [
+        "Alice",
+        "Carol"
+      ]
     }
   ],
   "mock_llm_response": {
@@ -51,7 +54,7 @@
         "attendees": "Alice, Carol",
         "confidence": "high",
         "reasoning": "Alice asks for a 30-minute prep call before the rescheduled client call. Carol confirms just the two of them.",
-        "assumptions": null,
+        "assumptions": "",
         "action": "create",
         "existing_event_id": null
       }

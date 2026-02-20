@@ -17,28 +17,41 @@
       "title": "One-on-One with Bob",
       "start_time": "2026-02-23T09:00:00",
       "end_time": "2026-02-23T10:00:00",
-      "attendees_contain": ["Alice", "Bob"]
+      "attendees_contain": [
+        "Alice",
+        "Bob"
+      ]
     },
     {
       "action": "create",
       "title": "One-on-One with Carol",
       "start_time": "2026-02-23T10:00:00",
       "end_time": "2026-02-23T11:00:00",
-      "attendees_contain": ["Alice", "Carol"]
+      "attendees_contain": [
+        "Alice",
+        "Carol"
+      ]
     },
     {
       "action": "create",
       "title": "Sprint Planning",
       "start_time": "2026-02-23T14:00:00",
       "end_time": "2026-02-23T15:30:00",
-      "attendees_contain": ["Alice", "Bob", "Carol"]
+      "attendees_contain": [
+        "Alice",
+        "Bob",
+        "Carol"
+      ]
     },
     {
       "action": "create",
       "title": "Client Sync",
       "start_time": "2026-02-24T11:00:00",
       "end_time": "2026-02-24T12:00:00",
-      "attendees_contain": ["Bob", "Carol"]
+      "attendees_contain": [
+        "Bob",
+        "Carol"
+      ]
     },
     {
       "action": "create",
@@ -51,35 +64,51 @@
       "title": "Board Presentation Prep",
       "start_time": "2026-02-25T11:30:00",
       "end_time": "2026-02-25T13:00:00",
-      "attendees_contain": ["Alice", "Bob"]
+      "attendees_contain": [
+        "Alice",
+        "Bob"
+      ]
     },
     {
       "action": "create",
       "title": "Design Critique",
       "start_time": "2026-02-25T15:00:00",
       "end_time": "2026-02-25T16:00:00",
-      "attendees_contain": ["Carol"]
+      "attendees_contain": [
+        "Carol"
+      ]
     },
     {
       "action": "create",
       "title": "Board Presentation",
       "start_time": "2026-02-26T09:00:00",
       "end_time": "2026-02-26T11:00:00",
-      "attendees_contain": ["Alice", "Bob"]
+      "attendees_contain": [
+        "Alice",
+        "Bob"
+      ]
     },
     {
       "action": "create",
       "title": "Sprint Retro",
       "start_time": "2026-02-26T14:00:00",
       "end_time": "2026-02-26T15:00:00",
-      "attendees_contain": ["Alice", "Bob", "Carol"]
+      "attendees_contain": [
+        "Alice",
+        "Bob",
+        "Carol"
+      ]
     },
     {
       "action": "create",
       "title": "Demo Run-Through",
       "start_time": "2026-02-27T13:00:00",
       "end_time": "2026-02-27T15:00:00",
-      "attendees_contain": ["Alice", "Bob", "Carol"]
+      "attendees_contain": [
+        "Alice",
+        "Bob",
+        "Carol"
+      ]
     }
   ],
   "mock_llm_response": {
@@ -128,7 +157,7 @@
         "attendees": "Alice, Bob, Carol",
         "confidence": "high",
         "reasoning": "Regular sprint planning on Monday at 2 PM, shortened to 90 minutes (2-3:30) due to Carol's 3:30 conflict.",
-        "assumptions": null,
+        "assumptions": "",
         "action": "create",
         "existing_event_id": null
       },
@@ -140,7 +169,7 @@
         "attendees": "Alice, Bob, Carol",
         "confidence": "high",
         "reasoning": "Video call with the Acme team on Tuesday at 11 AM. Bob leads, Carol joins for design feedback.",
-        "assumptions": null,
+        "assumptions": "",
         "action": "create",
         "existing_event_id": null
       },
@@ -152,7 +181,7 @@
         "attendees": "Alice, Bob, Carol",
         "confidence": "high",
         "reasoning": "Company all-hands meeting on Wednesday from 10 to 11:30 AM in the auditorium.",
-        "assumptions": null,
+        "assumptions": "",
         "action": "create",
         "existing_event_id": null
       },
@@ -164,7 +193,7 @@
         "attendees": "Alice, Bob",
         "confidence": "high",
         "reasoning": "Alice and Bob plan to prep for the board presentation right after the all-hands, from 11:30 to 1 PM with lunch.",
-        "assumptions": null,
+        "assumptions": "",
         "action": "create",
         "existing_event_id": null
       },
@@ -188,7 +217,7 @@
         "attendees": "Alice, Bob",
         "confidence": "high",
         "reasoning": "Board presentation on Thursday at 9 AM until about 11 AM in the boardroom on the 5th floor.",
-        "assumptions": null,
+        "assumptions": "",
         "action": "create",
         "existing_event_id": null
       },
@@ -200,7 +229,7 @@
         "attendees": "Alice, Bob, Carol",
         "confidence": "high",
         "reasoning": "Sprint retrospective on Thursday at 2 PM in the team room for 1 hour.",
-        "assumptions": null,
+        "assumptions": "",
         "action": "create",
         "existing_event_id": null
       },
@@ -212,7 +241,7 @@
         "attendees": "Alice, Bob, Carol",
         "confidence": "high",
         "reasoning": "Demo run-through on Friday at 1 PM for 2 hours in the demo room on the 3rd floor. All three need to attend.",
-        "assumptions": null,
+        "assumptions": "",
         "action": "create",
         "existing_event_id": null
       }

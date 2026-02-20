@@ -32,7 +32,7 @@
         "attendees": "Carol, Dave",
         "confidence": "high",
         "reasoning": "Carol explicitly states she needs to cancel the code review scheduled for tomorrow afternoon at 2 PM because the feature branch is not ready. Dave confirms. Matches calendar event [1].",
-        "assumptions": null,
+        "assumptions": "",
         "action": "delete",
         "existing_event_id": 1
       }

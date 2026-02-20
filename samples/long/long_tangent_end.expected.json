@@ -11,7 +11,10 @@
       "title": "Product Launch Rehearsal",
       "start_time": "2026-02-26T15:00:00",
       "end_time": "2026-02-26T17:00:00",
-      "attendees_contain": ["Alice", "Bob"]
+      "attendees_contain": [
+        "Alice",
+        "Bob"
+      ]
     }
   ],
   "mock_llm_response": {
@@ -24,7 +27,7 @@
         "attendees": "Alice, Bob, Carol, Dave, Marketing Team",
         "confidence": "high",
         "reasoning": "Alice informs Bob about a product launch rehearsal requested by marketing for next Thursday at 3 PM. Located in the event space on the first floor, about 2 hours. Bob confirms availability.",
-        "assumptions": null,
+        "assumptions": "",
         "action": "create",
         "existing_event_id": null
       }

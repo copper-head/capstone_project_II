@@ -11,13 +11,19 @@
       "title": "Architecture Deep Dive",
       "start_time": "2026-02-20T13:00:00",
       "end_time": "2026-02-20T15:00:00",
-      "attendees_contain": ["Alice", "Dave"]
+      "attendees_contain": [
+        "Alice",
+        "Dave"
+      ]
     },
     {
       "action": "create",
       "title": "Coffee with Carol",
       "start_time": "2026-02-18T15:30:00",
-      "attendees_contain": ["Bob", "Carol"]
+      "attendees_contain": [
+        "Bob",
+        "Carol"
+      ]
     }
   ],
   "mock_llm_response": {
@@ -30,7 +36,7 @@
         "attendees": "Alice, Dave",
         "confidence": "high",
         "reasoning": "Alice and Dave agreed to a 2-hour architecture deep dive on Friday at 1 PM in the large conference room.",
-        "assumptions": null,
+        "assumptions": "",
         "action": "create",
         "existing_event_id": null
       },

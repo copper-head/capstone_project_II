@@ -12,7 +12,10 @@
       "start_time": "2026-02-26T12:00:00",
       "end_time": "2026-02-26T13:00:00",
       "location": "5th",
-      "attendees_contain": ["Alice", "Bob"]
+      "attendees_contain": [
+        "Alice",
+        "Bob"
+      ]
     }
   ],
   "mock_llm_response": {
@@ -25,7 +28,7 @@
         "attendees": "Alice, Bob",
         "confidence": "high",
         "reasoning": "Alice and Bob explicitly agreed to lunch at noon on Thursday at a restaurant on 5th.",
-        "assumptions": null,
+        "assumptions": "",
         "action": "create",
         "existing_event_id": null
       }

@@ -12,7 +12,11 @@
       "start_time": "2026-02-26T10:00:00",
       "end_time": "2026-02-26T13:00:00",
       "location": "Innovation Lab",
-      "attendees_contain": ["Alice", "Bob", "Carol"]
+      "attendees_contain": [
+        "Alice",
+        "Bob",
+        "Carol"
+      ]
     }
   ],
   "mock_llm_response": {
@@ -25,7 +29,7 @@
         "attendees": "Alice, Bob, Carol, Dave",
         "confidence": "high",
         "reasoning": "After multiple rounds of rescheduling (Monday, Tuesday, Wednesday all rejected), the team settles on Thursday at 10 AM to 1 PM in the innovation lab. Dave will also be invited.",
-        "assumptions": null,
+        "assumptions": "",
         "action": "create",
         "existing_event_id": null
       }

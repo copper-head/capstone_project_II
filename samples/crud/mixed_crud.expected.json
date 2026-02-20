@@ -27,7 +27,11 @@
       "start_time": "2026-02-18T14:00:00",
       "end_time": "2026-02-18T15:00:00",
       "location": "design lab",
-      "attendees_contain": ["Alice", "Bob", "Carol"]
+      "attendees_contain": [
+        "Alice",
+        "Bob",
+        "Carol"
+      ]
     },
     {
       "action": "update",
@@ -35,7 +39,10 @@
       "start_time": "2026-02-20T10:00:00",
       "end_time": "2026-02-20T11:00:00",
       "existing_event_id_required": true,
-      "attendees_contain": ["Alice", "Bob"]
+      "attendees_contain": [
+        "Alice",
+        "Bob"
+      ]
     },
     {
       "action": "delete",
@@ -78,7 +85,7 @@
         "attendees": "Alice, Bob, Carol",
         "confidence": "high",
         "reasoning": "Alice cancels the retrospective on Friday at 3 PM, saying it will be rolled into next week's session. Carol confirms. Matches calendar event [2].",
-        "assumptions": null,
+        "assumptions": "",
         "action": "delete",
         "existing_event_id": 2
       }

@@ -465,15 +465,22 @@ def assert_extraction_result(
             )
             continue  # Skip further checks if action is wrong.
 
-        # Title fuzzy match.
-        try:
-            _assert_title_match(
-                actual_event.title,
-                expected_event.title,
-                thresholds.title_ratio_min,
-            )
-        except AssertionError as exc:
-            errors.append(f"{pair_label}: {exc}")
+        # Title match: exact for strict, fuzzy for moderate/relaxed.
+        if level == "strict":
+            if actual_event.title.strip().lower() != expected_event.title.strip().lower():
+                errors.append(
+                    f"{pair_label}: title mismatch (strict exact): "
+                    f"actual={actual_event.title!r}, expected={expected_event.title!r}"
+                )
+        else:
+            try:
+                _assert_title_match(
+                    actual_event.title,
+                    expected_event.title,
+                    thresholds.title_ratio_min,
+                )
+            except AssertionError as exc:
+                errors.append(f"{pair_label}: {exc}")
 
         # Resolve expected times: for delete actions with a referenced
         # calendar context event, use the context event's times instead.

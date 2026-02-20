@@ -70,7 +70,7 @@
         "attendees": "DonalldTrump",
         "confidence": "high",
         "reasoning": "DonalldTrump wants to clear entire schedule for the next 3 days. This morning briefing on Feb 20 falls within that window. Matches calendar event [1].",
-        "assumptions": null,
+        "assumptions": "",
         "action": "delete",
         "existing_event_id": 1
       },
@@ -82,7 +82,7 @@
         "attendees": "DonalldTrump",
         "confidence": "high",
         "reasoning": "DonalldTrump wants to clear entire schedule for the next 3 days. This working lunch on Feb 20 falls within that window. Matches calendar event [2].",
-        "assumptions": null,
+        "assumptions": "",
         "action": "delete",
         "existing_event_id": 2
       },
@@ -94,7 +94,7 @@
         "attendees": "DonalldTrump",
         "confidence": "high",
         "reasoning": "DonalldTrump wants to clear entire schedule for the next 3 days. This cabinet meeting on Feb 21 falls within that window. Matches calendar event [3].",
-        "assumptions": null,
+        "assumptions": "",
         "action": "delete",
         "existing_event_id": 3
       },
@@ -106,7 +106,7 @@
         "attendees": "DonalldTrump",
         "confidence": "high",
         "reasoning": "DonalldTrump wants to clear entire schedule for the next 3 days. This press conference on Feb 22 falls within that window. Matches calendar event [4].",
-        "assumptions": null,
+        "assumptions": "",
         "action": "delete",
         "existing_event_id": 4
       }

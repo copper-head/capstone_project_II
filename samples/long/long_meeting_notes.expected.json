@@ -12,21 +12,30 @@
       "start_time": "2026-03-04T13:00:00",
       "end_time": "2026-03-04T16:00:00",
       "location": "Riverside Conference Center",
-      "attendees_contain": ["Alice", "Bob", "Carol", "Dave"]
+      "attendees_contain": [
+        "Alice",
+        "Bob",
+        "Carol",
+        "Dave"
+      ]
     },
     {
       "action": "create",
       "title": "Sprint Demo",
       "start_time": "2026-02-27T14:00:00",
       "end_time": "2026-02-27T15:00:00",
-      "attendees_contain": ["Bob"]
+      "attendees_contain": [
+        "Bob"
+      ]
     },
     {
       "action": "create",
       "title": "Tech Debt Review",
       "start_time": "2026-02-24T11:00:00",
       "end_time": "2026-02-24T12:30:00",
-      "attendees_contain": ["Carol"]
+      "attendees_contain": [
+        "Carol"
+      ]
     }
   ],
   "mock_llm_response": {
@@ -39,7 +48,7 @@
         "attendees": "Alice, Bob, Carol, Dave",
         "confidence": "high",
         "reasoning": "Alice explicitly asks everyone to block off Wednesday March 4th from 1 to 4 PM for the quarterly planning offsite at the Riverside Conference Center. All attendees confirm.",
-        "assumptions": null,
+        "assumptions": "",
         "action": "create",
         "existing_event_id": null
       },
@@ -63,7 +72,7 @@
         "attendees": "Carol, Engineering Team",
         "confidence": "high",
         "reasoning": "Alice asks Carol to set up a tech debt review session for next Tuesday at 11 AM, 90 minutes long, with the full engineering team.",
-        "assumptions": null,
+        "assumptions": "",
         "action": "create",
         "existing_event_id": null
       }

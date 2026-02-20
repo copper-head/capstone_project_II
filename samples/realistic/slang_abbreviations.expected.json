@@ -12,7 +12,10 @@
       "start_time": "2026-02-25T13:00:00",
       "end_time": "2026-02-25T15:00:00",
       "location": "Design Lab",
-      "attendees_contain": ["Alice", "Carol"]
+      "attendees_contain": [
+        "Alice",
+        "Carol"
+      ]
     }
   ],
   "mock_llm_response": {
@@ -25,7 +28,7 @@
         "attendees": "Alice, Carol",
         "confidence": "high",
         "reasoning": "Alice and Carol agree to meet Wednesday afternoon at 1 PM in the design lab to review mockups before a client call. Duration is approximately 2 hours.",
-        "assumptions": null,
+        "assumptions": "",
         "action": "create",
         "existing_event_id": null
       }

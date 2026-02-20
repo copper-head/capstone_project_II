@@ -12,7 +12,12 @@
       "start_time": "2026-02-23T10:00:00",
       "end_time": "2026-02-23T11:00:00",
       "location": "Large conference room",
-      "attendees_contain": ["Alice", "Bob", "Carol", "Dave"]
+      "attendees_contain": [
+        "Alice",
+        "Bob",
+        "Carol",
+        "Dave"
+      ]
     },
     {
       "action": "create",
@@ -20,7 +25,10 @@
       "start_time": "2026-02-24T15:00:00",
       "end_time": "2026-02-24T16:00:00",
       "location": "design lab",
-      "attendees_contain": ["Bob", "Carol"]
+      "attendees_contain": [
+        "Bob",
+        "Carol"
+      ]
     },
     {
       "action": "create",
@@ -34,7 +42,10 @@
       "start_time": "2026-02-26T09:30:00",
       "end_time": "2026-02-26T10:30:00",
       "location": "Alice's office",
-      "attendees_contain": ["Alice", "Bob"]
+      "attendees_contain": [
+        "Alice",
+        "Bob"
+      ]
     }
   ],
   "mock_llm_response": {
@@ -47,7 +58,7 @@
         "attendees": "Alice, Bob, Carol, Dave",
         "confidence": "high",
         "reasoning": "Alice asks Dave to set up the sprint retrospective for Monday at 10 AM. Dave confirms and will book the large conference room. Carol requests it be kept to 1 hour.",
-        "assumptions": null,
+        "assumptions": "",
         "action": "create",
         "existing_event_id": null
       },
