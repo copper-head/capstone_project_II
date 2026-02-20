@@ -13,12 +13,20 @@ Build the benchmark runner that discovers samples, executes live Gemini extracti
 - `run_benchmark(directory, output_path, gemini_client)` → `BenchmarkResult` dataclass
 - For each sample with sidecar:
   1. Load sidecar, build `CalendarContext` from sidecar's `calendar_context` field
-  2. Call `gemini_client.extract_events(transcript_text, calendar_context, owner, reference_datetime)`
-  3. Capture `LLMCallResult.usage` for token counting, `time.monotonic()` for latency
-  4. Score via `score_sample()` from Task 2
+  2. Call `gemini_client.extract_events(transcript_text, owner_name, current_datetime, calendar_context=context_text)`
+  <!-- Updated by plan-sync: fn-8-vyv.1 used extract_events(transcript_text, owner_name, current_datetime, calendar_context="") not extract_events(text, calendar_context, owner, reference_datetime) -->
+  3. Capture `ExtractionResult.usage_metadata` (list of usage objects, one per API attempt) for token counting, `time.monotonic()` for latency
+  <!-- Updated by plan-sync: fn-8-vyv.1 stores usage as ExtractionResult.usage_metadata (list[Any]) not LLMCallResult.usage -->
+  4. Score via `score_sample(actual_events, expected_events, tolerance_level, sample_name="category/name", category="category")` from Task 2 — must pass `sample_name` and `category` kwargs for per-category aggregation to work
+  <!-- Updated by plan-sync: fn-8-vyv.2 added sample_name and category keyword args to score_sample() -->
 - For samples without sidecars: extract only, log warning, skip scoring
 - Progress indicator: print `[N/M] category/name... P=X.XX R=X.XX (Xs)` to stderr
 - `BenchmarkResult`: list of `SampleResult`, aggregate scores, total tokens, total cost, total duration
+- Task 2's scoring API exports: `score_sample()`, `aggregate_scores()`, `calibrate_confidence()`, and dataclasses `SampleScore`, `AggregateScore`, `CategoryScore`, `EventMatchDetail` — all importable from `cal_ai.benchmark`
+- `AggregateScore` has fields: `overall_tp`, `overall_fp`, `overall_fn`, `overall_precision`, `overall_recall`, `overall_f1`, `per_category: list[CategoryScore]`, `sample_count`
+- `CategoryScore` has fields: `category`, `tp`, `fp`, `fn`, `precision`, `recall`, `f1`, `sample_count`
+- `SampleScore` has fields: `sample_name`, `category`, `tolerance`, `tp`, `fp`, `fn`, `precision`, `recall`, `f1`, `per_event_details: list[EventMatchDetail]`
+<!-- Updated by plan-sync: fn-8-vyv.2 built CategoryScore dataclass and EventMatchDetail dataclass; AggregateScore uses list[CategoryScore] for per_category; SampleScore includes sample_name, category, tolerance fields -->
 
 ### Report (`report.py`)
 - `format_console_summary(result: BenchmarkResult) → str` — follows `demo_output.py` pattern (list of strings)
@@ -38,7 +46,8 @@ Build the benchmark runner that discovers samples, executes live Gemini extracti
 
 ## Key context
 
-- `extract_events()` signature: `extract_events(text, calendar_context, owner, current_datetime)` at `llm.py:96-103`
+- `extract_events()` signature: `extract_events(transcript_text, owner_name, current_datetime, calendar_context="")` at `llm.py:74-169`
+<!-- Updated by plan-sync: fn-8-vyv.1 used extract_events(transcript_text, owner_name, current_datetime, calendar_context="") not extract_events(text, calendar_context, owner, current_datetime); line range updated from 96-103 to 74-169 -->
 - `CalendarContext` has `events_text`, `id_map`, `event_count`, `event_meta` at `calendar/context.py`
 - Sidecar `calendar_context` from fn-7 is a dict with `events_text` and `id_map` — must be converted to `CalendarContext` dataclass
 - Gemini free tier: 15 RPM. Add `time.sleep()` between samples if needed (configurable)
@@ -47,7 +56,8 @@ Build the benchmark runner that discovers samples, executes live Gemini extracti
 - [ ] `discover_samples()` finds all `.txt` files across category subdirectories
 - [ ] Samples with sidecars are scored; samples without sidecars are extracted and warned
 - [ ] Live Gemini extraction called with sidecar's calendar context, owner, and reference_datetime
-- [ ] Token counts collected from `LLMCallResult.usage` and used for cost estimation
+- [ ] Token counts collected from `ExtractionResult.usage_metadata` (list of usage objects) and used for cost estimation
+<!-- Updated by plan-sync: fn-8-vyv.1 stores usage on ExtractionResult.usage_metadata not LLMCallResult.usage -->
 - [ ] Latency tracked per sample via `time.monotonic()`
 - [ ] Console summary printed to stdout with overall P/R/F1 and per-category breakdown
 - [ ] Detailed markdown report written with per-sample expected vs actual diff
@@ -57,9 +67,8 @@ Build the benchmark runner that discovers samples, executes live Gemini extracti
 - [ ] `ruff check .` passes
 - [ ] `pytest` passes with 0 failures
 ## Done summary
-TBD
-
+Built the benchmark runner (discover_samples, run_benchmark with live Gemini extraction, latency/token tracking, rate limiting), report generator (console summary and markdown report with per-category P/R/F1 breakdown and cost estimates), and JSONL history append. Wired _handle_benchmark() in __main__.py to replace the stub. Added 14 unit tests for report formatters.
 ## Evidence
-- Commits:
-- Tests:
+- Commits: 906984c2195dabb57a5e9350eada20018c93d87d
+- Tests: pytest tests/ -x -q (432 passed), ruff check . (all passed)
 - PRs:

@@ -210,9 +210,7 @@ class TestCRUDFlows:
         """Update flow: calendar has event, AI outputs update with existing_event_id."""
         cal_ctx = CalendarContext(
             events_text=(
-                "[1] Team Standup"
-                " | 2026-02-19T09:00:00 - 2026-02-19T09:30:00"
-                " | Main conf room"
+                "[1] Team Standup | 2026-02-19T09:00:00 - 2026-02-19T09:30:00 | Main conf room"
             ),
             id_map={1: "real-uuid-standup"},
             event_count=1,
@@ -457,8 +455,7 @@ class TestCRUDFlows:
                 start="2026-02-19T10:00:00",
                 end="2026-02-19T10:30:00",
                 attendees=["Alice", "Bob"],
-                reasoning="Alice asks to move standup to 10 AM. "
-                "No calendar context available.",
+                reasoning="Alice asks to move standup to 10 AM. No calendar context available.",
             ),
         ]
 
@@ -491,8 +488,7 @@ class TestCRUDFlows:
                 start="2026-02-19T10:00:00",
                 end="2026-02-19T10:30:00",
                 attendees=["Alice", "Bob"],
-                reasoning="Alice moves standup to 10 AM. "
-                "No existing event ID available.",
+                reasoning="Alice moves standup to 10 AM. No existing event ID available.",
             ),
         ]
 

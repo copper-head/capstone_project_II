@@ -96,8 +96,7 @@ def pytest_generate_tests(metafunc: pytest.Metafunc) -> None:
     # Note: sample_case is a single tuple parameter, so we pass each value
     # wrapped in pytest.param() WITHOUT unpacking (no *val).
     marked_argvalues = [
-        pytest.param(val, marks=mrks)
-        for val, mrks in zip(argvalues, marks_list, strict=True)
+        pytest.param(val, marks=mrks) for val, mrks in zip(argvalues, marks_list, strict=True)
     ]
 
     metafunc.parametrize(

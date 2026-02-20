@@ -18,7 +18,7 @@ class TestDockerConfig:
     def test_dockerfile_has_correct_entrypoint(self) -> None:
         """Dockerfile ENTRYPOINT contains 'python -m cal_ai'."""
         content = DOCKERFILE.read_text()
-        assert 'python -m cal_ai' in content or 'python", "-m", "cal_ai' in content, (
+        assert "python -m cal_ai" in content or 'python", "-m", "cal_ai' in content, (
             "Dockerfile must contain ENTRYPOINT with 'python -m cal_ai'"
         )
 

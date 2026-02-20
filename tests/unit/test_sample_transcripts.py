@@ -97,9 +97,7 @@ class TestSampleTranscripts:
             f"Expected at least 2 speakers, got {len(result.speakers)}"
         )
         full_text = " ".join(u.text.lower() for u in result.utterances)
-        assert "cancel" in full_text, (
-            "cancel_event.txt should contain cancellation language"
-        )
+        assert "cancel" in full_text, "cancel_event.txt should contain cancellation language"
 
     def test_mixed_crud_has_all_action_types(self) -> None:
         """mixed_crud.txt contains create, update, and delete language."""
@@ -118,18 +116,14 @@ class TestSampleTranscripts:
         assert "move" in full_text or "push" in full_text, (
             "mixed_crud.txt should contain update/reschedule language"
         )
-        assert "cancel" in full_text, (
-            "mixed_crud.txt should contain cancellation language"
-        )
+        assert "cancel" in full_text, "mixed_crud.txt should contain cancellation language"
 
     def test_new_crud_samples_use_speaker_format(self) -> None:
         """All new CRUD sample files use [Speaker]: text format."""
         crud_files = ["crud/update_meeting.txt", "crud/cancel_event.txt", "crud/mixed_crud.txt"]
         for name in crud_files:
             result = parse_transcript_file(SAMPLES_DIR / name)
-            assert len(result.utterances) > 0, (
-                f"{name} should have parseable utterances"
-            )
+            assert len(result.utterances) > 0, f"{name} should have parseable utterances"
             # Verify all utterances have non-empty speakers.
             for utterance in result.utterances:
                 assert utterance.speaker, (

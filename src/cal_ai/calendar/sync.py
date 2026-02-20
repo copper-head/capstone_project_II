@@ -65,11 +65,13 @@ def sync_events(
                 event.action,
                 exc,
             )
-            result.failures.append({
-                "event": event.title,
-                "action": event.action,
-                "error": str(exc),
-            })
+            result.failures.append(
+                {
+                    "event": event.title,
+                    "action": event.action,
+                    "error": str(exc),
+                }
+            )
 
     logger.info(
         "Sync complete: %d created, %d updated, %d deleted, %d skipped, "

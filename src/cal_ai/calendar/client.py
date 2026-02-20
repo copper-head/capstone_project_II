@@ -134,11 +134,7 @@ class GoogleCalendarClient:
                 ", ".join(titles),
             )
 
-        result = (
-            self._service.events()
-            .insert(calendarId=_PRIMARY_CALENDAR, body=body)
-            .execute()
-        )
+        result = self._service.events().insert(calendarId=_PRIMARY_CALENDAR, body=body).execute()
         logger.info(
             "Created event '%s' (id=%s)",
             event.title,
@@ -262,9 +258,7 @@ class GoogleCalendarClient:
         Raises:
             CalendarNotFoundError: If the event ID does not exist.
         """
-        self._service.events().delete(
-            calendarId=_PRIMARY_CALENDAR, eventId=event_id
-        ).execute()
+        self._service.events().delete(calendarId=_PRIMARY_CALENDAR, eventId=event_id).execute()
         logger.info("Deleted event (id=%s)", event_id)
 
     @with_retry()
@@ -294,9 +288,7 @@ class GoogleCalendarClient:
             )
             return False
 
-        self._service.events().delete(
-            calendarId=_PRIMARY_CALENDAR, eventId=match["id"]
-        ).execute()
+        self._service.events().delete(calendarId=_PRIMARY_CALENDAR, eventId=match["id"]).execute()
         logger.info(
             "Found and deleted event '%s' (id=%s)",
             event.title,

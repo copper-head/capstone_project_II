@@ -14,9 +14,9 @@ Defines the structured data types used in the Gemini extraction pipeline:
 from __future__ import annotations
 
 from datetime import datetime, timedelta
-from typing import Literal
+from typing import Any, Literal
 
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 # ---------------------------------------------------------------------------
 # ExtractedEvent -- raw LLM output for a single event
@@ -71,10 +71,17 @@ class ExtractionResult(BaseModel):
     Attributes:
         events: List of extracted calendar events (may be empty).
         summary: Human-readable summary of the extraction outcome.
+        usage_metadata: List of token-usage metadata objects from LLM
+            API calls (one per attempt).  Populated by
+            :meth:`~cal_ai.llm.GeminiClient.extract_events` after
+            the API call.  Defaults to an empty list.
     """
+
+    model_config = ConfigDict(arbitrary_types_allowed=True)
 
     events: list[ExtractedEvent] = Field(default_factory=list)
     summary: str
+    usage_metadata: list[Any] = Field(default_factory=list)
 
 
 # ---------------------------------------------------------------------------

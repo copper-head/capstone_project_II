@@ -294,10 +294,7 @@ def build_user_prompt(transcript_text: str) -> str:
     Returns:
         The user prompt string wrapping the transcript.
     """
-    return (
-        "Extract calendar events from the following conversation:\n\n"
-        f"{transcript_text}"
-    )
+    return f"Extract calendar events from the following conversation:\n\n{transcript_text}"
 
 
 def format_transcript_for_llm(utterances: list[Utterance]) -> str:
@@ -314,6 +311,4 @@ def format_transcript_for_llm(utterances: list[Utterance]) -> str:
         A newline-separated string of ``Speaker: text`` lines.  Returns
         an empty string if *utterances* is empty.
     """
-    return "\n".join(
-        f"{utterance.speaker}: {utterance.text}" for utterance in utterances
-    )
+    return "\n".join(f"{utterance.speaker}: {utterance.text}" for utterance in utterances)

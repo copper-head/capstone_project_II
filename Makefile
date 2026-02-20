@@ -1,4 +1,4 @@
-.PHONY: install lint format test test-cov test-regression test-regression-live build run clean
+.PHONY: install lint format test test-cov test-regression test-regression-live benchmark build run clean
 
 install:
 	pip install -e ".[dev]"
@@ -22,6 +22,9 @@ test-regression:
 
 test-regression-live:
 	pytest tests/regression/ --live -v
+
+benchmark:
+	python -m cal_ai benchmark
 
 build:
 	docker compose build

@@ -272,10 +272,14 @@ class TestListEventsReturnsResults:
         """list_events returns the correct list of event dicts."""
         items = [
             _make_google_event(
-                "Event A", datetime(2026, 3, 10, 9, 0), datetime(2026, 3, 10, 10, 0),
+                "Event A",
+                datetime(2026, 3, 10, 9, 0),
+                datetime(2026, 3, 10, 10, 0),
             ),
             _make_google_event(
-                "Event B", datetime(2026, 3, 10, 11, 0), datetime(2026, 3, 10, 12, 0),
+                "Event B",
+                datetime(2026, 3, 10, 11, 0),
+                datetime(2026, 3, 10, 12, 0),
             ),
         ]
         service = _build_mock_service(list_items=items)
@@ -315,7 +319,9 @@ class TestListEventsPagination:
         page1 = {
             "items": [
                 _make_google_event(
-                    "P1", datetime(2026, 3, 10, 9, 0), datetime(2026, 3, 10, 10, 0),
+                    "P1",
+                    datetime(2026, 3, 10, 9, 0),
+                    datetime(2026, 3, 10, 10, 0),
                 ),
             ],
             "nextPageToken": "token-page2",
@@ -323,7 +329,9 @@ class TestListEventsPagination:
         page2 = {
             "items": [
                 _make_google_event(
-                    "P2", datetime(2026, 3, 10, 11, 0), datetime(2026, 3, 10, 12, 0),
+                    "P2",
+                    datetime(2026, 3, 10, 11, 0),
+                    datetime(2026, 3, 10, 12, 0),
                 ),
             ],
         }
@@ -547,7 +555,7 @@ class TestDuplicateDetectionPartialOverlap:
         existing = _make_google_event(
             summary="Team Standup",
             start=datetime(2026, 3, 10, 9, 30),  # starts 30 min after new event
-            end=datetime(2026, 3, 10, 10, 30),   # ends 30 min after new event
+            end=datetime(2026, 3, 10, 10, 30),  # ends 30 min after new event
         )
         event = _make_event()  # 9:00-10:00
 
@@ -723,9 +731,12 @@ class TestSyncEventsReturnsSummary:
         client = _make_client(service)
 
         events = [
-            _make_event(title="Create Event", action="create",
-                        start_time=datetime(2026, 3, 11, 9, 0),
-                        end_time=datetime(2026, 3, 11, 10, 0)),
+            _make_event(
+                title="Create Event",
+                action="create",
+                start_time=datetime(2026, 3, 11, 9, 0),
+                end_time=datetime(2026, 3, 11, 10, 0),
+            ),
             _make_event(title="Team Standup", action="update"),
             _make_event(title="Team Standup", action="delete"),
         ]
@@ -748,6 +759,7 @@ class TestSyncEventsContinuesOnPartialFailure:
 
         # First event will fail (set insert to raise), second should succeed.
         call_count = 0
+
         def side_effect_insert(*args, **kwargs):
             nonlocal call_count
             call_count += 1
@@ -760,12 +772,18 @@ class TestSyncEventsContinuesOnPartialFailure:
         )
 
         events = [
-            _make_event(title="Failing Event", action="create",
-                        start_time=datetime(2026, 3, 11, 9, 0),
-                        end_time=datetime(2026, 3, 11, 10, 0)),
-            _make_event(title="Good Event", action="create",
-                        start_time=datetime(2026, 3, 12, 9, 0),
-                        end_time=datetime(2026, 3, 12, 10, 0)),
+            _make_event(
+                title="Failing Event",
+                action="create",
+                start_time=datetime(2026, 3, 11, 9, 0),
+                end_time=datetime(2026, 3, 11, 10, 0),
+            ),
+            _make_event(
+                title="Good Event",
+                action="create",
+                start_time=datetime(2026, 3, 12, 9, 0),
+                end_time=datetime(2026, 3, 12, 10, 0),
+            ),
         ]
 
         result = sync_events(events, client)

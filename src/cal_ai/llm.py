@@ -9,7 +9,9 @@ from __future__ import annotations
 
 import json
 import logging
+from dataclasses import dataclass
 from datetime import datetime
+from typing import Any
 
 from google import genai
 from google.genai import errors as genai_errors
@@ -24,6 +26,25 @@ from cal_ai.models.extraction import (
 from cal_ai.prompts import build_system_prompt, build_user_prompt
 
 logger = logging.getLogger(__name__)
+
+
+@dataclass(frozen=True)
+class LLMCallResult:
+    """Result of a single LLM API call.
+
+    Bundles the raw response text with optional token-usage metadata
+    returned by the Gemini SDK (``response.usage_metadata``).
+
+    Attributes:
+        text: The raw text content from the model response.
+        usage: The ``usage_metadata`` object from the Gemini response,
+            or ``None`` if unavailable.  Expected fields include
+            ``prompt_token_count``, ``candidates_token_count``,
+            ``total_token_count``, and ``thoughts_token_count``.
+    """
+
+    text: str
+    usage: Any = None
 
 
 class GeminiClient:
@@ -101,8 +122,12 @@ class GeminiClient:
 
         # Attempt extraction with one retry on malformed responses.
         last_error: MalformedResponseError | None = None
+        accumulated_usage: list[Any] = []
         for attempt in range(1, 3):  # attempts 1 and 2
-            raw_text = self._call_api(user_prompt, config)
+            call_result = self._call_api(user_prompt, config)
+            raw_text = call_result.text
+            if call_result.usage is not None:
+                accumulated_usage.append(call_result.usage)
             logger.debug("Raw LLM response (attempt %d):\n%s", attempt, raw_text)
 
             try:
@@ -118,14 +143,14 @@ class GeminiClient:
                     continue
                 # Second failure -- fall through to graceful failure.
             else:
-                # Successful parse.
+                # Successful parse.  Attach usage metadata for benchmark.
+                result.usage_metadata = accumulated_usage
                 self._log_extraction(result)
                 return result
 
         # Both attempts failed -- return graceful empty result.
         logger.error(
-            "LLM response malformed after 2 attempts. "
-            "Raw response: %s | Error: %s",
+            "LLM response malformed after 2 attempts. Raw response: %s | Error: %s",
             last_error.raw_response if last_error else "<unknown>",
             last_error,
         )
@@ -136,6 +161,7 @@ class GeminiClient:
                 f"after 2 attempts. Error: {last_error}"
             ),
         )
+        graceful.usage_metadata = accumulated_usage
         logger.info("Extraction summary: %s", graceful.summary)
         return graceful
 
@@ -181,8 +207,8 @@ class GeminiClient:
         self,
         user_prompt: str,
         config: genai_types.GenerateContentConfig,
-    ) -> str:
-        """Call the Gemini API and return the raw response text.
+    ) -> LLMCallResult:
+        """Call the Gemini API and return the raw response text with usage.
 
         Args:
             user_prompt: The user-facing prompt content.
@@ -190,7 +216,7 @@ class GeminiClient:
                 and response MIME type.
 
         Returns:
-            The raw text content from the first candidate.
+            An :class:`LLMCallResult` with text and token-usage metadata.
 
         Raises:
             ExtractionError: On API-level failures (network, auth, etc.).
@@ -205,7 +231,8 @@ class GeminiClient:
             logger.error("Gemini API error: %s", exc)
             raise ExtractionError(f"Gemini API call failed: {exc}") from exc
 
-        return response.text or ""
+        usage = getattr(response, "usage_metadata", None)
+        return LLMCallResult(text=response.text or "", usage=usage)
 
     def _parse_response(self, raw_text: str) -> ExtractionResult:
         """Parse raw JSON text into an :class:`ExtractionResult`.
@@ -225,16 +252,12 @@ class GeminiClient:
                 conform to the expected schema.
         """
         if not raw_text or not raw_text.strip():
-            raise MalformedResponseError(
-                "Empty response from LLM", raw_response=raw_text or ""
-            )
+            raise MalformedResponseError("Empty response from LLM", raw_response=raw_text or "")
 
         try:
             data = json.loads(raw_text)
         except json.JSONDecodeError as exc:
-            raise MalformedResponseError(
-                f"Invalid JSON: {exc}", raw_response=raw_text
-            ) from exc
+            raise MalformedResponseError(f"Invalid JSON: {exc}", raw_response=raw_text) from exc
 
         try:
             # Convert "none" sentinels and comma-separated strings.
@@ -269,20 +292,14 @@ class GeminiClient:
         if attendees is None or (isinstance(attendees, str) and not attendees.strip()):
             result["attendees"] = []
         elif isinstance(attendees, str):
-            result["attendees"] = [
-                name.strip() for name in attendees.split(",") if name.strip()
-            ]
+            result["attendees"] = [name.strip() for name in attendees.split(",") if name.strip()]
 
         # Split comma-separated assumptions into a list.
         assumptions = result.get("assumptions")
-        if assumptions is None or (
-            isinstance(assumptions, str) and not assumptions.strip()
-        ):
+        if assumptions is None or (isinstance(assumptions, str) and not assumptions.strip()):
             result["assumptions"] = []
         elif isinstance(assumptions, str):
-            result["assumptions"] = [
-                a.strip() for a in assumptions.split(",") if a.strip()
-            ]
+            result["assumptions"] = [a.strip() for a in assumptions.split(",") if a.strip()]
 
         return result
 

@@ -40,9 +40,8 @@ Build the scoring engine that calculates Precision/Recall/F1 metrics and confide
 - [ ] `ruff check .` passes
 - [ ] `pytest` passes with 0 failures
 ## Done summary
-TBD
-
+Built the benchmark scoring engine with score_sample(), aggregate_scores(), and calibrate_confidence() functions. Reuses fn-7's Hungarian best-match algorithm and tolerance thresholds to classify events as TP/FP/FN, compute P/R/F1 metrics per sample and per category, and map confidence levels to accuracy percentages. Includes 31 unit tests covering all edge cases.
 ## Evidence
-- Commits:
-- Tests:
+- Commits: 99bd629f31e9e03a137157e11964093fcec4a337
+- Tests: python -m pytest tests/unit/test_benchmark_scoring.py -v (31 passed), python -m pytest --tb=short (418 passed, 40 skipped), python -m ruff check . (All checks passed)
 - PRs:

@@ -31,21 +31,22 @@ from cal_ai.calendar.exceptions import CalendarAuthError
 class TestLoadCachedTokenValid:
     """Cached token exists and is still valid -- no browser flow needed."""
 
-    def test_load_cached_token_valid(
-        self, tmp_path: Path, mock_credentials: MagicMock
-    ) -> None:
+    def test_load_cached_token_valid(self, tmp_path: Path, mock_credentials: MagicMock) -> None:
         """Valid cached token is returned directly without launching a browser flow."""
         token_path = tmp_path / "token.json"
         token_path.write_text('{"token": "cached"}')
         creds_path = tmp_path / "credentials.json"
         creds_path.write_text('{"installed": {}}')
 
-        with patch(
-            "cal_ai.calendar.auth._load_cached_token",
-            return_value=mock_credentials,
-        ) as mock_load, patch(
-            "cal_ai.calendar.auth._run_browser_flow",
-        ) as mock_flow:
+        with (
+            patch(
+                "cal_ai.calendar.auth._load_cached_token",
+                return_value=mock_credentials,
+            ) as mock_load,
+            patch(
+                "cal_ai.calendar.auth._run_browser_flow",
+            ) as mock_flow,
+        ):
             result = get_calendar_credentials(creds_path, token_path)
 
         mock_load.assert_called_once_with(token_path)
@@ -68,15 +69,19 @@ class TestExpiredTokenRefresh:
         # After refresh, mark the credentials as valid.
         refreshed_creds = mock_expired_credentials
 
-        with patch(
-            "cal_ai.calendar.auth._load_cached_token",
-            return_value=mock_expired_credentials,
-        ), patch(
-            "cal_ai.calendar.auth._refresh_token",
-            return_value=refreshed_creds,
-        ) as mock_refresh, patch(
-            "cal_ai.calendar.auth._save_token",
-        ) as mock_save:
+        with (
+            patch(
+                "cal_ai.calendar.auth._load_cached_token",
+                return_value=mock_expired_credentials,
+            ),
+            patch(
+                "cal_ai.calendar.auth._refresh_token",
+                return_value=refreshed_creds,
+            ) as mock_refresh,
+            patch(
+                "cal_ai.calendar.auth._save_token",
+            ) as mock_save,
+        ):
             result = get_calendar_credentials(creds_path, token_path)
 
         mock_refresh.assert_called_once_with(mock_expired_credentials)
@@ -95,18 +100,23 @@ class TestExpiredTokenRefresh:
         fresh_creds.valid = True
         fresh_creds.to_json.return_value = '{"token": "new"}'
 
-        with patch(
-            "cal_ai.calendar.auth._load_cached_token",
-            return_value=mock_expired_credentials,
-        ), patch(
-            "cal_ai.calendar.auth._refresh_token",
-            return_value=None,
-        ), patch(
-            "cal_ai.calendar.auth._run_browser_flow",
-            return_value=fresh_creds,
-        ) as mock_flow, patch(
-            "cal_ai.calendar.auth._save_token",
-        ) as mock_save:
+        with (
+            patch(
+                "cal_ai.calendar.auth._load_cached_token",
+                return_value=mock_expired_credentials,
+            ),
+            patch(
+                "cal_ai.calendar.auth._refresh_token",
+                return_value=None,
+            ),
+            patch(
+                "cal_ai.calendar.auth._run_browser_flow",
+                return_value=fresh_creds,
+            ) as mock_flow,
+            patch(
+                "cal_ai.calendar.auth._save_token",
+            ) as mock_save,
+        ):
             result = get_calendar_credentials(creds_path, token_path)
 
         mock_flow.assert_called_once_with(creds_path)
@@ -128,15 +138,19 @@ class TestNoCachedToken:
         fresh_creds.valid = True
         fresh_creds.to_json.return_value = '{"token": "new"}'
 
-        with patch(
-            "cal_ai.calendar.auth._load_cached_token",
-            return_value=None,
-        ), patch(
-            "cal_ai.calendar.auth._run_browser_flow",
-            return_value=fresh_creds,
-        ) as mock_flow, patch(
-            "cal_ai.calendar.auth._save_token",
-        ) as mock_save:
+        with (
+            patch(
+                "cal_ai.calendar.auth._load_cached_token",
+                return_value=None,
+            ),
+            patch(
+                "cal_ai.calendar.auth._run_browser_flow",
+                return_value=fresh_creds,
+            ) as mock_flow,
+            patch(
+                "cal_ai.calendar.auth._save_token",
+            ) as mock_save,
+        ):
             result = get_calendar_credentials(creds_path, token_path)
 
         mock_flow.assert_called_once_with(creds_path)
@@ -153,10 +167,13 @@ class TestMissingCredentialsFile:
         creds_path = tmp_path / "credentials.json"
         # creds_path does NOT exist
 
-        with patch(
-            "cal_ai.calendar.auth._load_cached_token",
-            return_value=None,
-        ), pytest.raises(CalendarAuthError, match="client secrets"):
+        with (
+            patch(
+                "cal_ai.calendar.auth._load_cached_token",
+                return_value=None,
+            ),
+            pytest.raises(CalendarAuthError, match="client secrets"),
+        ):
             get_calendar_credentials(creds_path, token_path)
 
 
@@ -173,15 +190,19 @@ class TestTokenSavedAfterAuth:
         fresh_creds.valid = True
         fresh_creds.to_json.return_value = '{"token": "brand-new"}'
 
-        with patch(
-            "cal_ai.calendar.auth._load_cached_token",
-            return_value=None,
-        ), patch(
-            "cal_ai.calendar.auth._run_browser_flow",
-            return_value=fresh_creds,
-        ), patch(
-            "cal_ai.calendar.auth._save_token",
-        ) as mock_save:
+        with (
+            patch(
+                "cal_ai.calendar.auth._load_cached_token",
+                return_value=None,
+            ),
+            patch(
+                "cal_ai.calendar.auth._run_browser_flow",
+                return_value=fresh_creds,
+            ),
+            patch(
+                "cal_ai.calendar.auth._save_token",
+            ) as mock_save,
+        ):
             get_calendar_credentials(creds_path, token_path)
 
         mock_save.assert_called_once_with(fresh_creds, token_path)
@@ -206,14 +227,18 @@ class TestCorrectScopesRequested:
         mock_flow_instance = MagicMock()
         mock_flow_instance.run_local_server.return_value = mock_creds
 
-        with patch(
-            "cal_ai.calendar.auth._load_cached_token",
-            return_value=None,
-        ), patch(
-            "cal_ai.calendar.auth.InstalledAppFlow.from_client_secrets_file",
-            return_value=mock_flow_instance,
-        ) as mock_from_secrets, patch(
-            "cal_ai.calendar.auth._save_token",
+        with (
+            patch(
+                "cal_ai.calendar.auth._load_cached_token",
+                return_value=None,
+            ),
+            patch(
+                "cal_ai.calendar.auth.InstalledAppFlow.from_client_secrets_file",
+                return_value=mock_flow_instance,
+            ) as mock_from_secrets,
+            patch(
+                "cal_ai.calendar.auth._save_token",
+            ),
         ):
             from cal_ai.calendar.auth import _run_browser_flow
 

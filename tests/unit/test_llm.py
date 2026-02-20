@@ -48,24 +48,38 @@ def _single_lunch_event() -> dict:
     }
 
 
+def _mock_usage_metadata() -> MagicMock:
+    """Return a mock ``usage_metadata`` with realistic token counts."""
+    usage = MagicMock()
+    usage.prompt_token_count = 100
+    usage.candidates_token_count = 50
+    usage.total_token_count = 150
+    usage.thoughts_token_count = 0
+    return usage
+
+
 def _mock_client(response_text: str) -> GeminiClient:
     """Create a ``GeminiClient`` with a mocked ``genai.Client``.
 
     The mock's ``models.generate_content`` returns *response_text* on every
-    call.
+    call, including ``usage_metadata``.
     """
     with patch("cal_ai.llm.genai.Client"):
         client = GeminiClient(api_key="fake-key")
 
     mock_response = MagicMock()
     mock_response.text = response_text
-    client._client.models.generate_content = MagicMock(return_value=mock_response)
+    mock_response.usage_metadata = _mock_usage_metadata()
+    client._client.models.generate_content = MagicMock(
+        return_value=mock_response,
+    )
     return client
 
 
 def _mock_client_multi(response_texts: list[str]) -> GeminiClient:
     """Create a ``GeminiClient`` whose ``generate_content`` returns different
-    text on successive calls (using ``side_effect``).
+    text on successive calls (using ``side_effect``), including
+    ``usage_metadata``.
     """
     with patch("cal_ai.llm.genai.Client"):
         client = GeminiClient(api_key="fake-key")
@@ -74,6 +88,7 @@ def _mock_client_multi(response_texts: list[str]) -> GeminiClient:
     for text in response_texts:
         mock_resp = MagicMock()
         mock_resp.text = text
+        mock_resp.usage_metadata = _mock_usage_metadata()
         responses.append(mock_resp)
 
     client._client.models.generate_content = MagicMock(side_effect=responses)
@@ -262,8 +277,7 @@ class TestOwnerPerspective:
             "attendees": "Bob, Carol",
             "confidence": "low",
             "reasoning": (
-                "Alice overheard Bob and Carol scheduling a meeting."
-                " Alice is not involved."
+                "Alice overheard Bob and Carol scheduling a meeting. Alice is not involved."
             ),
             "assumptions": None,
             "action": "create",
@@ -278,8 +292,10 @@ class TestOwnerPerspective:
         )
 
         assert result.events[0].confidence == "low"
-        assert "overheard" in result.events[0].reasoning.lower() or \
-               "not involved" in result.events[0].reasoning.lower()
+        assert (
+            "overheard" in result.events[0].reasoning.lower()
+            or "not involved" in result.events[0].reasoning.lower()
+        )
 
 
 # ---------------------------------------------------------------------------
@@ -376,9 +392,7 @@ class TestMalformedResponseHandling:
 
     def test_malformed_json_retry_success(self, caplog: pytest.LogCaptureFixture) -> None:
         """First call returns invalid JSON, second call succeeds -- retry works."""
-        valid_response = _make_llm_response_json(
-            [_single_lunch_event()], summary="Found 1 event."
-        )
+        valid_response = _make_llm_response_json([_single_lunch_event()], summary="Found 1 event.")
         client = _mock_client_multi(["NOT VALID JSON {{", valid_response])
 
         with caplog.at_level(logging.WARNING, logger="cal_ai.llm"):
@@ -390,8 +404,11 @@ class TestMalformedResponseHandling:
 
         assert len(result.events) == 1
         assert client._client.models.generate_content.call_count == 2
-        assert any("retry" in r.message.lower() or "malformed" in r.message.lower()
-                    for r in caplog.records if r.levelno >= logging.WARNING)
+        assert any(
+            "retry" in r.message.lower() or "malformed" in r.message.lower()
+            for r in caplog.records
+            if r.levelno >= logging.WARNING
+        )
 
     def test_malformed_json_retry_still_bad_graceful_failure(
         self, caplog: pytest.LogCaptureFixture
@@ -413,9 +430,7 @@ class TestMalformedResponseHandling:
 
     def test_llm_returns_empty_response(self) -> None:
         """Empty string response triggers retry (treated as malformed)."""
-        valid_response = _make_llm_response_json(
-            [_single_lunch_event()], summary="Found 1 event."
-        )
+        valid_response = _make_llm_response_json([_single_lunch_event()], summary="Found 1 event.")
         client = _mock_client_multi(["", valid_response])
 
         result = client.extract_events(
@@ -441,9 +456,7 @@ class TestMalformedResponseHandling:
             # no "title" field
         }
         bad_response = _make_llm_response_json([bad_event])
-        good_response = _make_llm_response_json(
-            [_single_lunch_event()], summary="Found 1 event."
-        )
+        good_response = _make_llm_response_json([_single_lunch_event()], summary="Found 1 event.")
         client = _mock_client_multi([bad_response, good_response])
 
         result = client.extract_events(

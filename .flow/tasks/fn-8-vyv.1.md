@@ -42,9 +42,8 @@ Two infrastructure changes required before the benchmark module can be built: (1
 - [ ] `ruff check .` passes
 - [ ] `pytest` passes with 0 failures
 ## Done summary
-TBD
-
+Surfaced Gemini token usage metadata from _call_api() via LLMCallResult dataclass and added CLI subcommand infrastructure (run + benchmark) with full backward compatibility.
 ## Evidence
-- Commits:
-- Tests:
+- Commits: 6ce7ffa9378d89ee9b7f67edcc11cc68958bae24
+- Tests: ruff check ., pytest
 - PRs:
