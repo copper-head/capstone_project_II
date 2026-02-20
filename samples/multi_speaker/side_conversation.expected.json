@@ -1,0 +1,59 @@
+{
+  "description": "Two speakers plan a side event (coffee) while the main group discusses work scheduling. Tests extraction of both main-thread and side-conversation events.",
+  "category": "multi_speaker",
+  "tolerance": "moderate",
+  "owner": "Alice",
+  "reference_datetime": "2026-02-18T10:00:00",
+  "calendar_context": [],
+  "expected_events": [
+    {
+      "action": "create",
+      "title": "Architecture Deep Dive",
+      "start_time": "2026-02-20T13:00:00",
+      "end_time": "2026-02-20T15:00:00",
+      "attendees_contain": [
+        "Alice",
+        "Dave"
+      ]
+    },
+    {
+      "action": "create",
+      "title": "Coffee with Carol",
+      "start_time": "2026-02-18T15:30:00",
+      "attendees_contain": [
+        "Bob",
+        "Carol"
+      ]
+    }
+  ],
+  "mock_llm_response": {
+    "events": [
+      {
+        "title": "Architecture Deep Dive",
+        "start_time": "2026-02-20T13:00:00",
+        "end_time": "2026-02-20T15:00:00",
+        "location": "Large Conference Room",
+        "attendees": "Alice, Dave",
+        "confidence": "high",
+        "reasoning": "Alice and Dave agreed to a 2-hour architecture deep dive on Friday at 1 PM in the large conference room.",
+        "assumptions": "",
+        "action": "create",
+        "existing_event_id": null
+      },
+      {
+        "title": "Coffee with Bob",
+        "start_time": "2026-02-18T15:30:00",
+        "end_time": "2026-02-18T16:00:00",
+        "location": "Lobby Cafe",
+        "attendees": "Bob, Carol",
+        "confidence": "medium",
+        "reasoning": "Bob and Carol had a side conversation about grabbing coffee. Initially set for 3 PM, Carol changed it to 3:30 PM at the lobby cafe.",
+        "assumptions": "Duration assumed 30 minutes for a coffee",
+        "action": "create",
+        "existing_event_id": null
+      }
+    ],
+    "summary": "Found 2 events: architecture deep dive (Friday 1 PM) and coffee (today 3:30 PM)."
+  },
+  "notes": "Reference datetime is Wednesday 2026-02-18. 'Friday' resolves to 2026-02-20. The coffee time was updated mid-conversation from 3:00 to 3:30 (last instruction wins). Medium conversation (14 lines)."
+}

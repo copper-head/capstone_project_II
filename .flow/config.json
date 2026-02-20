@@ -8,5 +8,8 @@
   },
   "review": {
     "backend": null
+  },
+  "scouts": {
+    "github": false
   }
 }

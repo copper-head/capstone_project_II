@@ -1,0 +1,83 @@
+[Alice]: Hey Bob, got a minute?
+
+[Bob]: Sure, what's up?
+
+[Alice]: Before we get to business, did you hear about what happened in the parking lot this morning?
+
+[Bob]: No, what happened?
+
+[Alice]: Someone backed into the CEO's car. The brand new Tesla.
+
+[Bob]: No way. Who was it?
+
+[Alice]: Nobody knows. Hit and run apparently. Security is reviewing the camera footage.
+
+[Bob]: Yikes. That's going to be expensive. Was there much damage?
+
+[Alice]: Big dent in the rear quarter panel. And the taillight is completely smashed.
+
+[Bob]: The CEO must be furious.
+
+[Alice]: You'd think, but apparently he was pretty chill about it. Said that's what insurance is for.
+
+[Bob]: Wow, good attitude. If someone hit my car I'd be livid.
+
+[Alice]: Same. Speaking of cars, are you still thinking about getting that hybrid?
+
+[Bob]: Yeah, I've been looking at the RAV4 hybrid. The gas prices are killing me.
+
+[Alice]: Tell me about it. I filled up yesterday, it was like 65 dollars.
+
+[Bob]: Sixty-five! Where are you getting gas?
+
+[Alice]: The station on Elm Street. Which, now that I think about it, is always the most expensive one.
+
+[Bob]: Try the Costco on Route 9. It's like 30 cents cheaper per gallon.
+
+[Alice]: Good tip. Do you need a membership for the gas?
+
+[Bob]: Yeah but the membership pays for itself in gas savings alone. Trust me.
+
+[Alice]: I might have to do that. Oh, completely unrelated, but did you try the cookies Carol brought in?
+
+[Bob]: The chocolate chip ones? Oh my god, yes. I had like four.
+
+[Alice]: She made them from scratch. Said it was her grandmother's recipe.
+
+[Bob]: Carol is dangerously talented. Those were the best cookies I've ever had at the office.
+
+[Alice]: She said she might bring brownies next week.
+
+[Bob]: I will be first in line.
+
+[Alice]: Ha! Okay so the reason I actually wanted to talk to you...
+
+[Bob]: Right, I was wondering when we'd get to the point.
+
+[Alice]: Sorry, I'm easily distracted today. So, marketing wants to do a product launch event.
+
+[Bob]: For the new feature release?
+
+[Alice]: Yeah. They want to do a rehearsal first. They're proposing next Thursday at 3 PM.
+
+[Bob]: Next Thursday at 3? Let me think... yeah, I can make that work.
+
+[Alice]: It'll be in the event space on the first floor. Should be about 2 hours.
+
+[Bob]: Who all needs to be there?
+
+[Alice]: You, me, Carol, Dave, and the marketing leads. Maybe 8 people total.
+
+[Bob]: Sounds good. Should I prepare anything?
+
+[Alice]: Just bring the demo laptop with the latest build. Marketing will handle everything else.
+
+[Bob]: Easy enough. 3 PM Thursday, event space, bring the demo laptop. Got it.
+
+[Alice]: Perfect. Sorry for burying the lead under 10 minutes of parking lot drama and cookie reviews.
+
+[Bob]: Hey, at least I know where to get cheap gas now. Worth it.
+
+[Alice]: Ha! Alright, back to work. Talk later.
+
+[Bob]: See ya.

@@ -1,0 +1,11 @@
+[Alice]: Dave, can you move our architecture review to 3 PM on Wednesday?
+
+[Dave]: Architecture review? I don't see that on my calendar. Did we already have one scheduled?
+
+[Alice]: I thought we did, but maybe I'm thinking of last week's. Either way, let's just get it on the calendar for Wednesday at 3.
+
+[Dave]: Works for me. I'll add it. Conference room C?
+
+[Alice]: Yes, conference room C. Let's plan for about 90 minutes.
+
+[Dave]: Got it. Architecture review, Wednesday 3 PM, room C, 90 minutes.

@@ -1,0 +1,14 @@
+{
+  "assignee": null,
+  "claim_note": "",
+  "claimed_at": null,
+  "created_at": "2026-02-20T08:31:30.902120Z",
+  "depends_on": [],
+  "epic": "fn-7-1hq",
+  "id": "fn-7-1hq.2",
+  "priority": null,
+  "spec_path": ".flow/tasks/fn-7-1hq.2.md",
+  "status": "todo",
+  "title": "Build sidecar JSON schema and tolerance assertion engine",
+  "updated_at": "2026-02-20T08:32:13.432548Z"
+}

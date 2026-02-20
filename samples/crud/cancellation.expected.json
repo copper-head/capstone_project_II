@@ -1,0 +1,43 @@
+{
+  "description": "Alice cancels a meeting with Bob on Friday due to client travel. Single delete event with calendar context.",
+  "category": "crud",
+  "tolerance": "strict",
+  "owner": "Alice",
+  "reference_datetime": "2026-02-18T10:00:00",
+  "calendar_context": [
+    {
+      "id": "gcal-evt-meeting-001",
+      "summary": "Meeting with Bob",
+      "start": "2026-02-20T10:00:00",
+      "end": "2026-02-20T11:00:00",
+      "location": null
+    }
+  ],
+  "expected_events": [
+    {
+      "action": "delete",
+      "title": "Meeting with Bob",
+      "start_time": "2026-02-20T10:00:00",
+      "end_time": "2026-02-20T11:00:00",
+      "existing_event_id_required": true
+    }
+  ],
+  "mock_llm_response": {
+    "events": [
+      {
+        "title": "Meeting with Bob",
+        "start_time": "2026-02-20T10:00:00",
+        "end_time": "2026-02-20T11:00:00",
+        "location": null,
+        "attendees": "Alice, Bob",
+        "confidence": "high",
+        "reasoning": "Alice explicitly cancels 'our meeting on Friday' due to client travel. She declines Bob's offer to reschedule, saying 'let's just cancel for now.' Matches calendar event [1].",
+        "assumptions": "",
+        "action": "delete",
+        "existing_event_id": 1
+      }
+    ],
+    "summary": "Cancelled the Friday meeting with Bob."
+  },
+  "notes": "Reference datetime is Wednesday 2026-02-18, so 'Friday' resolves to 2026-02-20. Alice explicitly says 'cancel' and rejects rescheduling."
+}

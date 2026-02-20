@@ -1,0 +1,11 @@
+[Alice]: Bob, don't forget you have that dentist appointment tomorrow at 2 PM.
+
+[Bob]: Oh right, thanks for the reminder. I almost scheduled over it.
+
+[Alice]: Also, Carol mentioned she has a doctor's visit on Thursday morning. Let's not schedule any team meetings before noon on Thursday.
+
+[Bob]: Good call. What about our weekly sync, should we move it?
+
+[Alice]: Let's move our sync to Thursday at 1 PM instead of the usual 10 AM. That way Carol can join after her appointment.
+
+[Bob]: Thursday at 1 PM works for me.

@@ -1,0 +1,14 @@
+{
+  "description": "Vague scheduling references with no concrete time, date, or location. 'Sometime', 'maybe next month', 'eventually'.",
+  "category": "adversarial",
+  "tolerance": "relaxed",
+  "owner": "Alice",
+  "reference_datetime": "2026-02-20T10:00:00",
+  "calendar_context": [],
+  "expected_events": [],
+  "mock_llm_response": {
+    "events": [],
+    "summary": "No actionable calendar events found. All references are vague ('sometime', 'maybe next month', 'eventually') with no specific date or time."
+  },
+  "notes": "Relaxed tolerance allows up to 2 false positives, but ideally 0. The speakers explicitly acknowledge they are not making a concrete plan."
+}

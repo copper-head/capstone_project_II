@@ -1,0 +1,38 @@
+{
+  "description": "Very long tangent-heavy conversation (parking lot drama, car shopping, gas prices, cookies) with scheduling info at the very end: product launch rehearsal next Thursday at 3 PM.",
+  "category": "long",
+  "tolerance": "relaxed",
+  "owner": "Alice",
+  "reference_datetime": "2026-02-20T10:00:00",
+  "calendar_context": [],
+  "expected_events": [
+    {
+      "action": "create",
+      "title": "Product Launch Rehearsal",
+      "start_time": "2026-02-26T15:00:00",
+      "end_time": "2026-02-26T17:00:00",
+      "attendees_contain": [
+        "Alice",
+        "Bob"
+      ]
+    }
+  ],
+  "mock_llm_response": {
+    "events": [
+      {
+        "title": "Product Launch Rehearsal",
+        "start_time": "2026-02-26T15:00:00",
+        "end_time": "2026-02-26T17:00:00",
+        "location": "Event Space, 1st Floor",
+        "attendees": "Alice, Bob, Carol, Dave, Marketing Team",
+        "confidence": "high",
+        "reasoning": "Alice informs Bob about a product launch rehearsal requested by marketing for next Thursday at 3 PM. Located in the event space on the first floor, about 2 hours. Bob confirms availability.",
+        "assumptions": "",
+        "action": "create",
+        "existing_event_id": null
+      }
+    ],
+    "summary": "Found 1 event: product launch rehearsal next Thursday at 3 PM. The majority of the conversation was off-topic tangents."
+  },
+  "notes": "Reference datetime is Friday 2026-02-20, so 'next Thursday' is 2026-02-26. 60+ lines with the real scheduling info appearing only in the last quarter of the conversation."
+}

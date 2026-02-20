@@ -1,111 +1,129 @@
 # Comprehensive Regression Test Suite: 40+ Stress-Test Samples
 
-## Problem
+## Overview
 
-The current test suite has 11 sample transcripts, all 3-10 lines long. This is insufficient for evaluating the AI extraction pipeline's reliability across diverse scenarios. We need a comprehensive stress-test suite with 40+ samples covering varied lengths, CRUD edge cases, multi-speaker complexity, adversarial inputs, and real-world messiness — each with automated regression tests that assert structural correctness with configurable per-sample tolerance.
+Build a comprehensive regression test suite for the AI extraction pipeline with 40+ sample transcripts across 5 scenario categories, each paired with a sidecar `.expected.json` file. The suite supports mock mode (default, deterministic) and live mode (`--live` flag, real Gemini API). Assertions use a three-tier tolerance system (strict/moderate/relaxed) per sample.
 
-## Key Decisions
+## Scope
 
-1. **Scope: Automated regression only** — benchmarking (precision/recall/F1) is a separate future epic.
-2. **Volume: 40+ new samples** — at least 5 per scenario category.
-3. **Length: Even spread** — equal mix of short (5 lines), medium (20 lines), long (50+ lines), and very long (100+ lines).
-4. **Sidecar JSON files** — each sample.txt gets a sample.expected.json defining expected events, actions, mock calendar context (for CRUD tests), and tolerance level.
-5. **Per-sample tolerance** — three levels:
-   - **strict**: exact event count, exact action types, times ±30min, exact titles.
-   - **moderate**: ±1 event count, times ±2hrs, title keyword matching.
-   - **relaxed**: ±2 event count, times ±1 day, fuzzy title matching.
-6. **Full setup in sidecar** — sidecar defines both expected output AND mock calendar state the AI should see (for update/delete scenarios).
-7. **Subdirectory organization** — `samples/crud/`, `samples/adversarial/`, `samples/multi_speaker/`, `samples/realistic/`, `samples/long/`.
-8. **Migrate existing 11 samples** into the new subdirectory structure, update all references (Dockerfile, docker-compose, tests).
-9. **Live + mock test modes** — default to mock (pre-recorded responses), explicit `--live` flag for real API calls. Uses `@pytest.mark.live` marker, skipped unless `--live` is passed.
-10. **Adversarial: moderate level** — sarcasm, hypotheticals, past-tense events, vague references. No extreme prompt injection or multi-language mixing.
-11. **Done criteria: scenario coverage complete** — every category has at least 5 samples each.
-12. **Sample style: mix** — some surgical/targeted for specific edge cases, some naturalistic (filler, tangents, natural flow).
-13. **Docker paths updated** to match new subdirectory structure.
+**In scope:**
+- Migrate existing 11 samples to new `samples/<category>/` subdirectory structure
+- Update all hardcoded `samples/` references (Dockerfile, docker-compose, 5+ test files, README, CLAUDE.md)
+- Build sidecar JSON schema with Pydantic model + loader utility
+- Build tolerance assertion engine (strict/moderate/relaxed) with `rapidfuzz` for fuzzy title matching
+- Create `tests/regression/` infrastructure: conftest.py, pytest_generate_tests, --live flag, parametrized tests
+- Write 40+ new sample transcripts with sidecar `.expected.json` files across all 5 categories
+- Add `rapidfuzz` dev dependency
+- Register `live` marker in pyproject.toml, add Makefile targets
+- Update docs (README, CLAUDE.md, Makefile)
 
-## Scenario Categories (at least 5 samples each)
+**Out of scope:**
+- Benchmarking/scoring (fn-8-vyv)
+- Precision/recall metrics
+- AI-generated reports
+- New pipeline features
 
-### CRUD Edge Cases
-- Bulk deletes ("clear my schedule")
-- Partial updates (change time but keep location)
-- Conflicting instructions (reschedule then cancel same event)
-- Ambiguous references to existing events (multiple possible matches)
-- Update with no matching event (should fall back to create)
-- Delete already-deleted event
+## Architecture & Data Flow
 
-### Multi-Speaker Complexity
-- 5+ speakers with cross-talk
-- Side conversations (2 people plan something while 3 others discuss unrelated topics)
-- Speaker references another speaker's calendar ("Bob, don't forget your dentist appointment")
-- Multiple events from different speaker pairs in same conversation
-- Speakers disagreeing on event details
-
-### Adversarial / Tricky
-- Sarcasm ("yeah let's totally have a meeting at 3am")
-- Hypotheticals ("what if we scheduled a retreat?")
-- Past-tense events ("we met last Thursday" — should NOT create)
-- Vague references ("let's catch up sometime")
-- Events mentioned in negation ("I'm NOT going to the party")
-
-### Real-World Messy
-- Typos and informal language
-- Incomplete sentences, interruptions
-- Slang and abbreviations ("lmk", "tmr", "nvm")
-- Filler words and tangents
-- Time zones mentioned casually ("3pm your time")
-
-### Long Conversations
-- 50+ line conversations with 1-2 events buried in noise
-- 100+ line conversations with 5+ events spread throughout
-- Very long tangents with scheduling info at the very end
-- Conversations that circle back to modify earlier plans
-
-## Sidecar JSON Schema
-
-```json
-{
-  "description": "Brief description of what this sample tests",
-  "category": "crud|adversarial|multi_speaker|realistic|long",
-  "tolerance": "strict|moderate|relaxed",
-  "calendar_context": [
-    {
-      "id": "google-event-uuid",
-      "summary": "Team Standup",
-      "start": "2026-02-19T09:00:00",
-      "end": "2026-02-19T09:30:00",
-      "location": "Room 301"
-    }
-  ],
-  "expected_events": [
-    {
-      "action": "create|update|delete",
-      "title": "Event Title",
-      "start_time": "2026-02-20T12:00:00",
-      "end_time": "2026-02-20T13:00:00",
-      "existing_event_id_required": false,
-      "location": "optional",
-      "attendees_contain": ["Alice", "Bob"]
-    }
-  ],
-  "expected_event_count": 2,
-  "notes": "Optional notes about expected AI behavior"
-}
+```mermaid
+graph TD
+    A[samples/<category>/*.txt] --> B[pytest_generate_tests]
+    C[samples/<category>/*.expected.json] --> B
+    B --> D{--live flag?}
+    D -->|No: Mock mode| E[Patch GeminiClient.extract_events]
+    D -->|Yes: Live mode| F[Real Gemini API call]
+    E --> G[run_pipeline with mocked LLM]
+    F --> G
+    G --> H[ExtractionResult]
+    H --> I{Tolerance level from sidecar}
+    I -->|strict| J[Exact count, action, times ±30min, exact titles]
+    I -->|moderate| K[±1 count, times ±2hrs, token_set_ratio >= 80]
+    I -->|relaxed| L[±2 count, times ±1day, token_set_ratio >= 60]
+    J --> M[Pass/Fail]
+    K --> M
+    L --> M
 ```
 
-## Open Questions
+## Key Design Decisions (from gap analysis)
 
-- Exact tolerance thresholds may need tuning after initial test runs (e.g., ±30min may be too tight for strict on some edge cases).
-- How to handle non-determinism in title wording — keyword matching vs fuzzy string distance.
+1. **Mock response mechanism**: Sidecar JSON contains a `mock_llm_response` field with the raw JSON the LLM would return. Mock patches `GeminiClient._client.models.generate_content` to return this JSON (same layer as `test_llm.py:L51-63`). This tests LLM response parsing, not just extraction.
+
+2. **Mock intercept layer**: Patch at `genai.Client.models.generate_content` (like `_mock_client()` in `test_llm.py`), NOT at `extract_events()`. This exercises the JSON parsing and validation pipeline.
+
+3. **Sidecar schema additions** (beyond original spec):
+   - `owner`: Owner name for the pipeline (default: "Alice")
+   - `reference_datetime`: ISO 8601 frozen datetime for relative time resolution (default: "2026-02-20T10:00:00")
+   - `mock_llm_response`: Raw JSON string the mocked LLM returns
+   - Remove `expected_event_count` (derive from `len(expected_events)`)
+
+4. **Event matching**: Use best-match (not positional). Match actual events to expected events by minimizing total distance across (action, title, start_time). This avoids false failures from reordering.
+
+5. **Existing sample categorization**:
+   - `crud/`: simple_lunch, update_meeting, cancel_event, cancellation, mixed_crud, clear_schedule
+   - `multi_speaker/`: complex, multiple_events
+   - `adversarial/`: no_events
+   - `realistic/`: ambiguous_time
+   - Delete `multiple_events_copy.txt` (orphan duplicate)
+
+6. **Tolerance defaults**: If sidecar omits `tolerance`, default to `moderate`. For delete actions, time tolerance applies to the referenced event time (from calendar_context), not a new event time.
+
+7. **Live mode**: Uses same tolerance as sidecar. No automatic relaxation. Rate limiting handled by existing Gemini SDK retry logic.
+
+8. **Dockerfile CMD**: Updated to `CMD ["samples/crud/simple_lunch.txt"]`.
+
+## Risks & Mitigations
+
+| Risk | Impact | Mitigation |
+|------|--------|------------|
+| Tolerance thresholds too tight/loose | Flaky or meaningless tests | Start with moderate defaults, tune after first live run |
+| Gemini SDK uses gRPC (breaks VCR) | Mock mode fails | Mock at application layer, not HTTP |
+| 40+ samples = large test collection | Slow CI | Mock mode is fast (<1s/test); long samples marked `@pytest.mark.slow` |
+| Non-deterministic LLM output | Live tests flaky | Use `temperature=0` in live mode; tolerance absorbs variance |
+| Breaking existing tests during migration | Regression | Migrate + update refs atomically in one task; run full suite after |
+| fn-8 depends on sidecar schema | Schema lock-in | Finalize schema in Task 2 before writing samples |
+
+## Quick commands
+
+```bash
+# Run all tests including regression (mock mode)
+make test
+
+# Run only regression suite (mock mode)
+pytest tests/regression/ -v
+
+# Run regression suite with live Gemini API
+pytest tests/regression/ --live -v
+
+# Run only CRUD category
+pytest tests/regression/ -k crud -v
+
+# Skip long/slow regression tests
+pytest tests/regression/ -m "not slow" -v
+```
 
 ## Acceptance
 
 - [ ] 40+ sample transcripts across all 5 categories (at least 5 per category)
 - [ ] Even spread of conversation lengths (short, medium, long, very long)
-- [ ] Each sample has a sidecar .expected.json with tolerance, calendar context, and expected events
-- [ ] Existing 11 samples migrated to new subdirectory structure
-- [ ] All references updated (Dockerfile, docker-compose, existing tests)
-- [ ] Regression test runner loads sidecar files and asserts per tolerance level
-- [ ] Mock mode (default) uses pre-recorded responses
+- [ ] Each sample has a sidecar .expected.json with tolerance, calendar context, expected events, and mock_llm_response
+- [ ] Existing 11 samples migrated to new subdirectory structure with sidecars
+- [ ] All hardcoded references updated (Dockerfile, docker-compose, 5+ test files, README, CLAUDE.md)
+- [ ] Tolerance assertion engine with strict/moderate/relaxed levels using rapidfuzz
+- [ ] Regression test runner auto-discovers samples via pytest_generate_tests
+- [ ] Mock mode (default) patches generate_content with pre-recorded response
 - [ ] Live mode via --live flag with @pytest.mark.live marker
+- [ ] Event matching uses best-match algorithm (not positional)
 - [ ] All existing tests still pass after migration
 - [ ] ruff clean
+- [ ] New Makefile targets: test-regression, test-regression-live
+
+## References
+
+- Existing mock pattern: `tests/unit/test_llm.py:51-63` (`_mock_client()`)
+- Existing E2E pattern: `tests/integration/test_crud_flows.py:86-169` (`_run_crud_e2e()`)
+- Pipeline entry: `src/cal_ai/pipeline.py:116` (`run_pipeline()`)
+- Extraction models: `src/cal_ai/models/extraction.py` (`ExtractedEvent`, `ExtractionResult`)
+- Calendar context: `src/cal_ai/calendar/context.py` (`CalendarContext`)
+- Prompt injection: `src/cal_ai/prompts.py:265-274`
+- pytest parametrize docs: https://docs.pytest.org/en/stable/how-to/parametrize.html
+- rapidfuzz: https://github.com/rapidfuzz/RapidFuzz

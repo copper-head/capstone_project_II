@@ -1,0 +1,16 @@
+{
+  "assignee": null,
+  "claim_note": "",
+  "claimed_at": null,
+  "created_at": "2026-02-20T08:31:30.995792Z",
+  "depends_on": [
+    "fn-7-1hq.2"
+  ],
+  "epic": "fn-7-1hq",
+  "id": "fn-7-1hq.3",
+  "priority": null,
+  "spec_path": ".flow/tasks/fn-7-1hq.3.md",
+  "status": "todo",
+  "title": "Build regression test infrastructure (conftest, --live flag, parametrize)",
+  "updated_at": "2026-02-20T08:32:31.884970Z"
+}

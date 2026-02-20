@@ -75,7 +75,7 @@ def _make_failed_event(
 
 
 def _make_result(
-    transcript_path: str = "samples/simple_lunch.txt",
+    transcript_path: str = "samples/crud/simple_lunch.txt",
     speakers: list[str] | None = None,
     utterance_count: int = 3,
     events: list[ExtractedEvent] | None = None,
@@ -125,7 +125,7 @@ class TestDemoOutput:
     def test_output_contains_transcript_info(self) -> None:
         """Stage 1 section contains file path, speakers, and utterance count."""
         result = _make_result(
-            transcript_path="samples/simple_lunch.txt",
+            transcript_path="samples/crud/simple_lunch.txt",
             speakers=["Alice", "Bob"],
             utterance_count=3,
         )
@@ -133,7 +133,7 @@ class TestDemoOutput:
         output = format_pipeline_result(result)
 
         assert "STAGE 1: Transcript Loaded" in output
-        assert "samples/simple_lunch.txt" in output
+        assert "samples/crud/simple_lunch.txt" in output
         assert "Alice" in output
         assert "Bob" in output
         assert "3 lines" in output

@@ -191,7 +191,7 @@ class TestCRUDFlows:
             ),
         ]
 
-        result, mocks = _run_crud_e2e("samples/simple_lunch.txt", events)
+        result, mocks = _run_crud_e2e("samples/crud/simple_lunch.txt", events)
 
         # Verify extraction and sync.
         assert len(result.events_extracted) == 1
@@ -233,7 +233,7 @@ class TestCRUDFlows:
         ]
 
         result, mocks = _run_crud_e2e(
-            "samples/update_meeting.txt",
+            "samples/crud/update_meeting.txt",
             events,
             calendar_context=cal_ctx,
         )
@@ -274,7 +274,7 @@ class TestCRUDFlows:
         ]
 
         result, mocks = _run_crud_e2e(
-            "samples/cancel_event.txt",
+            "samples/crud/cancel_event.txt",
             events,
             owner="Carol",
             calendar_context=cal_ctx,
@@ -337,7 +337,7 @@ class TestCRUDFlows:
         ]
 
         result, mocks = _run_crud_e2e(
-            "samples/mixed_crud.txt",
+            "samples/crud/mixed_crud.txt",
             events,
             calendar_context=cal_ctx,
         )
@@ -389,7 +389,7 @@ class TestCRUDFlows:
         ]
 
         result, mocks = _run_crud_e2e(
-            "samples/update_meeting.txt",
+            "samples/crud/update_meeting.txt",
             events,
             calendar_context=cal_ctx,
             update_event_side_effect=CalendarNotFoundError("Event not found"),
@@ -433,7 +433,7 @@ class TestCRUDFlows:
         ]
 
         result, mocks = _run_crud_e2e(
-            "samples/cancel_event.txt",
+            "samples/crud/cancel_event.txt",
             events,
             owner="Carol",
             calendar_context=cal_ctx,
@@ -463,7 +463,7 @@ class TestCRUDFlows:
         ]
 
         result, mocks = _run_crud_e2e(
-            "samples/update_meeting.txt",
+            "samples/crud/update_meeting.txt",
             events,
             context_side_effect=RuntimeError("No credentials available"),
         )
@@ -497,7 +497,7 @@ class TestCRUDFlows:
         ]
 
         result, mocks = _run_crud_e2e(
-            "samples/update_meeting.txt",
+            "samples/crud/update_meeting.txt",
             events,
         )
 

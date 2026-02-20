@@ -1,0 +1,252 @@
+{
+  "description": "100+ line planning session with 11 distinct events spread across a full work week. Tests extraction of many events from a lengthy conversation.",
+  "category": "long",
+  "tolerance": "relaxed",
+  "owner": "Alice",
+  "reference_datetime": "2026-02-20T10:00:00",
+  "calendar_context": [],
+  "expected_events": [
+    {
+      "action": "create",
+      "title": "Team Breakfast",
+      "start_time": "2026-02-23T08:00:00",
+      "end_time": "2026-02-23T09:00:00"
+    },
+    {
+      "action": "create",
+      "title": "One-on-One with Bob",
+      "start_time": "2026-02-23T09:00:00",
+      "end_time": "2026-02-23T10:00:00",
+      "attendees_contain": [
+        "Alice",
+        "Bob"
+      ]
+    },
+    {
+      "action": "create",
+      "title": "One-on-One with Carol",
+      "start_time": "2026-02-23T10:00:00",
+      "end_time": "2026-02-23T11:00:00",
+      "attendees_contain": [
+        "Alice",
+        "Carol"
+      ]
+    },
+    {
+      "action": "create",
+      "title": "Sprint Planning",
+      "start_time": "2026-02-23T14:00:00",
+      "end_time": "2026-02-23T15:30:00",
+      "attendees_contain": [
+        "Alice",
+        "Bob",
+        "Carol"
+      ]
+    },
+    {
+      "action": "create",
+      "title": "Client Sync",
+      "start_time": "2026-02-24T11:00:00",
+      "end_time": "2026-02-24T12:00:00",
+      "attendees_contain": [
+        "Bob",
+        "Carol"
+      ]
+    },
+    {
+      "action": "create",
+      "title": "All-Hands Meeting",
+      "start_time": "2026-02-25T10:00:00",
+      "end_time": "2026-02-25T11:30:00"
+    },
+    {
+      "action": "create",
+      "title": "Board Presentation Prep",
+      "start_time": "2026-02-25T11:30:00",
+      "end_time": "2026-02-25T13:00:00",
+      "attendees_contain": [
+        "Alice",
+        "Bob"
+      ]
+    },
+    {
+      "action": "create",
+      "title": "Design Critique",
+      "start_time": "2026-02-25T15:00:00",
+      "end_time": "2026-02-25T16:00:00",
+      "attendees_contain": [
+        "Carol"
+      ]
+    },
+    {
+      "action": "create",
+      "title": "Board Presentation",
+      "start_time": "2026-02-26T09:00:00",
+      "end_time": "2026-02-26T11:00:00",
+      "attendees_contain": [
+        "Alice",
+        "Bob"
+      ]
+    },
+    {
+      "action": "create",
+      "title": "Sprint Retro",
+      "start_time": "2026-02-26T14:00:00",
+      "end_time": "2026-02-26T15:00:00",
+      "attendees_contain": [
+        "Alice",
+        "Bob",
+        "Carol"
+      ]
+    },
+    {
+      "action": "create",
+      "title": "Demo Run-Through",
+      "start_time": "2026-02-27T13:00:00",
+      "end_time": "2026-02-27T15:00:00",
+      "attendees_contain": [
+        "Alice",
+        "Bob",
+        "Carol"
+      ]
+    }
+  ],
+  "mock_llm_response": {
+    "events": [
+      {
+        "title": "Team Breakfast",
+        "start_time": "2026-02-23T08:00:00",
+        "end_time": "2026-02-23T09:00:00",
+        "location": "Cafeteria",
+        "attendees": "Alice, Bob, Carol",
+        "confidence": "medium",
+        "reasoning": "Alice mentions an optional team breakfast on Monday at 8 AM in the cafeteria. Bob and Carol both agree to attend.",
+        "assumptions": "Duration assumed 1 hour",
+        "action": "create",
+        "existing_event_id": null
+      },
+      {
+        "title": "1-on-1 with Bob",
+        "start_time": "2026-02-23T09:00:00",
+        "end_time": "2026-02-23T10:00:00",
+        "location": "Alice's Office",
+        "attendees": "Alice, Bob",
+        "confidence": "high",
+        "reasoning": "Alice schedules a one-on-one with Bob for Monday at 9 AM in her office.",
+        "assumptions": "Duration assumed 1 hour",
+        "action": "create",
+        "existing_event_id": null
+      },
+      {
+        "title": "1-on-1 with Carol",
+        "start_time": "2026-02-23T10:00:00",
+        "end_time": "2026-02-23T11:00:00",
+        "location": "Alice's Office",
+        "attendees": "Alice, Carol",
+        "confidence": "high",
+        "reasoning": "Alice schedules a one-on-one with Carol for Monday at 10 AM right after Bob's session.",
+        "assumptions": "Duration assumed 1 hour",
+        "action": "create",
+        "existing_event_id": null
+      },
+      {
+        "title": "Sprint Planning",
+        "start_time": "2026-02-23T14:00:00",
+        "end_time": "2026-02-23T15:30:00",
+        "location": "Team Room",
+        "attendees": "Alice, Bob, Carol",
+        "confidence": "high",
+        "reasoning": "Regular sprint planning on Monday at 2 PM, shortened to 90 minutes (2-3:30) due to Carol's 3:30 conflict.",
+        "assumptions": "",
+        "action": "create",
+        "existing_event_id": null
+      },
+      {
+        "title": "Client Sync with Acme Team",
+        "start_time": "2026-02-24T11:00:00",
+        "end_time": "2026-02-24T12:00:00",
+        "location": "Room 302",
+        "attendees": "Alice, Bob, Carol",
+        "confidence": "high",
+        "reasoning": "Video call with the Acme team on Tuesday at 11 AM. Bob leads, Carol joins for design feedback.",
+        "assumptions": "",
+        "action": "create",
+        "existing_event_id": null
+      },
+      {
+        "title": "Company All-Hands",
+        "start_time": "2026-02-25T10:00:00",
+        "end_time": "2026-02-25T11:30:00",
+        "location": "Auditorium",
+        "attendees": "Alice, Bob, Carol",
+        "confidence": "high",
+        "reasoning": "Company all-hands meeting on Wednesday from 10 to 11:30 AM in the auditorium.",
+        "assumptions": "",
+        "action": "create",
+        "existing_event_id": null
+      },
+      {
+        "title": "Board Presentation Prep",
+        "start_time": "2026-02-25T11:30:00",
+        "end_time": "2026-02-25T13:00:00",
+        "location": "Alice's Office",
+        "attendees": "Alice, Bob",
+        "confidence": "high",
+        "reasoning": "Alice and Bob plan to prep for the board presentation right after the all-hands, from 11:30 to 1 PM with lunch.",
+        "assumptions": "",
+        "action": "create",
+        "existing_event_id": null
+      },
+      {
+        "title": "Design Critique Session",
+        "start_time": "2026-02-25T15:00:00",
+        "end_time": "2026-02-25T16:00:00",
+        "location": "Design Lab",
+        "attendees": "Carol, UX Team",
+        "confidence": "high",
+        "reasoning": "Carol runs a design critique session on Wednesday at 3 PM in the design lab with the UX team.",
+        "assumptions": "Duration assumed 1 hour",
+        "action": "create",
+        "existing_event_id": null
+      },
+      {
+        "title": "Board Presentation",
+        "start_time": "2026-02-26T09:00:00",
+        "end_time": "2026-02-26T11:00:00",
+        "location": "Boardroom, 5th Floor",
+        "attendees": "Alice, Bob",
+        "confidence": "high",
+        "reasoning": "Board presentation on Thursday at 9 AM until about 11 AM in the boardroom on the 5th floor.",
+        "assumptions": "",
+        "action": "create",
+        "existing_event_id": null
+      },
+      {
+        "title": "Sprint Retro",
+        "start_time": "2026-02-26T14:00:00",
+        "end_time": "2026-02-26T15:00:00",
+        "location": "Team Room",
+        "attendees": "Alice, Bob, Carol",
+        "confidence": "high",
+        "reasoning": "Sprint retrospective on Thursday at 2 PM in the team room for 1 hour.",
+        "assumptions": "",
+        "action": "create",
+        "existing_event_id": null
+      },
+      {
+        "title": "Demo Run-Through",
+        "start_time": "2026-02-27T13:00:00",
+        "end_time": "2026-02-27T15:00:00",
+        "location": "Demo Room, 3rd Floor",
+        "attendees": "Alice, Bob, Carol",
+        "confidence": "high",
+        "reasoning": "Demo run-through on Friday at 1 PM for 2 hours in the demo room on the 3rd floor. All three need to attend.",
+        "assumptions": "",
+        "action": "create",
+        "existing_event_id": null
+      }
+    ],
+    "summary": "Found 11 events across the full work week: Monday (breakfast, 2 one-on-ones, sprint planning), Tuesday (client sync), Wednesday (all-hands, board prep, design critique), Thursday (board presentation, retro), Friday (demo run-through)."
+  },
+  "notes": "Reference datetime is Friday 2026-02-20, so Monday is 2026-02-23 through Friday 2026-02-27. 100+ lines with 11 events. Budget review (just Alice) and code pairing (Bob/Carol) and intern KT (Bob) are intentionally omitted from some expected counts to keep relaxed tolerance manageable. The mock includes the primary 11 events."
+}

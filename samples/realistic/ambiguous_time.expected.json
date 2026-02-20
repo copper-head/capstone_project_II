@@ -1,0 +1,35 @@
+{
+  "description": "Alice and Bob discuss a product roadmap planning session 'sometime next week' with vague time references. Tests low-confidence extraction with assumptions.",
+  "category": "realistic",
+  "tolerance": "relaxed",
+  "owner": "Alice",
+  "reference_datetime": "2026-02-20T10:00:00",
+  "calendar_context": [],
+  "expected_events": [
+    {
+      "action": "create",
+      "title": "Product Roadmap Planning",
+      "start_time": "2026-02-26T14:00:00",
+      "end_time": "2026-02-26T16:00:00",
+      "attendees_contain": ["Alice", "Bob"]
+    }
+  ],
+  "mock_llm_response": {
+    "events": [
+      {
+        "title": "Product Roadmap Planning",
+        "start_time": "2026-02-26T14:00:00",
+        "end_time": "2026-02-26T16:00:00",
+        "location": null,
+        "attendees": "Alice, Bob",
+        "confidence": "low",
+        "reasoning": "Alice and Bob agree to meet 'next week' to plan the product roadmap. They narrow it down to Thursday or Friday afternoon but do not commit to a specific time. Bob mentions they will need 'a couple of hours at least.'",
+        "assumptions": "Assumed Thursday afternoon based on 'Thursday or Friday' preference, Assumed 2-hour duration based on 'couple of hours' mention, Assumed 2 PM start as a reasonable afternoon slot",
+        "action": "create",
+        "existing_event_id": null
+      }
+    ],
+    "summary": "Found 1 tentative event: product roadmap planning next week (time is vague)."
+  },
+  "notes": "Reference datetime is Friday 2026-02-20. 'Next week' = week of Feb 23. 'Thursday or Friday afternoon' narrows to Feb 26-27. Tolerance is relaxed because the time is very imprecise - the speakers never commit to a specific day or time."
+}

@@ -41,16 +41,16 @@ Place your Google OAuth `credentials.json` in the project root. On first run, a 
 
 ```bash
 # Run on a transcript
-python -m cal_ai samples/simple_lunch.txt
+python -m cal_ai samples/crud/simple_lunch.txt
 
 # Dry run (extract events without syncing to calendar)
-python -m cal_ai samples/mixed_crud.txt --dry-run
+python -m cal_ai samples/crud/mixed_crud.txt --dry-run
 
 # Verbose logging (shows AI reasoning, API calls)
-python -m cal_ai samples/clear_schedule.txt -v
+python -m cal_ai samples/crud/clear_schedule.txt -v
 
 # Override the calendar owner name
-python -m cal_ai samples/multiple_events.txt --owner "Alice"
+python -m cal_ai samples/multi_speaker/multiple_events.txt --owner "Alice"
 ```
 
 ### Docker
@@ -60,10 +60,10 @@ docker compose build
 docker compose up
 ```
 
-The default entrypoint runs `samples/simple_lunch.txt`. Mount a different transcript:
+The default entrypoint runs `samples/crud/simple_lunch.txt`. Mount a different transcript:
 
 ```bash
-docker compose run cal-ai samples/mixed_crud.txt
+docker compose run cal-ai samples/crud/mixed_crud.txt
 ```
 
 ## How It Works
@@ -84,22 +84,20 @@ The prompt includes:
 
 ### Sample Transcripts
 
-| File | Scenario |
-|---|---|
-| `simple_lunch.txt` | Basic lunch event between two people |
-| `multiple_events.txt` | Several events in one conversation |
-| `ambiguous_time.txt` | Vague time references the AI must resolve |
-| `cancellation.txt` | Event cancellation |
-| `update_meeting.txt` | Rescheduling an existing meeting |
-| `cancel_event.txt` | Cancelling an existing event |
-| `mixed_crud.txt` | Create + update + delete in one conversation |
-| `clear_schedule.txt` | Bulk delete — clear all events for 3 days |
-| `no_events.txt` | Conversation with no calendar-relevant content |
+40 sample transcripts organized by category under `samples/`, each paired with a `.expected.json` sidecar for regression testing:
+
+| Category | Count | Examples |
+|---|---|---|
+| `crud/` | 14 | `simple_lunch` (basic create), `update_meeting` (reschedule), `cancel_event` (single delete), `mixed_crud` (create+update+delete), `clear_schedule` (bulk delete), `conflicting_instructions` (last-statement-wins), `partial_update`, `bulk_delete` |
+| `multi_speaker/` | 7 | `complex` (4 speakers), `five_speakers_crosstalk` (5 speakers, cross-talk), `multiple_pairs_events` (4 pairs plan separately), `speakers_disagree` (conflict resolution), `side_conversation` |
+| `adversarial/` | 7 | `no_events` (no calendar content), `sarcasm` (absurd suggestions), `negation` (all events declined), `hypothetical` (no concrete plans), `past_tense` (already happened), `vague_reference` |
+| `realistic/` | 7 | `ambiguous_time` (vague times), `typos_informal` (heavy typos), `slang_abbreviations` (internet slang), `interruptions` (incomplete sentences), `filler_tangents` (off-topic noise), `callback_rescheduling` |
+| `long/` | 5 | `long_meeting_notes` (80+ lines, 3 events), `long_many_events` (100+ lines, 11 events), `long_circular_planning` (plans change mid-conversation), `long_noise_few_events` (mostly small talk) |
 
 ## Development
 
 ```bash
-# Run tests (313 tests, 92% coverage)
+# Run all tests including regression suite (mock mode)
 make test
 
 # Lint
@@ -111,6 +109,25 @@ make format
 # Coverage report
 make test-cov
 ```
+
+### Regression Testing
+
+The regression test suite validates the AI extraction pipeline against all 40 sample transcripts. Each sample has a `.expected.json` sidecar that defines expected events, tolerance level, and a mock LLM response.
+
+**Mock mode** (default) patches the Gemini API with pre-recorded responses for fast, deterministic testing:
+
+```bash
+make test-regression              # Run regression suite (mock mode)
+pytest tests/regression/ -k crud  # Run only CRUD category
+```
+
+**Live mode** calls the real Gemini API (requires `GEMINI_API_KEY`):
+
+```bash
+make test-regression-live         # Run regression suite (live mode)
+```
+
+Tolerance levels per sample: **strict** (exact match), **moderate** (fuzzy titles, +/-2hr times), **relaxed** (broad matching, +/-1day times).
 
 ### Project Structure
 
@@ -146,7 +163,7 @@ src/cal_ai/
 | Auth | OAuth 2.0 (Desktop app flow) |
 | Models | Pydantic v2 |
 | Container | Docker |
-| Testing | pytest (313 tests, 92% coverage) |
+| Testing | pytest (386+ tests, 92% coverage) |
 | Linting | ruff |
 
 ## License

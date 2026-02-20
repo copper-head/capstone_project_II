@@ -1,0 +1,103 @@
+[Alice]: Morning everyone! How was the weekend?
+
+[Bob]: Pretty good. Took the kids to the zoo on Saturday.
+
+[Carol]: Oh nice! Which zoo?
+
+[Bob]: The one out by the lake. They have a new penguin exhibit.
+
+[Carol]: I heard about that! Were the penguins cute?
+
+[Bob]: Adorable. My daughter didn't want to leave.
+
+[Alice]: That sounds lovely. I spent most of the weekend catching up on that new show everyone's been talking about.
+
+[Carol]: The mystery one on Netflix?
+
+[Alice]: Yeah! It's so good. I binged like 6 episodes.
+
+[Bob]: No spoilers! I'm only on episode 2.
+
+[Alice]: My lips are sealed. Carol, have you seen it?
+
+[Carol]: Not yet, but it's on my list. I was mostly doing yard work this weekend. Spring cleaning came early.
+
+[Bob]: Already? It's still February!
+
+[Carol]: I know, but the garage was a disaster. Found stuff in there from like 2019.
+
+[Alice]: Ha! I should do that too. My closets are out of control.
+
+[Bob]: Same here. Oh hey, did anyone try that new Thai place on Oak Street?
+
+[Carol]: Yes! We went Friday night. The pad Thai is amazing.
+
+[Alice]: Good to know. I've been looking for a good Thai spot since Bamboo Garden closed.
+
+[Bob]: Rest in peace, Bamboo Garden. Best green curry in town.
+
+[Carol]: Their drunken noodles were my favorite.
+
+[Alice]: Okay well, should we talk about work stuff at some point?
+
+[Bob]: Probably a good idea. What's on the agenda?
+
+[Alice]: Not much honestly. Things are pretty quiet this week. I do need someone to review the Q1 numbers though.
+
+[Carol]: I can take a look. When do you need it by?
+
+[Alice]: No rush. End of the week is fine.
+
+[Bob]: What about the Henderson account? Any updates there?
+
+[Alice]: Nothing new. They're still reviewing our proposal. Said they'd get back to us by end of month.
+
+[Bob]: Fingers crossed. That would be a big win.
+
+[Carol]: Huge. What about the office renovation? Any timeline on that?
+
+[Alice]: Last I heard, they're starting the third floor next month. We shouldn't be affected.
+
+[Bob]: Good. I was worried they'd relocate us to that trailer in the parking lot again.
+
+[Carol]: Oh god, that was terrible. Remember the AC broke?
+
+[Bob]: In July! The hottest week of the year.
+
+[Alice]: Don't remind me. Okay, one actual agenda item. We need to schedule the client demo. I'm thinking next Friday at 11 AM. Does that work for everyone?
+
+[Bob]: Friday at 11... let me check... yeah, I'm free.
+
+[Carol]: Works for me too.
+
+[Alice]: Great. We'll do it in the big conference room. The one with the projector that actually works.
+
+[Bob]: Novel concept, a working projector.
+
+[Carol]: Should we invite Dave from engineering?
+
+[Alice]: Good idea. I'll send him an invite.
+
+[Bob]: Cool. Anything else?
+
+[Alice]: Nope, that's the only real item. The rest is just status quo.
+
+[Carol]: Works for me. Short meeting for once!
+
+[Bob]: My favorite kind. Alright, back to the grind.
+
+[Alice]: Oh wait, one more thing. The building management sent an email about parking changes. Did you guys see it?
+
+[Bob]: No, what's happening?
+
+[Alice]: They're repaving section C starting next week. We'll need to park in section D temporarily.
+
+[Carol]: Ugh. Section D is so far.
+
+[Bob]: At least it's not raining season yet. Oh wait, it is.
+
+[Alice]: Bring an umbrella I guess. Okay, that's really it. Have a good day everyone!
+
+[Bob]: You too! Later.
+
+[Carol]: Bye!

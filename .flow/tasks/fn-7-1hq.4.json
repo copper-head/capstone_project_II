@@ -1,0 +1,17 @@
+{
+  "assignee": null,
+  "claim_note": "",
+  "claimed_at": null,
+  "created_at": "2026-02-20T08:31:31.105606Z",
+  "depends_on": [
+    "fn-7-1hq.1",
+    "fn-7-1hq.2"
+  ],
+  "epic": "fn-7-1hq",
+  "id": "fn-7-1hq.4",
+  "priority": null,
+  "spec_path": ".flow/tasks/fn-7-1hq.4.md",
+  "status": "todo",
+  "title": "Write CRUD and Multi-Speaker category samples with sidecars",
+  "updated_at": "2026-02-20T08:32:57.053743Z"
+}

@@ -1,0 +1,107 @@
+[Alice]: Okay team, we need to schedule the offsite planning workshop. Let's figure out when works.
+
+[Bob]: How about Monday at 10 AM?
+
+[Carol]: Monday doesn't work for me. I have a dentist appointment in the morning.
+
+[Alice]: What about Monday afternoon then? Like 2 PM?
+
+[Bob]: I actually have a conflict at 2 on Monday. Client call.
+
+[Carol]: Tuesday morning?
+
+[Alice]: Tuesday could work. 9 AM?
+
+[Bob]: 9 is early. Can we do 10?
+
+[Carol]: 10 works.
+
+[Alice]: Wait, actually, Tuesday at 10 conflicts with the weekly standup.
+
+[Bob]: Oh right. We could move the standup?
+
+[Carol]: Or push the workshop to 11?
+
+[Alice]: Let's try 11. Bob, does 11 work?
+
+[Bob]: Actually, I have lunch with a vendor at noon on Tuesday. If the workshop runs long I'll have to leave early.
+
+[Alice]: Hmm. How long do we need? I was thinking 3 hours.
+
+[Bob]: 3 hours from 11 puts us at 2 PM. I'd have to leave at 11:45 latest.
+
+[Carol]: That's barely 45 minutes. Not enough.
+
+[Alice]: Okay, Tuesday doesn't work either. Wednesday?
+
+[Bob]: I'm wide open on Wednesday.
+
+[Carol]: Me too, actually. Wednesday is my lightest day.
+
+[Alice]: Perfect. Wednesday morning at 9?
+
+[Bob]: 9 works.
+
+[Carol]: Wait, actually, I just remembered. The facilities team is doing fire drill practice on Wednesday morning.
+
+[Alice]: Seriously? When?
+
+[Carol]: 9 to 10 apparently. Building-wide thing.
+
+[Alice]: Okay so Wednesday at 10 then.
+
+[Bob]: 10 works.
+
+[Carol]: 10 works for me too.
+
+[Alice]: 3-hour block, so 10 AM to 1 PM. Where should we do it?
+
+[Bob]: Not the usual conference room. It's too small for a 3-hour workshop.
+
+[Carol]: What about the innovation lab? It has whiteboards and that big table.
+
+[Alice]: Good idea. Let me check if it's available... yes, it's free.
+
+[Bob]: Actually, wait. Can we reconsider Thursday instead? I just realized I need to finish the quarterly report by Wednesday evening and a 3-hour workshop in the middle of the day will really cut into my time.
+
+[Alice]: Bob, we literally just spent 10 minutes finding a time that works.
+
+[Bob]: I know, I'm sorry. But the report is for the VP and I really can't be behind on it.
+
+[Carol]: What if we do the workshop Thursday at 10 instead? Same time, one day later.
+
+[Alice]: Bob, would Thursday at 10 work better?
+
+[Bob]: Thursday at 10 is perfect. I'll have the report done by then.
+
+[Alice]: Carol?
+
+[Carol]: Thursday at 10 works for me. Innovation lab still?
+
+[Alice]: Let me check... yes, available Thursday too.
+
+[Bob]: Sorry for the runaround.
+
+[Alice]: It's fine. So final answer: Thursday, 10 AM to 1 PM, innovation lab.
+
+[Carol]: Should we invite Dave? He usually has good input on these things.
+
+[Alice]: Good idea. I'll add him to the invite.
+
+[Bob]: What about Eve from product?
+
+[Alice]: She's on vacation this week. We'll catch her up after.
+
+[Carol]: Makes sense. Anything we should prep beforehand?
+
+[Alice]: I'll send out an agenda by Tuesday end of day. Just come with ideas for Q2 priorities.
+
+[Bob]: Got it.
+
+[Carol]: Sounds good. Thursday at 10, innovation lab, 3 hours. Final answer.
+
+[Alice]: Final answer. Now can we please stop rescheduling?
+
+[Bob]: Deal.
+
+[Carol]: Ha! Deal.

@@ -180,7 +180,7 @@ class TestEndToEnd:
             ),
         ]
 
-        result, mocks = _run_e2e("samples/simple_lunch.txt", events)
+        result, mocks = _run_e2e("samples/crud/simple_lunch.txt", events)
 
         assert result.utterance_count > 0
         assert len(result.speakers_found) >= 2
@@ -221,7 +221,7 @@ class TestEndToEnd:
             ),
         ]
 
-        result, mocks = _run_e2e("samples/multiple_events.txt", events)
+        result, mocks = _run_e2e("samples/multi_speaker/multiple_events.txt", events)
 
         assert result.utterance_count > 0
         assert len(result.events_extracted) == 3
@@ -242,7 +242,7 @@ class TestEndToEnd:
             ),
         ]
 
-        result, mocks = _run_e2e("samples/cancellation.txt", events)
+        result, mocks = _run_e2e("samples/crud/cancellation.txt", events)
 
         assert len(result.events_extracted) == 1
         assert result.events_extracted[0].action == "delete"
@@ -271,7 +271,7 @@ class TestEndToEnd:
             ),
         ]
 
-        result, _ = _run_e2e("samples/ambiguous_time.txt", events)
+        result, _ = _run_e2e("samples/realistic/ambiguous_time.txt", events)
 
         assert len(result.events_extracted) == 1
         extracted = result.events_extracted[0]
@@ -284,7 +284,7 @@ class TestEndToEnd:
 
     def test_e2e_no_events(self) -> None:
         """Full pipeline on no_events.txt: 0 events, 'No calendar events detected'."""
-        result, mocks = _run_e2e("samples/no_events.txt", [])
+        result, mocks = _run_e2e("samples/adversarial/no_events.txt", [])
 
         assert result.utterance_count > 0
         assert len(result.events_extracted) == 0
@@ -337,7 +337,7 @@ class TestEndToEnd:
             ),
         ]
 
-        result, mocks = _run_e2e("samples/complex.txt", events)
+        result, mocks = _run_e2e("samples/multi_speaker/complex.txt", events)
 
         assert len(result.speakers_found) >= 3
         assert len(result.events_extracted) == 4
@@ -376,7 +376,7 @@ class TestEndToEnd:
 
         # Second create call raises, first and third succeed.
         result, _ = _run_e2e(
-            "samples/simple_lunch.txt",
+            "samples/crud/simple_lunch.txt",
             events,
             create_side_effect=[
                 {"id": "evt-1"},
@@ -393,7 +393,7 @@ class TestEndToEnd:
     def test_e2e_llm_failure_graceful_exit(self) -> None:
         """LLM service down: 0 events, error message, pipeline does not crash."""
         result, mocks = _run_e2e(
-            "samples/simple_lunch.txt",
+            "samples/crud/simple_lunch.txt",
             [],  # won't matter -- extract_events will raise
             extract_side_effect=ExtractionError("Gemini API 503: Service Unavailable"),
         )
@@ -423,7 +423,7 @@ class TestEndToEnd:
             ),
         ]
 
-        result, _ = _run_e2e("samples/simple_lunch.txt", events)
+        result, _ = _run_e2e("samples/crud/simple_lunch.txt", events)
 
         output = format_pipeline_result(result)
 

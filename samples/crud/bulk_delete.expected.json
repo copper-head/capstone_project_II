@@ -1,0 +1,99 @@
+{
+  "description": "Cancel three events on Friday (bulk delete). Tests bulk delete with calendar context matching.",
+  "category": "crud",
+  "tolerance": "strict",
+  "owner": "Alice",
+  "reference_datetime": "2026-02-18T10:00:00",
+  "calendar_context": [
+    {
+      "id": "gcal-evt-aaa111",
+      "summary": "Client Presentation",
+      "start": "2026-02-20T10:00:00",
+      "end": "2026-02-20T11:30:00",
+      "location": "Board Room A"
+    },
+    {
+      "id": "gcal-evt-bbb222",
+      "summary": "Working Lunch with Client",
+      "start": "2026-02-20T12:00:00",
+      "end": "2026-02-20T13:00:00",
+      "location": "Executive Dining Room"
+    },
+    {
+      "id": "gcal-evt-ccc333",
+      "summary": "Client Debrief",
+      "start": "2026-02-20T15:00:00",
+      "end": "2026-02-20T16:00:00",
+      "location": "Conference Room B"
+    },
+    {
+      "id": "gcal-evt-ddd444",
+      "summary": "Weekly Team Standup",
+      "start": "2026-02-19T09:00:00",
+      "end": "2026-02-19T09:30:00",
+      "location": null
+    }
+  ],
+  "expected_events": [
+    {
+      "action": "delete",
+      "title": "Client Presentation",
+      "start_time": "2026-02-20T10:00:00",
+      "existing_event_id_required": true
+    },
+    {
+      "action": "delete",
+      "title": "Working Lunch with Client",
+      "start_time": "2026-02-20T12:00:00",
+      "existing_event_id_required": true
+    },
+    {
+      "action": "delete",
+      "title": "Client Debrief",
+      "start_time": "2026-02-20T15:00:00",
+      "existing_event_id_required": true
+    }
+  ],
+  "mock_llm_response": {
+    "events": [
+      {
+        "title": "Client Presentation",
+        "start_time": "2026-02-20T10:00:00",
+        "end_time": "2026-02-20T11:30:00",
+        "location": "Board Room A",
+        "attendees": "Alice, Bob",
+        "confidence": "high",
+        "reasoning": "Alice explicitly asked to cancel the client presentation at 10 AM on Friday. Matches calendar event [1].",
+        "assumptions": "",
+        "action": "delete",
+        "existing_event_id": 1
+      },
+      {
+        "title": "Working Lunch with Client",
+        "start_time": "2026-02-20T12:00:00",
+        "end_time": "2026-02-20T13:00:00",
+        "location": "Executive Dining Room",
+        "attendees": "Alice, Bob",
+        "confidence": "high",
+        "reasoning": "Alice asked to cancel the working lunch at noon on Friday. Matches calendar event [2].",
+        "assumptions": "",
+        "action": "delete",
+        "existing_event_id": 2
+      },
+      {
+        "title": "Client Debrief",
+        "start_time": "2026-02-20T15:00:00",
+        "end_time": "2026-02-20T16:00:00",
+        "location": "Conference Room B",
+        "attendees": "Alice, Bob",
+        "confidence": "high",
+        "reasoning": "Alice asked to cancel the follow-up debrief at 3 PM on Friday. Matches calendar event [3].",
+        "assumptions": "",
+        "action": "delete",
+        "existing_event_id": 3
+      }
+    ],
+    "summary": "Cancelled 3 Friday events: client presentation, working lunch, and debrief."
+  },
+  "notes": "Reference datetime is Wednesday 2026-02-18, so 'Friday' resolves to 2026-02-20. Event [4] (Thursday standup) should NOT be deleted."
+}

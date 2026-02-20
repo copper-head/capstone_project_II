@@ -1,0 +1,21 @@
+[Alice]: Hey Carol, I need to schedule a call with the London team. Can you make it?
+
+[Carol]: Sure, when are you thinking?
+
+[Alice]: They suggested 3 PM their time, which would be... let me think... 10 AM for us.
+
+[Carol]: Tuesday?
+
+[Alice]: Yeah, Tuesday works. It's going to be a video call so make sure your camera works this time.
+
+[Carol]: Ha, that was ONE time. Okay, 10 AM our time Tuesday. Got it.
+
+[Alice]: Also, Dave from the Tokyo office wants to do a quick sync. He said 9 AM his time on Wednesday, so that'd be like... 7 PM our time? Is that too late?
+
+[Carol]: 7 PM is a bit rough but I can make it work. It's just 30 minutes right?
+
+[Alice]: Yeah, should be quick. He just wants to go over the API changes.
+
+[Carol]: Fine. So Tuesday at 10 with London, Wednesday at 7 PM with Tokyo. I'll put them both on my calendar.
+
+[Alice]: Perfect. Thanks Carol!

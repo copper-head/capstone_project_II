@@ -1,0 +1,13 @@
+[Alice]: Hey Bob, I just got word that the client visit on Friday is cancelled.
+
+[Bob]: Oh really? So what does that mean for our schedule?
+
+[Alice]: Basically we need to clear everything on Friday. Cancel the client presentation at 10 AM, the working lunch at noon, and the follow-up debrief at 3 PM.
+
+[Bob]: All three? That's our entire Friday gone.
+
+[Alice]: Yep, all three. The client rescheduled to next month so there's no point keeping any of it.
+
+[Bob]: Alright, I'll wipe them from the calendar. At least we get a free Friday.
+
+[Alice]: Silver lining, right?

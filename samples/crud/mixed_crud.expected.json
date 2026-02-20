@@ -1,0 +1,96 @@
+{
+  "description": "Alice announces three scheduling changes: create a design review, update sprint planning time, and cancel the retrospective. Tests mixed create+update+delete in one conversation.",
+  "category": "crud",
+  "tolerance": "moderate",
+  "owner": "Alice",
+  "reference_datetime": "2026-02-18T10:00:00",
+  "calendar_context": [
+    {
+      "id": "gcal-evt-sprint-001",
+      "summary": "Sprint Planning",
+      "start": "2026-02-19T09:00:00",
+      "end": "2026-02-19T10:00:00",
+      "location": null
+    },
+    {
+      "id": "gcal-evt-retro-002",
+      "summary": "Retrospective",
+      "start": "2026-02-20T15:00:00",
+      "end": "2026-02-20T16:00:00",
+      "location": null
+    }
+  ],
+  "expected_events": [
+    {
+      "action": "create",
+      "title": "Design Review",
+      "start_time": "2026-02-18T14:00:00",
+      "end_time": "2026-02-18T15:00:00",
+      "location": "design lab",
+      "attendees_contain": [
+        "Alice",
+        "Bob",
+        "Carol"
+      ]
+    },
+    {
+      "action": "update",
+      "title": "Sprint Planning",
+      "start_time": "2026-02-20T10:00:00",
+      "end_time": "2026-02-20T11:00:00",
+      "existing_event_id_required": true,
+      "attendees_contain": [
+        "Alice",
+        "Bob"
+      ]
+    },
+    {
+      "action": "delete",
+      "title": "Retrospective",
+      "start_time": "2026-02-20T15:00:00",
+      "existing_event_id_required": true
+    }
+  ],
+  "mock_llm_response": {
+    "events": [
+      {
+        "title": "Design Review",
+        "start_time": "2026-02-18T14:00:00",
+        "end_time": "2026-02-18T15:00:00",
+        "location": "Design lab",
+        "attendees": "Alice, Bob, Carol",
+        "confidence": "high",
+        "reasoning": "Alice sets up a new design review on Wednesday at 2 PM in the design lab. Bob and Carol both confirm the time works.",
+        "assumptions": "Assumed 1-hour duration as no end time was specified",
+        "action": "create",
+        "existing_event_id": null
+      },
+      {
+        "title": "Sprint Planning",
+        "start_time": "2026-02-20T10:00:00",
+        "end_time": "2026-02-20T11:00:00",
+        "location": null,
+        "attendees": "Alice, Bob, Carol",
+        "confidence": "high",
+        "reasoning": "Alice moves sprint planning from Thursday at 9 AM to Friday at 10 AM because the product team needs more time. Bob confirms. Matches calendar event [1].",
+        "assumptions": "Duration kept the same as original (1 hour)",
+        "action": "update",
+        "existing_event_id": 1
+      },
+      {
+        "title": "Retrospective",
+        "start_time": "2026-02-20T15:00:00",
+        "end_time": "2026-02-20T16:00:00",
+        "location": null,
+        "attendees": "Alice, Bob, Carol",
+        "confidence": "high",
+        "reasoning": "Alice cancels the retrospective on Friday at 3 PM, saying it will be rolled into next week's session. Carol confirms. Matches calendar event [2].",
+        "assumptions": "",
+        "action": "delete",
+        "existing_event_id": 2
+      }
+    ],
+    "summary": "Three scheduling changes: new design review Wednesday at 2 PM, sprint planning moved to Friday at 10 AM, and Friday retrospective cancelled."
+  },
+  "notes": "Reference datetime is Wednesday 2026-02-18. 'Wednesday at 2 PM' = today Feb 18 at 14:00. Sprint planning moves from Thursday (Feb 19) to Friday (Feb 20) at 10 AM. Retrospective on Friday (Feb 20) at 3 PM is cancelled."
+}

@@ -1,0 +1,14 @@
+{
+  "assignee": null,
+  "claim_note": "",
+  "claimed_at": null,
+  "created_at": "2026-02-20T08:46:13.972318Z",
+  "depends_on": [],
+  "epic": "fn-8-vyv",
+  "id": "fn-8-vyv.1",
+  "priority": null,
+  "spec_path": ".flow/tasks/fn-8-vyv.1.md",
+  "status": "todo",
+  "title": "Surface token usage from GeminiClient and add CLI subcommand infrastructure",
+  "updated_at": "2026-02-20T08:47:45.414937Z"
+}

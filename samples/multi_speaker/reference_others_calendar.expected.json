@@ -1,0 +1,44 @@
+{
+  "description": "Speakers reference other people's personal appointments. Tests owner-perspective filtering: only events involving the owner (Alice) should be actionable.",
+  "category": "multi_speaker",
+  "tolerance": "moderate",
+  "owner": "Alice",
+  "reference_datetime": "2026-02-18T10:00:00",
+  "calendar_context": [
+    {
+      "id": "gcal-evt-sync-001",
+      "summary": "Weekly Team Sync",
+      "start": "2026-02-19T10:00:00",
+      "end": "2026-02-19T11:00:00",
+      "location": "Conference Room A"
+    }
+  ],
+  "expected_events": [
+    {
+      "action": "update",
+      "title": "Weekly Team Sync",
+      "start_time": "2026-02-19T13:00:00",
+      "end_time": "2026-02-19T14:00:00",
+      "existing_event_id_required": true,
+      "attendees_contain": ["Alice", "Bob"]
+    }
+  ],
+  "mock_llm_response": {
+    "events": [
+      {
+        "title": "Weekly Team Sync",
+        "start_time": "2026-02-19T13:00:00",
+        "end_time": "2026-02-19T14:00:00",
+        "location": "Conference Room A",
+        "attendees": "Alice, Bob, Carol",
+        "confidence": "high",
+        "reasoning": "Alice proposed moving the weekly sync from Thursday 10 AM to Thursday 1 PM so Carol can join after her doctor's visit. Matches calendar event [1].",
+        "assumptions": "Duration kept at 1 hour, location unchanged",
+        "action": "update",
+        "existing_event_id": 1
+      }
+    ],
+    "summary": "Moved weekly sync to Thursday 1 PM to accommodate Carol's schedule."
+  },
+  "notes": "Reference datetime is Wednesday 2026-02-18. Bob's dentist and Carol's doctor visit are references to OTHER people's calendars - they should NOT create events on Alice's calendar. Only the weekly sync update is actionable."
+}

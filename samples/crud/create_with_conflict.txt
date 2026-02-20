@@ -1,0 +1,11 @@
+[Alice]: Bob, I want to schedule a product demo for Wednesday at 2 PM. Can you make it?
+
+[Bob]: Wednesday at 2? That overlaps with the design review but I think the demo is more important. Let's book it.
+
+[Alice]: I know it conflicts but the client is only available at 2. We'll keep it to 45 minutes so I can at least catch the tail end of the design review.
+
+[Bob]: Sounds good. Where should we do the demo?
+
+[Alice]: Let's use the demo room on the 3rd floor. It has the big screen we need.
+
+[Bob]: Perfect. I'll be there at 2.

@@ -1,0 +1,11 @@
+[Alice]: Bob, let's reschedule the sprint planning from Thursday at 9 to Friday at 11.
+
+[Bob]: Sure, Friday at 11 works. I'll update my calendar.
+
+[Alice]: Actually wait, on second thought let's just cancel it entirely. We can fold it into Monday's standup.
+
+[Bob]: Okay, so forget the reschedule - we're just cancelling it?
+
+[Alice]: Yes, just cancel the Thursday sprint planning. We don't need it this week.
+
+[Bob]: Got it. Cancelled.

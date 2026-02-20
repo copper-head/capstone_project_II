@@ -1,0 +1,39 @@
+{
+  "description": "Heavy use of internet slang and abbreviations (lmk, ur, idk, b4, obvi, prolly, tbh, rn, ttyl). One mockup review meeting on Wednesday at 1 PM.",
+  "category": "realistic",
+  "tolerance": "moderate",
+  "owner": "Alice",
+  "reference_datetime": "2026-02-20T10:00:00",
+  "calendar_context": [],
+  "expected_events": [
+    {
+      "action": "create",
+      "title": "Mockup Review",
+      "start_time": "2026-02-25T13:00:00",
+      "end_time": "2026-02-25T15:00:00",
+      "location": "Design Lab",
+      "attendees_contain": [
+        "Alice",
+        "Carol"
+      ]
+    }
+  ],
+  "mock_llm_response": {
+    "events": [
+      {
+        "title": "Mockup Review",
+        "start_time": "2026-02-25T13:00:00",
+        "end_time": "2026-02-25T15:00:00",
+        "location": "Design Lab",
+        "attendees": "Alice, Carol",
+        "confidence": "high",
+        "reasoning": "Alice and Carol agree to meet Wednesday afternoon at 1 PM in the design lab to review mockups before a client call. Duration is approximately 2 hours.",
+        "assumptions": "",
+        "action": "create",
+        "existing_event_id": null
+      }
+    ],
+    "summary": "Found 1 event: mockup review Wednesday at 1 PM for 2 hours in the design lab."
+  },
+  "notes": "Reference datetime is Friday 2026-02-20, so 'wed' is 2026-02-25. Tests parsing through heavy slang: lmk, ur, idk, b4, obvi, prolly, tbh, rn, ttyl."
+}

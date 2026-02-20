@@ -1,0 +1,19 @@
+[Alice]: Let's schedule the team offsite for next Friday.
+
+[Bob]: Friday? I was thinking Thursday would be better.
+
+[Carol]: I agree with Bob, Thursday makes more sense since people leave early on Fridays.
+
+[Alice]: Hmm, but the venue is only available Friday. How about we compromise - Friday but we start early at 9 AM so we finish by 3?
+
+[Bob]: I'd still prefer Thursday but if the venue is only free Friday then I guess Friday it is.
+
+[Carol]: Fine, Friday at 9. Where is it?
+
+[Alice]: Riverside Conference Center. I'll book 9 AM to 3 PM.
+
+[Bob]: Alright, I'll be there. But I'm leaving at 2:30, I have to pick up my kids.
+
+[Alice]: That's fine Bob. Carol, you're in for the full day?
+
+[Carol]: Yes, 9 to 3 works for me.

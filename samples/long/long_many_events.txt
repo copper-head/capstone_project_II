@@ -1,0 +1,111 @@
+[Alice]: Alright team, let's go through the week and get everything scheduled. I know we've got a lot happening.
+
+[Bob]: Yeah, this week is packed.
+
+[Carol]: Fire away, Alice.
+
+[Alice]: Okay so first things first. Monday morning, I need to do a one-on-one with each of you. Bob, can we do 9 AM?
+
+[Bob]: 9 AM Monday works.
+
+[Alice]: Great, my office. Carol, how about 10 AM right after?
+
+[Carol]: 10 works for me.
+
+[Alice]: Perfect. Same place. Now, Monday afternoon we've got the sprint planning. That's at 2 PM as usual, right?
+
+[Bob]: Yeah, 2 PM in the team room. Should be about 2 hours.
+
+[Carol]: I have a conflict at 3:30 though. Can we keep it to 90 minutes?
+
+[Alice]: Let's try. 2 to 3:30 then.
+
+[Bob]: That's tight but doable if everyone comes prepared.
+
+[Alice]: Agreed. Moving on to Tuesday. We've got the client sync at 11 AM. Bob, you're leading that one.
+
+[Bob]: Right. Video call with the Acme team. I'll need the conference room with the good camera.
+
+[Carol]: Room 302 has the new setup.
+
+[Bob]: 302 it is. Should be about an hour.
+
+[Alice]: Carol, can you sit in on that? I want you to hear their feedback on the design.
+
+[Carol]: Sure, I'll be there.
+
+[Alice]: Also on Tuesday, I need to do the quarterly budget review with finance. That's at 3 PM, just me and the finance team. Two hours probably.
+
+[Bob]: Better you than me.
+
+[Alice]: Tell me about it. Okay, Wednesday. This is the big day. We've got the all-hands at 10 AM.
+
+[Carol]: The company all-hands? That's in the auditorium right?
+
+[Alice]: Yes, auditorium, 10 to 11:30. Then after that, Bob, you and I need to prep for Thursday's board presentation.
+
+[Bob]: How about right after the all-hands? Like 11:30 to 1? We can grab lunch while we work.
+
+[Alice]: Good idea. We'll use my office. Carol, you don't need to be at that one.
+
+[Carol]: Thank god. I'll use that time to catch up on code reviews.
+
+[Alice]: Wednesday afternoon, Carol, I need you to run the design critique session. 3 PM?
+
+[Carol]: 3 PM works. Design lab?
+
+[Alice]: Design lab, yeah. Invite the whole UX team.
+
+[Bob]: What about Thursday?
+
+[Alice]: Thursday morning is the board presentation at 9 AM. Bob and I will be in that until about 11.
+
+[Bob]: Boardroom on the 5th floor.
+
+[Alice]: Right. Then Thursday afternoon, we should do a retro on the last sprint. How about 2 PM?
+
+[Carol]: 2 PM Thursday works. Team room again?
+
+[Bob]: Works for me too.
+
+[Alice]: Team room, 1 hour. And then Carol, can you and Bob do a code pairing session after? Like 3:30?
+
+[Carol]: Sure, we need to work on the authentication module anyway.
+
+[Bob]: 3:30 Thursday, yeah. My desk or yours?
+
+[Carol]: Yours. You have the bigger monitor.
+
+[Alice]: Great. Now Friday. I'm hoping Friday is lighter. The only thing I have is a demo run-through at 1 PM. We all need to be there.
+
+[Bob]: 1 PM Friday. Where?
+
+[Alice]: Demo room on 3. Let's block out 2 hours to be safe.
+
+[Carol]: 1 to 3 PM, got it.
+
+[Bob]: Anything else?
+
+[Alice]: One more thing. Bob, can you do a knowledge transfer session with the new intern on Friday morning? Say 10 AM for an hour?
+
+[Bob]: 10 AM Friday, sure. I'll use the small meeting room.
+
+[Alice]: Perfect. I think that covers everything. Let me recap: Monday we have one-on-ones and sprint planning, Tuesday is the client sync and budget review, Wednesday is all-hands plus board prep and design critique, Thursday is the board presentation, retro, and code pairing, and Friday is the intern KT and demo run-through.
+
+[Carol]: That's a full week.
+
+[Bob]: No kidding. At least the weekend is close.
+
+[Alice]: We'll survive. Thanks everyone.
+
+[Bob]: Later.
+
+[Carol]: Bye!
+
+[Alice]: Oh wait, I almost forgot. Monday at 8 AM, there's an optional team breakfast in the cafeteria. No pressure but it'd be nice to kick off the week together.
+
+[Bob]: Free food? I'm in.
+
+[Carol]: Same. See you at 8!
+
+[Alice]: Great. Now I'm really done. Have a good rest of your day.

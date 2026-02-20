@@ -189,7 +189,7 @@ Result: THREE separate delete actions:
 - action: "delete", title: "Team Standup", existing_event_id: 2
 - action: "delete", title: "Lunch with Bob", existing_event_id: 4
 - action: "delete", title: "Code Review", existing_event_id: 6
-- reasoning for each: "Clearing schedule for tomorrow. This event falls within the requested window."
+- reasoning for each: "Clearing schedule for tomorrow. Event falls within window."
 WRONG: Creating a single event called "Clear Schedule". That is never correct.
 
 ## Negative Examples (Do NOT Do This)
