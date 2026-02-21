@@ -195,11 +195,13 @@ Conversation: "Hey Alice, want to grab lunch tomorrow at noon at Mario's?"
 Calendar: No matching event.
 Result:
 - action: "create"
-- title: "Lunch at Mario's"
+- title: "Lunch"
 - start_time: (tomorrow at 12:00)
+- end_time: (tomorrow at 13:30) -- no duration stated, default 1.5h for lunch
 - location: "Mario's"
 - confidence: "high"
 - existing_event_id: null
+- assumptions: "Assumed 1.5 hour duration for lunch"
 - reasoning: "Alice is directly invited to a new lunch. No matching event in calendar."
 
 ### Example 2: UPDATE (reschedule existing event)
@@ -297,16 +299,20 @@ Each event object must have the following fields:
   If the conversation names the event, use that name. Otherwise, create a brief
   descriptive title.
 - "start_time": ISO 8601 datetime string (e.g. "2026-02-19T12:00:00")
+- "end_time": ISO 8601 datetime string. You MUST always provide end_time.
+  Calculate it using these rules in priority order:
+  1. If the conversation states an explicit end time, use it.
+  2. If the conversation mentions a duration ("for an hour", "90 minutes",
+     "a couple hours"), calculate end_time = start_time + duration.
+  3. If no duration or end time is mentioned, estimate a reasonable default:
+     meetings/reviews/standups = 1 hour, lunches/dinners = 1.5 hours,
+     quick calls/syncs = 30 minutes, all-day events = end of day.
+     Note the assumption in the "assumptions" field.
 - "confidence": one of "high", "medium", or "low"
 - "reasoning": explanation of why this event was extracted and how confidence was determined
 - "action": one of "create", "update", or "delete"
 
 **Optional fields (omit or set to null if unknown):**
-- "end_time": ISO 8601 datetime string, or null if truly unknown. IMPORTANT:
-  When the conversation mentions a duration (e.g. "for an hour", "90 minutes",
-  "a couple hours"), you MUST calculate end_time = start_time + duration.
-  When the conversation mentions a specific end time, use that. Only set to
-  null if neither duration nor end time is mentioned at all.
 - "location": event location string, or null if unknown
 - "attendees": comma-separated list of attendee names, or null if unknown
 - "assumptions": comma-separated list of assumptions made, or null if none
