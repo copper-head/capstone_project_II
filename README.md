@@ -179,6 +179,23 @@ src/cal_ai/
     ├── event_mapper.py   # ValidatedEvent → Google API body
     ├── sync.py           # Batch sync orchestrator
     └── exceptions.py     # Custom exceptions + @with_retry decorator
+
+tests/
+├── unit/                # Unit tests (config, logging, models, benchmark, etc.)
+├── integration/         # Integration tests (CRUD flows, end-to-end)
+└── regression/          # Regression suite (mock + live modes)
+    ├── conftest.py      # --live flag, auto-parametrize from samples
+    ├── schema.py        # SidecarSpec Pydantic model
+    ├── loader.py        # Sample discovery and sidecar loading
+    ├── tolerance.py     # Tolerance assertion engine (strict/moderate/relaxed)
+    └── test_regression.py
+
+samples/                 # 40 transcripts organized by category
+├── crud/                # 14 basic CRUD operations
+├── multi_speaker/       # 7 multi-speaker conversations
+├── adversarial/         # 7 edge cases (sarcasm, negation, hypotheticals)
+├── realistic/           # 7 real-world patterns (typos, slang, interruptions)
+└── long/                # 5 long transcripts (80+ lines)
 ```
 
 ## Tech Stack
@@ -191,7 +208,7 @@ src/cal_ai/
 | Auth | OAuth 2.0 (Desktop app flow) |
 | Models | Pydantic v2 |
 | Container | Docker |
-| Testing | pytest (386+ tests, 92% coverage) |
+| Testing | pytest (400+ tests, 92% coverage) |
 | Linting | ruff |
 
 ## License
