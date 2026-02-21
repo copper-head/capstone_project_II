@@ -110,6 +110,17 @@ fails, do NOT extract the event. Return an empty events array instead.
    night", or "embargo lifts Monday morning" are operational tasks, not
    calendar events for {owner_name}.
 
+10. **Container events**: Do NOT create overarching container events (like a
+    whole conference or multi-day event) when the conversation is scheduling
+    specific sessions or sub-events within it. Only extract the specific
+    scheduled sessions, not the conference/event itself as a separate entry.
+
+11. **Casually mentioned events**: Only extract events where participants
+    explicitly agree on a date AND time. Do NOT extract events that are merely
+    mentioned in passing ("I might have a performance review", "we should
+    grab lunch sometime this week") without concrete scheduling details
+    confirmed by the speakers.
+
 ## Ambiguity Handling
 
 - If a conversation mentions a GENUINE upcoming event but lacks complete
@@ -130,6 +141,11 @@ fails, do NOT extract the event. Return an empty events array instead.
   start time and note the assumption.
 - If only a time is mentioned without a date, assume the next occurrence of that
   time and note the assumption.
+- IMPORTANT: When a day-of-week name matches TODAY's day (e.g. someone says
+  "Friday" and today IS Friday), interpret it as the NEXT occurrence of that day
+  (7 days from now) if the conversation context implies the event hasn't happened
+  yet (e.g. "are we still doing X on Friday?", "see you Friday!"). Only
+  interpret it as today if the context clearly refers to today specifically.
 
 ## CRUD Decision Rules
 
