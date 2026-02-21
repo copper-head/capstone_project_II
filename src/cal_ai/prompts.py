@@ -60,13 +60,59 @@ Use this to resolve any relative time references in the conversation.
   involved) should have confidence "low". Still extract these, but note in the
   reasoning that {owner_name} was not directly involved.
 
+## Do NOT Extract (Critical Filtering Rules)
+
+Before extracting any event, verify it passes ALL of these checks. If any check
+fails, do NOT extract the event. Return an empty events array instead.
+
+1. **Past events**: Do NOT extract events described in past tense ("we had a
+   meeting yesterday", "the workshop last week was great", "remember that offsite
+   in November?"). These already happened and should not be created on the calendar.
+   Only extract events scheduled for the FUTURE relative to the current date/time.
+
+2. **Sarcasm and rhetorical language**: Do NOT extract events from sarcastic,
+   ironic, or exaggerated statements ("Oh sure, let me just clear my entire
+   afternoon", "Maybe a midnight status call would be fun", "I'll just cancel
+   everything and sit in meetings all day"). Look for tone indicators: exaggeration,
+   absurd times, obvious frustration, or mocking tone.
+
+3. **Complaints and venting**: Do NOT extract events when speakers are complaining
+   about their schedule ("I have seven meetings tomorrow", "back-to-back from nine
+   to five"). Describing existing burdens is not scheduling new events.
+
+4. **Other people's schedules**: Do NOT extract events that belong exclusively to
+   other people's calendars when {owner_name} is not involved and not invited.
+   Gossip about a colleague's presentation, someone else's dinner, or another
+   team's offsite should not produce events for {owner_name}.
+
+5. **Retracted or cancelled proposals**: If someone proposes an event and then
+   immediately retracts it in the same conversation ("Let's do coffee tomorrow...
+   actually wait, I can't, never mind"), do NOT extract it. The retraction
+   supersedes the proposal.
+
+6. **Unmet preconditions**: Do NOT extract events that are explicitly contingent
+   on conditions that have not been met ("if the budget gets approved we could
+   do X", "let's wait and see", "hold off on booking"). If speakers explicitly
+   agree NOT to schedule yet, respect that.
+
+7. **Quoted speech that is dismissed**: Do NOT extract events from quotes of what
+   someone else said if the speakers dismiss or do not act on the quote ("Marcus
+   said we should do lunch but he never follows through").
+
+8. **Wishful thinking or hypotheticals**: Do NOT extract events from wishes,
+   dreams, or hypothetical scenarios ("wouldn't it be nice if we could...",
+   "in a perfect world we'd...").
+
 ## Ambiguity Handling
 
-- If a conversation mentions a possible event but lacks complete information (e.g.
-  no specific time, no location), still extract it. Set the confidence level
-  appropriately and list all assumptions in the "assumptions" field.
+- If a conversation mentions a GENUINE upcoming event but lacks complete
+  information (e.g. no specific time, no location), still extract it. Set the
+  confidence level appropriately and list all assumptions in the "assumptions" field.
 - If information is incomplete or ambiguous, make reasonable assumptions and
-  document them. Never skip an event just because some details are missing.
+  document them. Never skip a genuinely intended event just because some details
+  are missing.
+- However, ambiguity about WHETHER an event should happen at all (as opposed to
+  ambiguity about event details) means you should NOT extract it.
 
 ## Relative Time Resolution
 
@@ -208,6 +254,33 @@ WRONG: action "delete" with existing_event_id 7.
 CORRECT: No action for this event, or note with low confidence. "Might not
 make it" expresses uncertainty, not cancellation of the event itself.
 
+### Negative Example 3: Do NOT extract past events
+Conversation: "The design workshop yesterday was really productive. Carol ran
+a great session last week too."
+WRONG: Extracting "Design Workshop" or "Carol's session" as new events.
+CORRECT: Empty events array. Both events are in the past tense and already
+happened. Only extract FUTURE events.
+
+### Negative Example 4: Do NOT extract from sarcasm or complaints
+Conversation: "Great, another meeting. I already have back-to-back from nine
+to five tomorrow. Maybe I should just schedule a midnight call too."
+WRONG: Extracting "back-to-back meetings" or "midnight call" as events.
+CORRECT: Empty events array. The speaker is complaining and being sarcastic,
+not scheduling anything new.
+
+### Negative Example 5: Do NOT extract other people's events
+Conversation: "Did you hear Marcus has a big presentation to the CTO on
+Thursday? And the leadership team has their annual dinner Friday night."
+WRONG: Extracting "Marcus's presentation" or "Leadership Dinner" for Alice.
+CORRECT: Empty events array. These are other people's events that Alice is
+not participating in. Gossip is not scheduling.
+
+### Negative Example 6: Do NOT extract retracted proposals
+Conversation: "Hey want to grab coffee tomorrow morning? Actually wait, I
+just remembered I have a dentist appointment. Never mind!"
+WRONG: Extracting "Coffee" as a new event.
+CORRECT: Empty events array. The proposal was immediately retracted.
+
 ## Output Format
 
 Return a JSON object with the following structure:
@@ -218,14 +291,22 @@ Return a JSON object with the following structure:
 Each event object must have the following fields:
 
 **Required fields:**
-- "title": a short descriptive title for the event
+- "title": a short, concise descriptive title for the event (2-4 words preferred).
+  Use the event type or topic as the title (e.g. "Team Standup", "Design Review",
+  "Lunch"). Do NOT append attendee names or excessive detail to the title.
+  If the conversation names the event, use that name. Otherwise, create a brief
+  descriptive title.
 - "start_time": ISO 8601 datetime string (e.g. "2026-02-19T12:00:00")
 - "confidence": one of "high", "medium", or "low"
 - "reasoning": explanation of why this event was extracted and how confidence was determined
 - "action": one of "create", "update", or "delete"
 
 **Optional fields (omit or set to null if unknown):**
-- "end_time": ISO 8601 datetime string, or null if unknown
+- "end_time": ISO 8601 datetime string, or null if truly unknown. IMPORTANT:
+  When the conversation mentions a duration (e.g. "for an hour", "90 minutes",
+  "a couple hours"), you MUST calculate end_time = start_time + duration.
+  When the conversation mentions a specific end time, use that. Only set to
+  null if neither duration nor end time is mentioned at all.
 - "location": event location string, or null if unknown
 - "attendees": comma-separated list of attendee names, or null if unknown
 - "assumptions": comma-separated list of assumptions made, or null if none
