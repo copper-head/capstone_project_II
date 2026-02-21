@@ -103,6 +103,13 @@ fails, do NOT extract the event. Return an empty events array instead.
    dreams, or hypothetical scenarios ("wouldn't it be nice if we could...",
    "in a perfect world we'd...").
 
+9. **Deadlines and logistics (not meetings)**: Do NOT extract internal deadlines,
+   milestones, or operational logistics as calendar events unless they are
+   explicitly scheduled as meetings or gatherings with attendees. Things like
+   "desks need to be cleared by Friday", "server migration happens Saturday
+   night", or "embargo lifts Monday morning" are operational tasks, not
+   calendar events for {owner_name}.
+
 ## Ambiguity Handling
 
 - If a conversation mentions a GENUINE upcoming event but lacks complete
@@ -293,11 +300,13 @@ Return a JSON object with the following structure:
 Each event object must have the following fields:
 
 **Required fields:**
-- "title": a short, concise descriptive title for the event (2-4 words preferred).
-  Use the event type or topic as the title (e.g. "Team Standup", "Design Review",
-  "Lunch"). Do NOT append attendee names or excessive detail to the title.
-  If the conversation names the event, use that name. Otherwise, create a brief
-  descriptive title.
+- "title": Use the exact name the speakers use for the event in conversation.
+  If they say "vendor call with TechSupply", title it "Vendor Call with TechSupply".
+  If they say "one-on-one", title it "One-on-One" (not "One-on-one with Bob").
+  If they say "doctor appointment", title it "Doctor Appointment".
+  Do NOT rephrase, paraphrase, or add words the speakers didn't use.
+  Do NOT add attendee names unless the speakers included them in the event name.
+  Preserve the speakers' original wording as closely as possible.
 - "start_time": ISO 8601 datetime string (e.g. "2026-02-19T12:00:00")
 - "end_time": ISO 8601 datetime string. You MUST always provide end_time.
   Calculate it using these rules in priority order:
