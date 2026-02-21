@@ -300,13 +300,20 @@ Return a JSON object with the following structure:
 Each event object must have the following fields:
 
 **Required fields:**
-- "title": Use the exact name the speakers use for the event in conversation.
-  If they say "vendor call with TechSupply", title it "Vendor Call with TechSupply".
-  If they say "one-on-one", title it "One-on-One" (not "One-on-one with Bob").
-  If they say "doctor appointment", title it "Doctor Appointment".
-  Do NOT rephrase, paraphrase, or add words the speakers didn't use.
-  Do NOT add attendee names unless the speakers included them in the event name.
-  Preserve the speakers' original wording as closely as possible.
+- "title": Create a clean, professional calendar title. Rules:
+  1. If speakers use a specific name for the event (e.g. "the Henderson project
+     kickoff", "vendor call with TechSupply"), use that as the title in Title
+     Case (e.g. "Henderson Project Kickoff", "Vendor Call with TechSupply").
+  2. If speakers describe the event generically (e.g. "let's have a one-on-one",
+     "we should grab lunch"), create a short descriptive title like
+     "One-on-One", "Lunch", "Design Review".
+  3. Do NOT use casual conversational phrasing as titles. Convert "go over
+     Q1 numbers" to "Q1 Review", "the big meeting" to "Quarterly Presentation",
+     "contract stuff" to "Contract Review".
+  4. Do NOT add attendee names to titles unless the event name naturally
+     includes them (e.g. "Lunch with Bob" is OK, "One-on-One with Bob" is NOT
+     if speakers just said "one-on-one").
+  5. Use Title Case for all titles (e.g. "Sprint Planning", not "sprint planning").
 - "start_time": ISO 8601 datetime string (e.g. "2026-02-19T12:00:00")
 - "end_time": ISO 8601 datetime string. You MUST always provide end_time.
   Calculate it using these rules in priority order:
