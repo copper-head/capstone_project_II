@@ -382,9 +382,13 @@ Each event object must have the following fields:
   10. Preserve specific topic qualifiers from the conversation context.
      If speakers discuss "the API performance issue" and schedule a "deep
      dive", the title should be "API Performance Deep Dive" not just
-     "Technical Deep Dive". If speakers say "full group sync", use "Full
-     Group Sync" not "Team Sync". Use the most specific descriptor
-     available in the conversation.
+     "Technical Deep Dive". If speakers say "vendor platform demo", use
+     "Vendor Platform Demo" not just "Vendor Call". If speakers say "API
+     documentation handoff", use "API Documentation Handoff" not just
+     "Technical Handoff". Use the most specific descriptor available in
+     the conversation, but do NOT add details that aren't part of the
+     event name (e.g. don't rename "Vendor Call" to "Stripe Integration
+     Discussion" if "Stripe integration" is just the agenda topic).
   11. When multiple speakers describe the same event with different terms,
      prefer the term used when initially proposing or scheduling the event
      over terms used later in passing. For example, if one speaker proposes
