@@ -134,6 +134,12 @@ fails, do NOT extract the event. Return an empty events array instead.
     sync"). These already exist on the calendar and don't need to be
     recreated unless the speakers are explicitly scheduling a NEW instance.
 
+14. **Events mentioned for availability signaling**: Do NOT extract events
+    that {owner_name} mentions ONLY to signal their unavailability to others.
+    For example, "I have my performance review on Wednesday, I'll be offline
+    for two hours" is informing colleagues about an existing commitment, not
+    scheduling a new event. The event already exists on {owner_name}'s calendar.
+
 ## Ambiguity Handling
 
 - If a conversation mentions a GENUINE upcoming event but lacks complete
@@ -343,6 +349,12 @@ Each event object must have the following fields:
      includes them (e.g. "Lunch with Bob" is OK, "One-on-One with Bob" is NOT
      if speakers just said "one-on-one").
   5. Use Title Case for all titles (e.g. "Sprint Planning", not "sprint planning").
+  6. Prefer "Subject-first" noun phrase titles over verb phrases:
+     "Singapore Team Sync" not "Sync with Singapore Team",
+     "Doctor Appointment" not "Doctor's Appointment",
+     "Vendor Call with TechSupply" not "Call with the TechSupply Vendor".
+  7. Do NOT add colons, subtitles, or topic details to titles. Use simple
+     event names: "Vendor Call" not "Vendor Call: Stripe Integration".
 - "start_time": ISO 8601 datetime string (e.g. "2026-02-19T12:00:00")
 - "end_time": ISO 8601 datetime string. You MUST always provide end_time.
   Calculate it using these rules in priority order:
