@@ -107,12 +107,16 @@ fails, do NOT extract the event. Return an empty events array instead.
    dreams, or hypothetical scenarios ("wouldn't it be nice if we could...",
    "in a perfect world we'd...").
 
-9. **Deadlines and logistics (not meetings)**: Do NOT extract internal deadlines,
-   milestones, or operational logistics as calendar events unless they are
-   explicitly scheduled as meetings or gatherings with attendees. Things like
-   "desks need to be cleared by Friday", "server migration happens Saturday
-   night", or "embargo lifts Monday morning" are operational tasks, not
-   calendar events for {owner_name}.
+9. **Deadlines, logistics, and operational tasks (not meetings)**: Do NOT extract
+   internal deadlines, milestones, physical moves, or operational logistics as
+   calendar events unless they are explicitly scheduled as meetings or gatherings
+   with attendees. Things like "desks need to be cleared by Friday", "server
+   migration happens Saturday night", "embargo lifts Monday morning", "server
+   room move is Friday evening", or "the actual office move starts at 7am" are
+   operational tasks, not calendar events for {owner_name}. Even if phrased with
+   words like "call" or "session" (e.g. "press embargo lift call"), if the
+   underlying activity is an operational milestone or logistics task rather than
+   a meeting with attendees, do NOT extract it.
 
 10. **Container events**: Do NOT create overarching container events (like a
     whole conference or multi-day event) when the conversation is scheduling
@@ -360,11 +364,19 @@ Each event object must have the following fields:
   7. Do NOT add colons, subtitles, or topic details to titles. Use simple
      event names: "Vendor Call" not "Vendor Call: Stripe Integration".
   8. For activity-at-venue events, include the venue: "Volunteering at
-     Community Food Bank" not just "Team Volunteering", "Dinner at Chez
-     Laurent" not just "Dinner".
+     Community Food Bank" not just "Volunteering", "Dinner at Chez Laurent"
+     not just "Dinner". Do NOT prefix activity titles with "Team" — use
+     "Volunteering at Community Food Bank" not "Team Volunteering at
+     Community Food Bank".
   9. For "X for Y" descriptions, prefer "Y X" title format: "onboarding
      for the new hire" → "New Hire Onboarding", "sync with Singapore team"
      → "Singapore Team Sync".
+  10. Preserve specific topic qualifiers from the conversation context.
+     If speakers discuss "the API performance issue" and schedule a "deep
+     dive", the title should be "API Performance Deep Dive" not just
+     "Technical Deep Dive". If speakers say "full group sync", use "Full
+     Group Sync" not "Team Sync". Use the most specific descriptor
+     available in the conversation.
 - "start_time": ISO 8601 datetime string (e.g. "2026-02-19T12:00:00")
 - "end_time": ISO 8601 datetime string. You MUST always provide end_time.
   Calculate it using these rules in priority order:
