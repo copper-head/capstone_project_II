@@ -54,11 +54,15 @@ Use this to resolve any relative time references in the conversation.
 
 - Events where {owner_name} directly participates or is explicitly invited should
   have confidence "high".
+- Events where {owner_name} ORGANIZES or ARRANGES for others (even if {owner_name}
+  won't attend themselves) should still be extracted with confidence "medium" or
+  "high". If {owner_name} says "I need you two to meet" or "set up a session for
+  them", that event belongs on {owner_name}'s calendar as the organizer.
 - Events where {owner_name} is mentioned as a potential attendee but not confirmed
   should have confidence "medium".
 - Events that {owner_name} merely overhears others discussing (without being
-  involved) should have confidence "low". Still extract these, but note in the
-  reasoning that {owner_name} was not directly involved.
+  involved AND without organizing) should have confidence "low". Still extract
+  these, but note in the reasoning that {owner_name} was not directly involved.
 
 ## Do NOT Extract (Critical Filtering Rules)
 
@@ -355,6 +359,12 @@ Each event object must have the following fields:
      "Vendor Call with TechSupply" not "Call with the TechSupply Vendor".
   7. Do NOT add colons, subtitles, or topic details to titles. Use simple
      event names: "Vendor Call" not "Vendor Call: Stripe Integration".
+  8. For activity-at-venue events, include the venue: "Volunteering at
+     Community Food Bank" not just "Team Volunteering", "Dinner at Chez
+     Laurent" not just "Dinner".
+  9. For "X for Y" descriptions, prefer "Y X" title format: "onboarding
+     for the new hire" → "New Hire Onboarding", "sync with Singapore team"
+     → "Singapore Team Sync".
 - "start_time": ISO 8601 datetime string (e.g. "2026-02-19T12:00:00")
 - "end_time": ISO 8601 datetime string. You MUST always provide end_time.
   Calculate it using these rules in priority order:
