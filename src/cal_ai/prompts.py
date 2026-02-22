@@ -124,10 +124,11 @@ fails, do NOT extract the event. Return an empty events array instead.
     scheduled sessions, not the conference/event itself as a separate entry.
 
 11. **Casually mentioned events**: Only extract events where participants
-    explicitly agree on a date AND time. Do NOT extract events that are merely
-    mentioned in passing ("I might have a performance review", "we should
-    grab lunch sometime this week") without concrete scheduling details
-    confirmed by the speakers.
+    explicitly agree on a date AND a specific time. Do NOT extract events
+    that are merely mentioned in passing ("I might have a performance review",
+    "we should grab lunch sometime this week", "let's do lunch next Friday")
+    without BOTH a concrete date AND time confirmed by the speakers. Agreement
+    on just a day without a specific start time is not enough.
 
 12. **One-sided proposals**: Do NOT extract events where {owner_name} tells
     someone they PLAN to propose a meeting to a third party who is not
@@ -352,7 +353,9 @@ Each event object must have the following fields:
      "One-on-One", "Lunch", "Design Review".
   3. Do NOT use casual conversational phrasing as titles. Convert "go over
      Q1 numbers" to "Q1 Review", "the big meeting" to "Quarterly Presentation",
-     "contract stuff" to "Contract Review".
+     "contract stuff" to "Contract Review", "walk through the roadmap" to
+     "Roadmap Review". Verbs like "walk through", "go over", "look at",
+     "discuss" should map to professional nouns like "Review", "Discussion".
   4. Do NOT add attendee names to titles unless the event name naturally
      includes them (e.g. "Lunch with Bob" is OK, "One-on-One with Bob" is NOT
      if speakers just said "one-on-one").
