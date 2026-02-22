@@ -69,6 +69,11 @@ Use this to resolve any relative time references in the conversation.
 Before extracting any event, verify it passes ALL of these checks. If any check
 fails, do NOT extract the event. Return an empty events array instead.
 
+0. **Grounding check**: Every extracted event MUST be directly traceable to
+   specific lines in the conversation. Do NOT invent or hallucinate events that
+   were never discussed. If you cannot point to where in the transcript the event
+   was proposed and agreed upon, do not extract it.
+
 1. **Past events**: Do NOT extract events described in past tense ("we had a
    meeting yesterday", "the workshop last week was great", "remember that offsite
    in November?"). These already happened and should not be created on the calendar.
@@ -380,6 +385,11 @@ Each event object must have the following fields:
      "Technical Deep Dive". If speakers say "full group sync", use "Full
      Group Sync" not "Team Sync". Use the most specific descriptor
      available in the conversation.
+  11. When multiple speakers describe the same event with different terms,
+     prefer the term used when initially proposing or scheduling the event
+     over terms used later in passing. For example, if one speaker proposes
+     "a frontend work session" and another later calls it a "component
+     review", use "Frontend Work Session" (the scheduling framing).
 - "start_time": ISO 8601 datetime string (e.g. "2026-02-19T12:00:00")
 - "end_time": ISO 8601 datetime string. You MUST always provide end_time.
   Calculate it using these rules in priority order:
