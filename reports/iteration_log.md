@@ -15,6 +15,8 @@
 | 8 | run-8 | 0.91 | 0.96 | 0.94 | 0.86 | 0.90 | 0.88 | Organizer events, venue titles, Y X format |
 | 9 | run-9 | 0.97 | 0.99 | 0.98 | 0.86 | 0.90 | 0.88 | Topic-specific titles, logistics expansion, no Team prefix |
 | 10 | run-10 | 0.95 | 0.97 | 0.96 | 0.91 | 0.95 | 0.93 | Walk-through→Review mapping, stricter casual event filtering |
+| 11 | run-11 | 0.96 | 0.98 | 0.97 | 0.91 | 0.95 | 0.93 | Grounding check anti-hallucination, scheduling-framing title rule |
+| 12 | run-12 | 0.96 | 0.98 | 0.97 | 0.91 | 0.95 | 0.93 | Refined title qualifier rule with examples |
 
 ## Final Comparison
 
@@ -22,22 +24,25 @@
 - 97 TP, 3 FP, 1 FN across 70 samples
 - Categories at 1.00: adversarial, crud, multi_speaker, realistic
 
-**Best Validation F1:** Run 10 — **0.93** (P=0.91, R=0.95)
+**Best Validation F1:** Runs 10-12 — **0.93** (P=0.91, R=0.95)
 - 20 TP, 2 FP, 1 FN across 15 samples
-- Categories at 1.00: crud, multi_speaker, realistic
+- Stable across 3 consecutive runs
 
-**Overall Improvement:**
-- Training F1: 0.72 → 0.96 (+33%)
+**Overall Improvement (runs 0-12):**
+- Training F1: 0.72 → 0.97 (+35%)
 - Validation F1: 0.86 → 0.93 (+8%)
 - Adversarial training F1: 0.30 → 1.00 (from worst to perfect)
 - CRUD training F1: 0.55 → 0.96
 
 **Key Prompt Engineering Insights:**
 1. Anti-extraction rules (runs 1-7) were the single biggest driver of precision improvement
-2. Title formatting rules (runs 3-10) reduced FP+FN from title mismatches significantly
+2. Title formatting rules (runs 3-12) reduced FP+FN from title mismatches significantly
 3. Run 3 showed that overly literal title rules can regress — professional calendar style works better
 4. Making end_time required (run 2) was a high-impact structural change
-5. Diminishing returns after run 7 (F1=0.93) — remaining errors are edge cases and LLM stochasticity
+5. Run 11 grounding check eliminated LLM hallucinations (invented events)
+6. Run 12 showed over-constraining title rules can regress val — balance specificity vs generics
+7. Diminishing returns after run 7 (F1=0.93) — remaining errors are edge cases and LLM stochasticity
+8. Validation plateaued at 0.93 for runs 10-12, suggesting we've reached the prompt engineering ceiling
 
 ## Run 0 — Baseline (main)
 
