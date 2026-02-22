@@ -121,6 +121,19 @@ fails, do NOT extract the event. Return an empty events array instead.
     grab lunch sometime this week") without concrete scheduling details
     confirmed by the speakers.
 
+12. **One-sided proposals**: Do NOT extract events where {owner_name} tells
+    someone they PLAN to propose a meeting to a third party who is not
+    present in the conversation. Saying "I'll tell Frank we should do a call
+    tomorrow" is a plan to propose, not a confirmed event — Frank has not
+    agreed yet. Only extract events confirmed by the relevant participants
+    within the conversation.
+
+13. **Existing recurring events mentioned in passing**: Do NOT create new
+    events for existing recurring meetings that are merely referenced in
+    conversation (e.g. "after the Friday standup", "at our usual weekly
+    sync"). These already exist on the calendar and don't need to be
+    recreated unless the speakers are explicitly scheduling a NEW instance.
+
 ## Ambiguity Handling
 
 - If a conversation mentions a GENUINE upcoming event but lacks complete
