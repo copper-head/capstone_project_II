@@ -1,0 +1,19 @@
+[Alice]: Okay hear me out. What if we just moved the entire company to a space station and had our standups in zero gravity?
+
+[Bob]: Oh obviously. We could schedule all-hands on Mars. Really great for the commute.
+
+[Alice]: The bandwidth would be rough, but honestly the ping latency would still be better than what we have in this office.
+
+[Bob]: Ha! And we could do our annual review in the year 3000. Really take the long view on performance metrics.
+
+[Alice]: Now we're thinking big picture. Five-year plan? More like five-hundred-year plan.
+
+[Bob]: The board will love it. Visionary stuff.
+
+[Alice]: Okay in all seriousness though, did the vendor respond about the server upgrade?
+
+[Bob]: Yeah, got an email this morning. They're proposing next quarter for the rollout.
+
+[Alice]: Okay, that works. Let's circle back once they send the formal quote.
+
+[Bob]: Will do.

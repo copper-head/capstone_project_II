@@ -1,0 +1,45 @@
+[Alice]: Calendar review time. We have three things to sort out.
+
+[Bob]: Ready.
+
+[Carol]: Go ahead.
+
+[Dave]: Listening.
+
+[Alice]: First — the architecture review we have Thursday at 9 AM. I need to push that back. Can we do Thursday at 1 PM instead?
+
+[Bob]: Thursday 1 PM works for me.
+
+[Carol]: Same, 1 PM Thursday is fine.
+
+[Dave]: Works for me.
+
+[Alice]: Good. I'll update that one.
+
+[Bob]: What's the second thing?
+
+[Alice]: The brown bag lunch on Wednesday at noon — that's been cancelled. The speaker had to drop out.
+
+[Carol]: Oh that's a shame. Do we need to do anything or just remove it?
+
+[Alice]: Just delete it from the calendar.
+
+[Dave]: Got it, no replacement session?
+
+[Alice]: Not this week. We'll reschedule. Third thing — we need to add a new retrospective. Dave and I need to do a post-mortem on the recent outage.
+
+[Dave]: Agreed, that's overdue.
+
+[Alice]: Monday at 3 PM? Just you and me, Dave.
+
+[Dave]: Monday at 3 works. How long?
+
+[Alice]: 90 minutes should cover it.
+
+[Dave]: Done.
+
+[Bob]: Anything for Carol and me?
+
+[Alice]: Not today. You two are free on the new stuff.
+
+[Carol]: Works for us.

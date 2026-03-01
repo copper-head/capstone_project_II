@@ -1,0 +1,35 @@
+[Alice]: Okay team, rather than one big meeting, I think we split into two groups to work in parallel this week.
+
+[Bob]: That makes sense. Carol and I can handle the frontend work.
+
+[Carol]: Agreed. Bob, let's block Wednesday afternoon for that. 1 PM?
+
+[Bob]: Wednesday at 1 PM works. We can use the creative studio.
+
+[Carol]: Perfect, I'll book it.
+
+[Alice]: Great. Dave and I will handle the backend integration side.
+
+[Dave]: Works for me. When do you want to do that?
+
+[Alice]: Let's do Tuesday at 10 AM. The server room has the equipment we need.
+
+[Dave]: Tuesday at 10 in the server room. Got it.
+
+[Bob]: How long should we plan, Carol? Two hours?
+
+[Carol]: Yeah, two hours should cover the component review.
+
+[Alice]: Dave, same for us — two hours should be enough.
+
+[Dave]: Sounds good.
+
+[Alice]: Let's sync as a full group Thursday to share findings. Everyone free at 3 PM?
+
+[Bob]: Thursday at 3 works.
+
+[Carol]: I can do Thursday at 3.
+
+[Dave]: Thursday at 3 is fine.
+
+[Alice]: Great. I'll send the Thursday invite now.

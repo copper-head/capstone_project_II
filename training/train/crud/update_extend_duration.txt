@@ -1,0 +1,15 @@
+[Alice]: Frank, I think we're going to need more time for the strategy session on Tuesday.
+
+[Frank]: How much more are you thinking?
+
+[Alice]: It's currently booked for an hour, but I think we need at least two. There's a lot to cover.
+
+[Frank]: Two hours on Tuesday — what time does it start again?
+
+[Alice]: It starts at 10 AM, so we'd go until noon instead of 11.
+
+[Frank]: That works for me. I'll keep noon free.
+
+[Alice]: Perfect. Let's extend it to two hours then.
+
+[Frank]: Done. Tuesday 10 to 12.

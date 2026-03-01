@@ -1,0 +1,17 @@
+[Alice]: Hey Frank, I heard you want to walk through your entire development roadmap with me.
+
+[Frank]: Oh yeah, definitely. Let's do that. How about Tuesday at three in the conference room? I've only got about four hundred slides.
+
+[Alice]: Four hundred slides. Sure, sounds completely reasonable. I'll clear the whole afternoon.
+
+[Frank]: And maybe we can do a follow-up Wednesday at nine to cover everything we missed in the first session.
+
+[Alice]: Of course. And Thursday at noon we can do the retrospective on the follow-up. This is a great use of everyone's time.
+
+[Frank]: Truly. Your enthusiasm is infectious.
+
+[Alice]: Ha. Look, just email me the two-page summary and I'll read it over the weekend. That's genuinely all I need.
+
+[Frank]: That's actually probably the right call. I'll get that to you by Friday.
+
+[Alice]: Perfect. Thanks Frank.

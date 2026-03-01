@@ -1,0 +1,14 @@
+{
+  "description": "Conversation with maximum vagueness and zero commitment. 'Maybe sometime next week', 'we'll see', 'whenever makes sense', 'we'll figure it out' — no specific time, day, or confirmed intent.",
+  "category": "adversarial",
+  "tolerance": "moderate",
+  "owner": "Alice",
+  "reference_datetime": "2026-02-20T10:00:00",
+  "calendar_context": [],
+  "expected_events": [],
+  "mock_llm_response": {
+    "events": [],
+    "summary": "No actionable calendar events found. Every scheduling reference is hedged with maximum uncertainty: 'maybe', 'sometime', 'we'll see', 'whenever makes sense', 'we'll figure it out'. No specific time, day, or firm commitment is made by either party."
+  },
+  "notes": "Maximum vagueness pattern. The conversation is a social ritual of mutual deferral with no scheduling substance. 'Maybe sometime next week' is not schedulable — it lacks day, time, and bilateral commitment."
+}

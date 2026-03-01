@@ -1,0 +1,13 @@
+[Alice]: Dave, can we set up a deep-dive session on the new architecture proposal?
+
+[Dave]: Sure, when were you thinking?
+
+[Alice]: How about Thursday morning at 10? And let's block it for 2 hours so we have enough time to really get into the details.
+
+[Dave]: Thursday at 10 for two hours, works for me. Should we include Frank?
+
+[Alice]: Yes, bring Frank in. He's got context on the infrastructure side that we'll need.
+
+[Dave]: Alright, I'll make sure he's there. Thursday at 10, two hours, architecture deep-dive.
+
+[Alice]: Perfect.

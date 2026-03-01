@@ -1,0 +1,55 @@
+[Alice]: Happy Monday everyone! How was the weekend?
+
+[Bob]: Amazing, we went to the farmers market Saturday. Got some incredible cheese.
+
+[Carol]: Oh nice! I just binged that new show on Netflix. You have to watch it.
+
+[Dave]: Which one? I watched three shows this weekend.
+
+[Carol]: The one about the heist. You'll know it when you see the thumbnail.
+
+[Bob]: Is it better than the spy one from last month?
+
+[Carol]: So much better. Different vibe though.
+
+[Alice]: I'll add it to my list. Anyway, we should probably get to work at some point.
+
+[Dave]: Ha, yes. What's on for this week?
+
+[Alice]: Lots. Oh, Bob — can we do a quick sync Tuesday at 11 AM? I need your input on the pricing model.
+
+[Bob]: Tuesday at 11 works. How long?
+
+[Alice]: 30 minutes should do it.
+
+[Bob]: Perfect.
+
+[Carol]: Should I be in that one?
+
+[Alice]: Not necessary, Carol. It's very specific pricing math.
+
+[Carol]: Fine by me, less meetings!
+
+[Dave]: Speaking of meetings — Carol, did you and I ever sort out when to do the vendor demo?
+
+[Carol]: Oh right! I forgot about that. When works for you?
+
+[Dave]: Thursday afternoon. 4 PM?
+
+[Carol]: Thursday at 4... yes, that works. One hour?
+
+[Dave]: One hour is enough for a demo.
+
+[Carol]: Done. I'll book the demo room.
+
+[Bob]: Is that the Salesforce vendor?
+
+[Carol]: Yes, the new CRM demo.
+
+[Bob]: Cool. I might want a summary after.
+
+[Alice]: Okay team, sounds like we've got the week sorted. Let's get to it!
+
+[Dave]: Let's go!
+
+[Carol]: Time to work!

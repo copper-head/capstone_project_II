@@ -21,6 +21,8 @@ from cal_ai.calendar.exceptions import CalendarNotFoundError
 from cal_ai.config import load_settings
 from cal_ai.exceptions import ExtractionError
 from cal_ai.llm import GeminiClient
+from cal_ai.memory.formatter import format_memory_context
+from cal_ai.memory.store import MemoryStore
 from cal_ai.models.extraction import ExtractedEvent, ValidatedEvent
 from cal_ai.parser import parse_transcript_file
 
@@ -182,10 +184,26 @@ def run_pipeline(
         return result
 
     # ------------------------------------------------------------------
-    # Stage 1b: Build calendar client and fetch context
+    # Stage 1b: Load memories from SQLite
     # ------------------------------------------------------------------
     settings = load_settings()
 
+    memory_context_text = ""
+    try:
+        memory_store = MemoryStore(settings.memory_db_path)
+        memories = memory_store.load_all()
+        memory_context_text = format_memory_context(memories, settings.owner_name)
+        if memories:
+            logger.info("Memory context loaded: %d memorie(s)", len(memories))
+        memory_store.close()
+    except Exception as exc:
+        msg = f"Memory load failed, continuing without memory context: {exc}"
+        result.warnings.append(msg)
+        logger.warning(msg)
+
+    # ------------------------------------------------------------------
+    # Stage 1c: Build calendar client and fetch context
+    # ------------------------------------------------------------------
     calendar_context = CalendarContext()
     client: GoogleCalendarClient | None = None
 
@@ -219,6 +237,7 @@ def run_pipeline(
             owner_name=owner,
             current_datetime=now,
             calendar_context=calendar_context.events_text,
+            memory_context=memory_context_text,
         )
         result.events_extracted = list(extraction.events)
     except ExtractionError as exc:

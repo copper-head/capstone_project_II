@@ -1,0 +1,15 @@
+[Alice]: We really need to find time to address the technical debt situation. It's been hanging over us for months.
+
+[Dave]: I know. Time is running out before the next major release. If we don't carve out space for it, it'll just keep compounding.
+
+[Alice]: Exactly. We need to make time for this somehow. I keep saying we'll get to it but then something else takes priority.
+
+[Dave]: It's always something. We need to block out room for it in our planning process, not just squeeze it in between other things.
+
+[Alice]: Absolutely. We can't keep kicking this down the road. The team needs breathing room to actually tackle it properly.
+
+[Dave]: Agreed. I'll try to work it into the roadmap conversation when that happens.
+
+[Alice]: Good. Because time really is our biggest constraint here. We're running against the clock.
+
+[Dave]: No question. Let's keep it top of mind.

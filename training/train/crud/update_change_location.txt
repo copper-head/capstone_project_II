@@ -1,0 +1,13 @@
+[Alice]: Hey Dave, quick heads up — the team lunch on Wednesday is moving locations.
+
+[Dave]: Oh yeah? Where to?
+
+[Alice]: The main cafeteria is under renovation this week, so we're switching to the rooftop terrace instead. Same time, noon, just different spot.
+
+[Dave]: Rooftop terrace at noon, noted. Is everything else the same?
+
+[Alice]: Yep, same time, same people. Just the location change.
+
+[Dave]: Works for me. I'll let the others know.
+
+[Alice]: Thanks Dave.

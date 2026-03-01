@@ -1,0 +1,19 @@
+[Alice]: Carol, are we still on for the design review this Thursday?
+
+[Carol]: yep! I put it down for 2pm
+
+[Alice]: oh wait actually - can we do 3pm instead? I have a conflict at 2
+
+[Carol]: sure 3pm works
+
+[Alice]: wait no, sorry. my 2pm thing got moved so 2pm is actually fine again
+
+[Carol]: lol okay so back to 2pm?
+
+[Alice]: yes haha sorry. 2pm Thursday in the design lab
+
+[Carol]: no worries. 2pm Thursday design lab. got it. how long do you think?
+
+[Alice]: probably just an hour. we're just doing the mockup review
+
+[Carol]: perfect see you then

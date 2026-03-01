@@ -1,0 +1,36 @@
+{
+  "description": "Alice delegates scheduling to Bob, who negotiates a kickoff meeting time with Carol. Alice is invited but traveling.",
+  "category": "multi_speaker",
+  "tolerance": "moderate",
+  "owner": "Alice",
+  "reference_datetime": "2026-02-20T10:00:00",
+  "calendar_context": [],
+  "expected_events": [
+    {
+      "action": "create",
+      "title": "Data Migration Project Kickoff",
+      "start_time": "2026-02-23T09:00:00",
+      "end_time": "2026-02-23T10:30:00",
+      "location": "Maple Room",
+      "attendees_contain": ["Alice", "Bob", "Carol"]
+    }
+  ],
+  "mock_llm_response": {
+    "events": [
+      {
+        "title": "Data Migration Project Kickoff",
+        "start_time": "2026-02-23T09:00:00",
+        "end_time": "2026-02-23T10:30:00",
+        "location": "Maple Room",
+        "attendees": "Alice, Bob, Carol",
+        "confidence": "high",
+        "reasoning": "Alice delegates to Bob to schedule a kickoff meeting with Carol for the data migration project. Bob and Carol agree on Monday at 9 AM for 90 minutes in the Maple Room. Bob confirms he will include Alice on the invite.",
+        "assumptions": "",
+        "action": "create",
+        "existing_event_id": null
+      }
+    ],
+    "summary": "Found 1 event: data migration project kickoff on Monday at 9 AM in the Maple Room."
+  },
+  "notes": "Reference datetime is Friday 2026-02-20. Monday=Feb 23. Alice is included on the invite even though she is traveling."
+}

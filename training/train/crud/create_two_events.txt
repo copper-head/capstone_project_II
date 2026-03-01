@@ -1,0 +1,15 @@
+[Alice]: Bob, two things to get on the calendar this week.
+
+[Bob]: Go ahead.
+
+[Alice]: First, I need a budget review with you on Tuesday at 1 PM. We'll use my office for that one.
+
+[Bob]: Tuesday at 1, got it. What's the second?
+
+[Alice]: There's a client presentation on Wednesday at 3 PM. That'll be in the main boardroom. You and Carol should both be there.
+
+[Bob]: Wednesday at 3 in the boardroom — works for me. I'll let Carol know too.
+
+[Alice]: Great, those are the two. Budget review Tuesday at 1 and client presentation Wednesday at 3.
+
+[Bob]: Both logged. See you Tuesday!

@@ -1,0 +1,36 @@
+{
+  "description": "Alice is extremely casual (abbreviations, '!!', 'lol', 'fr fr') while Dave is very formal and professional. Vendor call Tuesday at 10 AM in Conference Room A for 90 minutes.",
+  "category": "realistic",
+  "tolerance": "moderate",
+  "owner": "Alice",
+  "reference_datetime": "2026-02-20T10:00:00",
+  "calendar_context": [],
+  "expected_events": [
+    {
+      "action": "create",
+      "title": "Vendor Call",
+      "start_time": "2026-02-24T10:00:00",
+      "end_time": "2026-02-24T11:30:00",
+      "location": "Conference Room A",
+      "attendees_contain": ["Alice", "Dave"]
+    }
+  ],
+  "mock_llm_response": {
+    "events": [
+      {
+        "title": "Vendor Call",
+        "start_time": "2026-02-24T10:00:00",
+        "end_time": "2026-02-24T11:30:00",
+        "location": "Conference Room A",
+        "attendees": "Alice, Dave",
+        "confidence": "high",
+        "reasoning": "Despite contrasting communication styles, both speakers agree on a vendor call Tuesday at 10 AM in Conference Room A for 90 minutes. Dave explicitly states 'Tuesday, February 24th at 10:00 AM for a 90-minute vendor call'.",
+        "assumptions": "End time is 11:30 AM based on Dave's 90-minute duration suggestion, confirmed by Alice.",
+        "action": "create",
+        "existing_event_id": null
+      }
+    ],
+    "summary": "Found 1 event: vendor call on Tuesday at 10 AM in Conference Room A for 90 minutes with Alice and Dave."
+  },
+  "notes": "Reference datetime is Friday 2026-02-20. Tuesday = 2026-02-24. Key challenge: reconciling scheduling info across drastically different register/formality levels. Dave explicitly dates it as Feb 24th."
+}

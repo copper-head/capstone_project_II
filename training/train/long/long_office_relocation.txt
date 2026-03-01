@@ -1,0 +1,184 @@
+[Alice]: Okay everyone, as you know we're officially moving to the new space on March 10th. That's three weeks from now. I want to go through everything we need to coordinate.
+
+[Bob]: I still can't believe we're finally moving. We've been in this office for what, four years?
+
+[Carol]: Five. I started here in 2021 and this was already the space.
+
+[Alice]: It's been a good run but the new place is going to be so much better. More natural light, actual quiet rooms, a proper kitchen.
+
+[Bob]: The kitchen situation here is a crime honestly.
+
+[Carol]: Don't get me started on the microwave.
+
+[Alice]: Okay so let's talk logistics. The moving company is confirmed for Tuesday March 10th. They're starting at 7 AM. I need everyone to have their desks cleared and all personal items boxed by end of day Friday March 7th.
+
+[Bob]: Is there going to be a staging area for the boxes?
+
+[Alice]: Yes, the lobby area will be used for staging from Friday afternoon. Facilities is setting up labels and color-coded boxes this week.
+
+[Carol]: Are we packing our own stuff or are they doing it?
+
+[Alice]: Personal items you pack yourself. Shared equipment and furniture the movers handle. There's a handout from facilities with the breakdown.
+
+[Bob]: Good. I have way too much junk in my desk. This is actually forcing me to declutter.
+
+[Alice]: Same. I found old monitors from two laptops ago under my desk. Anyway.
+
+[Carol]: What about the server room equipment?
+
+[Alice]: Dave's team is handling the server room separately. That's a specialized move with a different vendor.
+
+[Bob]: Smart. The last thing we need is the regular movers handling rack servers.
+
+[Alice]: Exactly. Dave's team will do the server room on Friday March 7th overnight so everything is online at the new location by Monday.
+
+[Carol]: So from a network perspective we're down over the weekend?
+
+[Alice]: There will be a planned outage from Friday midnight to Sunday midnight. Dave has a detailed runbook. I'll share it.
+
+[Bob]: Two days of downtime is significant. We should communicate that.
+
+[Alice]: Already drafted the customer notice. Going out today actually. And for us internally, we won't have access to internal systems over the weekend, so plan your work accordingly.
+
+[Carol]: I'll work ahead this week to bank some buffer.
+
+[Bob]: Same. I'll push my PRs before Friday.
+
+[Alice]: Good. Now I want to organize a packing party. Make it a little less miserable.
+
+[Bob]: Oh I love a packing party. Beer and boxes.
+
+[Alice]: Beer, pizza, and boxes. I was thinking Thursday March 5th, after work. Like 5 PM onward, a few hours.
+
+[Carol]: Thursday the 5th at 5 PM. Yes, I'm in.
+
+[Bob]: I'll bring the snacks. This is actually going to be fun.
+
+[Alice]: Great. So packing party is Thursday March 5th starting at 5 PM. Plan for at least 2 hours, maybe 3.
+
+[Carol]: Is this for the whole office or just our team?
+
+[Alice]: Whole office. I'll send the invite to the building list. But I'm asking our team specifically to commit to it.
+
+[Bob]: Wouldn't miss it.
+
+[Alice]: Now, new office setup. We arrive at the new space Monday March 10th. The movers will be done by early afternoon. I'd like us to do a space walkthrough together Monday afternoon to make sure everything is where it should be.
+
+[Carol]: What time?
+
+[Alice]: 2 PM Monday March 10th. Just a one-hour walkthrough, check the layout, make sure our area is set up correctly.
+
+[Bob]: Good idea. Last time we moved offices half the screens were wired to the wrong desks.
+
+[Carol]: And we had no chairs for two days.
+
+[Alice]: That was a different moving company. This one is supposed to be better. But yes, that's why we're doing the walkthrough.
+
+[Bob]: I'll be there Monday at 2.
+
+[Carol]: Same.
+
+[Alice]: Once we're settled in, I want to do a proper team celebration. First week in the new space, we should mark it.
+
+[Bob]: Team dinner?
+
+[Alice]: Team dinner. I was thinking Friday March 13th, end of first week in the new office.
+
+[Carol]: Friday the 13th? Are we tempting fate?
+
+[Bob]: Ha! I didn't even register that. Do you believe in that stuff Alice?
+
+[Alice]: I really don't. And I've been trying to get a reservation at that new Italian place on Commerce Street and Friday is the only slot they have.
+
+[Bob]: Which Italian place? The new one that opened last month?
+
+[Alice]: Yes, Rosario's. Have you been?
+
+[Bob]: Not yet but I've heard it's incredible. The pasta is housemade.
+
+[Carol]: My friend went there for her birthday and said it was the best meal she'd had in years.
+
+[Alice]: Perfect, so we go there and see for ourselves. Team celebration sorted.
+
+[Carol]: I'm in regardless. No amount of superstition will stop me from Italian food.
+
+[Bob]: Fair enough. What time?
+
+[Alice]: 7 PM. It's just our team, maybe I'll extend to a couple other folks too. But definitely the four of us.
+
+[Carol]: Friday March 13th at 7 PM. Looking forward to it.
+
+[Bob]: Same.
+
+[Alice]: And I'll send out the evite or calendar invite for that. If a couple others join, great, but minimum is us four.
+
+[Bob]: Low key is fine. We don't need to make it a big production.
+
+[Carol]: Agreed. Small group dinners are way more fun than big group ones anyway.
+
+[Alice]: Exactly my thinking. Okay now there are a few things I need to flag about the new space that will affect how we work.
+
+[Carol]: Like what?
+
+[Alice]: The meeting rooms are all bookable through a new system. We can't just walk in and use them anymore. There's a link in the welcome packet.
+
+[Bob]: That's going to take getting used to.
+
+[Alice]: There's also a new floor warden system for fire safety. We'll need to do a safety orientation in the first week.
+
+[Carol]: When is that?
+
+[Alice]: I'll schedule it for the first Tuesday in the new office. That's March 11th. I believe facilities is running it at 10 AM, about 30 minutes.
+
+[Bob]: Mandatory?
+
+[Alice]: Yes, everyone in the building has to do it. Building management is running it, not us.
+
+[Carol]: 10 AM Tuesday March 11th. Got it.
+
+[Bob]: Got it.
+
+[Bob]: That's smart. Avoids a lot of "is anyone using this room" awkwardness.
+
+[Alice]: Exactly. The old way of just wandering in was chaotic. You know how many times I walked in on someone mid-call because I thought the room was empty?
+
+[Carol]: More than once, yes.
+
+[Bob]: The glass walls with the little light indicators on the new rooms are going to be great.
+
+[Alice]: Green means free, red means occupied. Very simple.
+
+[Carol]: I also heard the new building has much better cell reception?
+
+[Alice]: Yes, they installed signal boosters. Apparently the landlord had complaints from multiple tenants about dropped calls.
+
+[Bob]: That alone makes the move worthwhile. I have to go to the stairwell to make phone calls here.
+
+[Carol]: The stairwell on floor three is an open secret.
+
+[Alice]: I know. Okay, let me continue with the transition notes.
+
+[Alice]: Now let's talk about the ongoing stuff during the transition. We still have normal work happening between now and the move. The sprint doesn't pause just because we're packing.
+
+[Bob]: Noted. The move is the background track, not the main event.
+
+[Carol]: I've been trying to treat it that way but it's hard when everyone keeps talking about it.
+
+[Alice]: I know. But let's stay focused. The move is well organized. We have three weeks.
+
+[Bob]: Speaking of ongoing work, should we still do our regular Friday standup today? Or is this meeting replacing it?
+
+[Alice]: This meeting is in addition to the standup. We still need to cover work items. Can we reconvene in 20 minutes?
+
+[Bob]: Sure, 20 minutes.
+
+[Carol]: I'll grab coffee.
+
+[Alice]: Perfect. Back here at — well I guess this is Zoom, so back on this call at the top of the hour.
+
+[Bob]: Sounds good. Good meeting Alice.
+
+[Carol]: Lots to do but at least it's clear.
+
+[Alice]: That's the goal. See you in 20.
+

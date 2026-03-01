@@ -1,0 +1,11 @@
+[Alice]: Bob, I made a reservation at Chez Laurent for Friday evening.
+
+[Bob]: Nice! What time?
+
+[Alice]: 7:30 PM. It's that French place on Meridian Ave. Carol and Dave are coming too.
+
+[Bob]: Oh great, the four of us. Should be a fun night.
+
+[Alice]: Exactly. So Friday the 27th at 7:30 at Chez Laurent. Don't be late — they only hold the table for 15 minutes.
+
+[Bob]: I'll be there on time, promise!

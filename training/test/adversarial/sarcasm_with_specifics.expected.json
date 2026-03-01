@@ -1,0 +1,14 @@
+{
+  "description": "Sarcastic scheduling references with real-sounding specifics: Tuesday at 3 in the conference room, Wednesday at 9, Thursday at noon. All are sarcastic exaggerations. The actual resolution is to email a summary instead — no meetings scheduled.",
+  "category": "adversarial",
+  "tolerance": "moderate",
+  "owner": "Alice",
+  "reference_datetime": "2026-02-20T10:00:00",
+  "calendar_context": [],
+  "expected_events": [],
+  "mock_llm_response": {
+    "events": [],
+    "summary": "No actionable calendar events found. The scheduling references (Tuesday at 3 in conference room, Wednesday at 9, Thursday at noon) are sarcastic responses to an unreasonable meeting request. The conversation resolves with Alice declining all meetings in favor of a written summary — the opposite of scheduling."
+  },
+  "notes": "Hardest sarcasm case: real-sounding specifics (day, time, room) used sarcastically. The giveaway is the escalating absurdity ('four hundred slides', 'clear the whole afternoon', 'retrospective on the follow-up') and the resolution ('just email me the two-page summary'). The model must read tone, not just extract times."
+}

@@ -1,0 +1,36 @@
+{
+  "description": "Speakers in different timezones negotiate a meeting time. Alice is EST, Carol is PST. Initial 10 AM EST / 7 AM PST rejected, settled on noon EST / 9 AM PST. Event stored in Alice's (owner's) local time.",
+  "category": "realistic",
+  "tolerance": "moderate",
+  "owner": "Alice",
+  "reference_datetime": "2026-02-20T10:00:00",
+  "calendar_context": [],
+  "expected_events": [
+    {
+      "action": "create",
+      "title": "Partnership Proposal Call",
+      "start_time": "2026-02-23T12:00:00",
+      "end_time": "2026-02-23T13:00:00",
+      "location": null,
+      "attendees_contain": ["Alice", "Carol"]
+    }
+  ],
+  "mock_llm_response": {
+    "events": [
+      {
+        "title": "Partnership Proposal Call",
+        "start_time": "2026-02-23T12:00:00",
+        "end_time": "2026-02-23T13:00:00",
+        "location": null,
+        "attendees": "Alice, Carol",
+        "confidence": "high",
+        "reasoning": "After timezone negotiation between Alice (EST) and Carol (PST), they settle on noon EST / 9 AM PST on Monday. The event is stored in Alice's (the owner's) local time: noon EST = 12:00.",
+        "assumptions": "Duration assumed 1 hour per Alice's 'like an hour'. Time stored in owner's (Alice's) local timezone EST: noon = 12:00. Monday = 2026-02-23.",
+        "action": "create",
+        "existing_event_id": null
+      }
+    ],
+    "summary": "Found 1 event: partnership proposal call on Monday at noon EST (9 AM PST for Carol) with Alice and Carol."
+  },
+  "notes": "Reference datetime is Friday 2026-02-20. Monday = 2026-02-23. Critical: store time in owner's (Alice's) local timezone. Rejected time: 10 AM EST / 7 AM PST. Confirmed time: noon EST / 9 AM PST = 12:00:00 for Alice's calendar."
+}

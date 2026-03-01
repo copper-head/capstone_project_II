@@ -1,0 +1,36 @@
+{
+  "description": "Three speakers negotiate a single meeting time for a Q1 roadmap review.",
+  "category": "multi_speaker",
+  "tolerance": "moderate",
+  "owner": "Alice",
+  "reference_datetime": "2026-02-20T10:00:00",
+  "calendar_context": [],
+  "expected_events": [
+    {
+      "action": "create",
+      "title": "Q1 Roadmap Review",
+      "start_time": "2026-02-25T14:00:00",
+      "end_time": "2026-02-25T15:00:00",
+      "location": "Main conference room",
+      "attendees_contain": ["Alice", "Bob", "Carol"]
+    }
+  ],
+  "mock_llm_response": {
+    "events": [
+      {
+        "title": "Q1 Roadmap Review",
+        "start_time": "2026-02-25T14:00:00",
+        "end_time": "2026-02-25T15:00:00",
+        "location": "Main conference room",
+        "attendees": "Alice, Bob, Carol",
+        "confidence": "high",
+        "reasoning": "All three speakers negotiate and agree on Wednesday at 2 PM for a Q1 roadmap review. Alice confirms 1 hour in the main conference room and will send the invite.",
+        "assumptions": "",
+        "action": "create",
+        "existing_event_id": null
+      }
+    ],
+    "summary": "Found 1 event: Q1 roadmap review on Wednesday at 2 PM."
+  },
+  "notes": "Reference datetime is Friday 2026-02-20. Wednesday=Feb 25. All three speakers attend."
+}

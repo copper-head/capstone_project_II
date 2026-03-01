@@ -1,0 +1,19 @@
+[Alice]: Hey Bob, want to grab coffee tomorrow morning and catch up on the project?
+
+[Bob]: Oh that sounds great, I was just thinking we should—
+
+[Alice]: Actually wait, I just checked and I completely forgot I have a thing with the finance team tomorrow. It's blocked off most of the morning.
+
+[Bob]: No worries at all. We can figure out another time.
+
+[Alice]: Yeah let's not worry about it for now. I'll reach out when things settle down a bit on my end.
+
+[Bob]: Sounds good. No rush on my end.
+
+[Alice]: Thanks for being flexible. I've been terrible at actually following through on coffee chats lately.
+
+[Bob]: Ha, you and me both. It's fine, we'll get there eventually.
+
+[Alice]: Okay, good talk. Take care.
+
+[Bob]: You too.

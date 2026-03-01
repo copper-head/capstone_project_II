@@ -1,0 +1,89 @@
+{
+  "description": "Alice makes three calendar changes: create a Tuesday stakeholder briefing, move the Thursday project review from 1 PM to 2 PM, and cancel the Monday morning standup.",
+  "category": "crud",
+  "tolerance": "moderate",
+  "owner": "Alice",
+  "reference_datetime": "2026-02-20T10:00:00",
+  "calendar_context": [
+    {
+      "id": "gcal-evt-project-review-001",
+      "summary": "Project Review",
+      "start": "2026-02-26T13:00:00",
+      "end": "2026-02-26T14:00:00",
+      "location": null
+    },
+    {
+      "id": "gcal-evt-standup-002",
+      "summary": "Morning Standup",
+      "start": "2026-02-23T09:00:00",
+      "end": "2026-02-23T09:15:00",
+      "location": null
+    }
+  ],
+  "expected_events": [
+    {
+      "action": "create",
+      "title": "Stakeholder Briefing",
+      "start_time": "2026-02-24T11:00:00",
+      "end_time": "2026-02-24T12:00:00",
+      "location": "boardroom",
+      "attendees_contain": ["Alice", "Bob", "Carol"]
+    },
+    {
+      "action": "update",
+      "title": "Project Review",
+      "start_time": "2026-02-26T14:00:00",
+      "end_time": "2026-02-26T15:00:00",
+      "existing_event_id_required": true,
+      "attendees_contain": ["Alice", "Bob"]
+    },
+    {
+      "action": "delete",
+      "title": "Morning Standup",
+      "start_time": "2026-02-23T09:00:00",
+      "existing_event_id_required": true
+    }
+  ],
+  "mock_llm_response": {
+    "events": [
+      {
+        "title": "Stakeholder Briefing",
+        "start_time": "2026-02-24T11:00:00",
+        "end_time": "2026-02-24T12:00:00",
+        "location": "Boardroom",
+        "attendees": "Alice, Bob, Carol",
+        "confidence": "high",
+        "reasoning": "Alice creates a new stakeholder briefing on Tuesday at 11 AM in the boardroom with Bob and Carol.",
+        "assumptions": "Assumed 1-hour duration as no end time specified.",
+        "action": "create",
+        "existing_event_id": null
+      },
+      {
+        "title": "Project Review",
+        "start_time": "2026-02-26T14:00:00",
+        "end_time": "2026-02-26T15:00:00",
+        "location": null,
+        "attendees": "Alice, Bob, Carol",
+        "confidence": "high",
+        "reasoning": "Alice moves the Thursday project review from 1 PM to 2 PM. Duration preserved. Matches calendar event [1].",
+        "assumptions": "Duration preserved as 1 hour from the original event.",
+        "action": "update",
+        "existing_event_id": 1
+      },
+      {
+        "title": "Morning Standup",
+        "start_time": "2026-02-23T09:00:00",
+        "end_time": "2026-02-23T09:15:00",
+        "location": null,
+        "attendees": "Alice, Bob, Carol",
+        "confidence": "high",
+        "reasoning": "Alice cancels the Monday morning standup as the team switches to async updates. Matches calendar event [2].",
+        "assumptions": "",
+        "action": "delete",
+        "existing_event_id": 2
+      }
+    ],
+    "summary": "Three changes: created stakeholder briefing Tuesday 11 AM, moved project review to Thursday 2 PM, cancelled Monday standup."
+  },
+  "notes": "Reference datetime is 2026-02-20 (Friday). Tuesday = 2026-02-24, Thursday = 2026-02-26, Monday = 2026-02-23. Project Review is calendar_context[0] so existing_event_id=1. Morning Standup is calendar_context[1] so existing_event_id=2."
+}

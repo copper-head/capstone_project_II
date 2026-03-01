@@ -1,0 +1,21 @@
+[Alice]: Everyone quick question — can we all do a team photo on Tuesday at noon?
+
+[Bob]: Noon Tuesday works for me.
+
+[Carol]: I'm in.
+
+[Dave]: Same, Tuesday noon is fine.
+
+[Eve]: Works for me too! Should we meet at the main entrance?
+
+[Alice]: Yes, main entrance. It'll be quick, maybe 30 minutes.
+
+[Bob]: Perfect, easy.
+
+[Carol]: See you all Tuesday.
+
+[Dave]: Tuesday it is.
+
+[Eve]: Can't wait!
+
+[Alice]: Great, I'll send the invite to everyone now.

@@ -1,0 +1,15 @@
+[Alice]: hey carol, you still good for our rendez-vous tomorrow? just want to confirm
+
+[Carol]: oui oui! totally forgot to reply, lo siento. what time again?
+
+[Alice]: noon! the little café on main, you know the one
+
+[Carol]: ah yes the café, parfait. noon mañana. I'll be there
+
+[Alice]: perfect! it's just a casual catch-up, maybe an hour or so
+
+[Carol]: sounds good. so demain at noon, café on main, one hour. got it?
+
+[Alice]: that's it! see you mañana Carol
+
+[Carol]: à bientôt!

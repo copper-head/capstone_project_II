@@ -1,0 +1,168 @@
+[Alice]: Okay let's get started. This is the sprint 14 review. We've got a lot to cover so let's be efficient. Anyone have questions before we dive in?
+
+[Bob]: No questions. Let's just get into it.
+
+[Carol]: Ready when you are.
+
+[Dave]: Same.
+
+[Bob]: Ready. I've got my demo all set up.
+
+[Carol]: Same here.
+
+[Dave]: Good to go.
+
+[Alice]: Alright. Let's start with completed work. Bob, you want to kick us off?
+
+[Bob]: Sure. So the big thing this sprint was the notification service rewrite. We migrated from the old polling-based system to a proper webhook architecture. The difference in latency is night and day — we went from average 4 second notification delay down to under 200 milliseconds.
+
+[Alice]: That's excellent. That was blocking several customer escalations.
+
+[Dave]: It was painful to be honest. I spent way too long debugging a race condition in the event dispatcher. It only manifested under load, which meant my local tests all passed.
+
+[Carol]: I remember you messaging at 11 PM about that.
+
+[Dave]: More than once. But it's solid now. We've had it running in staging for a week with no issues.
+
+[Alice]: Let's move on. Carol, what did design complete this sprint?
+
+[Carol]: We shipped the new dashboard layout. The card grid is done, the responsive breakpoints are working down to 375px wide, and we resolved all the accessibility feedback from the audit.
+
+[Alice]: Great. Any accessibility items still open?
+
+[Carol]: Two minor ones. Screen reader labels on the filter dropdown and keyboard navigation order on the modal. I'll have those done Monday.
+
+[Alice]: Monday, so February 23rd. Got it.
+
+[Carol]: Yeah, nothing blocking. Just clean-up.
+
+[Alice]: What about the user profile section? That was in scope.
+
+[Carol]: Partially done. The display side is complete but the edit flow got deprioritized because of the auth changes Dave was doing. We'll carry it into sprint 15.
+
+[Alice]: Understood. Dave, anything else from you on completed work?
+
+[Dave]: Notification service is the main thing. I also did the API rate limiting implementation. That one was straightforward. Also some infra work — I upgraded the logging pipeline, though that's invisible to most people.
+
+[Alice]: That logging upgrade has already saved me personally. The new structured logs in Grafana are so much better.
+
+[Bob]: Completely agree. Night and day.
+
+[Dave]: Yeah it was a fairly quick win once I decided to actually do it.
+
+[Alice]: Good. The logging work is underappreciated internally but it pays dividends every time something goes wrong.
+
+[Bob]: I used the new logs to debug a frontend issue last week. Saved probably two hours.
+
+[Dave]: That's exactly why I did it. Glad it's already being used.
+
+[Alice]: Okay. Let's talk velocity. We committed to 42 story points and we delivered 38. Four points short because of the profile edit carry-over.
+
+[Bob]: Which is honestly decent given the notification rewrite was harder than estimated.
+
+[Alice]: It was. The complexity was higher than we scoped. That's a conversation for the retrospective though. Let's stay on the review for now.
+
+[Carol]: Should we flag the estimation issue in the retro?
+
+[Alice]: Absolutely. Put it on the retro agenda. Now let's look at what's coming up in sprint 15. I want to schedule a proper sprint planning before the sprint starts.
+
+[Bob]: When do you want to do that?
+
+[Alice]: Let's do sprint 15 planning Monday February 23rd at 10 AM. Two hours. Team room.
+
+[Bob]: Monday the 23rd at 10. I'll be there.
+
+[Carol]: Works for me. Though I have the accessibility fixes to finish that morning too.
+
+[Alice]: You can do both, the planning is at 10. Fixes first thing?
+
+[Carol]: Yeah I'll get in early.
+
+[Dave]: Monday 10 AM works for me.
+
+[Alice]: Good. Now, the main sprint 15 items. We have the profile edit flow carry-over, we're starting the analytics dashboard, and we need to integrate the new payment provider.
+
+[Bob]: The payment integration is going to be the big one. I'd like to do a technical design session before we just start coding.
+
+[Alice]: Yes, absolutely. Let's schedule a payment integration design review. How does Tuesday February 24th at 2 PM sound? An hour and a half.
+
+[Bob]: Tuesday the 24th at 2 PM. Yes. Dave, you need to be in that one too.
+
+[Dave]: Definitely. Payment stuff has backend implications across the board.
+
+[Carol]: Do I need to be there or can I use that time for the profile flow?
+
+[Alice]: You should be there for the first half, first 45 minutes or so, because there's a UI flow component. After that you can drop off.
+
+[Carol]: Okay, 2 to 2:45ish, then I'll head out.
+
+[Alice]: Perfect. Now I also want to schedule individual check-ins this week. I like to do these at the start of each sprint. Bob, can we do Monday afternoon? Like 3 PM?
+
+[Bob]: Monday February 23rd at 3 PM. Sure, 30 minutes?
+
+[Alice]: Yep, 30 minutes. Carol, Tuesday morning? 9 AM?
+
+[Carol]: Tuesday the 24th at 9 AM. Yes.
+
+[Alice]: And Dave, Wednesday? 9 AM as well?
+
+[Dave]: Wednesday February 25th at 9 AM. Works for me.
+
+[Alice]: Great. These are just in my office, no special room needed.
+
+[Bob]: Got it.
+
+[Alice]: Now the other thing I need to set up is the external demo. The customer advisory board wants to see the analytics dashboard. We can't show them a complete dashboard since we're just starting it, but we can show them the mocked designs and get their input.
+
+[Carol]: I can prep mockups for that. Do you have a date in mind?
+
+[Alice]: I was thinking Thursday February 26th. A customer call, probably 11 AM, an hour.
+
+[Carol]: I can definitely have the mockups ready by Thursday.
+
+[Bob]: Who's on the call? Is this just you and Carol or does the full team come?
+
+[Alice]: Me, Carol, and I'd like Bob on it too since you'll be the one implementing the analytics. Dave probably doesn't need to be there.
+
+[Dave]: Fine by me. I have a lot of backend work to get started.
+
+[Bob]: Thursday February 26th at 11 AM. I'm in.
+
+[Alice]: Great. The customer advisory board call is confirmed then.
+
+[Carol]: Should I send the mockups to you beforehand so you can review them?
+
+[Alice]: Yes, send them to me Wednesday so I have time to look. Actually, let's do a quick internal review Wednesday afternoon. Maybe 2 PM? Just you and me, Carol. 30 minutes.
+
+[Carol]: Wednesday the 25th at 2 PM. Sure, that works.
+
+[Alice]: Perfect. Now, retrospective. We always do this at end of sprint. Let's do it Friday February 27th at 2 PM. One hour.
+
+[Bob]: End of sprint retro, Friday the 27th at 2 PM. Classic.
+
+[Carol]: I'll put it in my calendar.
+
+[Dave]: Same. What format are we doing? Should I prepare anything?
+
+[Alice]: Standard format. I'll send the template before. Everyone just needs to think about what went well, what didn't, and one process improvement suggestion.
+
+[Dave]: Got it. The race condition debugging nightmare is definitely going in the "what didn't go well" column.
+
+[Bob]: Ha. I'll add "late night debugging messages" to the empathy section.
+
+[Alice]: You were both troopers. Okay I think that covers everything. Let me recap the schedule: sprint planning Monday 10 AM, Bob check-in Monday 3 PM, Carol check-in Tuesday 9 AM, payment design review Tuesday 2 PM, Dave check-in Wednesday 9 AM, mockup review Wednesday 2 PM, customer advisory board call Thursday 11 AM, and sprint retro Friday 2 PM.
+
+[Bob]: That's a busy week.
+
+[Dave]: It is but at least it's all scheduled.
+
+[Carol]: Better than finding out about meetings at the last minute.
+
+[Alice]: Exactly. Thanks everyone, great sprint. Let's have an even better one. See you Monday.
+
+[Bob]: See you Monday Alice.
+
+[Carol]: Have a good weekend!
+
+[Dave]: Later.
+

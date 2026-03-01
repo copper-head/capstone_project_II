@@ -1,0 +1,15 @@
+[Alice]: Hey Dave, I was going to set up a sync for later this week but honestly I think we should just skip it.
+
+[Dave]: Yeah, I agree. Don't bother booking anything. We can handle it async over Slack.
+
+[Alice]: Exactly. Let's not schedule anything formal. Just ping me if something comes up that really needs a call.
+
+[Dave]: Works for me. Definitely don't put anything on the calendar, I'm trying to keep Thursday and Friday clear.
+
+[Alice]: Same. I'll just drop you a message if the specs doc needs clarification.
+
+[Dave]: Perfect. And if we really need to get on a call we can do a quick impromptu one, no invite needed.
+
+[Alice]: Great. That approach works way better for this kind of thing anyway.
+
+[Dave]: Totally agreed. Keeping it loose.

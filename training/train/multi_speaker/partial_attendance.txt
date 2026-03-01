@@ -1,0 +1,29 @@
+[Alice]: The all-hands is this Monday at 10 AM. I wanted to confirm who can make it.
+
+[Bob]: I'll be there for sure.
+
+[Carol]: Me too, I wouldn't miss it.
+
+[Dave]: I have a conflict. I'm traveling back from the conference Monday morning. I won't be able to join.
+
+[Eve]: Same situation for me actually — I'm still at the conference Monday.
+
+[Alice]: That's okay Dave and Eve. The session will be recorded.
+
+[Dave]: Thanks Alice. I'll catch the recording.
+
+[Eve]: Appreciate it. Sorry to miss it.
+
+[Alice]: No worries at all. So confirmed attendees are myself, Bob, and Carol.
+
+[Bob]: Should we still plan for the full group breakout after?
+
+[Alice]: We'll adjust the breakout since Dave and Eve will be out. Let's just do the main session for now.
+
+[Carol]: Sounds good.
+
+[Alice]: Alright, Monday at 10 AM, main auditorium. Two hours. See you there, Bob and Carol.
+
+[Bob]: See you Monday.
+
+[Carol]: Monday at 10!

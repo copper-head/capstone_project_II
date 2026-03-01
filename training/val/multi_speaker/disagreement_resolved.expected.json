@@ -1,0 +1,36 @@
+{
+  "description": "Speakers disagree through Monday and multiple Tuesday time proposals before compromising on Tuesday 11:30 AM for the release planning meeting.",
+  "category": "multi_speaker",
+  "tolerance": "moderate",
+  "owner": "Alice",
+  "reference_datetime": "2026-02-20T10:00:00",
+  "calendar_context": [],
+  "expected_events": [
+    {
+      "action": "create",
+      "title": "Release Planning Meeting",
+      "start_time": "2026-02-24T11:30:00",
+      "end_time": "2026-02-24T13:30:00",
+      "location": "Meeting room B",
+      "attendees_contain": ["Alice", "Bob", "Carol"]
+    }
+  ],
+  "mock_llm_response": {
+    "events": [
+      {
+        "title": "Release Planning Meeting",
+        "start_time": "2026-02-24T11:30:00",
+        "end_time": "2026-02-24T13:30:00",
+        "location": "Meeting room B",
+        "attendees": "Alice, Bob, Carol",
+        "confidence": "high",
+        "reasoning": "After Monday is rejected by Bob and Carol, and 11 AM Tuesday is negotiated but then deferred, all three speakers settle on Tuesday at 11:30 AM for 2 hours (until 1:30 PM) in meeting room B.",
+        "assumptions": "",
+        "action": "create",
+        "existing_event_id": null
+      }
+    ],
+    "summary": "Found 1 event after extended negotiation: release planning meeting on Tuesday at 11:30 AM."
+  },
+  "notes": "Reference datetime is Friday 2026-02-20. Tuesday=Feb 24. Monday was rejected. 11 AM was considered but replaced by 11:30 AM. The final agreed time is 11:30 AM to 1:30 PM."
+}

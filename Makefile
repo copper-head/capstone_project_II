@@ -21,7 +21,7 @@ test-regression:
 	pytest tests/regression/ -v
 
 test-regression-live:
-	pytest tests/regression/ --live -v
+	pytest tests/regression/ --live -v -n 5
 
 benchmark:
 	python -m cal_ai benchmark

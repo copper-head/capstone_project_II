@@ -1,0 +1,15 @@
+[Alice]: Hey Carol, are you doing anything Saturday?
+
+[Carol]: Nothing planned yet. What's up?
+
+[Alice]: I'm organizing a team volunteering thing at the food bank. We're meeting there at 10 AM. Interested?
+
+[Carol]: Absolutely, I'd love to join. Which food bank is it?
+
+[Alice]: The Community Food Bank on Elm Street. We'll probably be wrapping up around 1 PM.
+
+[Carol]: Perfect, I'll be there. Is it just us or is anyone else coming?
+
+[Alice]: Bob said he might come but hasn't confirmed yet. For now it's just you and me.
+
+[Carol]: Great, see you Saturday at 10!

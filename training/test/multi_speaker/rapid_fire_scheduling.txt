@@ -1,0 +1,43 @@
+[Alice]: Okay team, rapid fire. Four things to lock in, let's go fast.
+
+[Bob]: Ready.
+
+[Carol]: Go.
+
+[Dave]: Yep.
+
+[Alice]: One — Monday 9 AM, standup for all of us. 15 minutes. Bob?
+
+[Bob]: Monday 9 AM standup, yes.
+
+[Carol]: In.
+
+[Dave]: Yes.
+
+[Alice]: Two — Carol and Dave, Tuesday 2 PM, data review. One hour.
+
+[Carol]: Tuesday 2 PM data review, confirmed.
+
+[Dave]: Yes.
+
+[Alice]: Three — Bob, you and I have the investor briefing Wednesday at 11 AM. Two hours.
+
+[Bob]: Wednesday 11 AM investor briefing. Done.
+
+[Alice]: Four — full team retrospective Friday at 3 PM. Ninety minutes.
+
+[Bob]: Friday 3 PM retro, yes.
+
+[Carol]: In.
+
+[Dave]: Friday 3 PM, confirmed.
+
+[Alice]: Great. I'll blast all four invites now. Any issues?
+
+[Bob]: None from me.
+
+[Carol]: All good.
+
+[Dave]: All set.
+
+[Alice]: Perfect. Efficient!

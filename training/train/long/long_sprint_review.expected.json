@@ -1,0 +1,168 @@
+{
+  "description": "84-line sprint review meeting with 4 speakers. First half covers completed work (past tense, no events). Second half schedules 8 follow-up meetings and check-ins. Tests ignoring past-tense work discussion and extracting only future scheduled events.",
+  "category": "long",
+  "tolerance": "relaxed",
+  "owner": "Alice",
+  "reference_datetime": "2026-02-20T10:00:00",
+  "calendar_context": [],
+  "expected_events": [
+    {
+      "action": "create",
+      "title": "Sprint 15 Planning",
+      "start_time": "2026-02-23T10:00:00",
+      "end_time": "2026-02-23T12:00:00",
+      "attendees_contain": ["Alice", "Bob", "Carol", "Dave"]
+    },
+    {
+      "action": "create",
+      "title": "1-on-1 with Bob",
+      "start_time": "2026-02-23T15:00:00",
+      "end_time": "2026-02-23T15:30:00",
+      "attendees_contain": ["Alice", "Bob"]
+    },
+    {
+      "action": "create",
+      "title": "1-on-1 with Carol",
+      "start_time": "2026-02-24T09:00:00",
+      "end_time": "2026-02-24T09:30:00",
+      "attendees_contain": ["Alice", "Carol"]
+    },
+    {
+      "action": "create",
+      "title": "Payment Integration Design Review",
+      "start_time": "2026-02-24T14:00:00",
+      "end_time": "2026-02-24T15:30:00",
+      "attendees_contain": ["Alice", "Bob", "Carol", "Dave"]
+    },
+    {
+      "action": "create",
+      "title": "1-on-1 with Dave",
+      "start_time": "2026-02-25T09:00:00",
+      "end_time": "2026-02-25T09:30:00",
+      "attendees_contain": ["Alice", "Dave"]
+    },
+    {
+      "action": "create",
+      "title": "Mockup Review",
+      "start_time": "2026-02-25T14:00:00",
+      "end_time": "2026-02-25T14:30:00",
+      "attendees_contain": ["Alice", "Carol"]
+    },
+    {
+      "action": "create",
+      "title": "Customer Advisory Board Call",
+      "start_time": "2026-02-26T11:00:00",
+      "end_time": "2026-02-26T12:00:00",
+      "attendees_contain": ["Alice", "Bob", "Carol"]
+    },
+    {
+      "action": "create",
+      "title": "Sprint Retrospective",
+      "start_time": "2026-02-27T14:00:00",
+      "end_time": "2026-02-27T15:00:00",
+      "attendees_contain": ["Alice", "Bob", "Carol", "Dave"]
+    }
+  ],
+  "mock_llm_response": {
+    "events": [
+      {
+        "title": "Sprint 15 Planning",
+        "start_time": "2026-02-23T10:00:00",
+        "end_time": "2026-02-23T12:00:00",
+        "location": "Team Room",
+        "attendees": "Alice, Bob, Carol, Dave",
+        "confidence": "high",
+        "reasoning": "Alice schedules sprint 15 planning for Monday February 23rd at 10 AM for 2 hours in the team room with the full team.",
+        "assumptions": "",
+        "action": "create",
+        "existing_event_id": null
+      },
+      {
+        "title": "1-on-1 with Bob",
+        "start_time": "2026-02-23T15:00:00",
+        "end_time": "2026-02-23T15:30:00",
+        "location": "Alice's Office",
+        "attendees": "Alice, Bob",
+        "confidence": "high",
+        "reasoning": "Alice schedules a 30-minute individual check-in with Bob on Monday February 23rd at 3 PM in her office.",
+        "assumptions": "",
+        "action": "create",
+        "existing_event_id": null
+      },
+      {
+        "title": "1-on-1 with Carol",
+        "start_time": "2026-02-24T09:00:00",
+        "end_time": "2026-02-24T09:30:00",
+        "location": "Alice's Office",
+        "attendees": "Alice, Carol",
+        "confidence": "high",
+        "reasoning": "Alice schedules a 30-minute individual check-in with Carol on Tuesday February 24th at 9 AM in her office.",
+        "assumptions": "",
+        "action": "create",
+        "existing_event_id": null
+      },
+      {
+        "title": "Payment Integration Design Review",
+        "start_time": "2026-02-24T14:00:00",
+        "end_time": "2026-02-24T15:30:00",
+        "location": null,
+        "attendees": "Alice, Bob, Carol, Dave",
+        "confidence": "high",
+        "reasoning": "Bob requests and Alice confirms a technical design session for the payment integration on Tuesday February 24th at 2 PM for 90 minutes. Carol will attend the first 45 minutes only, but all four are nominally invited.",
+        "assumptions": "",
+        "action": "create",
+        "existing_event_id": null
+      },
+      {
+        "title": "1-on-1 with Dave",
+        "start_time": "2026-02-25T09:00:00",
+        "end_time": "2026-02-25T09:30:00",
+        "location": "Alice's Office",
+        "attendees": "Alice, Dave",
+        "confidence": "high",
+        "reasoning": "Alice schedules a 30-minute individual check-in with Dave on Wednesday February 25th at 9 AM in her office.",
+        "assumptions": "",
+        "action": "create",
+        "existing_event_id": null
+      },
+      {
+        "title": "Mockup Review",
+        "start_time": "2026-02-25T14:00:00",
+        "end_time": "2026-02-25T14:30:00",
+        "location": null,
+        "attendees": "Alice, Carol",
+        "confidence": "high",
+        "reasoning": "Alice and Carol agree to a quick 30-minute internal mockup review on Wednesday February 25th at 2 PM before the customer call on Thursday.",
+        "assumptions": "",
+        "action": "create",
+        "existing_event_id": null
+      },
+      {
+        "title": "Customer Advisory Board Call",
+        "start_time": "2026-02-26T11:00:00",
+        "end_time": "2026-02-26T12:00:00",
+        "location": null,
+        "attendees": "Alice, Bob, Carol",
+        "confidence": "high",
+        "reasoning": "Alice schedules a customer advisory board call on Thursday February 26th at 11 AM for 1 hour with Alice, Bob, and Carol. Dave is explicitly excluded.",
+        "assumptions": "",
+        "action": "create",
+        "existing_event_id": null
+      },
+      {
+        "title": "Sprint Retrospective",
+        "start_time": "2026-02-27T14:00:00",
+        "end_time": "2026-02-27T15:00:00",
+        "location": null,
+        "attendees": "Alice, Bob, Carol, Dave",
+        "confidence": "high",
+        "reasoning": "Alice schedules the standard end-of-sprint retrospective for Friday February 27th at 2 PM for 1 hour with the full team.",
+        "assumptions": "",
+        "action": "create",
+        "existing_event_id": null
+      }
+    ],
+    "summary": "Found 8 events: sprint planning (Mon 10 AM), Bob check-in (Mon 3 PM), Carol check-in (Tue 9 AM), payment design review (Tue 2 PM), Dave check-in (Wed 9 AM), mockup review (Wed 2 PM), customer advisory board call (Thu 11 AM), and sprint retro (Fri 2 PM). The completed sprint work discussion is past-tense and produces no calendar events."
+  },
+  "notes": "Reference datetime is Friday 2026-02-20. The first half of the transcript discusses completed sprint 14 work in past tense and should produce no events. All 8 events are scheduled in the second half of the meeting. Monday accessibility fix completion (Carol) is a task deadline, not a calendar event."
+}

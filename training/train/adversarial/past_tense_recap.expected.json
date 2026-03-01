@@ -1,0 +1,14 @@
+{
+  "description": "Conversation recapping events that already happened: a design workshop yesterday and a previous one last quarter. All events are in the past — nothing is being scheduled.",
+  "category": "adversarial",
+  "tolerance": "moderate",
+  "owner": "Alice",
+  "reference_datetime": "2026-02-20T10:00:00",
+  "calendar_context": [],
+  "expected_events": [],
+  "mock_llm_response": {
+    "events": [],
+    "summary": "No actionable calendar events found. The conversation recaps past events (yesterday's design workshop, last quarter's session, November's meeting) using past tense throughout. No future events are being scheduled."
+  },
+  "notes": "Pure past-tense recap. The model must not create calendar events for things that have already occurred. Watch for 'yesterday', 'last quarter', 'back in November' as past-tense signals."
+}

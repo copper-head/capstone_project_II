@@ -1,0 +1,15 @@
+[Alice]: You know, someday I'd love to get the whole team together for an actual offsite. Like a real one, not just a conference room with bad sandwiches.
+
+[Bob]: Oh that would be amazing. Maybe somewhere with a lake view. We could do some actual strategic planning instead of just talking about strategic planning.
+
+[Alice]: Exactly. Wouldn't it be nice if we could just block off a week somewhere and actually focus without constant interruptions?
+
+[Bob]: A week! I'd settle for two days. But yeah, maybe once the project wraps up we could look into something like that.
+
+[Alice]: One day. Anyway, how's the integration work going?
+
+[Bob]: Slow but steady. We hit a snag with the authentication layer but I think we've got a fix in testing now.
+
+[Alice]: Good. Keep me posted. Let's try to get it wrapped by end of the month.
+
+[Bob]: Will do.

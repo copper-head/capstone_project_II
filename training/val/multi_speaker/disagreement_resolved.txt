@@ -1,0 +1,39 @@
+[Alice]: We need to set the release planning meeting. I want to do it Monday morning.
+
+[Bob]: Monday morning doesn't work for me at all. I have three syncs already.
+
+[Carol]: Monday is tough for me too, honestly.
+
+[Alice]: Okay, Tuesday then?
+
+[Bob]: Tuesday I can do, but not before 11.
+
+[Carol]: Tuesday after 11 works. How about 11:30?
+
+[Alice]: 11:30 feels a bit late. Can we do 11?
+
+[Bob]: 11 is on the edge for me because of my earlier call, but I can make it work.
+
+[Carol]: I'm fine with 11.
+
+[Alice]: Okay, 11 it is. Actually wait — Bob, does your call end at 10:45 or 11?
+
+[Bob]: 10:45 if it runs on time, 11 if not.
+
+[Alice]: Let's just do 11:30 to be safe. I don't want us rushing.
+
+[Bob]: 11:30 works. Thanks for the flexibility.
+
+[Carol]: 11:30 Tuesday. Good call.
+
+[Alice]: Two hours?
+
+[Bob]: Yeah, 11:30 to 1:30.
+
+[Carol]: Works for me.
+
+[Alice]: Great. I'll send the invite. Meeting room B.
+
+[Bob]: Meeting room B, noted.
+
+[Carol]: See you both Tuesday.

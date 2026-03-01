@@ -1,0 +1,33 @@
+[Alice]: We have two things to schedule — the product roadmap session and the hiring committee review. Let's figure out both.
+
+[Bob]: For the roadmap session, I'm thinking Monday morning. How does that sound?
+
+[Carol]: Monday is tough. For me the hiring review is more urgent. Can we lock that in first?
+
+[Dave]: I agree the hiring review needs to happen soon. We have candidates waiting.
+
+[Alice]: Okay let's do both simultaneously. Bob and Carol, what's your take on Monday for roadmap?
+
+[Bob]: I'm flexible. Carol, what time does the hiring review work for you?
+
+[Carol]: Hiring review — Thursday at 2 PM. Dave, can you do that?
+
+[Dave]: Thursday at 2 PM for hiring review, yes.
+
+[Bob]: Okay so roadmap session, Alice — can we do Monday at 10 AM?
+
+[Alice]: Monday at 10 works for me.
+
+[Bob]: Great. Two hours for the roadmap?
+
+[Alice]: Yeah, 10 to noon.
+
+[Carol]: And the hiring review is just Dave and me, right?
+
+[Dave]: And the HR rep, but not Alice or Bob.
+
+[Alice]: Correct. Bob and I have the roadmap session, Carol and Dave you handle hiring.
+
+[Carol]: Perfect. I'll send the hiring review invite.
+
+[Alice]: And I'll send the roadmap one.

@@ -1,0 +1,14 @@
+{
+  "description": "Nostalgic conversation about wishing a team reunion could happen. Both speakers express desire but explicitly acknowledge it is not realistically happening anytime soon. No concrete plan is made.",
+  "category": "adversarial",
+  "tolerance": "moderate",
+  "owner": "Alice",
+  "reference_datetime": "2026-02-20T10:00:00",
+  "calendar_context": [],
+  "expected_events": [],
+  "mock_llm_response": {
+    "events": [],
+    "summary": "No actionable calendar events found. The conversation expresses wishful thinking about a team reunion using language like 'I wish we could', 'too bad', 'I hope it happens eventually', and 'one day, maybe'. No concrete date, plan, or commitment is made."
+  },
+  "notes": "Wishful thinking vs. scheduling intent. Key signals: 'I wish we could', 'too bad', 'life gets in the way', 'I don't see us pulling this off anytime soon'. The explicit pessimism about it happening distinguishes this from a real plan."
+}

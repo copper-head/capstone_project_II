@@ -1,0 +1,21 @@
+[Alice]: Bob, putting the sprint planning on Thursday at 3pm, main conference room
+
+[Bob]: sounds good
+
+[Alice]: wait actually it should be Wednesday not Thursday. sorry
+
+[Bob]: okay Wednesday at 3pm main conf room
+
+[Alice]: and actually make it 2pm not 3pm, I have a thing at 3
+
+[Bob]: Wednesday 2pm got it. main conference room
+
+[Alice]: oh also not the main conference room - engineering booked it. let's use the annex
+
+[Bob]: Wednesday 2pm annex. final answer?
+
+[Alice]: yes! Wednesday 2pm annex. sorry for all the changes
+
+[Bob]: no worries. sprint planning, Wednesday at 2pm, annex. confirmed
+
+[Alice]: perfect, thanks for being patient!

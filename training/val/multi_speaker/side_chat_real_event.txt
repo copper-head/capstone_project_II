@@ -1,0 +1,37 @@
+[Alice]: How was everyone's weekend?
+
+[Bob]: Great! Went hiking up north.
+
+[Carol]: Nice! I just relaxed at home, very needed.
+
+[Dave]: Same, pretty low-key. Good to be back though.
+
+[Alice]: For real. Okay so, Bob — totally unrelated — are you free Tuesday evening?
+
+[Bob]: Tuesday evening? Yeah, what's up?
+
+[Alice]: I have two tickets to the tech panel discussion downtown. 7 PM. Want to come?
+
+[Bob]: Oh that sounds great actually. I'd love to.
+
+[Alice]: Perfect. It goes until about 9. I'll add it to our calendars.
+
+[Bob]: Which venue?
+
+[Alice]: The Innovation Hub on Market Street.
+
+[Bob]: I know that place. Great, I'll be there.
+
+[Carol]: What are you two talking about?
+
+[Bob]: A tech panel Tuesday evening.
+
+[Carol]: Fun! You two enjoy. Dave and I will just keep enjoying our quiet evenings.
+
+[Dave]: Ha, exactly.
+
+[Alice]: You're both welcome to get your own tickets but it's sold out now.
+
+[Carol]: Next time!
+
+[Alice]: Definitely. Anyway, back to the agenda for today...

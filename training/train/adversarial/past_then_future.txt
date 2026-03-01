@@ -1,0 +1,19 @@
+[Alice]: That board dinner last Tuesday was exhausting. Three hours of small talk and they still couldn't align on the Q2 priorities.
+
+[Carol]: I heard it went long. Did they at least reach any conclusions?
+
+[Alice]: Sort of. They approved the headcount plan, which was the big one. The rest got punted to a follow-up session they never actually scheduled.
+
+[Carol]: Classic. And how was the offsite the week before? You seemed pretty wiped out after it.
+
+[Alice]: It was good but intense. Three days of strategy sessions, I was done by day two. But we got the roadmap locked so it was worth it.
+
+[Carol]: Good outcome at least. So what's next on your end?
+
+[Alice]: Actually, can we meet Monday morning? I need to walk you through the roadmap decisions before you start the design phase. Eight-thirty at the office?
+
+[Carol]: Monday at eight-thirty works. Should I bring the current wireframes?
+
+[Alice]: Yes, bring everything you've got so far. This shouldn't take more than an hour.
+
+[Carol]: Great, I'll see you then.

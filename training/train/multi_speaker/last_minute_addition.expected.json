@@ -1,0 +1,54 @@
+{
+  "description": "Carol joins late and adds a new pre-sync event on top of the deployment planning already agreed upon by Alice and Bob.",
+  "category": "multi_speaker",
+  "tolerance": "moderate",
+  "owner": "Alice",
+  "reference_datetime": "2026-02-20T10:00:00",
+  "calendar_context": [],
+  "expected_events": [
+    {
+      "action": "create",
+      "title": "Deployment Planning",
+      "start_time": "2026-02-24T15:00:00",
+      "end_time": "2026-02-24T16:00:00",
+      "attendees_contain": ["Alice", "Bob", "Carol"]
+    },
+    {
+      "action": "create",
+      "title": "Pre-Deployment Sync",
+      "start_time": "2026-02-24T09:00:00",
+      "end_time": "2026-02-24T09:30:00",
+      "attendees_contain": ["Alice", "Carol"]
+    }
+  ],
+  "mock_llm_response": {
+    "events": [
+      {
+        "title": "Deployment Planning",
+        "start_time": "2026-02-24T15:00:00",
+        "end_time": "2026-02-24T16:00:00",
+        "location": null,
+        "attendees": "Alice, Bob, Carol",
+        "confidence": "high",
+        "reasoning": "Alice and Bob agree on Tuesday at 3 PM for 1 hour. Carol joins late and is included in the invite.",
+        "assumptions": "",
+        "action": "create",
+        "existing_event_id": null
+      },
+      {
+        "title": "Pre-Deployment Sync",
+        "start_time": "2026-02-24T09:00:00",
+        "end_time": "2026-02-24T09:30:00",
+        "location": null,
+        "attendees": "Alice, Carol",
+        "confidence": "high",
+        "reasoning": "Carol proposes a pre-deployment sync with Alice the morning before (Tuesday at 9 AM) for 30 minutes. Alice agrees. Bob asks to join but Carol clarifies it is only Alice and Carol.",
+        "assumptions": "",
+        "action": "create",
+        "existing_event_id": null
+      }
+    ],
+    "summary": "Found 2 events on Tuesday: pre-deployment sync at 9 AM (Alice and Carol only) and deployment planning at 3 PM (all three)."
+  },
+  "notes": "Reference datetime is Friday 2026-02-20. Tuesday=Feb 24. Bob is excluded from the pre-sync explicitly by Carol."
+}

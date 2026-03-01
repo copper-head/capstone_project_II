@@ -1,0 +1,41 @@
+[Alice]: Thursday is going to be a big day. We need to run three back-to-back sessions. Let me walk through them.
+
+[Bob]: Ready.
+
+[Carol]: Go ahead.
+
+[Dave]: Listening.
+
+[Alice]: First, 9 to 10 AM — kickoff with the whole team. Everyone is in that one.
+
+[Bob]: Got it. Kickoff at 9.
+
+[Carol]: I'll be there.
+
+[Dave]: Same.
+
+[Alice]: Second, immediately after — 10 to 11:30 AM — technical breakdown. That's just Bob and Dave. Deep dive into the architecture.
+
+[Bob]: 10 to 11:30 with Dave. Perfect.
+
+[Dave]: I'll prepare the architecture diagram.
+
+[Carol]: I'm off the hook for that one?
+
+[Alice]: Yes Carol, you're free from 10 to 11:30. Take a break.
+
+[Carol]: Lovely.
+
+[Alice]: Third session — noon to 1 PM — client readiness review. That's Carol and me.
+
+[Carol]: Noon to 1. I'll prepare the client-facing deck.
+
+[Bob]: And Dave and I are done by then?
+
+[Alice]: Right, you two are free after 11:30.
+
+[Dave]: Great, so I'm done early.
+
+[Alice]: Exactly. I'll send three separate invites so everyone sees their specific sessions.
+
+[Bob]: Perfect plan, Alice.

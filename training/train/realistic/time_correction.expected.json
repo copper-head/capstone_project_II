@@ -1,0 +1,36 @@
+{
+  "description": "Speaker proposes 2 PM, corrects to 3 PM, then corrects back to 2 PM. Final confirmed time is 2 PM Thursday. Tests tracking the last confirmed value through corrections.",
+  "category": "realistic",
+  "tolerance": "moderate",
+  "owner": "Alice",
+  "reference_datetime": "2026-02-20T10:00:00",
+  "calendar_context": [],
+  "expected_events": [
+    {
+      "action": "create",
+      "title": "Design Review",
+      "start_time": "2026-02-26T14:00:00",
+      "end_time": "2026-02-26T15:00:00",
+      "location": "Design Lab",
+      "attendees_contain": ["Alice", "Carol"]
+    }
+  ],
+  "mock_llm_response": {
+    "events": [
+      {
+        "title": "Design Review",
+        "start_time": "2026-02-26T14:00:00",
+        "end_time": "2026-02-26T15:00:00",
+        "location": "Design Lab",
+        "attendees": "Alice, Carol",
+        "confidence": "high",
+        "reasoning": "Alice initially proposes 2 PM, corrects to 3 PM, then corrects back to 2 PM after her conflict was resolved. The final confirmed time is 2 PM Thursday in the design lab.",
+        "assumptions": "Duration assumed 1 hour per Alice's 'probably just an hour'. Final time is 2 PM, not 3 PM, as Alice explicitly reverted.",
+        "action": "create",
+        "existing_event_id": null
+      }
+    ],
+    "summary": "Found 1 event: design review on Thursday at 2 PM in the design lab, after two time corrections."
+  },
+  "notes": "Reference datetime is Friday 2026-02-20. Thursday = 2026-02-26. Key challenge: tracking the FINAL confirmed time through corrections (2pm -> 3pm -> back to 2pm). Expected event uses the final value."
+}

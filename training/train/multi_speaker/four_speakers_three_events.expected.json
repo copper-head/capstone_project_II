@@ -1,0 +1,92 @@
+{
+  "description": "Four-speaker morning sync scheduling three events with different attendee combinations: client presentation, technical deep dive, and two one-on-ones.",
+  "category": "multi_speaker",
+  "tolerance": "moderate",
+  "owner": "Alice",
+  "reference_datetime": "2026-02-20T10:00:00",
+  "calendar_context": [],
+  "expected_events": [
+    {
+      "action": "create",
+      "title": "Client Presentation",
+      "start_time": "2026-02-26T14:00:00",
+      "end_time": "2026-02-26T15:00:00",
+      "attendees_contain": ["Alice", "Dave"]
+    },
+    {
+      "action": "create",
+      "title": "API Performance Deep Dive",
+      "start_time": "2026-02-24T10:00:00",
+      "end_time": "2026-02-24T12:00:00",
+      "attendees_contain": ["Bob", "Carol"]
+    },
+    {
+      "action": "create",
+      "title": "One-on-One",
+      "start_time": "2026-02-23T16:00:00",
+      "end_time": "2026-02-23T17:00:00",
+      "attendees_contain": ["Alice", "Bob"]
+    },
+    {
+      "action": "create",
+      "title": "One-on-One",
+      "start_time": "2026-02-25T16:00:00",
+      "end_time": "2026-02-25T17:00:00",
+      "attendees_contain": ["Alice", "Carol"]
+    }
+  ],
+  "mock_llm_response": {
+    "events": [
+      {
+        "title": "Client Presentation",
+        "start_time": "2026-02-26T14:00:00",
+        "end_time": "2026-02-26T15:00:00",
+        "location": null,
+        "attendees": "Alice, Dave",
+        "confidence": "high",
+        "reasoning": "Alice confirms Thursday at 2 PM client presentation with Dave. Dave confirms attendance.",
+        "assumptions": "Assumed 1-hour duration",
+        "action": "create",
+        "existing_event_id": null
+      },
+      {
+        "title": "API Performance Deep Dive",
+        "start_time": "2026-02-24T10:00:00",
+        "end_time": "2026-02-24T12:00:00",
+        "location": null,
+        "attendees": "Bob, Carol",
+        "confidence": "high",
+        "reasoning": "Bob and Carol agree on a 2-hour technical deep dive on the API performance issue on Tuesday from 10 AM to noon.",
+        "assumptions": "",
+        "action": "create",
+        "existing_event_id": null
+      },
+      {
+        "title": "One-on-One",
+        "start_time": "2026-02-23T16:00:00",
+        "end_time": "2026-02-23T17:00:00",
+        "location": null,
+        "attendees": "Alice, Bob",
+        "confidence": "high",
+        "reasoning": "Alice schedules a one-on-one with Bob on Monday at 4 PM. Bob confirms.",
+        "assumptions": "Assumed 1-hour duration",
+        "action": "create",
+        "existing_event_id": null
+      },
+      {
+        "title": "One-on-One",
+        "start_time": "2026-02-25T16:00:00",
+        "end_time": "2026-02-25T17:00:00",
+        "location": null,
+        "attendees": "Alice, Carol",
+        "confidence": "high",
+        "reasoning": "Alice schedules a one-on-one with Carol on Wednesday at 4 PM. Carol confirms.",
+        "assumptions": "Assumed 1-hour duration",
+        "action": "create",
+        "existing_event_id": null
+      }
+    ],
+    "summary": "Found 4 events: client presentation, API deep dive, and two one-on-ones on different days."
+  },
+  "notes": "Reference datetime is Friday 2026-02-20. Monday=Feb 23, Tuesday=Feb 24, Wednesday=Feb 25, Thursday=Feb 26. Dave's one-on-one already happened on the reference Friday, so it is not created."
+}

@@ -1,0 +1,27 @@
+[Alice]: Bob, let's lock in the deployment planning meeting. Tuesday at 3 PM?
+
+[Bob]: Tuesday at 3 works for me. An hour?
+
+[Alice]: Yeah, one hour. I'll send the invite.
+
+[Bob]: Great.
+
+[Carol]: Sorry I'm late — catching up. What did I miss?
+
+[Alice]: We just set the deployment planning for Tuesday at 3 PM, one hour. You're included.
+
+[Carol]: Got it. Oh, and actually — Alice, can we also schedule a quick pre-deployment sync? Just you and me, the morning before?
+
+[Alice]: That's a great idea. Tuesday morning? 9 AM?
+
+[Carol]: 9 AM Tuesday is perfect. 30 minutes should be enough.
+
+[Alice]: Done. I'll add that to the invite.
+
+[Bob]: Wait, should I be in the pre-sync too?
+
+[Carol]: Not necessary, Bob. It's just a quick alignment between Alice and me before the big meeting.
+
+[Bob]: Fair enough, no worries.
+
+[Alice]: Alright, two meetings on Tuesday. Pre-sync at 9, deployment planning at 3.

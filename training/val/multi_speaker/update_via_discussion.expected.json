@@ -1,0 +1,45 @@
+{
+  "description": "Three speakers discuss rescheduling an existing calendar event from Thursday morning to Thursday afternoon with a shortened duration.",
+  "category": "multi_speaker",
+  "tolerance": "moderate",
+  "owner": "Alice",
+  "reference_datetime": "2026-02-20T10:00:00",
+  "calendar_context": [
+    {
+      "id": "gcal-strategy-offsite-001",
+      "summary": "Strategy Offsite",
+      "start": "2026-02-26T09:00:00",
+      "end": "2026-02-26T12:00:00",
+      "location": "Offsite conference center"
+    }
+  ],
+  "expected_events": [
+    {
+      "action": "update",
+      "title": "Strategy Offsite",
+      "start_time": "2026-02-26T14:00:00",
+      "end_time": "2026-02-26T16:00:00",
+      "existing_event_id_required": true,
+      "location": "Offsite conference center",
+      "attendees_contain": ["Alice", "Bob", "Carol"]
+    }
+  ],
+  "mock_llm_response": {
+    "events": [
+      {
+        "title": "Strategy Offsite",
+        "start_time": "2026-02-26T14:00:00",
+        "end_time": "2026-02-26T16:00:00",
+        "location": "Offsite conference center",
+        "attendees": "Alice, Bob, Carol",
+        "confidence": "high",
+        "reasoning": "Alice needs to move the existing strategy offsite from Thursday 9 AM due to an investor call conflict. All three speakers agree on Thursday 2 PM to 4 PM (2 hours instead of 3). Location and attendees remain the same.",
+        "assumptions": "",
+        "action": "update",
+        "existing_event_id": 1
+      }
+    ],
+    "summary": "Updated 1 event: strategy offsite moved from Thursday 9 AM to 2 PM, duration reduced to 2 hours."
+  },
+  "notes": "Reference datetime is Friday 2026-02-20. Thursday=Feb 26. Calendar context has the original event at 9 AM. existing_event_id=1 refers to the first calendar_context entry."
+}

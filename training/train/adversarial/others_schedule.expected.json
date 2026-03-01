@@ -1,0 +1,14 @@
+{
+  "description": "Conversation entirely about other people's calendars and events (Marcus's presentation, leadership dinner, product team offsite). Alice is not involved in or scheduling any of these events.",
+  "category": "adversarial",
+  "tolerance": "moderate",
+  "owner": "Alice",
+  "reference_datetime": "2026-02-20T10:00:00",
+  "calendar_context": [],
+  "expected_events": [],
+  "mock_llm_response": {
+    "events": [],
+    "summary": "No actionable calendar events found. All events discussed (Marcus's CTO presentation, leadership dinner, product team offsite) belong to other people's calendars. Alice is not organizing, attending, or invited to any of these events."
+  },
+  "notes": "Third-party schedule discussion. The owner (Alice) is only gossiping about other people's events, not scheduling anything for herself. Key signal: 'he has a presentation', 'they booked', 'they rented' — all third-person."
+}

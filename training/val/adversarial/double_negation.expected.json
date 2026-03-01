@@ -1,0 +1,14 @@
+{
+  "description": "Conversation with compounding double and triple negations that make scheduling intent completely ambiguous. The speakers themselves cannot resolve the ambiguity and agree to table the discussion entirely.",
+  "category": "adversarial",
+  "tolerance": "moderate",
+  "owner": "Alice",
+  "reference_datetime": "2026-02-20T10:00:00",
+  "calendar_context": [],
+  "expected_events": [],
+  "mock_llm_response": {
+    "events": [],
+    "summary": "No actionable calendar events found. The conversation uses compounding negations ('shouldn't not', 'not opposed to not', 'don't think we can't skip') that render scheduling intent completely unresolvable. The conversation explicitly concludes with 'let's table the whole thing'."
+  },
+  "notes": "Double/triple negation adversarial pattern. Even if the negations resolved to a meeting intent, no date, time, or location is ever specified. The explicit conclusion to 'table it' makes the non-event outcome definitive."
+}

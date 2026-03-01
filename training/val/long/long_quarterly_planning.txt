@@ -1,0 +1,176 @@
+[Alice]: Alright, Q2 planning time. I know it feels early since we're barely into Q1, but leadership wants the quarterly plan by end of this month and I'd rather do this properly now than scramble.
+
+[Bob]: Makes sense. I've been doing some prep. Want me to go first?
+
+[Carol]: I have some notes too. And a lot of questions.
+
+[Dave]: Same. My list of questions is probably longer than my actual plan.
+
+[Eve]: Ha. That tracks, Dave.
+
+[Alice]: Let's start with objectives and then get into the calendar. What are the big rocks for Q2?
+
+[Bob]: From a product perspective we have three main things: the mobile app launch, the API versioning project, and the self-service onboarding flow.
+
+[Carol]: Design is aligned with those. The mobile app designs are basically done. API versioning doesn't have much of a design surface. The onboarding flow is the one that needs the most design work.
+
+[Dave]: Engineering is probably blocked on the API versioning until we finish the deprecation work from Q1. That's my biggest concern going into Q2.
+
+[Eve]: From a marketing standpoint we need at least 6 weeks of runway before the mobile launch to do the campaign properly.
+
+[Alice]: Good to know. So if we want mobile launch in late April or May, we need the product ready to hand to marketing by mid-March.
+
+[Eve]: Exactly. March 15th would be ideal for me to start the full campaign build.
+
+[Bob]: That's tight but possible if we freeze scope.
+
+[Alice]: Let's call it an aspiration and see where we land. Okay, let's get into the actual calendar. I want to set up the rhythm for Q2 now.
+
+[Carol]: What's changing from Q1?
+
+[Alice]: A few things. First, I want to add a monthly design review to the calendar. Q1 we did them ad hoc and it was messy.
+
+[Carol]: I would love that. A recurring design review would help us stay ahead of the design debt.
+
+[Alice]: So monthly design reviews starting in Q2. First one: Tuesday March 3rd, 2 PM, two hours.
+
+[Carol]: Tuesday March 3rd at 2 PM. Great.
+
+[Bob]: Do product need to be in those?
+
+[Alice]: Yes, you should be there. Engineering maybe optional but invited.
+
+[Dave]: I'll come to the first one and see if it makes sense for me to keep attending.
+
+[Alice]: Fair. And Dave, can you do your weekly architecture office hours in Q2? You mentioned wanting to start those.
+
+[Dave]: Yes! Wednesdays, late morning. I was thinking 11 AM to noon, every Wednesday.
+
+[Alice]: Let's start that the first Wednesday of Q2 then. March 4th.
+
+[Dave]: Wednesday March 4th at 11 AM, yes. Anyone from the team can drop in.
+
+[Eve]: I might come to those actually. I want to understand the tech better for the marketing materials.
+
+[Dave]: You'd be very welcome Eve.
+
+[Alice]: Good. Architecture office hours starting March 4th, every Wednesday 11 to noon.
+
+[Bob]: Alice, we should also talk about the mobile launch event. If we're launching the mobile app in Q2, should we do a virtual launch event?
+
+[Alice]: Yes, we've been discussing that. Let me check with leadership on the exact timing. But tentatively, if mobile is ready by end of April, we'd do the launch event the first week of May.
+
+[Eve]: I'd suggest May 5th. It's a Tuesday, which historically has the best engagement for our announcements.
+
+[Alice]: May 5th, virtual launch event. Let's put that as tentative.
+
+[Bob]: Tentative works. We don't want to commit and then have to move it.
+
+[Carol]: The last time we moved a launch event it was a PR nightmare.
+
+[Alice]: Let's not revisit that. Moving on. I also want to schedule our quarterly team off-site.
+
+[Eve]: Oh exciting! Where are we thinking?
+
+[Alice]: I was looking at a venue about an hour outside the city. Full day event, mix of planning and team building.
+
+[Bob]: When?
+
+[Alice]: March 23rd. It's a Monday, which I know isn't ideal for some people but the venue was only available on that day in March.
+
+[Carol]: March 23rd. I'll make it work.
+
+[Dave]: Same, as long as I know early enough I can arrange coverage.
+
+[Eve]: I can do it.
+
+[Alice]: Great. Team off-site, Monday March 23rd, all day. I'll send the details once I confirm the venue. Tentatively 9 AM to 5 PM.
+
+[Bob]: Is there travel the night before? Or is it a drive-in the morning?
+
+[Alice]: Drive in the morning. It's only an hour. I'll organize carpooling.
+
+[Carol]: Smart. Okay I also have something to add to the calendar. I have a conference I want to attend in March.
+
+[Alice]: Which one?
+
+[Carol]: It's called DesignNow. It's in the city on March 16th and 17th. I've been to it before and the talks are genuinely excellent.
+
+[Alice]: Is this on the training budget?
+
+[Carol]: Yes, it's within the individual learning allocation.
+
+[Alice]: Then go for it. Do you want the team to know you'll be unavailable those days?
+
+[Carol]: That would be helpful yeah. Should I put an out-of-office on the calendar?
+
+[Alice]: You can. But it's not a team event, just your own thing.
+
+[Carol]: Got it. I'll handle that myself.
+
+[Alice]: Now let's talk about the cross-functional syncs. In Q1 we didn't have a good rhythm with marketing. Eve, what do you need from us?
+
+[Eve]: Honestly a bi-weekly checkpoint would be enough. Something where I can ask questions and get quick answers from product and design.
+
+[Alice]: Bi-weekly cross-functional sync. Let's do Thursdays at 3 PM, every other week. Starting March 5th.
+
+[Eve]: Thursday March 5th at 3 PM. Yes. 30 minutes?
+
+[Alice]: One hour. There's always more to cover than 30 minutes.
+
+[Eve]: Fair.
+
+[Bob]: I'll make sure to have status updates ready for those.
+
+[Alice]: Good. And on the topic of syncs, I want to revive the leadership alignment meeting. Alice, Bob, and me.
+
+[Bob]: You mean just us three?
+
+[Alice]: Yes. Monthly. First Friday of each month, 9 AM, 90 minutes. Starting March 7th.
+
+[Bob]: First Friday in March is March 7th. That works.
+
+[Alice]: Great. Leadership alignment, March 7th 9 AM, 90 minutes, just me, you, and Bob.
+
+[Bob]: That's you saying you and Bob. You're Alice so...
+
+[Alice]: Ha, sorry. Me, Alice, and you Bob. Just the two of us and whoever else is in leadership at the time.
+
+[Bob]: I figured. March 7th at 9 AM.
+
+[Alice]: Now, Dave — do you want to present the Q2 engineering roadmap at the all-hands? I'm planning the all-hands for late March.
+
+[Dave]: Sure. How long do I have?
+
+[Alice]: 15 minutes, plus Q&A. The all-hands is March 30th, last Monday of the quarter.
+
+[Dave]: Monday March 30th. Works.
+
+[Alice]: All-hands March 30th, 10 AM, full company, usual format. I'll book the big conference room. Plan for 2 hours total.
+
+[Eve]: I'll prepare the marketing update for that too.
+
+[Carol]: And I can show the new design system work.
+
+[Alice]: Perfect. All-hands agenda is shaping up already.
+
+[Bob]: This has been a super productive session. I feel a lot better about Q2 now.
+
+[Carol]: Same. Having the calendar set up early makes such a difference.
+
+[Dave]: Agreed. I hate when planning happens the week before Q2 starts.
+
+[Eve]: Two weeks into Q1 and already planning Q2. That's a sign of a healthy team honestly.
+
+[Alice]: Or an anxious manager. Either way, we're set. Let me recap: design review March 3rd, architecture office hours starting March 4th weekly, cross-functional sync starting March 5th bi-weekly, leadership alignment March 7th, team off-site March 23rd, all-hands March 30th. And tentatively mobile launch event May 5th.
+
+[Bob]: Got it all.
+
+[Carol]: Thanks Alice. Great session.
+
+[Dave]: Very organized. See you all.
+
+[Eve]: Bye everyone!
+
+[Alice]: Bye all.
+

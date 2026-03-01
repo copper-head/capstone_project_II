@@ -1,0 +1,19 @@
+[Alice]: Oh yes, please add another standup to my calendar. That's exactly what this team needs, more standups.
+
+[Bob]: And let's make it at eight AM because everyone loves kicking off their day with a meeting before coffee.
+
+[Alice]: Naturally. And then a follow-up to the standup at nine, a retrospective on the follow-up at ten.
+
+[Bob]: Don't forget the monthly all-hands on Mars for team alignment.
+
+[Alice]: Ha. Okay but genuinely — can you block Tuesday at two for the architecture review? I want to go through the new database schema with you before we bring the rest of the team in.
+
+[Bob]: Tuesday at two works for me. Just us or should I loop in Dave?
+
+[Alice]: Just us for now. Thirty minutes should be enough.
+
+[Bob]: Perfect. I'll be ready. Should we use the usual meeting room or do a video call?
+
+[Alice]: Let's just do a video call, I might be working from home Tuesday.
+
+[Bob]: Sounds good. I'll keep an eye out for the invite.

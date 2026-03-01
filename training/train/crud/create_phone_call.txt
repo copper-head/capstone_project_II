@@ -1,0 +1,13 @@
+[Alice]: Eve, I have a call with the vendor from TechSupply scheduled for Monday at 11 AM.
+
+[Eve]: What's the call about?
+
+[Alice]: They want to go over the Q2 contract terms. Should be about 45 minutes.
+
+[Eve]: Do you want me to join?
+
+[Alice]: No, I've got this one. I just need it on my calendar so nothing else gets booked then.
+
+[Eve]: Makes sense. I'll make sure the slot stays open for you.
+
+[Alice]: Thanks. Monday at 11, vendor call, 45 minutes.

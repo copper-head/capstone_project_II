@@ -1,0 +1,14 @@
+{
+  "description": "Socially polite exchange where both parties express enthusiasm for meeting but use classic deflection language. 'We should', 'we really should', 'one of these days', 'whenever it works out' — no actual commitment.",
+  "category": "adversarial",
+  "tolerance": "moderate",
+  "owner": "Alice",
+  "reference_datetime": "2026-02-20T10:00:00",
+  "calendar_context": [],
+  "expected_events": [],
+  "mock_llm_response": {
+    "events": [],
+    "summary": "No actionable calendar events found. The conversation uses classic polite deflection: 'we should', 'one of these days', 'whenever it works out', 'when things calm down'. Both parties express social enthusiasm without making any specific commitment to a time, date, or place."
+  },
+  "notes": "Polite deflection is a common social pattern where 'we should do lunch' is a farewell pleasantry, not a scheduling request. The mutual enthusiasm without any specificity ('sometime', 'one of these days', 'whenever') is the hallmark of this pattern."
+}

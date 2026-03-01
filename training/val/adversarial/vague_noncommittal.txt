@@ -1,0 +1,15 @@
+[Alice]: We should probably catch up at some point. Maybe sometime next week?
+
+[Frank]: Yeah, definitely, we'll see. Let me know if something opens up.
+
+[Alice]: Sure, I'll check in when I have a better sense of what my schedule looks like.
+
+[Frank]: No rush. Could be the week after if next week doesn't work out.
+
+[Alice]: Right, yeah. Totally flexible on my end. Whenever makes sense.
+
+[Frank]: Same. We'll figure it out.
+
+[Alice]: Cool. I'll be in touch.
+
+[Frank]: Sounds good.

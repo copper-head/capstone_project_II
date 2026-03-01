@@ -1,0 +1,14 @@
+{
+  "description": "Alice tells a narrative anecdote about a bad meeting from five years ago. The meeting is a past event in a story, not a scheduling request. No present or future events are being scheduled.",
+  "category": "adversarial",
+  "tolerance": "moderate",
+  "owner": "Alice",
+  "reference_datetime": "2026-02-20T10:00:00",
+  "calendar_context": [],
+  "expected_events": [],
+  "mock_llm_response": {
+    "events": [],
+    "summary": "No actionable calendar events found. The conversation is a narrative anecdote about a past meeting from approximately five years ago. The Monday morning all-hands is part of a story, not a scheduling request. All temporal references are historical."
+  },
+  "notes": "Narrative storytelling trap. The Monday morning all-hands mentioned in the story happened years ago and is framed explicitly as a past memory. The model must distinguish between events that appear in narratives/anecdotes and actual scheduling intents."
+}

@@ -1,4 +1,4 @@
-"""Unit tests for the prompt builders (18 tests).
+"""Unit tests for the prompt builders (21 tests).
 
 Covers ``build_system_prompt``, ``build_user_prompt``, and
 ``format_transcript_for_llm`` from :mod:`cal_ai.prompts`.
@@ -13,6 +13,8 @@ Test matrix:
 - Negative examples (1): at least 1 negative example present
 - Calendar context (2): with context appended, without context default
 - Last-statement-wins (1): instruction present
+- Memory context (3): byte-for-byte identity when empty, memory context
+  appended when provided, memory context placed before calendar context
 - build_user_prompt (1): transcript embedded
 - format_transcript_for_llm (2): normal + empty list
 """
@@ -296,6 +298,69 @@ class TestCalendarContextParameter:
         )
         assert isinstance(prompt_with_ctx, str)
         assert len(prompt_with_ctx) > len(prompt_no_ctx)
+
+
+# ---------------------------------------------------------------------------
+# build_system_prompt -- memory context (3 tests)
+# ---------------------------------------------------------------------------
+
+_SAMPLE_MEMORY_CONTEXT = (
+    "## Your Memory (about Alice)\n\n"
+    "### Preferences\n"
+    "- **meeting_time**: Alice prefers morning meetings (before 11am)\n\n"
+    "### People\n"
+    "- **Bob (manager)**: Alice's manager; weekly 1:1 on Tuesdays\n"
+)
+
+
+class TestMemoryContext:
+    """Memory context injection tests."""
+
+    def test_empty_memory_context_byte_for_byte_identical(self) -> None:
+        """With empty memory_context, output is byte-for-byte identical to legacy."""
+        # Baseline: call WITHOUT memory_context (legacy signature)
+        baseline = build_system_prompt(
+            owner_name=_OWNER,
+            current_datetime=_DATETIME,
+            calendar_context="",
+        )
+
+        # New call: explicit empty memory_context
+        with_empty_memory = build_system_prompt(
+            owner_name=_OWNER,
+            current_datetime=_DATETIME,
+            calendar_context="",
+            memory_context="",
+        )
+
+        assert baseline == with_empty_memory, (
+            "Empty memory_context must produce byte-for-byte identical output"
+        )
+
+    def test_memory_context_appended_when_provided(self) -> None:
+        """Non-empty memory_context is included in the output."""
+        prompt = build_system_prompt(
+            owner_name=_OWNER,
+            current_datetime=_DATETIME,
+            memory_context=_SAMPLE_MEMORY_CONTEXT,
+        )
+
+        assert "## Your Memory (about Alice)" in prompt
+        assert "Alice prefers morning meetings" in prompt
+        assert "Bob (manager)" in prompt
+
+    def test_memory_context_placed_before_calendar_context(self) -> None:
+        """Memory section appears before calendar section in the prompt."""
+        prompt = build_system_prompt(
+            owner_name=_OWNER,
+            current_datetime=_DATETIME,
+            calendar_context=_SAMPLE_CALENDAR_CONTEXT,
+            memory_context=_SAMPLE_MEMORY_CONTEXT,
+        )
+
+        memory_pos = prompt.find("## Your Memory")
+        calendar_pos = prompt.find("## Your Calendar")
+        assert memory_pos < calendar_pos, "Memory context must appear before calendar context"
 
 
 # ---------------------------------------------------------------------------

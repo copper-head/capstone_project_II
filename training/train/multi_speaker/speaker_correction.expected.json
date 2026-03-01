@@ -1,0 +1,36 @@
+{
+  "description": "One speaker corrects another's initial time suggestion; the final agreed time (1 PM Monday) must be used, not the initial proposal (11 AM Monday).",
+  "category": "multi_speaker",
+  "tolerance": "moderate",
+  "owner": "Alice",
+  "reference_datetime": "2026-02-20T10:00:00",
+  "calendar_context": [],
+  "expected_events": [
+    {
+      "action": "create",
+      "title": "Code Review",
+      "start_time": "2026-02-23T13:00:00",
+      "end_time": "2026-02-23T14:30:00",
+      "location": "Dev room, second floor",
+      "attendees_contain": ["Alice", "Bob", "Carol"]
+    }
+  ],
+  "mock_llm_response": {
+    "events": [
+      {
+        "title": "Code Review",
+        "start_time": "2026-02-23T13:00:00",
+        "end_time": "2026-02-23T14:30:00",
+        "location": "Dev room, second floor",
+        "attendees": "Alice, Bob, Carol",
+        "confidence": "high",
+        "reasoning": "Alice initially proposes Monday at 11 AM. Bob cannot do 11 AM and requests 1 PM Monday instead. All three confirm 1 PM to 2:30 PM (1.5 hours) on Monday in the dev room on the second floor.",
+        "assumptions": "",
+        "action": "create",
+        "existing_event_id": null
+      }
+    ],
+    "summary": "Found 1 event: code review on Monday at 1 PM after initial 11 AM proposal was corrected."
+  },
+  "notes": "Reference datetime is Friday 2026-02-20. Monday=Feb 23. The 11 AM proposal was rejected and replaced by 1 PM."
+}

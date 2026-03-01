@@ -1,0 +1,13 @@
+[Alice]: Hey team, let's get a daily standup on the calendar starting Monday.
+
+[Bob]: What time works best?
+
+[Alice]: I'm thinking 9 AM every day, just 15 minutes to sync up before we dive into work.
+
+[Bob]: That works for me. Where are we doing it?
+
+[Alice]: We'll use the main conference room. So Bob and Carol, you're both on it.
+
+[Carol]: Sounds good. See you Monday morning then!
+
+[Alice]: Perfect. First one is Monday at 9.

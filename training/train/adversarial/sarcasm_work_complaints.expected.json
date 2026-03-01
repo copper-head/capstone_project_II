@@ -1,0 +1,14 @@
+{
+  "description": "Sarcastic complaints about overloaded meeting culture. The midnight call and 6 AM Saturday sync are sarcastic exaggerations, not real scheduling intent.",
+  "category": "adversarial",
+  "tolerance": "moderate",
+  "owner": "Alice",
+  "reference_datetime": "2026-02-20T10:00:00",
+  "calendar_context": [],
+  "expected_events": [],
+  "mock_llm_response": {
+    "events": [],
+    "summary": "No actionable calendar events found. The midnight status call and 6 AM Saturday sync are clearly sarcastic exaggerations used to express frustration with meeting culture, not genuine scheduling requests."
+  },
+  "notes": "Sarcastic scheduling suggestions embedded in work-complaint dialogue. The absurd times (midnight, 6 AM Saturday) and sarcastic tone indicate zero real scheduling intent."
+}

@@ -1,0 +1,17 @@
+[Alice]: Hey Carol, did you get a chance to catch up with the design team after that workshop yesterday?
+
+[Carol]: Yeah, we had a great session actually. Ran about two hours, way more productive than I expected.
+
+[Alice]: That's great to hear. I remember when we did one of those last quarter — the one on the third floor with the whiteboards — it was really useful.
+
+[Carol]: Same vibe. We mapped out the whole user flow and identified like five major pain points. Marcus walked us through the new wireframes too.
+
+[Alice]: Oh nice. How did those land?
+
+[Carol]: Really well actually. Everyone was pretty aligned by the end. We even wrapped up twenty minutes early which never happens.
+
+[Alice]: Amazing. Sounds like it went way better than the one we had back in November. That one dragged on forever.
+
+[Carol]: Ha, yeah that November one was rough. But this was solid. I'll write up a summary and share it with you.
+
+[Alice]: Please do. Thanks Carol.

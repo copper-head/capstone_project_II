@@ -1,0 +1,27 @@
+[Alice]: Bob, I need you to get a kickoff meeting on the books with Carol for the data migration project. I'll be traveling and can't set it up myself.
+
+[Bob]: Sure, I can handle that. Carol, does next week work for you?
+
+[Carol]: Next week is fine. What days are you thinking?
+
+[Bob]: How about Monday? That gives everyone the weekend to prep.
+
+[Carol]: Monday works. Morning or afternoon?
+
+[Bob]: Morning is better for me. 9 AM?
+
+[Carol]: 9 AM Monday is great. How long should we plan for?
+
+[Bob]: I'd say an hour and a half to cover the scope and initial plan.
+
+[Carol]: Perfect. Should we book a conference room?
+
+[Bob]: Let's use the Maple Room. It has the big screen for sharing diagrams.
+
+[Carol]: Good idea. I'll grab the Maple Room.
+
+[Bob]: Alice, I'll send you a calendar invite too so you have it on record even if you can't attend.
+
+[Alice]: Thanks Bob. Just make sure Carol and the data team are on it.
+
+[Bob]: Will do. I'll include you and Carol and send it out today.

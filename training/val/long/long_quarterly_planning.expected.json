@@ -1,0 +1,130 @@
+{
+  "description": "88-line quarterly planning session with 5 speakers setting up recurring meetings, one-time events, and a tentative launch event. Tests multi-speaker coordination, recurring meeting detection, and distinguishing confirmed from tentative events across a quarter-long planning horizon.",
+  "category": "long",
+  "tolerance": "relaxed",
+  "owner": "Alice",
+  "reference_datetime": "2026-02-20T10:00:00",
+  "calendar_context": [],
+  "expected_events": [
+    {
+      "action": "create",
+      "title": "Design Review",
+      "start_time": "2026-03-03T14:00:00",
+      "end_time": "2026-03-03T16:00:00",
+      "attendees_contain": ["Alice", "Bob", "Carol"]
+    },
+    {
+      "action": "create",
+      "title": "Architecture Office Hours",
+      "start_time": "2026-03-04T11:00:00",
+      "end_time": "2026-03-04T12:00:00",
+      "attendees_contain": ["Dave"]
+    },
+    {
+      "action": "create",
+      "title": "Cross-Functional Sync",
+      "start_time": "2026-03-05T15:00:00",
+      "end_time": "2026-03-05T16:00:00",
+      "attendees_contain": ["Alice", "Bob", "Carol", "Eve"]
+    },
+    {
+      "action": "create",
+      "title": "Leadership Alignment",
+      "start_time": "2026-03-07T09:00:00",
+      "end_time": "2026-03-07T10:30:00",
+      "attendees_contain": ["Alice", "Bob"]
+    },
+    {
+      "action": "create",
+      "title": "Team Off-Site",
+      "start_time": "2026-03-23T09:00:00",
+      "end_time": "2026-03-23T17:00:00",
+      "attendees_contain": ["Alice", "Bob", "Carol", "Dave", "Eve"]
+    },
+    {
+      "action": "create",
+      "title": "Company All-Hands",
+      "start_time": "2026-03-30T10:00:00",
+      "end_time": "2026-03-30T12:00:00",
+      "attendees_contain": ["Alice", "Bob", "Carol", "Dave", "Eve"]
+    }
+  ],
+  "mock_llm_response": {
+    "events": [
+      {
+        "title": "Design Review",
+        "start_time": "2026-03-03T14:00:00",
+        "end_time": "2026-03-03T16:00:00",
+        "location": null,
+        "attendees": "Alice, Bob, Carol, Dave",
+        "confidence": "high",
+        "reasoning": "Alice establishes a recurring monthly design review starting Tuesday March 3rd at 2 PM for 2 hours. Bob (required) and Dave (optional but attending the first one) are included.",
+        "assumptions": "Only first occurrence scheduled; will recur monthly",
+        "action": "create",
+        "existing_event_id": null
+      },
+      {
+        "title": "Architecture Office Hours",
+        "start_time": "2026-03-04T11:00:00",
+        "end_time": "2026-03-04T12:00:00",
+        "location": null,
+        "attendees": "Dave, Eve",
+        "confidence": "high",
+        "reasoning": "Dave proposes weekly architecture office hours every Wednesday 11 AM to noon starting March 4th. Open to anyone on the team; Eve explicitly says she will attend.",
+        "assumptions": "Only first occurrence scheduled; open-door format",
+        "action": "create",
+        "existing_event_id": null
+      },
+      {
+        "title": "Cross-Functional Sync",
+        "start_time": "2026-03-05T15:00:00",
+        "end_time": "2026-03-05T16:00:00",
+        "location": null,
+        "attendees": "Alice, Bob, Carol, Eve",
+        "confidence": "high",
+        "reasoning": "Alice schedules a bi-weekly cross-functional sync with marketing (Eve) every other Thursday at 3 PM for 1 hour starting March 5th.",
+        "assumptions": "Only first occurrence scheduled; bi-weekly cadence noted",
+        "action": "create",
+        "existing_event_id": null
+      },
+      {
+        "title": "Leadership Alignment",
+        "start_time": "2026-03-07T09:00:00",
+        "end_time": "2026-03-07T10:30:00",
+        "location": null,
+        "attendees": "Alice, Bob",
+        "confidence": "high",
+        "reasoning": "Alice schedules a monthly leadership alignment meeting for the first Friday of each month at 9 AM for 90 minutes, starting March 7th. Attendees are Alice and Bob.",
+        "assumptions": "Only first occurrence scheduled; monthly cadence noted",
+        "action": "create",
+        "existing_event_id": null
+      },
+      {
+        "title": "Team Off-Site",
+        "start_time": "2026-03-23T09:00:00",
+        "end_time": "2026-03-23T17:00:00",
+        "location": null,
+        "attendees": "Alice, Bob, Carol, Dave, Eve",
+        "confidence": "high",
+        "reasoning": "Alice schedules a full-day team off-site for Monday March 23rd, 9 AM to 5 PM. All five team members confirm attendance. Venue is approximately one hour outside the city.",
+        "assumptions": "",
+        "action": "create",
+        "existing_event_id": null
+      },
+      {
+        "title": "Company All-Hands",
+        "start_time": "2026-03-30T10:00:00",
+        "end_time": "2026-03-30T12:00:00",
+        "location": "Big Conference Room",
+        "attendees": "Alice, Bob, Carol, Dave, Eve",
+        "confidence": "high",
+        "reasoning": "Alice schedules the company all-hands for Monday March 30th at 10 AM for 2 hours in the big conference room. Dave, Eve, and Carol all volunteer to present.",
+        "assumptions": "",
+        "action": "create",
+        "existing_event_id": null
+      }
+    ],
+    "summary": "Found 6 confirmed events: design review (Mar 3), architecture office hours (Mar 4, weekly), cross-functional sync (Mar 5, bi-weekly), leadership alignment (Mar 7, monthly), team off-site (Mar 23), and all-hands (Mar 30). The mobile app launch event on May 5th is explicitly marked as tentative and is omitted. Carol's DesignNow conference (Mar 16-17) is her personal event handled outside shared calendar."
+  },
+  "notes": "Reference datetime is Friday 2026-02-20. The mobile launch event (May 5th) is explicitly called 'tentative' and should not be created. Carol's DesignNow conference is a personal out-of-office, not a team event. Multiple recurring meetings (design review, office hours, cross-functional sync, leadership alignment) are created as single first-occurrence events per the calendar convention."
+}

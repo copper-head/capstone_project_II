@@ -1,0 +1,14 @@
+{
+  "description": "Mutual venting about meeting overload. Both speakers complain about existing meetings but no new events are proposed or scheduled.",
+  "category": "adversarial",
+  "tolerance": "moderate",
+  "owner": "Alice",
+  "reference_datetime": "2026-02-20T10:00:00",
+  "calendar_context": [],
+  "expected_events": [],
+  "mock_llm_response": {
+    "events": [],
+    "summary": "No actionable calendar events found. The entire conversation is venting about existing meetings and meeting culture. Mentions of meetings are descriptive of current frustrations, not requests to schedule new events."
+  },
+  "notes": "Venting about meetings is not scheduling. References to 'back-to-back meetings' and 'seven meetings on Tuesday' describe existing calendar state, not new events to create. The model must distinguish complaint from intent."
+}

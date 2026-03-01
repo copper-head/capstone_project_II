@@ -1,0 +1,172 @@
+[Alice]: Alright, DevConf is confirmed for March 3rd through March 5th in Chicago. I want to make sure we're all on the same page about who's going and what we're doing there.
+
+[Bob]: I've been looking at the session schedule. There's a lot of good stuff this year.
+
+[Carol]: Same. The distributed systems track is stacked. And I want to see the keynote from that woman who built the Polaris framework.
+
+[Dave]: She's excellent. I've read all her papers.
+
+[Alice]: Okay so first things first. Travel. I'm flying out Wednesday March 4th — actually wait, the conference starts Monday the 3rd. I need to get there Sunday.
+
+[Bob]: Yeah I was going to say. Sunday night is the opening networking reception. That's kind of important.
+
+[Alice]: Right. So everyone should fly in on Sunday March 2nd. I'll book flights. Bob, Dave, you're both coming?
+
+[Bob]: Definitely.
+
+[Dave]: Yep. Already told my wife.
+
+[Carol]: Me too. I've been looking forward to this since December.
+
+[Alice]: Great. So we all fly out Sunday. What time does the reception start?
+
+[Bob]: It's at 7 PM on Sunday. Rooftop bar at the conference hotel.
+
+[Alice]: Perfect. We should try to get there by 6 to check in and freshen up. So Sunday evening, let's call it the team pre-conference dinner and networking reception. 6 PM.
+
+[Carol]: Should we make a reservation somewhere for dinner before?
+
+[Alice]: Good point. Let me find something near the hotel. If I can get a 5 PM reservation, we eat, then hit the reception together.
+
+[Dave]: That sounds good. Nothing worse than networking on an empty stomach.
+
+[Bob]: Agreed. And it's easier to make introductions when you're in a group.
+
+[Alice]: Okay I'll handle the dinner reservation separately. That's a personal booking. The reception at 7 PM I'll put on the shared calendar though.
+
+[Carol]: What's the conference hotel?
+
+[Alice]: The Meridian downtown. I'll send the booking link. Everyone should book their own rooms but let me know if you have trouble with the corporate rate.
+
+[Bob]: Got it. I'll do that today.
+
+[Dave]: Same.
+
+[Alice]: Now let's talk about the actual conference sessions. I want us to be strategic about which talks we attend so we're covering different tracks and can share notes afterward.
+
+[Carol]: That's how I was thinking about it too. I'll be in the design and frontend track most of Monday.
+
+[Bob]: I'm going to the infrastructure and DevOps sessions. There's a workshop on Kubernetes operators I really want to do.
+
+[Alice]: What time is that workshop?
+
+[Bob]: Monday March 3rd, 1 PM to 4 PM. It's a three-hour hands-on lab.
+
+[Alice]: Put that in your calendar so I know you're occupied.
+
+[Bob]: Will do.
+
+[Dave]: I want to attend the AI/ML sessions. Most of them are Tuesday. Plus there's a panel I'm on at 11 AM Tuesday.
+
+[Alice]: Right! Dave's on the distributed caching panel. That's exciting.
+
+[Carol]: I saw that in the schedule. I'm definitely going to that.
+
+[Dave]: It's Tuesday March 4th at 11 AM, about an hour.
+
+[Alice]: I'll be there. We should block time to prep for it Monday evening actually. Dave, can we do a quick run-through dinner where you walk us through your talking points?
+
+[Dave]: Sure. Monday evening after the conference day. Like 7 PM?
+
+[Alice]: Monday March 3rd at 7 PM. Yes. Let's call it panel prep dinner. The four of us?
+
+[Carol]: I'm there.
+
+[Bob]: Same, wouldn't miss it.
+
+[Alice]: Good. That's an informal dinner but I'll put it on the calendar so it's visible.
+
+[Dave]: There's also the conference speaker reception Monday evening. That's at 6 PM. I have to go as a panelist.
+
+[Alice]: Oh right. We should all go to that too actually. It's a good networking opportunity.
+
+[Bob]: The speaker reception is at 6 PM Monday?
+
+[Dave]: Yeah, private event in one of the ballrooms. I can get you all in as my guests.
+
+[Alice]: Perfect. So Monday evening: speaker reception at 6 PM, then panel prep dinner at 7 PM — actually that's tight.
+
+[Carol]: Very tight. Maybe push dinner to 7:30?
+
+[Alice]: 7:30 PM Monday. That works better. Speaker reception 6 to 7ish, then dinner at 7:30.
+
+[Dave]: That works. The reception is usually winding down by 7 anyway.
+
+[Alice]: Great. Now Wednesday is the last day. What time does it end?
+
+[Bob]: Sessions end at 3 PM and then there's a closing ceremony from 3 to 4.
+
+[Alice]: And our flights?
+
+[Bob]: I was looking at 6 PM flights. Gets us back by 8 PM our time.
+
+[Carol]: That works. I was going to look for a 5 PM but 6 is probably safer with Chicago traffic.
+
+[Alice]: Let's say everyone targets 6 PM Wednesday flights. That's March 5th.
+
+[Dave]: Agreed.
+
+[Alice]: Now I want to do a debrief session when we're back in the office. Thursday March 6th. All four of us. Let's share what we learned and figure out what to act on.
+
+[Carol]: Thursday the 6th. What time?
+
+[Alice]: 2 PM. One hour. The team room.
+
+[Bob]: Sounds good.
+
+[Dave]: I'll be a little wired from all the ideas. It'll be good to talk through them.
+
+[Alice]: Exactly. These conferences are only useful if we actually do something with the takeaways.
+
+[Carol]: Last year we said we'd implement three things from the conference and we implemented none.
+
+[Bob]: In fairness one of them became irrelevant when we switched platforms.
+
+[Alice]: Fair. This year let's be more intentional. I'll prepare a template for capturing action items during the debrief.
+
+[Dave]: Good idea.
+
+[Alice]: Okay so to summarize the conference calendar: Sunday March 2nd networking reception at 7 PM at the hotel, Monday all day conference with the speaker reception at 6 PM and panel prep dinner at 7:30 PM, Tuesday Dave's panel at 11 AM, and Thursday March 6th the conference debrief back in the office.
+
+[Bob]: What about the Kubernetes workshop on Monday?
+
+[Alice]: Right, that's Bob's personal session 1 to 4 PM Monday. Bob, put that in your own calendar.
+
+[Bob]: Already writing it down.
+
+[Carol]: I also want to flag that I signed up for a hands-on workshop Tuesday afternoon. Figma's new component system. 2 to 5 PM.
+
+[Alice]: Good. These individual sessions don't need to be on the shared team calendar but definitely block your own time.
+
+[Carol]: Will do.
+
+[Dave]: I might want to hit the closing panel Wednesday morning too. It's on engineering culture, which is relevant for how we want to grow the team.
+
+[Alice]: Yeah go for it. Make sure you're done in time for the 6 PM flight.
+
+[Dave]: The panel is 10 to 11:30. I'll have plenty of time.
+
+[Alice]: Perfect. I think we're well organized. Anything else before we hang up?
+
+[Bob]: Does anyone want to share hotel rooms to save on expenses?
+
+[Dave]: I'd rather have my own room but I don't mind being on the same floor.
+
+[Carol]: Same. Own room but let's coordinate the floor so we can hang out in the evenings.
+
+[Alice]: I'll see if I can request adjacent rooms when I send out the booking link.
+
+[Bob]: Good. Okay I think we're set. This is going to be a great conference.
+
+[Carol]: I'm excited. It's been two years since I've been to an in-person one.
+
+[Dave]: Same. Remote conferences just aren't the same.
+
+[Alice]: Agreed. Alright, I'll send out the calendar invites and the hotel booking link this afternoon. See you all next week.
+
+[Bob]: Thanks Alice. See you.
+
+[Carol]: Bye!
+
+[Dave]: Later everyone.
+

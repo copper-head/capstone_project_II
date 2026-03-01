@@ -1,0 +1,33 @@
+[Alice]: We really need to pin down a time for the security audit review. It keeps getting pushed.
+
+[Bob]: I know. My problem is I'm blocked solid on Monday and Tuesday.
+
+[Carol]: Wednesday is hard for me. I have back-to-back stakeholder meetings all day.
+
+[Alice]: What about Thursday?
+
+[Bob]: Thursday morning I'm free after 10.
+
+[Carol]: Thursday afternoon is better for me. 2 PM?
+
+[Bob]: 2 PM Thursday — yeah, I can make that work actually.
+
+[Alice]: Are you sure? I don't want to push again.
+
+[Bob]: I'm sure. I'll move my 2 PM dentist reminder.
+
+[Carol]: Actually wait, I might have a conflict at 2. Can we do 3?
+
+[Alice]: Bob?
+
+[Bob]: 3 PM Thursday is fine. That's even better.
+
+[Carol]: Okay, 3 PM Thursday. For how long?
+
+[Alice]: Let's block two hours. We have a lot to cover.
+
+[Bob]: Two hours at 3 PM Thursday. Done.
+
+[Carol]: Agreed. Will you send the invite, Alice?
+
+[Alice]: Yes, sending now.

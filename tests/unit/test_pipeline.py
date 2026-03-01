@@ -1,4 +1,4 @@
-"""Unit tests for the pipeline orchestrator (25 tests).
+"""Unit tests for the pipeline orchestrator (27 tests).
 
 Tests cover: full-flow success, empty parse, no-events extraction,
 extraction failure, partial sync failure, all sync failures, dry-run,
@@ -8,7 +8,8 @@ graceful degradation on credential failure, id_map storage,
 dry-run with context fetch, direct ID-based update/delete dispatch,
 404 fallback on update (falls back to create), 404 fallback on delete
 (idempotent success), fallback to search when existing_event_id not in
-id_map, and id_map reverse lookup correctness.
+id_map, id_map reverse lookup correctness, memory load integration, and
+memory load failure graceful degradation.
 """
 
 from __future__ import annotations
@@ -111,6 +112,8 @@ def _make_settings() -> MagicMock:
     settings.gemini_api_key = "fake-key"
     settings.timezone = "America/Vancouver"
     settings.google_account_email = "test@example.com"
+    settings.owner_name = "TestOwner"
+    settings.memory_db_path = "/tmp/test_memory.db"
     return settings
 
 
@@ -136,6 +139,8 @@ def _patch_pipeline_deps(
     sync_side_effects: list[dict | Exception] | None = None,
     calendar_context: CalendarContext | None = None,
     context_side_effect: Exception | None = None,
+    memory_store_side_effect: Exception | None = None,
+    memory_records: list | None = None,
 ):
     """Return a context manager that patches all pipeline external deps.
 
@@ -185,6 +190,19 @@ def _patch_pipeline_deps(
     else:
         mock_fetch_context.return_value = calendar_context
 
+    # Memory store mock
+    mock_memory_store_instance = MagicMock()
+    if memory_store_side_effect:
+        mock_memory_store_instance.load_all.side_effect = memory_store_side_effect
+    else:
+        mock_memory_store_instance.load_all.return_value = memory_records or []
+    mock_memory_store_cls = MagicMock(return_value=mock_memory_store_instance)
+
+    # Memory formatter mock
+    mock_format_memory = MagicMock(return_value="")
+    if memory_records:
+        mock_format_memory.return_value = "## Your Memory (about TestOwner)\n\nmocked"
+
     class _Ctx:
         """Holds all mocks for the patched pipeline dependencies."""
 
@@ -199,6 +217,9 @@ def _patch_pipeline_deps(
             self.cal_cls = mock_cal_cls
             self.get_creds = mock_get_creds
             self.fetch_context = mock_fetch_context
+            self.memory_store_cls = mock_memory_store_cls
+            self.memory_store = mock_memory_store_instance
+            self.format_memory = mock_format_memory
             self._patches = []
             self._started = []
 
@@ -210,6 +231,8 @@ def _patch_pipeline_deps(
                 ("cal_ai.pipeline.get_calendar_credentials", self.get_creds),
                 ("cal_ai.pipeline.GoogleCalendarClient", self.cal_cls),
                 ("cal_ai.pipeline.fetch_calendar_context", self.fetch_context),
+                ("cal_ai.pipeline.MemoryStore", self.memory_store_cls),
+                ("cal_ai.pipeline.format_memory_context", self.format_memory),
             ]
             for target, mock_obj in targets:
                 p = patch(target, mock_obj)
@@ -829,3 +852,62 @@ class TestPipeline:
         ctx.client.find_and_update_event.assert_called_once()
         ctx.client.update_event.assert_not_called()
         assert result.events_synced[0].action_taken == "updated"
+
+    # ------------------------------------------------------------------
+    # Memory load integration tests
+    # ------------------------------------------------------------------
+
+    def test_pipeline_loads_memory_and_passes_to_extractor(self, tmp_path: Path) -> None:
+        """Memory loaded from store -> formatted -> passed to extract_events."""
+        transcript = tmp_path / "sample.txt"
+        transcript.write_text("[Alice]: Hi\n")
+
+        from cal_ai.memory.models import MemoryRecord
+
+        records = [
+            MemoryRecord(
+                id=1,
+                category="preferences",
+                key="meeting_time",
+                value="Prefers mornings",
+            ),
+        ]
+
+        with _patch_pipeline_deps(memory_records=records) as ctx:
+            run_pipeline(
+                transcript_path=transcript,
+                owner="TestOwner",
+                dry_run=True,
+            )
+
+        # MemoryStore should be instantiated with the settings path.
+        ctx.memory_store_cls.assert_called_once_with(ctx.settings.memory_db_path)
+        # load_all should be called.
+        ctx.memory_store.load_all.assert_called_once()
+        # format_memory_context should be called with the records and owner name.
+        ctx.format_memory.assert_called_once_with(records, ctx.settings.owner_name)
+        # extract_events should receive the formatted memory context.
+        call_kwargs = ctx.gemini.extract_events.call_args.kwargs
+        assert call_kwargs["memory_context"] == ctx.format_memory.return_value
+
+    def test_pipeline_memory_load_failure_degrades_gracefully(self, tmp_path: Path) -> None:
+        """Memory store failure -> warning logged, pipeline continues."""
+        transcript = tmp_path / "sample.txt"
+        transcript.write_text("[Alice]: Hi\n")
+
+        with _patch_pipeline_deps(
+            memory_store_side_effect=RuntimeError("SQLite corrupted"),
+        ) as ctx:
+            result = run_pipeline(
+                transcript_path=transcript,
+                owner="TestOwner",
+                dry_run=True,
+            )
+
+        # Pipeline should still succeed.
+        assert len(result.events_extracted) >= 1
+        # Warning about memory load failure should be recorded.
+        assert any("memory load failed" in w.lower() for w in result.warnings)
+        # extract_events should receive empty memory_context.
+        call_kwargs = ctx.gemini.extract_events.call_args.kwargs
+        assert call_kwargs["memory_context"] == ""

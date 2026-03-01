@@ -1,0 +1,29 @@
+[Alice]: Two things I need to lock in today. First with Bob, then with Carol.
+
+[Bob]: Sure, what do you need?
+
+[Alice]: Bob, I need us to do the contract review. How about Monday at 2?
+
+[Bob]: Monday at 2 works. Should we do an hour?
+
+[Alice]: Let's do 90 minutes — there are several clauses to go through.
+
+[Bob]: Fine by me. I'll have the documents ready.
+
+[Alice]: Great. Okay Carol, now for you. I need your input on the marketing proposal.
+
+[Carol]: Happy to help. What time works?
+
+[Alice]: I was thinking Wednesday at 11 AM?
+
+[Carol]: Wednesday at 11 works. An hour?
+
+[Alice]: An hour is plenty. Can we do it over video call? I'll be working from home.
+
+[Carol]: Sure, I'll set up a Zoom link.
+
+[Alice]: Perfect. And Bob, you're not needed for the marketing one.
+
+[Bob]: Understood, no worries.
+
+[Alice]: Okay, both events are set. Monday and Wednesday.

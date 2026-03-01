@@ -1,0 +1,14 @@
+{
+  "description": "Absurdist fantasy scheduling: standups in zero gravity, all-hands on Mars, annual review in the year 3000. All physically impossible and clearly humorous. The real conversation pivot is about a vendor email with no specific scheduling.",
+  "category": "adversarial",
+  "tolerance": "moderate",
+  "owner": "Alice",
+  "reference_datetime": "2026-02-20T10:00:00",
+  "calendar_context": [],
+  "expected_events": [],
+  "mock_llm_response": {
+    "events": [],
+    "summary": "No actionable calendar events found. The scheduling references (space station standups, Mars all-hands, year 3000 annual review) are absurdist humor. The real conversation topic (vendor server upgrade) results in a vague 'next quarter' mention with no specific date or commitment."
+  },
+  "notes": "Impossible/absurd scheduling locations and times mark clearly non-actionable events. The vendor follow-up mention ('next quarter', 'once they send the formal quote') is too vague to constitute a schedulable event."
+}

@@ -1,0 +1,14 @@
+{
+  "description": "Conversation explicitly deciding NOT to schedule anything. Alice and Dave mutually agree to skip a planned sync and handle things asynchronously.",
+  "category": "adversarial",
+  "tolerance": "moderate",
+  "owner": "Alice",
+  "reference_datetime": "2026-02-20T10:00:00",
+  "calendar_context": [],
+  "expected_events": [],
+  "mock_llm_response": {
+    "events": [],
+    "summary": "No actionable calendar events found. The conversation explicitly cancels a potential meeting, with both parties agreeing to 'not schedule anything', 'don't put anything on the calendar', and to 'handle it async'."
+  },
+  "notes": "Explicit negation of scheduling intent. Multiple clear signals: 'don't bother booking', 'let's not schedule anything formal', 'don't put anything on the calendar'. The model must respect these negations."
+}

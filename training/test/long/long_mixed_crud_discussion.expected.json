@@ -1,0 +1,178 @@
+{
+  "description": "86-line two-speaker conversation covering a mix of calendar management actions: 2 updates (rescheduled meetings), 1 delete (cancelled vendor demo), and 3 creates (new meetings). Tests all three CRUD operations in a single long conversation with calendar context.",
+  "category": "long",
+  "tolerance": "relaxed",
+  "owner": "Alice",
+  "reference_datetime": "2026-02-20T10:00:00",
+  "calendar_context": [
+    {
+      "id": "gcal-product-strategy-workshop-001",
+      "summary": "Product Strategy Workshop",
+      "start": "2026-02-24T14:00:00",
+      "end": "2026-02-24T16:00:00",
+      "location": "Big Conference Room"
+    },
+    {
+      "id": "gcal-engineering-standup-001",
+      "summary": "Engineering Standup",
+      "start": "2026-02-25T09:00:00",
+      "end": "2026-02-25T09:30:00",
+      "location": null
+    },
+    {
+      "id": "gcal-synthex-demo-001",
+      "summary": "Synthex Data Tools Demo",
+      "start": "2026-02-26T15:00:00",
+      "end": "2026-02-26T16:00:00",
+      "location": null
+    },
+    {
+      "id": "gcal-sprint-retro-001",
+      "summary": "Sprint Retrospective",
+      "start": "2026-02-23T15:00:00",
+      "end": "2026-02-23T16:00:00",
+      "location": null
+    }
+  ],
+  "expected_events": [
+    {
+      "action": "update",
+      "title": "Product Strategy Workshop",
+      "start_time": "2026-02-24T10:00:00",
+      "end_time": "2026-02-24T12:00:00",
+      "existing_event_id_required": true
+    },
+    {
+      "action": "update",
+      "title": "Engineering Standup",
+      "start_time": "2026-02-25T10:00:00",
+      "end_time": "2026-02-25T10:30:00",
+      "existing_event_id_required": true
+    },
+    {
+      "action": "delete",
+      "title": "Synthex Data Tools Demo",
+      "start_time": "2026-02-26T15:00:00",
+      "end_time": "2026-02-26T16:00:00",
+      "existing_event_id_required": true
+    },
+    {
+      "action": "update",
+      "title": "Sprint Retrospective",
+      "start_time": "2026-02-24T09:00:00",
+      "end_time": "2026-02-24T10:00:00",
+      "existing_event_id_required": true
+    },
+    {
+      "action": "create",
+      "title": "Vendor Landscape Review",
+      "start_time": "2026-02-26T14:00:00",
+      "end_time": "2026-02-26T16:00:00",
+      "attendees_contain": ["Alice", "Bob", "Carol", "Dave"]
+    },
+    {
+      "action": "create",
+      "title": "Skip-Level with Priya",
+      "start_time": "2026-02-27T11:00:00",
+      "end_time": "2026-02-27T11:45:00",
+      "attendees_contain": ["Alice"]
+    },
+    {
+      "action": "create",
+      "title": "Lunch-and-Learn: Product Prioritization",
+      "start_time": "2026-03-02T12:00:00",
+      "end_time": "2026-03-02T13:00:00",
+      "attendees_contain": ["Alice"]
+    }
+  ],
+  "mock_llm_response": {
+    "events": [
+      {
+        "title": "Product Strategy Workshop",
+        "start_time": "2026-02-24T10:00:00",
+        "end_time": "2026-02-24T12:00:00",
+        "location": "Big Conference Room",
+        "attendees": "Alice, Bob",
+        "confidence": "high",
+        "reasoning": "Alice says the product strategy workshop needs to move from Tuesday 2 PM to Tuesday 10 AM because legal needs the conference room in the afternoon. February 24th, 10 AM to noon.",
+        "assumptions": "Same 2-hour duration retained",
+        "action": "update",
+        "existing_event_id": 1
+      },
+      {
+        "title": "Engineering Standup",
+        "start_time": "2026-02-25T10:00:00",
+        "end_time": "2026-02-25T10:30:00",
+        "location": null,
+        "attendees": "Alice, Bob",
+        "confidence": "high",
+        "reasoning": "Alice says the Wednesday 9 AM engineering standup is being pushed to 10 AM starting this week (February 25th) to accommodate Priya's standing morning conflict.",
+        "assumptions": "Same 30-minute duration retained",
+        "action": "update",
+        "existing_event_id": 2
+      },
+      {
+        "title": "Synthex Data Tools Demo",
+        "start_time": "2026-02-26T15:00:00",
+        "end_time": "2026-02-26T16:00:00",
+        "location": null,
+        "attendees": "Alice, Bob",
+        "confidence": "high",
+        "reasoning": "Alice cancels the Thursday Synthex demo because the vendor has been acquired and the evaluation is no longer needed.",
+        "assumptions": "",
+        "action": "delete",
+        "existing_event_id": 3
+      },
+      {
+        "title": "Sprint Retrospective",
+        "start_time": "2026-02-24T09:00:00",
+        "end_time": "2026-02-24T10:00:00",
+        "location": null,
+        "attendees": "Alice, Bob",
+        "confidence": "high",
+        "reasoning": "Bob flags that Dave is travelling Monday February 23rd, so the sprint retro originally at 3 PM Monday must be rescheduled. Alice moves it to Tuesday February 24th at 9 AM for 1 hour.",
+        "assumptions": "Same 1-hour duration retained",
+        "action": "update",
+        "existing_event_id": 4
+      },
+      {
+        "title": "Vendor Landscape Review",
+        "start_time": "2026-02-26T14:00:00",
+        "end_time": "2026-02-26T16:00:00",
+        "location": null,
+        "attendees": "Alice, Bob, Carol, Dave",
+        "confidence": "high",
+        "reasoning": "Alice creates a new 2-hour vendor landscape review on Thursday February 26th at 2 PM. Bob, Carol, and Dave are invited. Dave's availability is being confirmed separately.",
+        "assumptions": "",
+        "action": "create",
+        "existing_event_id": null
+      },
+      {
+        "title": "Skip-Level with Priya",
+        "start_time": "2026-02-27T11:00:00",
+        "end_time": "2026-02-27T11:45:00",
+        "location": null,
+        "attendees": "Alice, Priya",
+        "confidence": "high",
+        "reasoning": "Alice creates a new 45-minute skip-level meeting with Priya (a team member) on Friday February 27th at 11 AM as part of a new quarterly skip-level program.",
+        "assumptions": "",
+        "action": "create",
+        "existing_event_id": null
+      },
+      {
+        "title": "Lunch-and-Learn: Product Prioritization",
+        "start_time": "2026-03-02T12:00:00",
+        "end_time": "2026-03-02T13:00:00",
+        "location": "Main Breakout Space",
+        "attendees": "Alice",
+        "confidence": "high",
+        "reasoning": "Alice creates the first lunch-and-learn session for Monday March 2nd at noon, 1 hour total. She will present on product prioritization. Open to the whole building.",
+        "assumptions": "Duration 1 hour: 45 min content + 15 min Q&A",
+        "action": "create",
+        "existing_event_id": null
+      }
+    ],
+    "summary": "Found 7 calendar operations in this conversation: 2 rescheduled meetings (product strategy workshop moved from Tue 2 PM to 10 AM, engineering standup moved from Wed 9 AM to 10 AM), 1 cancellation (Synthex demo deleted), 1 reschedule (sprint retro moved from Mon 3 PM to Tue 9 AM), and 3 new events created (vendor landscape review Thu 2 PM, skip-level with Priya Fri 11 AM, lunch-and-learn Mon Mar 2 noon)."
+  },
+  "notes": "Reference datetime is Friday 2026-02-20. Calendar context provides 4 existing events for the updates and delete. existing_event_id values 1-4 correspond to the 1-based index of entries in calendar_context. The sprint retrospective reschedule (ID 4) is raised by Bob late in the conversation — tests that events discussed mid-meeting and at the end are both captured."
+}

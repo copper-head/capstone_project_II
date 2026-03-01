@@ -1,0 +1,9 @@
+[Alice]: Hey Bob, cancel my 3 PM today, would you?
+
+[Bob]: Sure. Any particular reason I should note?
+
+[Alice]: I've got an unexpected conflict. Just cancel it.
+
+[Bob]: Done. Your 3 o'clock is cleared.
+
+[Alice]: Thanks, that's all I needed.

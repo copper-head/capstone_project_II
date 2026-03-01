@@ -1,0 +1,36 @@
+{
+  "description": "Three successive corrections: wrong day (Thursday -> Wednesday), wrong time (3 PM -> 2 PM), wrong room (main conference room -> annex). Expected event uses all final corrected values.",
+  "category": "realistic",
+  "tolerance": "moderate",
+  "owner": "Alice",
+  "reference_datetime": "2026-02-20T10:00:00",
+  "calendar_context": [],
+  "expected_events": [
+    {
+      "action": "create",
+      "title": "Sprint Planning",
+      "start_time": "2026-02-25T14:00:00",
+      "end_time": "2026-02-25T15:00:00",
+      "location": "Annex",
+      "attendees_contain": ["Alice", "Bob"]
+    }
+  ],
+  "mock_llm_response": {
+    "events": [
+      {
+        "title": "Sprint Planning",
+        "start_time": "2026-02-25T14:00:00",
+        "end_time": "2026-02-25T15:00:00",
+        "location": "Annex",
+        "attendees": "Alice, Bob",
+        "confidence": "high",
+        "reasoning": "Alice makes three corrections: day (Thursday to Wednesday), time (3 PM to 2 PM), and room (main conference room to annex). The final confirmed values are Wednesday at 2 PM in the annex, explicitly confirmed by both speakers.",
+        "assumptions": "Duration assumed 1 hour as standard for sprint planning. All three corrections tracked: final day = Wednesday, final time = 2 PM, final location = Annex.",
+        "action": "create",
+        "existing_event_id": null
+      }
+    ],
+    "summary": "Found 1 event: sprint planning on Wednesday at 2 PM in the annex, after three successive corrections to day, time, and location."
+  },
+  "notes": "Reference datetime is Friday 2026-02-20. Wednesday = 2026-02-25. Critical: track all three corrections. Initial: Thursday/3pm/main conference room. Final: Wednesday/2pm/annex. Bob confirms final values explicitly."
+}

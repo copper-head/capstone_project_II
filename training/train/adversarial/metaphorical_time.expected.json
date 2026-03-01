@@ -1,0 +1,14 @@
+{
+  "description": "Conversation filled with temporal metaphors ('find time', 'time is running out', 'carve out space', 'block out room') that sound like scheduling but are figurative. No actual calendar event is being created.",
+  "category": "adversarial",
+  "tolerance": "moderate",
+  "owner": "Alice",
+  "reference_datetime": "2026-02-20T10:00:00",
+  "calendar_context": [],
+  "expected_events": [],
+  "mock_llm_response": {
+    "events": [],
+    "summary": "No actionable calendar events found. All time-related language is metaphorical ('find time', 'time is running out', 'carve out space', 'running against the clock'). No specific date, time, or concrete scheduling action is proposed."
+  },
+  "notes": "Metaphorical time language trap. Phrases like 'find time', 'block out room', and 'carve out space' sound like scheduling but are figurative expressions about priorities. No event is actually being scheduled."
+}

@@ -1,0 +1,34 @@
+{
+  "description": "Alice has a 45-minute vendor call with TechSupply on Monday at 11 AM to discuss Q2 contract terms. Alice attends alone.",
+  "category": "crud",
+  "tolerance": "strict",
+  "owner": "Alice",
+  "reference_datetime": "2026-02-20T10:00:00",
+  "calendar_context": [],
+  "expected_events": [
+    {
+      "action": "create",
+      "title": "Vendor Call with TechSupply",
+      "start_time": "2026-02-23T11:00:00",
+      "end_time": "2026-02-23T11:45:00"
+    }
+  ],
+  "mock_llm_response": {
+    "events": [
+      {
+        "title": "Vendor Call with TechSupply",
+        "start_time": "2026-02-23T11:00:00",
+        "end_time": "2026-02-23T11:45:00",
+        "location": null,
+        "attendees": "Alice",
+        "confidence": "high",
+        "reasoning": "Alice has a 45-minute vendor call with TechSupply on Monday at 11 AM. Eve will not attend; Alice handles this call alone.",
+        "assumptions": "Duration explicitly stated as about 45 minutes.",
+        "action": "create",
+        "existing_event_id": null
+      }
+    ],
+    "summary": "Found 1 event: vendor call with TechSupply on Monday at 11 AM for 45 minutes."
+  },
+  "notes": "Reference datetime is 2026-02-20 (Friday), so 'Monday' resolves to 2026-02-23. Eve explicitly declines attendance, so only Alice listed."
+}

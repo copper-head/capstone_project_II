@@ -1,0 +1,37 @@
+[Alice]: Good morning everyone. Quick team sync before the week kicks off.
+
+[Bob]: Morning. I've got about 20 minutes.
+
+[Carol]: Same here.
+
+[Dave]: Ready when you are.
+
+[Alice]: Okay. First — Dave and I have the client presentation Thursday at 2 PM. Dave, you're confirmed on that?
+
+[Dave]: Yes, confirmed. I'll prepare the slides.
+
+[Alice]: Great. Now, Bob, the API performance issue needs a focused session. Can you and Carol block time for a technical deep dive?
+
+[Bob]: Definitely. Carol, what does your Tuesday look like?
+
+[Carol]: Tuesday morning is free. 10 AM?
+
+[Bob]: 10 AM Tuesday works. Let's do two hours, it's a meaty problem.
+
+[Carol]: Agreed, 10 to noon.
+
+[Alice]: Perfect. Last thing — I need a one-on-one with each of you at some point this week, but let's keep those separate. Bob, can we do Monday at 4?
+
+[Bob]: Monday at 4 is perfect.
+
+[Alice]: And Carol, how about Wednesday at 4?
+
+[Carol]: Wednesday at 4 works for me.
+
+[Dave]: Should I have a one-on-one too?
+
+[Alice]: We already did ours on Friday, Dave. You're covered.
+
+[Dave]: Oh right, good point.
+
+[Alice]: Alright, that's it. Good week everyone.

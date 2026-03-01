@@ -1,0 +1,19 @@
+[Alice]: Okay everyone, we need a kickoff meeting for the Henderson project on Monday afternoon.
+
+[Bob]: What time?
+
+[Alice]: Let's do 3 PM. I need all of you there — Bob, Carol, Dave, Eve, and Frank.
+
+[Carol]: Got it, Monday at 3.
+
+[Dave]: I'm in.
+
+[Eve]: Same, I'll be there.
+
+[Frank]: Monday at 3, confirmed.
+
+[Alice]: Great. We'll meet in the Henderson conference room on the third floor. Plan for about an hour.
+
+[Bob]: Works for me. Should we prepare anything?
+
+[Alice]: Just review the project brief I sent last week. See you all Monday!

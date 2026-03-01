@@ -1,0 +1,93 @@
+{
+  "description": "92-line office relocation planning conversation with 3 speakers. Lots of logistical discussion (packing, server migration, new room booking system) mixed with 5 scheduled events. Tests separating planning discussion from actual calendar events and tracking events that evolve during conversation.",
+  "category": "long",
+  "tolerance": "relaxed",
+  "owner": "Alice",
+  "reference_datetime": "2026-02-20T10:00:00",
+  "calendar_context": [],
+  "expected_events": [
+    {
+      "action": "create",
+      "title": "Packing Party",
+      "start_time": "2026-03-05T17:00:00",
+      "end_time": "2026-03-05T20:00:00",
+      "attendees_contain": ["Alice", "Bob", "Carol"]
+    },
+    {
+      "action": "create",
+      "title": "New Office Walkthrough",
+      "start_time": "2026-03-10T14:00:00",
+      "end_time": "2026-03-10T15:00:00",
+      "attendees_contain": ["Alice", "Bob", "Carol"]
+    },
+    {
+      "action": "create",
+      "title": "Fire Safety Orientation",
+      "start_time": "2026-03-11T10:00:00",
+      "end_time": "2026-03-11T10:30:00",
+      "attendees_contain": ["Alice", "Bob", "Carol"]
+    },
+    {
+      "action": "create",
+      "title": "Team Celebration Dinner",
+      "start_time": "2026-03-13T19:00:00",
+      "end_time": "2026-03-13T21:00:00",
+      "location": "Rosario's, Commerce Street",
+      "attendees_contain": ["Alice", "Bob", "Carol"]
+    }
+  ],
+  "mock_llm_response": {
+    "events": [
+      {
+        "title": "Packing Party",
+        "start_time": "2026-03-05T17:00:00",
+        "end_time": "2026-03-05T20:00:00",
+        "location": null,
+        "attendees": "Alice, Bob, Carol",
+        "confidence": "high",
+        "reasoning": "Alice organizes a packing party for Thursday March 5th starting at 5 PM for 2-3 hours. Beer and pizza provided. All team members confirm attendance.",
+        "assumptions": "Duration assumed 3 hours based on 'plan for at least 2 hours, maybe 3'",
+        "action": "create",
+        "existing_event_id": null
+      },
+      {
+        "title": "New Office Walkthrough",
+        "start_time": "2026-03-10T14:00:00",
+        "end_time": "2026-03-10T15:00:00",
+        "location": "New Office",
+        "attendees": "Alice, Bob, Carol",
+        "confidence": "high",
+        "reasoning": "Alice schedules a space walkthrough on Monday March 10th at 2 PM for 1 hour to verify the new office layout and setup.",
+        "assumptions": "",
+        "action": "create",
+        "existing_event_id": null
+      },
+      {
+        "title": "Fire Safety Orientation",
+        "start_time": "2026-03-11T10:00:00",
+        "end_time": "2026-03-11T10:30:00",
+        "location": "New Office",
+        "attendees": "Alice, Bob, Carol",
+        "confidence": "high",
+        "reasoning": "Facilities is running a mandatory fire safety orientation on Tuesday March 11th at 10 AM for 30 minutes. Alice confirms everyone must attend.",
+        "assumptions": "",
+        "action": "create",
+        "existing_event_id": null
+      },
+      {
+        "title": "Team Celebration Dinner",
+        "start_time": "2026-03-13T19:00:00",
+        "end_time": "2026-03-13T21:00:00",
+        "location": "Rosario's, Commerce Street",
+        "attendees": "Alice, Bob, Carol",
+        "confidence": "high",
+        "reasoning": "Alice plans a team dinner to celebrate first week in the new office on Friday March 13th at 7 PM at Rosario's Italian restaurant on Commerce Street.",
+        "assumptions": "Duration assumed 2 hours",
+        "action": "create",
+        "existing_event_id": null
+      }
+    ],
+    "summary": "Found 4 events: packing party (Mar 5 5 PM), new office walkthrough (Mar 10 2 PM), fire safety orientation (Mar 11 10 AM), and team celebration dinner (Mar 13 7 PM at Rosario's). The move day itself (March 10), server room migration (March 7 overnight), and planned system outage are logistics, not calendar meeting events."
+  },
+  "notes": "Reference datetime is Friday 2026-02-20. Move day March 10th and the server room migration on March 7th are logistical milestones discussed extensively but are not meetings to be added to the calendar. The packing deadline (end of day March 7th) is a task deadline, not an event. The standup mentioned at the end is a reference to an existing recurring meeting, not a new event being created."
+}

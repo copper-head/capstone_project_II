@@ -1,0 +1,33 @@
+[Alice]: Alright, I'm going through my list of things to schedule this week. Bear with me.
+
+[Bob]: Go ahead.
+
+[Carol]: Ready.
+
+[Dave]: Listening.
+
+[Alice]: Bob, you and Frank need to do the infrastructure handoff. I'm thinking Tuesday at 2 PM. Can you make that work?
+
+[Bob]: Tuesday at 2 is fine. I'll loop Frank in.
+
+[Alice]: Great. Carol, the compliance training for the new hires is Wednesday morning. I need you to run that.
+
+[Carol]: Wednesday morning — what time?
+
+[Alice]: 9 AM. It should run about two hours.
+
+[Carol]: Got it, 9 to 11 Wednesday.
+
+[Alice]: Dave, the board slide review is Thursday at noon. Just you and me.
+
+[Dave]: Thursday at noon, noted.
+
+[Alice]: It'll be an hour. We're meeting in the boardroom.
+
+[Dave]: Boardroom Thursday noon. I'll be ready.
+
+[Alice]: That covers it. Thanks everyone. Go have a productive week.
+
+[Bob]: Thanks Alice.
+
+[Carol]: Will do.

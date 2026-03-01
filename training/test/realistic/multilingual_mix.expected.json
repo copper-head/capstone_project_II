@@ -1,0 +1,36 @@
+{
+  "description": "English mixed with Spanish and French phrases. 'Mañana'/'demain' = tomorrow, 'rendez-vous' = meeting, 'parfait' = perfect, 'oui oui' = yes yes, 'lo siento' = sorry, 'à bientôt' = see you soon. Casual catch-up tomorrow at noon at the café.",
+  "category": "realistic",
+  "tolerance": "moderate",
+  "owner": "Alice",
+  "reference_datetime": "2026-02-20T10:00:00",
+  "calendar_context": [],
+  "expected_events": [
+    {
+      "action": "create",
+      "title": "Catch-up",
+      "start_time": "2026-02-21T12:00:00",
+      "end_time": "2026-02-21T13:00:00",
+      "location": "Café on Main",
+      "attendees_contain": ["Alice", "Carol"]
+    }
+  ],
+  "mock_llm_response": {
+    "events": [
+      {
+        "title": "Catch-up",
+        "start_time": "2026-02-21T12:00:00",
+        "end_time": "2026-02-21T13:00:00",
+        "location": "Café on Main",
+        "attendees": "Alice, Carol",
+        "confidence": "high",
+        "reasoning": "Despite multilingual code-switching, the scheduling intent is clear: 'rendez-vous tomorrow'/'mañana'/'demain' all mean tomorrow (2026-02-21). 'Noon' is confirmed as the time. The location is 'the café on main'. Duration is approximately one hour.",
+        "assumptions": "Duration assumed 1 hour per Alice's 'maybe an hour or so'. 'Mañana', 'demain', and 'tomorrow' all resolve to 2026-02-21. 'Rendez-vous' interpreted as meeting/catch-up.",
+        "action": "create",
+        "existing_event_id": null
+      }
+    ],
+    "summary": "Found 1 event: casual catch-up tomorrow at noon at the café on main with Alice and Carol."
+  },
+  "notes": "Reference datetime is Friday 2026-02-20. Tomorrow = 2026-02-21. Multilingual terms: 'rendez-vous' (French: meeting), 'mañana' (Spanish: tomorrow), 'demain' (French: tomorrow), 'parfait' (French: perfect), 'oui oui' (French: yes yes), 'lo siento' (Spanish: sorry), 'à bientôt' (French: see you soon)."
+}
