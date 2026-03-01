@@ -203,6 +203,9 @@ def _patch_pipeline_deps(
     if memory_records:
         mock_format_memory.return_value = "## Your Memory (about TestOwner)\n\nmocked"
 
+    # Memory DB path resolver mock
+    mock_resolve_memory_db = MagicMock(return_value="/tmp/test_memory.db")
+
     class _Ctx:
         """Holds all mocks for the patched pipeline dependencies."""
 
@@ -220,6 +223,7 @@ def _patch_pipeline_deps(
             self.memory_store_cls = mock_memory_store_cls
             self.memory_store = mock_memory_store_instance
             self.format_memory = mock_format_memory
+            self.resolve_memory_db = mock_resolve_memory_db
             self._patches = []
             self._started = []
 
@@ -233,6 +237,7 @@ def _patch_pipeline_deps(
                 ("cal_ai.pipeline.fetch_calendar_context", self.fetch_context),
                 ("cal_ai.pipeline.MemoryStore", self.memory_store_cls),
                 ("cal_ai.pipeline.format_memory_context", self.format_memory),
+                ("cal_ai.pipeline._resolve_memory_db_path", self.resolve_memory_db),
             ]
             for target, mock_obj in targets:
                 p = patch(target, mock_obj)
@@ -880,8 +885,10 @@ class TestPipeline:
                 dry_run=True,
             )
 
-        # MemoryStore should be instantiated with the settings path.
-        ctx.memory_store_cls.assert_called_once_with(ctx.settings.memory_db_path)
+        # _resolve_memory_db_path should be called with runtime owner and settings.
+        ctx.resolve_memory_db.assert_called_once_with("TestOwner", ctx.settings)
+        # MemoryStore should be instantiated with the resolved path.
+        ctx.memory_store_cls.assert_called_once_with(ctx.resolve_memory_db.return_value)
         # load_all should be called.
         ctx.memory_store.load_all.assert_called_once()
         # format_memory_context should be called with the records and the

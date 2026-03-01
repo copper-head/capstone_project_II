@@ -9,6 +9,7 @@ for rendering by the demo output formatter.
 from __future__ import annotations
 
 import logging
+import os
 import time
 from dataclasses import dataclass, field
 from datetime import datetime
@@ -18,7 +19,7 @@ from cal_ai.calendar.auth import get_calendar_credentials
 from cal_ai.calendar.client import GoogleCalendarClient
 from cal_ai.calendar.context import CalendarContext, fetch_calendar_context
 from cal_ai.calendar.exceptions import CalendarNotFoundError
-from cal_ai.config import load_settings
+from cal_ai.config import _slugify_owner, load_settings
 from cal_ai.exceptions import ExtractionError
 from cal_ai.llm import GeminiClient
 from cal_ai.memory.formatter import format_memory_context
@@ -190,7 +191,10 @@ def run_pipeline(
 
     memory_context_text = ""
     try:
-        memory_store = MemoryStore(settings.memory_db_path)
+        # Derive memory DB path from the runtime owner for consistency,
+        # unless an explicit MEMORY_DB_PATH env var is set.
+        memory_db_path = _resolve_memory_db_path(owner, settings)
+        memory_store = MemoryStore(memory_db_path)
         try:
             memories = memory_store.load_all()
             memory_context_text = format_memory_context(memories, owner)
@@ -340,6 +344,28 @@ def run_pipeline(
 # ---------------------------------------------------------------------------
 # Internal helpers
 # ---------------------------------------------------------------------------
+
+
+def _resolve_memory_db_path(owner: str, settings) -> str:
+    """Resolve the memory DB path, binding to the runtime owner.
+
+    When ``MEMORY_DB_PATH`` is explicitly set in the environment, its
+    value is used directly (via ``settings.memory_db_path``).  Otherwise,
+    the path is derived from the runtime *owner* name -- not from
+    ``settings.owner_name`` -- so that a ``--owner`` CLI override
+    consistently selects the correct per-owner database.
+
+    Args:
+        owner: The runtime owner name (from CLI args or settings).
+        settings: Application :class:`~cal_ai.config.Settings`.
+
+    Returns:
+        The resolved memory DB file path.
+    """
+    if os.environ.get("MEMORY_DB_PATH", "").strip():
+        return settings.memory_db_path
+    slug = _slugify_owner(owner)
+    return f"data/memory_{slug}.db"
 
 
 def _lookup_matched_event(
