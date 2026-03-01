@@ -246,6 +246,7 @@ def run_pipeline(
     # Build the transcript text for the LLM from the parsed utterances.
     transcript_text = _build_transcript_text(parse_result.utterances)
 
+    extraction = None
     try:
         extraction = gemini.extract_events(
             transcript_text=transcript_text,
@@ -259,8 +260,8 @@ def run_pipeline(
         msg = f"LLM extraction failed: {exc}"
         result.warnings.append(msg)
         logger.error(msg)
-        result.duration_seconds = time.monotonic() - start_time
-        return result
+        # Continue to memory write path -- conversations with no
+        # scheduling content can still contain memory-worthy facts.
 
     logger.info(
         "Stage 2 complete: %d event(s) extracted",

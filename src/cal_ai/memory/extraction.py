@@ -298,6 +298,14 @@ def _dispatch_actions(
                 new_value=action.new_value,
                 transcript=transcript_name,
             )
+            # Track in in-memory state so subsequent actions see it.
+            existing_by_db_id[mem_id] = MemoryRecord(
+                id=mem_id,
+                category=action.category,
+                key=action.key,
+                value=action.new_value,
+                confidence=action.confidence,
+            )
             result.memories_added += 1
             logger.info(
                 "Memory ADD: [%s] %s = %s",
@@ -339,27 +347,52 @@ def _dispatch_actions(
                 )
                 continue
 
+            # Enforce category immutability on UPDATE: the target
+            # record's category/key are authoritative.  If the LLM
+            # emits a different category, log a warning and skip.
+            if action.category != existing.category:
+                logger.warning(
+                    "UPDATE attempted category reclassification "
+                    "'%s' -> '%s' for key '%s', skipping "
+                    "(use DELETE + ADD to reclassify)",
+                    existing.category,
+                    action.category,
+                    existing.key,
+                )
+                continue
+
+            # Use the target record's category and key to ensure the
+            # upsert updates the correct row rather than creating a
+            # new one if the LLM emits a slightly different key.
             old_value = existing.value
             mem_id = store.upsert(
-                category=action.category,
-                key=action.key,
+                category=existing.category,
+                key=existing.key,
                 value=action.new_value,
                 confidence=action.confidence,
             )
             store.log_action(
                 action="UPDATE",
                 memory_id=mem_id,
-                category=action.category,
-                key=action.key,
+                category=existing.category,
+                key=existing.key,
                 old_value=old_value,
                 new_value=action.new_value,
                 transcript=transcript_name,
             )
+            # Refresh in-memory state so subsequent actions see the update.
+            existing_by_db_id[db_id] = MemoryRecord(
+                id=db_id,
+                category=existing.category,
+                key=existing.key,
+                value=action.new_value,
+                confidence=action.confidence,
+            )
             result.memories_updated += 1
             logger.info(
                 "Memory UPDATE: [%s] %s: %s -> %s",
-                action.category,
-                action.key,
+                existing.category,
+                existing.key,
                 old_value,
                 action.new_value,
             )
@@ -382,20 +415,33 @@ def _dispatch_actions(
                 continue
 
             existing = existing_by_db_id.get(db_id)
-            old_value = existing.value if existing else None
+            if existing is None:
+                logger.warning(
+                    "DELETE target DB id %d not found in store "
+                    "(already deleted by a prior action?), skipping",
+                    db_id,
+                )
+                continue
+
+            old_value = existing.value
 
             deleted = store.delete(db_id)
             if not deleted:
                 logger.warning(
-                    "DELETE target DB id %d not found in store (already deleted?)",
+                    "DELETE target DB id %d could not be deleted, skipping",
                     db_id,
                 )
+                continue
+
+            # Remove from in-memory state so subsequent actions in the
+            # same batch see the deletion.
+            del existing_by_db_id[db_id]
 
             store.log_action(
                 action="DELETE",
                 memory_id=db_id,
-                category=action.category,
-                key=action.key,
+                category=existing.category,
+                key=existing.key,
                 old_value=old_value,
                 new_value=None,
                 transcript=transcript_name,
@@ -403,8 +449,8 @@ def _dispatch_actions(
             result.memories_deleted += 1
             logger.info(
                 "Memory DELETE: [%s] %s (was: %s)",
-                action.category,
-                action.key,
+                existing.category,
+                existing.key,
                 old_value,
             )
 
