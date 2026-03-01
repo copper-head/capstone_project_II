@@ -7,6 +7,7 @@ argument parsing (no extra dependencies).
 Subcommands:
     run       -- Default. Process a transcript and sync to calendar.
     benchmark -- Run the benchmark suite against sample transcripts.
+    memory    -- Display current memories from the memory store.
 
 Exit codes:
     0 -- Pipeline completed successfully (including zero events).
@@ -96,6 +97,12 @@ def build_parser() -> argparse.ArgumentParser:
         help="Enable debug-level logging.",
     )
 
+    # --- "memory" subcommand ------------------------------------------
+    subparsers.add_parser(
+        "memory",
+        help="Display current memories from the memory store.",
+    )
+
     return parser
 
 
@@ -117,7 +124,7 @@ def _resolve_command(
     Returns:
         Parsed :class:`argparse.Namespace`.
     """
-    known_subcommands = {"run", "benchmark"}
+    known_subcommands = {"run", "benchmark", "memory"}
     if not argv:
         # No arguments at all -- let the "run" subparser handle the error
         # so the user sees usage for the run subcommand.
@@ -265,6 +272,49 @@ def _handle_benchmark(args: argparse.Namespace) -> int:
     return 0
 
 
+def _handle_memory(_args: argparse.Namespace) -> int:
+    """Execute the ``memory`` subcommand.
+
+    Loads all current memories from the SQLite store and displays them
+    in a formatted table grouped by category.
+
+    Returns:
+        Exit code: ``0`` on success, ``1`` on error.
+    """
+    from itertools import groupby
+
+    from cal_ai.memory.store import MemoryStore
+
+    try:
+        settings = load_settings()
+    except ConfigError as exc:
+        print(f"Error: {exc}", file=sys.stderr)
+        return 1
+
+    store = MemoryStore(settings.memory_db_path)
+    try:
+        memories = store.load_all()
+    finally:
+        store.close()
+
+    if not memories:
+        print("No memories stored.")
+        return 0
+
+    # Display grouped by category.
+    for category, group in groupby(memories, key=lambda m: m.category):
+        print(f"\n  [{category}]")
+        print(f"  {'Key':<30} {'Value':<45} {'Conf':<8} {'Count'}")
+        print(f"  {'-' * 30} {'-' * 45} {'-' * 8} {'-' * 5}")
+        for mem in group:
+            # Truncate long values for display.
+            val = mem.value if len(mem.value) <= 45 else mem.value[:42] + "..."
+            print(f"  {mem.key:<30} {val:<45} {mem.confidence:<8} {mem.source_count}")
+
+    print()
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     """Run the cal-ai CLI.
 
@@ -285,6 +335,8 @@ def main(argv: list[str] | None = None) -> int:
     # --- Dispatch to subcommand handler -------------------------------
     if args.command == "benchmark":
         return _handle_benchmark(args)
+    if args.command == "memory":
+        return _handle_memory(args)
 
     # Default: "run" subcommand (including implicit routing).
     return _handle_run(args)
