@@ -7,6 +7,7 @@ decisions over time.
 
 from __future__ import annotations
 
+from cal_ai.memory.extraction import MemoryWriteResult, run_memory_write
 from cal_ai.memory.formatter import format_memory_context
 from cal_ai.memory.models import (
     MemoryAction,
@@ -24,5 +25,7 @@ __all__ = [
     "MemoryFactResponse",
     "MemoryRecord",
     "MemoryStore",
+    "MemoryWriteResult",
     "format_memory_context",
+    "run_memory_write",
 ]

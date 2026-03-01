@@ -53,9 +53,8 @@ Implement the memory read path: load memories from SQLite, format them by catego
 - [ ] `make test` and `make lint` pass
 
 ## Done summary
-TBD
-
+Implemented the memory read path: created formatter.py with format_memory_context() for grouping memories by category with owner-contextualized headers, added memory_context parameter to build_system_prompt() and extract_events() (backward-compatible defaults), integrated memory load stage into pipeline before calendar context fetch with graceful degradation, and ensured full owner-consistency by deriving DB path from runtime owner. Added 13 new tests (8 formatter, 3 prompts, 2 pipeline).
 ## Evidence
-- Commits:
-- Tests:
+- Commits: ec26504, c054366, c8bde10, 7a84e06
+- Tests: make lint, make test (489 passed), pytest tests/regression/ -v (40 passed)
 - PRs:

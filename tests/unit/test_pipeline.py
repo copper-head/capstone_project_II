@@ -1,4 +1,4 @@
-"""Unit tests for the pipeline orchestrator (27 tests).
+"""Unit tests for the pipeline orchestrator (30 tests).
 
 Tests cover: full-flow success, empty parse, no-events extraction,
 extraction failure, partial sync failure, all sync failures, dry-run,
@@ -8,8 +8,9 @@ graceful degradation on credential failure, id_map storage,
 dry-run with context fetch, direct ID-based update/delete dispatch,
 404 fallback on update (falls back to create), 404 fallback on delete
 (idempotent success), fallback to search when existing_event_id not in
-id_map, id_map reverse lookup correctness, memory load integration, and
-memory load failure graceful degradation.
+id_map, id_map reverse lookup correctness, memory load integration,
+memory load failure graceful degradation, memory write path integration,
+memory write path dry-run skip, and memory write failure graceful degradation.
 """
 
 from __future__ import annotations
@@ -141,6 +142,8 @@ def _patch_pipeline_deps(
     context_side_effect: Exception | None = None,
     memory_store_side_effect: Exception | None = None,
     memory_records: list | None = None,
+    memory_write_side_effect: Exception | None = None,
+    memory_write_result: MagicMock | None = None,
 ):
     """Return a context manager that patches all pipeline external deps.
 
@@ -206,6 +209,20 @@ def _patch_pipeline_deps(
     # Memory DB path resolver mock
     mock_resolve_memory_db = MagicMock(return_value="/tmp/test_memory.db")
 
+    # Memory write path mock
+    if memory_write_result is None:
+        from cal_ai.memory.extraction import MemoryWriteResult
+
+        mock_memory_write_result = MemoryWriteResult()
+    else:
+        mock_memory_write_result = memory_write_result
+
+    mock_run_memory_write = MagicMock()
+    if memory_write_side_effect:
+        mock_run_memory_write.side_effect = memory_write_side_effect
+    else:
+        mock_run_memory_write.return_value = mock_memory_write_result
+
     class _Ctx:
         """Holds all mocks for the patched pipeline dependencies."""
 
@@ -224,6 +241,7 @@ def _patch_pipeline_deps(
             self.memory_store = mock_memory_store_instance
             self.format_memory = mock_format_memory
             self.resolve_memory_db = mock_resolve_memory_db
+            self.run_memory_write = mock_run_memory_write
             self._patches = []
             self._started = []
 
@@ -238,6 +256,7 @@ def _patch_pipeline_deps(
                 ("cal_ai.pipeline.MemoryStore", self.memory_store_cls),
                 ("cal_ai.pipeline.format_memory_context", self.format_memory),
                 ("cal_ai.pipeline._resolve_memory_db_path", self.resolve_memory_db),
+                ("cal_ai.pipeline.run_memory_write", self.run_memory_write),
             ]
             for target, mock_obj in targets:
                 p = patch(target, mock_obj)
@@ -919,3 +938,103 @@ class TestPipeline:
         # extract_events should receive empty memory_context.
         call_kwargs = ctx.gemini.extract_events.call_args.kwargs
         assert call_kwargs["memory_context"] == ""
+
+    # ------------------------------------------------------------------
+    # Memory write path tests
+    # ------------------------------------------------------------------
+
+    def test_pipeline_memory_write_runs_after_sync(self, tmp_path: Path) -> None:
+        """Memory write path runs after sync, results in PipelineResult."""
+        transcript = tmp_path / "sample.txt"
+        transcript.write_text("[Alice]: I prefer mornings\n")
+
+        from cal_ai.memory.extraction import MemoryWriteResult
+
+        write_result = MemoryWriteResult(
+            memories_added=2,
+            memories_updated=1,
+            memories_deleted=0,
+            usage_metadata=["usage1", "usage2"],
+        )
+
+        with _patch_pipeline_deps(memory_write_result=write_result) as ctx:
+            result = run_pipeline(
+                transcript_path=transcript,
+                owner="TestOwner",
+            )
+
+        # run_memory_write should have been called.
+        ctx.run_memory_write.assert_called_once()
+        # Memory counts should be in PipelineResult.
+        assert result.memories_added == 2
+        assert result.memories_updated == 1
+        assert result.memories_deleted == 0
+        assert result.memory_usage_metadata == ["usage1", "usage2"]
+
+    def test_pipeline_memory_write_skipped_in_dry_run(self, tmp_path: Path) -> None:
+        """Memory write path is skipped when dry_run=True."""
+        transcript = tmp_path / "sample.txt"
+        transcript.write_text("[Alice]: I prefer mornings\n")
+
+        with _patch_pipeline_deps() as ctx:
+            result = run_pipeline(
+                transcript_path=transcript,
+                owner="TestOwner",
+                dry_run=True,
+            )
+
+        # run_memory_write should NOT have been called.
+        ctx.run_memory_write.assert_not_called()
+        # Memory counts should be zero defaults.
+        assert result.memories_added == 0
+        assert result.memories_updated == 0
+        assert result.memories_deleted == 0
+
+    def test_pipeline_memory_write_failure_degrades_gracefully(self, tmp_path: Path) -> None:
+        """Memory write failure -> warning logged, pipeline succeeds."""
+        transcript = tmp_path / "sample.txt"
+        transcript.write_text("[Alice]: I prefer mornings\n")
+
+        with _patch_pipeline_deps(
+            memory_write_side_effect=RuntimeError("LLM call failed"),
+        ):
+            result = run_pipeline(
+                transcript_path=transcript,
+                owner="TestOwner",
+            )
+
+        # Pipeline should still succeed (events were synced).
+        assert len(result.events_synced) >= 1
+        # Warning about memory write failure.
+        assert any("memory write failed" in w.lower() for w in result.warnings)
+        # Memory counts should be zero.
+        assert result.memories_added == 0
+
+    def test_pipeline_memory_write_runs_with_no_events(self, tmp_path: Path) -> None:
+        """Memory write runs even when zero events are extracted."""
+        transcript = tmp_path / "sample.txt"
+        transcript.write_text("[Alice]: Bob is my manager\n")
+
+        extraction = _make_extraction_result(events=[])
+
+        from cal_ai.memory.extraction import MemoryWriteResult
+
+        write_result = MemoryWriteResult(
+            memories_added=1,
+            memories_updated=0,
+            memories_deleted=0,
+            usage_metadata=["usage1"],
+        )
+
+        with _patch_pipeline_deps(
+            extraction_result=extraction,
+            memory_write_result=write_result,
+        ) as ctx:
+            result = run_pipeline(
+                transcript_path=transcript,
+                owner="TestOwner",
+            )
+
+        # Memory write should still run.
+        ctx.run_memory_write.assert_called_once()
+        assert result.memories_added == 1

@@ -22,6 +22,7 @@ from cal_ai.calendar.exceptions import CalendarNotFoundError
 from cal_ai.config import _slugify_owner, load_settings
 from cal_ai.exceptions import ExtractionError
 from cal_ai.llm import GeminiClient
+from cal_ai.memory.extraction import run_memory_write
 from cal_ai.memory.formatter import format_memory_context
 from cal_ai.memory.store import MemoryStore
 from cal_ai.models.extraction import ExtractedEvent, ValidatedEvent
@@ -96,6 +97,10 @@ class PipelineResult:
         event_meta: Mapping from integer IDs to event metadata dicts
             (``title``, ``start_time``).  Used by the demo output
             formatter to show matched event info.
+        memories_added: Count of memory ADD actions dispatched.
+        memories_updated: Count of memory UPDATE actions dispatched.
+        memories_deleted: Count of memory DELETE actions dispatched.
+        memory_usage_metadata: Token usage from both memory LLM calls.
     """
 
     transcript_path: Path
@@ -109,6 +114,10 @@ class PipelineResult:
     dry_run: bool = False
     id_map: dict[int, str] = field(default_factory=dict)
     event_meta: dict[int, dict[str, str]] = field(default_factory=dict)
+    memories_added: int = 0
+    memories_updated: int = 0
+    memories_deleted: int = 0
+    memory_usage_metadata: list = field(default_factory=list)
 
 
 # ---------------------------------------------------------------------------
@@ -258,14 +267,12 @@ def run_pipeline(
         len(result.events_extracted),
     )
 
-    if not result.events_extracted:
-        result.duration_seconds = time.monotonic() - start_time
-        return result
-
     # ------------------------------------------------------------------
     # Stage 3: Sync to Calendar
     # ------------------------------------------------------------------
-    if dry_run:
+    if not result.events_extracted:
+        logger.info("Stage 3: No events to sync, skipping calendar sync")
+    elif dry_run:
         logger.info("Stage 3: Dry-run mode -- skipping calendar sync")
         for event in result.events_extracted:
             matched_title, matched_time = _lookup_matched_event(
@@ -326,14 +333,58 @@ def run_pipeline(
                 )
                 result.events_failed.append(FailedEvent(event=event, error=str(exc)))
 
-    logger.info(
-        "Stage 3 complete: %d synced, %d failed",
-        len(result.events_synced),
-        len(result.events_failed),
-    )
+    if result.events_extracted:
+        logger.info(
+            "Stage 3 complete: %d synced, %d failed",
+            len(result.events_synced),
+            len(result.events_failed),
+        )
 
     # ------------------------------------------------------------------
-    # Stage 4: Summary
+    # Stage 4: Memory Write Path
+    # ------------------------------------------------------------------
+    if dry_run:
+        logger.info("Stage 4: Dry-run mode -- skipping memory write")
+    else:
+        logger.info("Stage 4: Running memory write path")
+        try:
+            memory_db_path = _resolve_memory_db_path(owner, settings)
+            memory_write_store = MemoryStore(memory_db_path)
+            try:
+                write_result = run_memory_write(
+                    gemini_client=gemini,
+                    store=memory_write_store,
+                    transcript_text=transcript_text,
+                    extracted_events=list(result.events_extracted),
+                    owner_name=owner,
+                    transcript_path=transcript_path,
+                )
+                result.memories_added = write_result.memories_added
+                result.memories_updated = write_result.memories_updated
+                result.memories_deleted = write_result.memories_deleted
+                result.memory_usage_metadata = write_result.usage_metadata
+
+                # Console summary line.
+                logger.info(
+                    "Memory: +%d added, %d updated, %d deleted",
+                    write_result.memories_added,
+                    write_result.memories_updated,
+                    write_result.memories_deleted,
+                )
+                print(
+                    f"Memory: +{write_result.memories_added} added, "
+                    f"{write_result.memories_updated} updated, "
+                    f"{write_result.memories_deleted} deleted"
+                )
+            finally:
+                memory_write_store.close()
+        except Exception as exc:
+            msg = f"Memory write failed, continuing without memory update: {exc}"
+            result.warnings.append(msg)
+            logger.warning(msg)
+
+    # ------------------------------------------------------------------
+    # Stage 5: Summary
     # ------------------------------------------------------------------
     result.duration_seconds = time.monotonic() - start_time
     logger.info("Pipeline complete in %.1fs", result.duration_seconds)
