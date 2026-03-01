@@ -1,4 +1,4 @@
-.PHONY: install lint format test test-cov test-regression test-regression-live benchmark build run clean
+.PHONY: install lint format test test-cov test-regression test-regression-live benchmark build run clean clean-memory
 
 install:
 	pip install -e ".[dev]"
@@ -36,3 +36,6 @@ clean:
 	rm -rf .ruff_cache .pytest_cache htmlcov .coverage
 	rm -rf src/*.egg-info dist build
 	find . -type d -name __pycache__ -exec rm -rf {} +
+
+clean-memory:
+	rm -f data/memory*.db data/memory*.db-wal data/memory*.db-shm

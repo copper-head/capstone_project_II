@@ -49,9 +49,8 @@ Ensure the memory system is compatible with the existing regression test suite a
 - [ ] `make lint` passes
 
 ## Done summary
-TBD
-
+Added memory system regression test compatibility and integration tests. SidecarMemoryEntry model and optional memory_context field added to SidecarSpec schema. Regression tests inject memory context via patched MemoryStore when sidecars include memory data. Benchmark runner passes memory_context="" explicitly. 15 integration tests cover full read path (seed -> load -> format -> prompt) and full write path including end-to-end run_memory_write orchestrator tests with mocked LLM and real SQLite store.
 ## Evidence
-- Commits:
-- Tests:
+- Commits: 81283a73c6e1ac28f9ade4a1d04b5a98f1ae9e14, 50ec68e053d13f302cc5688a64053cd2c892b97f
+- Tests: make test (535 passed, 40 skipped), make lint (all checks passed), pytest tests/regression/ -v (40 passed, 40 skipped), pytest tests/unit/test_memory_integration.py -v (15 passed)
 - PRs:
