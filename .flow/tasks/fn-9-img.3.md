@@ -75,9 +75,8 @@ Implement the memory write path: after calendar sync, run two LLM calls — (1) 
 - [ ] `make test` and `make lint` pass
 
 ## Done summary
-TBD
-
+Implemented the memory write path with a dual-call LLM architecture: (1) fact extraction from transcripts + extracted events, (2) action decision comparing candidates against existing memories with ADD/UPDATE/DELETE/NOOP dispatch. Integrated as Stage 4 in the pipeline after calendar sync, with graceful degradation, dry-run skip, integer ID remapping, category immutability enforcement, and mutable in-memory state tracking across action batches.
 ## Evidence
-- Commits:
-- Tests:
+- Commits: c4eefa30aa3a9f6cb994e27dab5e67dc3e93c96f, b973dc3c8cd583c2c0b2f460c9469d34ce6b7acd
+- Tests: make test, make lint
 - PRs:

@@ -6,35 +6,42 @@ Ensure the memory system is compatible with the existing regression test suite a
 
 **Size:** M
 **Files:**
-- `tests/regression/schema.py` (modify) — add typed optional memory fields to `SidecarSpec`
-- `tests/regression/test_regression.py` (modify) — inject memory context when present in sidecar, via patching `MemoryStore.load_all()` or the memory-loader function in pipeline
-- `src/cal_ai/benchmark/runner.py` (modify) — update `extract_events()` call to accept memory_context
-- `tests/unit/test_memory_integration.py` (new) — integration test: full read+write path with mocked LLM
-- `tests/regression/conftest.py` (modify if needed) — expose sidecar memory data to test functions
+- `tests/regression/schema.py` — **already modified** by fn-9-img.3 (SidecarMemoryEntry + memory_context added). Verify only.
+- `tests/regression/test_regression.py` — **already modified** by fn-9-img.3 (memory patches in test_mock_extraction). Verify only.
+- `src/cal_ai/benchmark/runner.py` — **already modified** by fn-9-img.3 (memory_context="" at line 291). Verify only.
+- `tests/unit/test_memory_integration.py` (new) — integration test: full read+write path with mocked LLM. **This is the main remaining deliverable.**
+- `tests/regression/conftest.py` (verify) — confirm no changes needed
+<!-- Updated by plan-sync: fn-9-img.3 already modified schema.py, test_regression.py, and runner.py -->
 
 ## Approach
 
-- **SidecarSpec schema**: Define a `SidecarMemoryEntry` Pydantic model with required `category: Literal["preferences", "people", "vocabulary", "patterns", "corrections"]`, required `key: str`, required `value: str`, and optional `confidence: Literal["low", "medium", "high"] = "medium"`. Add `memory_context: list[SidecarMemoryEntry] | None = None` to `SidecarSpec`. This provides schema validation and makes formatter inputs unambiguous.
-- **Regression memory injection**: Since regression tests run via `run_pipeline()` (not `extract_events()` directly), memory injection must happen at the pipeline level. The pipeline imports three memory-related symbols that need patching: `cal_ai.pipeline.MemoryStore`, `cal_ai.pipeline.format_memory_context`, and `cal_ai.pipeline._resolve_memory_db_path`. Patch `MemoryStore` so its `load_all()` returns the sidecar's memory entries. Because `format_memory_context()` is duck-typed (accepts objects with `category`/`key`/`value` attributes), `SidecarMemoryEntry` objects can be returned directly from the patched `load_all()` — no conversion to `MemoryRecord` needed. See the existing `_patch_pipeline_deps()` helper in `tests/unit/test_pipeline.py` (lines ~193-240) for the established pattern — it already patches all three targets. Patch in `test_regression.py` via `monkeypatch` or `unittest.mock.patch`. If the sidecar has no `memory_context`, the pipeline uses its normal empty-DB behavior.
-<!-- Updated by plan-sync: fn-9-img.2 imports MemoryStore, format_memory_context, and _resolve_memory_db_path separately in pipeline; all three need patching -->
-- **Benchmark runner**: Update the `extract_events()` call at `runner.py:286` to pass `memory_context=""` explicitly. The benchmark runs without memory context by default — memory-specific benchmark samples are out of scope (V2).
+- **SidecarSpec schema**: **Already implemented by fn-9-img.3.** `SidecarMemoryEntry` (with `category` Literal, `key`, `value`, and optional `confidence`) and `SidecarSpec.memory_context: list[SidecarMemoryEntry] | None = None` already exist in `tests/regression/schema.py` (lines ~61-111). Verify the model validation works and no changes are needed.
+<!-- Updated by plan-sync: fn-9-img.3 already added SidecarMemoryEntry and memory_context to SidecarSpec -->
+- **Regression memory injection**: **Already implemented by fn-9-img.3.** The regression test `test_mock_extraction` already patches all four memory pipeline targets (`MemoryStore`, `format_memory_context`, `_resolve_memory_db_path`, `run_memory_write`) and reads `sidecar.memory_context`. See `tests/regression/test_regression.py` lines ~81-125. The `_patch_pipeline_deps()` helper in `tests/unit/test_pipeline.py` (lines ~134-271) also patches all four targets and served as the pattern. Verify this works correctly; no new patching code is needed.
+<!-- Updated by plan-sync: fn-9-img.3 already implemented regression memory patches and SidecarMemoryEntry/memory_context in schema -->
+- **Benchmark runner**: **Already implemented by fn-9-img.3.** The `extract_events()` call at `runner.py:286` already passes `memory_context=""` (line 291). No change needed — verify only.
+<!-- Updated by plan-sync: fn-9-img.3 already added memory_context="" to benchmark runner extract_events call -->
 - **Integration test**: Test the full round-trip: seed MemoryStore with test data → load → format → verify prompt includes memory section → mock write-path LLM calls → verify store mutations. Use `tmp_path / "memory.db"` fixture (file-based, not `:memory:`).
-- **Backward compatibility verification**: Run `make test` and confirm all 40 existing regression samples pass in mock mode with zero sidecar changes.
+- **Backward compatibility verification**: Run `make test` and confirm all existing regression samples pass in mock mode with zero sidecar changes. The memory patches in `test_mock_extraction` are already in place from fn-9-img.3, so backward compatibility should already be assured. Note: `test_live_extraction` does NOT yet patch memory targets — it relies on graceful degradation (Stage 1b try/except). Decide if live tests also need memory patches for cleanliness.
+<!-- Updated by plan-sync: fn-9-img.3 already added memory patches to test_mock_extraction; live test relies on graceful degradation -->
 
 ## Key context
 
-- `SidecarSpec` is a Pydantic model at `tests/regression/schema.py` — adding optional fields is non-breaking
-- Regression tests run `run_pipeline()`, NOT `extract_events()` directly — memory injection must happen at the pipeline level (patching MemoryStore), not at the extraction level
+- `SidecarSpec` is a Pydantic model at `tests/regression/schema.py` — `SidecarMemoryEntry` and `memory_context` field already added by fn-9-img.3
+- Regression tests run `run_pipeline()`, NOT `extract_events()` directly — memory injection at the pipeline level (patching MemoryStore + 3 other targets) already done in `test_mock_extraction` by fn-9-img.3
 - `conftest.py` at `tests/regression/conftest.py` has `pytest_generate_tests` for auto-discovery — it parametrizes `sample_case` but does not call `extract_events()`
-- The benchmark runner builds calendar context from sidecar data via `build_calendar_context()` at `runner.py:~270` — memory context follows the same opt-in pattern
+- The benchmark runner already passes `memory_context=""` at `runner.py:291` (added by fn-9-img.3)
 - No existing sidecar files need modification — new optional fields default to `None`
+- `_patch_pipeline_deps()` in `tests/unit/test_pipeline.py` (lines ~134-271) patches all four memory targets: `MemoryStore`, `format_memory_context`, `_resolve_memory_db_path`, and `run_memory_write`
+- The pipeline memory write path is **Stage 4** (not Stage 5); summary is Stage 5
+- The main remaining work items for this task are: (1) integration test `tests/unit/test_memory_integration.py`, (2) verification that all existing tests pass, (3) any cleanup needed for `test_live_extraction` memory handling
 
 ## Acceptance
-- [ ] `SidecarMemoryEntry` model has `category` (Literal enum), `key`, `value` (required), and `confidence` (optional Literal enum) with validation
-- [ ] `SidecarSpec` has typed optional `memory_context: list[SidecarMemoryEntry] | None = None`
+- [x] `SidecarMemoryEntry` model has `category` (Literal enum), `key`, `value` (required), and `confidence` (optional Literal enum) with validation *(done by fn-9-img.3 — `tests/regression/schema.py:61-79`)*
+- [x] `SidecarSpec` has typed optional `memory_context: list[SidecarMemoryEntry] | None = None` *(done by fn-9-img.3 — `tests/regression/schema.py:109`)*
 - [ ] All existing regression test samples pass in mock mode with zero sidecar changes
-- [ ] Regression tests inject memory context by patching `MemoryStore.load_all()` when sidecar includes `memory_context`
-- [ ] Benchmark runner calls `extract_events()` with `memory_context=""` (backward compatible)
+- [x] Regression tests inject memory context by patching `MemoryStore.load_all()` when sidecar includes `memory_context` *(done by fn-9-img.3 — `tests/regression/test_regression.py:81-125`)*
+- [x] Benchmark runner calls `extract_events()` with `memory_context=""` (backward compatible) *(done by fn-9-img.3 — `src/cal_ai/benchmark/runner.py:291`)*
 - [ ] Integration test covers full read path: seed store → load → format → verify prompt section
 - [ ] Integration test covers full write path: mock LLM → dispatch actions → verify store mutations (upsert/delete)
 - [ ] Integration test uses `tmp_path / "memory.db"` (file-based, isolated)
