@@ -5,17 +5,22 @@ Covers the end-to-end memory lifecycle using a real SQLite database
 
 Tests:
 - Read path: seed store -> load -> format -> verify prompt section.
-- Write path: mock LLM -> dispatch actions -> verify store mutations.
+- Write path (dispatch): dispatch actions -> verify store mutations.
+- Write path (orchestrator): run_memory_write with mocked LLM -> verify DB state + result.
 - Round-trip: seed, run write path, verify DB state.
 """
 
 from __future__ import annotations
 
+import json
 from pathlib import Path
+from unittest.mock import MagicMock
 
 from cal_ai.memory.extraction import (
+    MemoryWriteResult,
     _build_memory_id_map,
     _dispatch_actions,
+    run_memory_write,
 )
 from cal_ai.memory.formatter import format_memory_context
 from cal_ai.memory.models import MemoryAction, MemoryRecord
@@ -408,3 +413,277 @@ class TestMemoryWritePath:
             assert memories[0].value == "America/Vancouver"
         finally:
             store2.close()
+
+
+# ---------------------------------------------------------------------------
+# End-to-end orchestrator tests (run_memory_write with mocked LLM)
+# ---------------------------------------------------------------------------
+
+
+def _make_mock_call_result(response_json: dict, usage_prompt: int = 100, usage_output: int = 50):
+    """Build a mock LLM _call_api return value with text and usage."""
+    mock_result = MagicMock()
+    mock_result.text = json.dumps(response_json)
+    mock_usage = MagicMock()
+    mock_usage.prompt_token_count = usage_prompt
+    mock_usage.candidates_token_count = usage_output
+    mock_result.usage = mock_usage
+    return mock_result
+
+
+class TestMemoryWriteOrchestrator:
+    """End-to-end tests for run_memory_write with mocked Gemini client."""
+
+    def test_run_memory_write_add_new_fact(self, tmp_path: Path) -> None:
+        """Full orchestrator: fact extraction -> action decision -> DB write."""
+        db_path = tmp_path / "memory.db"
+        store = MemoryStore(db_path)
+        try:
+            # Mock Gemini client with two sequential _call_api responses.
+            mock_gemini = MagicMock()
+
+            # First call: fact extraction returns one candidate fact.
+            fact_response = {
+                "facts": [
+                    {
+                        "category": "preferences",
+                        "confidence": "high",
+                        "key": "meeting_time",
+                        "value": "Alice prefers mornings before 11am",
+                    }
+                ]
+            }
+            # Second call: action decision returns ADD action.
+            action_response = {
+                "actions": [
+                    {
+                        "action": "ADD",
+                        "category": "preferences",
+                        "confidence": "high",
+                        "key": "meeting_time",
+                        "new_value": "Alice prefers mornings before 11am",
+                        "reasoning": "New preference from conversation.",
+                    }
+                ]
+            }
+
+            mock_gemini._call_api.side_effect = [
+                _make_mock_call_result(fact_response, usage_prompt=150, usage_output=80),
+                _make_mock_call_result(action_response, usage_prompt=200, usage_output=60),
+            ]
+
+            result = run_memory_write(
+                gemini_client=mock_gemini,
+                store=store,
+                transcript_text="[Alice]: I really prefer morning meetings, before 11am.",
+                extracted_events=[],
+                owner_name="Alice",
+                transcript_path="test_convo.txt",
+            )
+
+            # Verify result counts.
+            assert isinstance(result, MemoryWriteResult)
+            assert result.memories_added == 1
+            assert result.memories_updated == 0
+            assert result.memories_deleted == 0
+
+            # Verify usage metadata collected from both LLM calls.
+            assert len(result.usage_metadata) == 2
+            assert result.usage_metadata[0].prompt_token_count == 150
+            assert result.usage_metadata[1].prompt_token_count == 200
+
+            # Verify DB state.
+            memories = store.load_all()
+            assert len(memories) == 1
+            assert memories[0].category == "preferences"
+            assert memories[0].key == "meeting_time"
+            assert memories[0].value == "Alice prefers mornings before 11am"
+            assert memories[0].confidence == "high"
+
+            # Verify audit log.
+            cursor = store._conn.execute("SELECT action, transcript FROM memory_log ORDER BY id")
+            logs = cursor.fetchall()
+            assert len(logs) == 1
+            assert logs[0]["action"] == "ADD"
+            assert logs[0]["transcript"] == "test_convo.txt"
+
+            # Verify _call_api was called exactly twice.
+            assert mock_gemini._call_api.call_count == 2
+        finally:
+            store.close()
+
+    def test_run_memory_write_update_existing_fact(self, tmp_path: Path) -> None:
+        """Orchestrator with seeded store: extraction -> UPDATE -> verify mutation."""
+        db_path = tmp_path / "memory.db"
+        store = MemoryStore(db_path)
+        try:
+            # Seed an existing memory.
+            store.upsert("people", "Bob", "Alice's colleague", "medium")
+
+            mock_gemini = MagicMock()
+
+            fact_response = {
+                "facts": [
+                    {
+                        "category": "people",
+                        "confidence": "high",
+                        "key": "Bob",
+                        "value": "Alice's manager; weekly 1:1 on Tuesdays",
+                    }
+                ]
+            }
+            # The existing memory will be remapped to ID 1 by _build_memory_id_map.
+            action_response = {
+                "actions": [
+                    {
+                        "action": "UPDATE",
+                        "category": "people",
+                        "confidence": "high",
+                        "key": "Bob",
+                        "new_value": "Alice's manager; weekly 1:1 on Tuesdays",
+                        "reasoning": "Bob was promoted from colleague to manager.",
+                        "target_memory_id": 1,
+                    }
+                ]
+            }
+
+            mock_gemini._call_api.side_effect = [
+                _make_mock_call_result(fact_response),
+                _make_mock_call_result(action_response),
+            ]
+
+            result = run_memory_write(
+                gemini_client=mock_gemini,
+                store=store,
+                transcript_text="[Alice]: Bob is my new manager now.",
+                extracted_events=[],
+                owner_name="Alice",
+                transcript_path="promo_convo.txt",
+            )
+
+            assert result.memories_updated == 1
+            assert result.memories_added == 0
+
+            # Verify DB was mutated.
+            memories = store.load_all()
+            assert len(memories) == 1
+            assert memories[0].value == "Alice's manager; weekly 1:1 on Tuesdays"
+            assert memories[0].source_count == 2  # incremented by upsert
+
+            # Verify audit log records old and new values.
+            cursor = store._conn.execute(
+                "SELECT action, old_value, new_value FROM memory_log ORDER BY id"
+            )
+            logs = cursor.fetchall()
+            assert len(logs) == 1
+            assert logs[0]["action"] == "UPDATE"
+            assert logs[0]["old_value"] == "Alice's colleague"
+            assert logs[0]["new_value"] == "Alice's manager; weekly 1:1 on Tuesdays"
+        finally:
+            store.close()
+
+    def test_run_memory_write_empty_facts_skips_action_decision(self, tmp_path: Path) -> None:
+        """Trivial transcript -> no facts -> no action decision call -> empty result."""
+        db_path = tmp_path / "memory.db"
+        store = MemoryStore(db_path)
+        try:
+            mock_gemini = MagicMock()
+
+            # Fact extraction returns empty facts array.
+            fact_response = {"facts": []}
+            mock_gemini._call_api.return_value = _make_mock_call_result(fact_response)
+
+            result = run_memory_write(
+                gemini_client=mock_gemini,
+                store=store,
+                transcript_text="[Alice]: Hey, nice weather today!",
+                extracted_events=[],
+                owner_name="Alice",
+            )
+
+            assert result.memories_added == 0
+            assert result.memories_updated == 0
+            assert result.memories_deleted == 0
+
+            # Only one LLM call (fact extraction), no action decision.
+            assert mock_gemini._call_api.call_count == 1
+
+            # Usage metadata should still include the extraction call.
+            assert len(result.usage_metadata) == 1
+
+            # DB should be empty.
+            assert store.load_all() == []
+        finally:
+            store.close()
+
+    def test_run_memory_write_mixed_actions(self, tmp_path: Path) -> None:
+        """Orchestrator with ADD + DELETE in single batch, verify final DB state."""
+        db_path = tmp_path / "memory.db"
+        store = MemoryStore(db_path)
+        try:
+            # Seed existing memory to delete.
+            store.upsert("vocabulary", "standup", "daily standup meeting", "low")
+
+            mock_gemini = MagicMock()
+
+            fact_response = {
+                "facts": [
+                    {
+                        "category": "preferences",
+                        "confidence": "high",
+                        "key": "default_duration",
+                        "value": "1 hour for most meetings",
+                    },
+                    {
+                        "category": "vocabulary",
+                        "confidence": "low",
+                        "key": "standup",
+                        "value": "no longer used",
+                    },
+                ]
+            }
+            action_response = {
+                "actions": [
+                    {
+                        "action": "ADD",
+                        "category": "preferences",
+                        "confidence": "high",
+                        "key": "default_duration",
+                        "new_value": "1 hour for most meetings",
+                        "reasoning": "Alice mentioned her preferred duration.",
+                    },
+                    {
+                        "action": "DELETE",
+                        "category": "vocabulary",
+                        "confidence": "low",
+                        "key": "standup",
+                        "reasoning": "Term no longer relevant.",
+                        "target_memory_id": 1,  # remapped ID for seeded memory
+                    },
+                ]
+            }
+
+            mock_gemini._call_api.side_effect = [
+                _make_mock_call_result(fact_response),
+                _make_mock_call_result(action_response),
+            ]
+
+            result = run_memory_write(
+                gemini_client=mock_gemini,
+                store=store,
+                transcript_text="[Alice]: I like 1-hour meetings. We don't do standups anymore.",
+                extracted_events=[],
+                owner_name="Alice",
+                transcript_path="mixed.txt",
+            )
+
+            assert result.memories_added == 1
+            assert result.memories_deleted == 1
+
+            # Final DB should only contain the newly added preference.
+            memories = store.load_all()
+            assert len(memories) == 1
+            assert memories[0].category == "preferences"
+            assert memories[0].key == "default_duration"
+        finally:
+            store.close()
