@@ -884,8 +884,9 @@ class TestPipeline:
         ctx.memory_store_cls.assert_called_once_with(ctx.settings.memory_db_path)
         # load_all should be called.
         ctx.memory_store.load_all.assert_called_once()
-        # format_memory_context should be called with the records and owner name.
-        ctx.format_memory.assert_called_once_with(records, ctx.settings.owner_name)
+        # format_memory_context should be called with the records and the
+        # runtime owner (not settings.owner_name) for consistent identity.
+        ctx.format_memory.assert_called_once_with(records, "TestOwner")
         # extract_events should receive the formatted memory context.
         call_kwargs = ctx.gemini.extract_events.call_args.kwargs
         assert call_kwargs["memory_context"] == ctx.format_memory.return_value

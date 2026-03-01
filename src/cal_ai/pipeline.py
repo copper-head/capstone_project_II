@@ -191,11 +191,13 @@ def run_pipeline(
     memory_context_text = ""
     try:
         memory_store = MemoryStore(settings.memory_db_path)
-        memories = memory_store.load_all()
-        memory_context_text = format_memory_context(memories, settings.owner_name)
-        if memories:
-            logger.info("Memory context loaded: %d memorie(s)", len(memories))
-        memory_store.close()
+        try:
+            memories = memory_store.load_all()
+            memory_context_text = format_memory_context(memories, owner)
+            if memories:
+                logger.info("Memory context loaded: %d memorie(s)", len(memories))
+        finally:
+            memory_store.close()
     except Exception as exc:
         msg = f"Memory load failed, continuing without memory context: {exc}"
         result.warnings.append(msg)
