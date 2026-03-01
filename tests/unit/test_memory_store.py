@@ -172,6 +172,18 @@ class TestUpsert:
 
         assert isinstance(row_id, int)
 
+    def test_upsert_update_returns_correct_id(self, tmp_path: Path) -> None:
+        """Upserting an existing key returns the same row id, not a new one."""
+        store = MemoryStore(tmp_path / "memory.db")
+        id1 = store.upsert("people", "Bob", "Manager")
+        _id2 = store.upsert("people", "Carol", "Designer")
+
+        # Upsert Bob again -- should return Bob's original id, not Carol's.
+        id1_again = store.upsert("people", "Bob", "Former manager")
+        store.close()
+
+        assert id1_again == id1
+
     def test_upsert_existing_updates_value(self, tmp_path: Path) -> None:
         """Upserting an existing (category, key) updates the value."""
         store = MemoryStore(tmp_path / "memory.db")

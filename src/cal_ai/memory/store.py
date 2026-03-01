@@ -119,7 +119,7 @@ class MemoryStore:
             The ``id`` of the upserted row.
         """
         now = datetime.now(UTC).isoformat()
-        cursor = self._conn.execute(
+        self._conn.execute(
             """\
             INSERT INTO memories
                 (category, key, value, confidence, source_count, created_at, updated_at)
@@ -134,10 +134,9 @@ class MemoryStore:
         )
         self._conn.commit()
 
-        # RETURNING is SQLite 3.35+; use a follow-up SELECT for broader compat.
-        if cursor.lastrowid:
-            return cursor.lastrowid
-
+        # Always SELECT to get the correct row ID.  cursor.lastrowid is
+        # unreliable on the UPDATE path of an UPSERT (it may hold a stale
+        # value from a prior INSERT on the same connection).
         row = self._conn.execute(
             "SELECT id FROM memories WHERE category = ? AND key = ?",
             (category, key),
