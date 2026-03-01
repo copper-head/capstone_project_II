@@ -28,7 +28,7 @@ src/cal_ai/           # Main package (src layout)
   memory/              # Long-term memory system (SQLite-backed)
     __init__.py        # Public API exports (MemoryStore, MemoryRecord, etc.)
     store.py           # SQLite memory store (upsert, delete, load_all, log_action)
-    models.py          # Pydantic models (MemoryRecord, ExtractedFact, MemoryAction)
+    models.py          # Pydantic models (MemoryRecord, MemoryFact, MemoryAction)
     formatter.py       # Format memories for LLM prompt injection
     extraction.py      # Memory write path orchestration (run_memory_write)
     prompts.py         # Prompt builders for fact extraction + action decision
