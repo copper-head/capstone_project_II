@@ -1,0 +1,19 @@
+[Alice]: Dave, heads up - we're doing standup at the crack of dawn Monday, like usual
+
+[Dave]: ugh really? what time is that exactly
+
+[Alice]: 7am lol, I know it's rough
+
+[Dave]: okay yeah that's crack of dawn alright. I'll be there
+
+[Alice]: also the team lunch is still happening, right? we never confirmed a time
+
+[Dave]: oh yeah lunchtime works for me. like noon?
+
+[Alice]: noon's perfect. let's say noon on Monday too then. same spot, the deli on fifth
+
+[Dave]: works for me. so two things Monday - 7am standup and noon lunch at the deli on fifth
+
+[Alice]: exactly! should be a fun day lol
+
+[Dave]: haha sure. see you bright and early

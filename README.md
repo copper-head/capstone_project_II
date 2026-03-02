@@ -1,12 +1,14 @@
 # Cal-AI: Conversation-to-Calendar
 
-An AI pipeline that reads conversation transcripts, extracts calendar events using Google Gemini, and syncs them to Google Calendar with full CRUD intelligence.
+An AI pipeline that reads conversation transcripts, extracts calendar events using Google Gemini, and syncs them to Google Calendar with full CRUD intelligence and long-term memory.
 
 ```
-Transcript  →  Parser  →  Calendar Context  →  Gemini 2.5 Pro  →  Sync  →  Google Calendar
+Transcript  →  Parser  →  Load Memories  →  Calendar Context  →  Gemini  →  Sync  →  Memory Write
 ```
 
 The AI sees your existing calendar and decides whether to **create**, **update**, or **delete** events based on what's discussed in the conversation. It doesn't just blindly create — if someone says "move standup to 10am" it updates the existing event, and "cancel the code review" deletes it.
+
+Between runs, the system **remembers** scheduling-relevant facts about the owner — people they work with, meeting preferences, recurring patterns — and injects this context into future extractions.
 
 ## Quick Start
 
@@ -43,14 +45,17 @@ Place your Google OAuth `credentials.json` in the project root. On first run, a 
 # Run on a transcript
 python -m cal_ai samples/crud/simple_lunch.txt
 
-# Dry run (extract events without syncing to calendar)
+# Dry run (extract events without syncing to calendar or writing memories)
 python -m cal_ai samples/crud/mixed_crud.txt --dry-run
 
-# Verbose logging (shows AI reasoning, API calls)
+# Verbose logging (shows AI reasoning, API calls, memory operations)
 python -m cal_ai samples/crud/clear_schedule.txt -v
 
 # Override the calendar owner name
 python -m cal_ai samples/multi_speaker/multiple_events.txt --owner "Alice"
+
+# View stored memories for the current owner
+python -m cal_ai memory
 ```
 
 ### Docker
@@ -68,10 +73,16 @@ docker compose run cal-ai samples/crud/mixed_crud.txt
 
 ## How It Works
 
+The pipeline runs in 5 stages:
+
 1. **Parse** — Reads `[Speaker]: text` formatted transcripts, extracts speakers and utterances.
-2. **Calendar Context** — Fetches your next 14 days of events from Google Calendar. Remaps UUIDs to short integer IDs (reduces LLM error rates from ~50% to ~5%).
-3. **LLM Extraction** — Gemini 2.5 Pro receives the transcript + your calendar context. It outputs structured JSON with `create`, `update`, or `delete` actions, referencing existing events by ID.
-4. **Sync** — Dispatches each action to the Google Calendar API. Direct ID-based calls for updates/deletes, with fallback on 404 (update→create, delete→skip).
+2. **Memory Load** — Loads stored facts about the owner from a per-owner SQLite database (preferences, people, patterns, vocabulary, corrections). Injected into the LLM prompt as context.
+3. **Calendar Context** — Fetches your next 14 days of events from Google Calendar. Remaps UUIDs to short integer IDs (reduces LLM error rates from ~50% to ~5%).
+4. **LLM Extraction** — Gemini receives the transcript + memory context + calendar context. It outputs structured JSON with `create`, `update`, or `delete` actions, referencing existing events by ID.
+5. **Sync** — Dispatches each action to the Google Calendar API. Direct ID-based calls for updates/deletes, with fallback on 404 (update→create, delete→skip).
+6. **Memory Write** — Two additional Gemini calls extract scheduling-relevant facts from the conversation and decide whether to ADD, UPDATE, or DELETE memories in the SQLite store.
+
+See [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) for a detailed breakdown of the pipeline, memory system, and benchmark suite.
 
 ### CRUD Intelligence
 
@@ -81,6 +92,25 @@ The prompt includes:
 - Few-shot examples including bulk operations ("clear my schedule" → multiple deletes)
 - Negative examples to prevent common mistakes
 - Last-statement-wins for conflicting instructions
+
+### Memory System
+
+The memory system gives the AI persistent context across conversations:
+
+- **Read path:** Before extraction, stored memories are loaded and injected into the system prompt grouped by category (preferences, people, vocabulary, patterns, corrections). When no memories exist, the section is omitted entirely.
+- **Write path:** After calendar sync, two Gemini calls handle memory updates:
+  1. **Fact extraction** — transcript + events → candidate facts with category/key/value/confidence
+  2. **Action decision** — candidate facts + existing memories → ADD/UPDATE/DELETE/NOOP actions
+- **Per-owner isolation:** Each owner gets a separate SQLite DB file (`data/memory_{owner}.db`)
+- **Graceful degradation:** If memory read or write fails, the pipeline continues normally — events still sync
+
+```bash
+# View current memories
+python -m cal_ai memory
+
+# Clear all memories for the current owner
+make clean-memory
+```
 
 ### Sample Transcripts
 
@@ -156,17 +186,23 @@ python -m cal_ai benchmark /path/to/samples/ --output /tmp/reports/
 
 ```
 src/cal_ai/
-├── __main__.py          # CLI entrypoint (run + benchmark subcommands)
-├── pipeline.py          # 4-stage orchestrator
+├── __main__.py          # CLI entrypoint (run, benchmark, memory subcommands)
+├── pipeline.py          # 5-stage orchestrator
 ├── llm.py               # Gemini client + response parsing
 ├── prompts.py           # System/user prompt builders
 ├── parser.py            # Transcript parser
-├── config.py            # Settings from .env
+├── config.py            # Settings from .env, owner slugification
 ├── demo_output.py       # Console output renderer
 ├── models/
 │   ├── extraction.py    # Pydantic models (ExtractedEvent, ValidatedEvent)
 │   ├── transcript.py    # Utterance, TranscriptParseResult
 │   └── calendar.py      # SyncResult
+├── memory/
+│   ├── store.py         # SQLite memory store (upsert, delete, load_all, audit log)
+│   ├── models.py        # Pydantic models (MemoryRecord, MemoryFact, MemoryAction)
+│   ├── formatter.py     # Format memories for LLM prompt injection
+│   ├── extraction.py    # Write path orchestration (run_memory_write)
+│   └── prompts.py       # Prompt builders for fact extraction + action decision
 ├── benchmark/
 │   ├── scoring.py       # P/R/F1 metrics, event matching, confidence calibration
 │   ├── runner.py        # Sample discovery, live extraction, cost tracking
@@ -181,7 +217,7 @@ src/cal_ai/
     └── exceptions.py     # Custom exceptions + @with_retry decorator
 
 tests/
-├── unit/                # Unit tests (config, logging, models, benchmark, etc.)
+├── unit/                # Unit tests (config, logging, memory, models, benchmark)
 ├── integration/         # Integration tests (CRUD flows, end-to-end)
 └── regression/          # Regression suite (mock + live modes)
     ├── conftest.py      # --live flag, auto-parametrize from samples
@@ -196,6 +232,11 @@ samples/                 # 40 transcripts organized by category
 ├── adversarial/         # 7 edge cases (sarcasm, negation, hypotheticals)
 ├── realistic/           # 7 real-world patterns (typos, slang, interruptions)
 └── long/                # 5 long transcripts (80+ lines)
+
+training/                # 100 additional transcripts (train/test/val splits)
+data/                    # Per-owner memory SQLite DBs (gitignored)
+docs/                    # Specification, architecture, memory design docs
+reports/                 # Benchmark output (gitignored)
 ```
 
 ## Tech Stack
@@ -205,11 +246,28 @@ samples/                 # 40 transcripts organized by category
 | Language | Python 3.12 |
 | LLM | Google Gemini 2.5 Pro |
 | Calendar | Google Calendar API (`google-api-python-client`) |
+| Memory | SQLite (per-owner, via `memory/store.py`) |
 | Auth | OAuth 2.0 (Desktop app flow) |
 | Models | Pydantic v2 |
 | Container | Docker |
-| Testing | pytest (400+ tests, 92% coverage) |
+| Testing | pytest |
 | Linting | ruff |
+
+## Benchmark Results
+
+Extraction accuracy measured on 70 training samples (P/R/F1 via Hungarian-algorithm best-match pairing):
+
+| Model | Precision | Recall | F1 | Cost (70 samples) |
+|---|---|---|---|---|
+| Gemini 2.5 Pro | 0.93 | 0.95 | **0.94** | $0.72 |
+| Gemini 3.1 Pro Preview | 0.93 | 0.93 | 0.93 | $0.70 |
+
+Per-category F1 (Gemini 2.5 Pro / 3.1 Pro Preview):
+- Adversarial: 0.75 / **1.00**
+- CRUD: 0.91 / **0.94**
+- Long: **0.96** / 0.86
+- Multi-speaker: **0.97** / 0.95
+- Realistic: 0.92 / **1.00**
 
 ## License
 

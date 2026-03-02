@@ -1,0 +1,27 @@
+[Alice]: Let's set up the code review for next week. How about Monday at 11?
+
+[Bob]: I thought we said Tuesday, Alice?
+
+[Alice]: Did we? I don't think we nailed it down yet.
+
+[Carol]: Yeah, I don't think we confirmed a day. Monday works for me actually.
+
+[Bob]: Hmm, let me check... actually you're right. We hadn't confirmed. But Monday at 11 won't work for me — I have a standup that runs long.
+
+[Alice]: What time works for you Monday?
+
+[Bob]: Could we push to 1 PM Monday?
+
+[Carol]: 1 PM Monday is fine with me.
+
+[Alice]: Okay, 1 PM Monday. Not 11. Let's do an hour and a half — there's a lot of code to cover.
+
+[Bob]: Agreed. 1 to 2:30 Monday.
+
+[Carol]: Perfect. Where are we meeting?
+
+[Alice]: The dev room on the second floor.
+
+[Bob]: Works for me.
+
+[Carol]: See you both Monday at 1.

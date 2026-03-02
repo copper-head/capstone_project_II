@@ -1,0 +1,36 @@
+{
+  "description": "Mostly sarcastic conversation about meeting culture with one genuine scheduling request buried in the middle. Alice and Bob make fun of meeting overload, then Alice pivots to a real architecture review request for Tuesday at 2 PM.",
+  "category": "adversarial",
+  "tolerance": "moderate",
+  "owner": "Alice",
+  "reference_datetime": "2026-02-20T10:00:00",
+  "calendar_context": [],
+  "expected_events": [
+    {
+      "action": "create",
+      "title": "Architecture Review",
+      "start_time": "2026-02-24T14:00:00",
+      "end_time": "2026-02-24T14:30:00",
+      "location": null,
+      "attendees_contain": ["Alice", "Bob"]
+    }
+  ],
+  "mock_llm_response": {
+    "events": [
+      {
+        "title": "Architecture Review",
+        "start_time": "2026-02-24T14:00:00",
+        "end_time": "2026-02-24T14:30:00",
+        "location": null,
+        "attendees": "Alice, Bob",
+        "confidence": "high",
+        "reasoning": "Alice explicitly asks Bob to 'block Tuesday at two for the architecture review' to go through the new database schema. Bob confirms the time works. Thirty-minute duration specified. The prior sarcastic suggestions (additional standups, Mars all-hands) are clearly humor.",
+        "assumptions": "Video call format; Tuesday = Feb 24",
+        "action": "create",
+        "existing_event_id": null
+      }
+    ],
+    "summary": "One real event extracted: an architecture review on Tuesday Feb 24 at 2:00 PM for 30 minutes. The preceding sarcastic scheduling suggestions are discarded as humor."
+  },
+  "notes": "Real event buried after sarcastic setup. The model must filter out the sarcastic opening and identify the genuine scheduling request when Alice says 'okay but genuinely' — a clear pivot signal from sarcasm to real intent."
+}

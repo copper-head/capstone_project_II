@@ -1,0 +1,13 @@
+[Alice]: Frank, I have a job interview on Wednesday at 2 PM. Can you make sure nothing gets scheduled for me that afternoon?
+
+[Frank]: Absolutely. Where's the interview?
+
+[Alice]: It's at Apex Technologies, over on Grant Avenue. They said it'll run about an hour and a half.
+
+[Frank]: Got it. So you're blocked from 2 to roughly 3:30 PM on Wednesday?
+
+[Alice]: Right. And please treat this as confidential — don't mention it to anyone.
+
+[Frank]: Of course, understood. I'll block it out discreetly.
+
+[Alice]: Thanks Frank. The company name is Apex Technologies if you need it for the calendar entry.

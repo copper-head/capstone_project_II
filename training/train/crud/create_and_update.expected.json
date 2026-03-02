@@ -1,0 +1,64 @@
+{
+  "description": "Alice requests two calendar changes: create a new hire onboarding session on Tuesday at 10 AM, and move the Thursday weekly check-in from 2 PM to 4 PM.",
+  "category": "crud",
+  "tolerance": "moderate",
+  "owner": "Alice",
+  "reference_datetime": "2026-02-20T10:00:00",
+  "calendar_context": [
+    {
+      "id": "gcal-evt-weekly-checkin-001",
+      "summary": "Weekly Check-In",
+      "start": "2026-02-26T14:00:00",
+      "end": "2026-02-26T15:00:00",
+      "location": null
+    }
+  ],
+  "expected_events": [
+    {
+      "action": "create",
+      "title": "New Hire Onboarding",
+      "start_time": "2026-02-24T10:00:00",
+      "end_time": "2026-02-24T11:00:00",
+      "location": "HR Conference Room 1",
+      "attendees_contain": ["Alice"]
+    },
+    {
+      "action": "update",
+      "title": "Weekly Check-In",
+      "start_time": "2026-02-26T16:00:00",
+      "end_time": "2026-02-26T17:00:00",
+      "existing_event_id_required": true,
+      "attendees_contain": ["Alice", "Bob"]
+    }
+  ],
+  "mock_llm_response": {
+    "events": [
+      {
+        "title": "New Hire Onboarding",
+        "start_time": "2026-02-24T10:00:00",
+        "end_time": "2026-02-24T11:00:00",
+        "location": "HR Conference Room 1",
+        "attendees": "Alice",
+        "confidence": "high",
+        "reasoning": "Alice requests a new onboarding session for a new hire on Tuesday at 10 AM in HR Conference Room 1.",
+        "assumptions": "Assumed 1-hour duration as no end time specified. Emily will be added later, so not included as attendee.",
+        "action": "create",
+        "existing_event_id": null
+      },
+      {
+        "title": "Weekly Check-In",
+        "start_time": "2026-02-26T16:00:00",
+        "end_time": "2026-02-26T17:00:00",
+        "location": null,
+        "attendees": "Alice, Bob",
+        "confidence": "high",
+        "reasoning": "Alice moves the Thursday weekly check-in from 2 PM to 4 PM. Duration preserved. Matches calendar event [1].",
+        "assumptions": "Duration preserved as 1 hour from the original event.",
+        "action": "update",
+        "existing_event_id": 1
+      }
+    ],
+    "summary": "Two changes: created new hire onboarding on Tuesday and moved weekly check-in to 4 PM Thursday."
+  },
+  "notes": "Reference datetime is 2026-02-20 (Friday). Tuesday = 2026-02-24, Thursday = 2026-02-26. calendar_context[0] (Weekly Check-In) so existing_event_id=1."
+}

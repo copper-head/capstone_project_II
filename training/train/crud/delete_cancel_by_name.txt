@@ -1,0 +1,13 @@
+[Alice]: Carol, we need to cancel the quarterly review that's on the calendar.
+
+[Carol]: The one scheduled for Thursday?
+
+[Alice]: Yes, that's the one. The client pushed it back to next month, so we don't need it this week.
+
+[Carol]: No problem, I'll take it off the calendar. Should I send a cancellation notice?
+
+[Alice]: Yes please, let everyone know it's been pushed. We'll reschedule once we hear from the client.
+
+[Carol]: Will do. Quarterly review on Thursday is cancelled.
+
+[Alice]: Thanks Carol.

@@ -1,0 +1,11 @@
+[Alice]: I just called the clinic. I've got a doctor's appointment booked for Tuesday at 2:30 PM.
+
+[Bob]: Is everything okay?
+
+[Alice]: Yeah, just a routine checkup. It's at the Riverside Medical Center on Oak Street.
+
+[Bob]: Got it. Want me to hold off on scheduling anything for you that afternoon?
+
+[Alice]: Yes please, block out until around 4. These things always run late.
+
+[Bob]: Will do. I'll keep Tuesday afternoon clear for you.

@@ -1,0 +1,23 @@
+[Alice]: Hey, do we have time to sync this week? I want to go over the Q1 roadmap before it's locked.
+
+[Bob]: Yeah, definitely. I'm pretty open. What works for you, Carol?
+
+[Carol]: I have a bunch of calls on Monday and Tuesday. Wednesday afternoon should be free.
+
+[Alice]: Wednesday afternoon works for me too. What time?
+
+[Bob]: I can do 2 PM Wednesday. Carol?
+
+[Carol]: 2 PM Wednesday is good. How long are you thinking?
+
+[Alice]: An hour should be enough. Maybe we do it in the main conference room?
+
+[Bob]: Main conference room works. I'll bring the roadmap deck.
+
+[Carol]: Perfect. I'll add it to my calendar.
+
+[Alice]: I'll send the invite. See you both Wednesday at 2.
+
+[Bob]: Sounds good!
+
+[Carol]: Looking forward to it.

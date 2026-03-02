@@ -1,0 +1,23 @@
+[Alice]: Okay team, three calendar changes to go through.
+
+[Bob]: Ready.
+
+[Carol]: Go ahead.
+
+[Alice]: First, add a new stakeholder briefing on Tuesday at 11 AM in the boardroom. Bob and Carol, you're both needed.
+
+[Bob]: Tuesday at 11, boardroom. Got it.
+
+[Carol]: I'll be there.
+
+[Alice]: Second, the Thursday project review — push it back an hour to 2 PM. It's currently at 1.
+
+[Bob]: Thursday project review from 1 PM to 2 PM. Done.
+
+[Alice]: And third, cancel the Monday morning standup. We're switching to async updates going forward.
+
+[Carol]: Monday standup cancelled. Makes sense.
+
+[Alice]: Perfect. Stakeholder briefing Tuesday 11, project review Thursday at 2, and Monday standup is gone.
+
+[Bob]: All three confirmed.

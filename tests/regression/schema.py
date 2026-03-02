@@ -58,6 +58,27 @@ class SidecarExpectedEvent(BaseModel):
     attendees_contain: list[str] = Field(default_factory=list)
 
 
+class SidecarMemoryEntry(BaseModel):
+    """A single memory entry in the sidecar's ``memory_context`` array.
+
+    Provides typed, schema-validated memory data for regression tests that
+    exercise memory-aware extraction.  Objects satisfy the duck-typed
+    contract required by :func:`~cal_ai.memory.formatter.format_memory_context`
+    (``category``, ``key``, ``value`` attributes).
+
+    Attributes:
+        category: Memory category.
+        key: Lookup identifier within the category.
+        value: The memory content.
+        confidence: Confidence level.  Defaults to ``"medium"``.
+    """
+
+    category: Literal["preferences", "people", "vocabulary", "patterns", "corrections"]
+    key: str
+    value: str
+    confidence: Literal["low", "medium", "high"] = "medium"
+
+
 class SidecarSpec(BaseModel):
     """Top-level sidecar JSON schema for a regression test sample.
 
@@ -71,6 +92,9 @@ class SidecarSpec(BaseModel):
         calendar_context: List of pre-existing calendar events to inject
             as context for CRUD-aware extraction.
         expected_events: List of expected extraction results.
+        memory_context: Optional list of memory entries to inject into the
+            pipeline via patched ``MemoryStore.load_all()``.  When ``None``
+            (default), the pipeline uses its normal empty-DB behavior.
         mock_llm_response: Raw JSON dict the mocked LLM should return.
         notes: Optional notes about the test scenario.
     """
@@ -82,5 +106,6 @@ class SidecarSpec(BaseModel):
     reference_datetime: str = "2026-02-20T10:00:00"
     calendar_context: list[SidecarCalendarEvent] = Field(default_factory=list)
     expected_events: list[SidecarExpectedEvent] = Field(default_factory=list)
+    memory_context: list[SidecarMemoryEntry] | None = None
     mock_llm_response: dict[str, Any] = Field(default_factory=dict)
     notes: str | None = None

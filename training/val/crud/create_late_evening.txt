@@ -1,0 +1,13 @@
+[Alice]: Eve, are you free Thursday evening?
+
+[Eve]: I think so. What time?
+
+[Alice]: I was thinking 8 PM. There's a networking event at the downtown arts center I'd like us both to go to.
+
+[Eve]: 8 PM Thursday at the downtown arts center — I can make that work. How long does it run?
+
+[Alice]: Usually these things go until about 10. So block out 8 to 10 PM.
+
+[Eve]: Perfect. Looking forward to it.
+
+[Alice]: Great, I'll add us both to the calendar.

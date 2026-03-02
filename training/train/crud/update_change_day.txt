@@ -1,0 +1,13 @@
+[Alice]: Carol, the product roadmap meeting we had on Thursday — we need to move it.
+
+[Carol]: Move it to when?
+
+[Alice]: Next Monday. Same time, 2 PM, but Monday instead of Thursday.
+
+[Carol]: Monday at 2 PM works for me. Any change to the agenda?
+
+[Alice]: No, the agenda stays the same. Just the day is changing.
+
+[Carol]: Perfect, I'll update my calendar. So it's off Thursday and on Monday at 2.
+
+[Alice]: Exactly. Thanks Carol.

@@ -1,0 +1,35 @@
+{
+  "description": "Speakers arrange an event primarily for people not present in the conversation: Marcus, Priya, and Kenji. Alice attends briefly but Bob and Carol do not attend.",
+  "category": "multi_speaker",
+  "tolerance": "moderate",
+  "owner": "Alice",
+  "reference_datetime": "2026-02-20T10:00:00",
+  "calendar_context": [],
+  "expected_events": [
+    {
+      "action": "create",
+      "title": "Knowledge Transfer Session",
+      "start_time": "2026-02-25T10:00:00",
+      "end_time": "2026-02-25T13:00:00",
+      "attendees_contain": ["Alice", "Marcus", "Priya", "Kenji"]
+    }
+  ],
+  "mock_llm_response": {
+    "events": [
+      {
+        "title": "Knowledge Transfer Session",
+        "start_time": "2026-02-25T10:00:00",
+        "end_time": "2026-02-25T13:00:00",
+        "location": null,
+        "attendees": "Alice, Marcus, Priya, Kenji",
+        "confidence": "high",
+        "reasoning": "Alice, Bob, and Carol discuss a knowledge transfer for Marcus (absent on sabbatical) with Priya and Kenji. Carol relays that Priya and Kenji confirmed Wednesday 10 AM. Bob texted Marcus who also confirmed. Duration is 3 hours (10 AM to 1 PM). Alice attends briefly. Bob and Carol explicitly will not attend.",
+        "assumptions": "Alice added as optional attendee per her statement",
+        "action": "create",
+        "existing_event_id": null
+      }
+    ],
+    "summary": "Found 1 event scheduled for absent parties: knowledge transfer session on Wednesday 10 AM to 1 PM."
+  },
+  "notes": "Reference datetime is Friday 2026-02-20. Wednesday=Feb 25. Marcus, Priya, and Kenji are not speakers but are primary attendees. Bob and Carol explicitly do not attend."
+}

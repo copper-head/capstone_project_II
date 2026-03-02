@@ -1,0 +1,35 @@
+{
+  "description": "Three speakers go through multiple time proposals before reaching consensus on a single security audit review meeting.",
+  "category": "multi_speaker",
+  "tolerance": "moderate",
+  "owner": "Alice",
+  "reference_datetime": "2026-02-20T10:00:00",
+  "calendar_context": [],
+  "expected_events": [
+    {
+      "action": "create",
+      "title": "Security Audit Review",
+      "start_time": "2026-02-26T15:00:00",
+      "end_time": "2026-02-26T17:00:00",
+      "attendees_contain": ["Alice", "Bob", "Carol"]
+    }
+  ],
+  "mock_llm_response": {
+    "events": [
+      {
+        "title": "Security Audit Review",
+        "start_time": "2026-02-26T15:00:00",
+        "end_time": "2026-02-26T17:00:00",
+        "location": null,
+        "attendees": "Alice, Bob, Carol",
+        "confidence": "high",
+        "reasoning": "After negotiating through Monday, Tuesday, Wednesday, and an initial 2 PM Thursday proposal, all three speakers finally agree on Thursday at 3 PM for 2 hours. Alice will send the invite.",
+        "assumptions": "",
+        "action": "create",
+        "existing_event_id": null
+      }
+    ],
+    "summary": "Found 1 event: security audit review on Thursday at 3 PM after extended negotiation."
+  },
+  "notes": "Reference datetime is Friday 2026-02-20. Thursday=Feb 26. The earlier 2 PM Thursday proposal was superseded by the final 3 PM agreement."
+}

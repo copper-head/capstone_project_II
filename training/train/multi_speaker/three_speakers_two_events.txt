@@ -1,0 +1,27 @@
+[Alice]: Before we wrap up, let's make sure the next two things are scheduled.
+
+[Bob]: Sure, what are they?
+
+[Alice]: First, we need the UX review with the design team. Carol, you're leading that one.
+
+[Carol]: Right. Bob, can you join me for the UX review? I'd like your engineering perspective.
+
+[Bob]: Absolutely. When are you thinking?
+
+[Carol]: Tuesday at 11 AM? It'll be about 90 minutes.
+
+[Bob]: Tuesday at 11 works. I'll block it.
+
+[Alice]: Great. The second thing is the vendor call. That's just me and Bob.
+
+[Bob]: Oh right, the Stripe integration discussion.
+
+[Alice]: Exactly. How about Monday at 3 PM?
+
+[Bob]: Monday at 3 is fine with me.
+
+[Alice]: Perfect. I'll handle the invite for the vendor call. Carol, can you send the UX review invite?
+
+[Carol]: On it. I'll include the design team as well.
+
+[Alice]: Thanks. That's all I had.

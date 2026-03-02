@@ -1,0 +1,19 @@
+[Alice]: If we ever did a full system redesign, we'd probably need a series of workshops. Like, three or four days with the architecture team.
+
+[Bob]: Maybe. If we had that kind of runway. Right now I don't see how we'd carve out that time.
+
+[Alice]: Yeah, hypothetically. Or if things were different, we might do a design sprint — a week-long thing. Just brainstorming.
+
+[Bob]: Sure, if the stars aligned. Which they rarely do.
+
+[Alice]: Ha, true. Okay but actually — I need you at the vendor call Wednesday at two. They're demoing the new platform and I want a technical voice in the room.
+
+[Bob]: Wednesday at two, yep, I can do that. How long is it?
+
+[Alice]: They said an hour but I'd block ninety minutes just in case.
+
+[Bob]: Got it. I'll block ninety. Is there a dial-in or are we going to their office?
+
+[Alice]: They're coming to us. Our main boardroom.
+
+[Bob]: Perfect, I'll be there.

@@ -1,0 +1,56 @@
+{
+  "description": "Extreme text-speak abbreviations throughout. Two events: Q1 review tonight at 7 PM at Bob's, and a presentation tomorrow at 10 AM.",
+  "category": "realistic",
+  "tolerance": "moderate",
+  "owner": "Alice",
+  "reference_datetime": "2026-02-20T10:00:00",
+  "calendar_context": [],
+  "expected_events": [
+    {
+      "action": "create",
+      "title": "Q1 Review",
+      "start_time": "2026-02-20T19:00:00",
+      "end_time": "2026-02-20T20:00:00",
+      "location": "Bob's place",
+      "attendees_contain": ["Alice", "Bob", "Carol"]
+    },
+    {
+      "action": "create",
+      "title": "Q1 Presentation",
+      "start_time": "2026-02-21T10:00:00",
+      "end_time": "2026-02-21T11:00:00",
+      "location": null,
+      "attendees_contain": ["Alice"]
+    }
+  ],
+  "mock_llm_response": {
+    "events": [
+      {
+        "title": "Q1 Review",
+        "start_time": "2026-02-20T19:00:00",
+        "end_time": "2026-02-20T20:00:00",
+        "location": "Bob's place",
+        "attendees": "Alice, Bob, Carol",
+        "confidence": "high",
+        "reasoning": "Despite heavy abbreviations, Alice proposes a Q1 numbers review tonight ('2nite') at 7 PM ('7pm') at Bob's, confirmed by all three participants.",
+        "assumptions": "Duration assumed 1 hour based on 'like an hr'. '2nite' = tonight = 2026-02-20.",
+        "action": "create",
+        "existing_event_id": null
+      },
+      {
+        "title": "Q1 Presentation",
+        "start_time": "2026-02-21T10:00:00",
+        "end_time": "2026-02-21T11:00:00",
+        "location": null,
+        "attendees": "Alice",
+        "confidence": "high",
+        "reasoning": "Alice references a 'big pres 2morrow @ 10am' which translates to a presentation tomorrow (2026-02-21) at 10 AM.",
+        "assumptions": "Duration assumed 1 hour. '2morrow' = 2026-02-21. 'Pres' interpreted as presentation.",
+        "action": "create",
+        "existing_event_id": null
+      }
+    ],
+    "summary": "Found 2 events: a Q1 review tonight at 7 PM at Bob's with Alice, Bob, and Carol, and a Q1 presentation tomorrow at 10 AM."
+  },
+  "notes": "Reference datetime is Friday 2026-02-20. '2nite' = today, '2morrow' = 2026-02-21. Heavy abbreviations: r=are, u=you, wut=what, kk=okay, gr8=great, l8r=later, lmk=let me know."
+}

@@ -1,0 +1,36 @@
+{
+  "description": "Conversation mixes two clearly absurd/sarcastic events (private island summit, Swiss Alps quarterly review, Riviera debrief) with one real confirmed event (budget reconciliation Thursday at 11 AM). Only the real event should be extracted.",
+  "category": "adversarial",
+  "tolerance": "moderate",
+  "owner": "Alice",
+  "reference_datetime": "2026-02-20T10:00:00",
+  "calendar_context": [],
+  "expected_events": [
+    {
+      "action": "create",
+      "title": "Budget Reconciliation",
+      "start_time": "2026-02-26T11:00:00",
+      "end_time": "2026-02-26T13:00:00",
+      "location": "Small Meeting Room",
+      "attendees_contain": ["Alice", "Dave"]
+    }
+  ],
+  "mock_llm_response": {
+    "events": [
+      {
+        "title": "Budget Reconciliation",
+        "start_time": "2026-02-26T11:00:00",
+        "end_time": "2026-02-26T13:00:00",
+        "location": "Small Meeting Room",
+        "attendees": "Alice, Dave",
+        "confidence": "high",
+        "reasoning": "Surrounded by absurdist sarcastic events (private island summit, Swiss Alps quarterly review, Riviera debrief), Alice makes a clearly genuine request marked with 'I genuinely need you' and 'Finance won't let me reschedule it again'. Thursday at 11 AM in the small meeting room off the main floor, up to 2 hours. Dave confirms it is in his calendar.",
+        "assumptions": "Thursday = Feb 26; 2-hour block used as upper bound given 'ninety minutes, maybe two hours'",
+        "action": "create",
+        "existing_event_id": null
+      }
+    ],
+    "summary": "One event extracted: budget reconciliation on Thursday Feb 26 at 11:00 AM (2 hours) in the small meeting room. Three absurdist events (private island summit, Swiss Alps review, Riviera debrief) are correctly identified as sarcastic humor and excluded."
+  },
+  "notes": "The hardest mixed pattern: multiple fake events sandwiching a real one. The real event is signaled by 'I genuinely need you', the constraint ('Finance won't let me reschedule'), specific location, duration discussion, and Dave's calendar confirmation. Absurd venues (private island, Swiss Alps, Riviera) mark the fake events."
+}

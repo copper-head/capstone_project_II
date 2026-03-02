@@ -1,0 +1,49 @@
+[Alice]: Okay everyone, team of six now. Big group but let's keep things tight. We need to lock in a few things.
+
+[Bob]: What's on the list?
+
+[Frank]: Yeah, what do we need to schedule?
+
+[Alice]: First, the product demo for stakeholders. That needs everyone.
+
+[Carol]: When is it?
+
+[Alice]: Friday next week — wait, that's too far out. Let's do this Friday.
+
+[Dave]: This Friday? That's tomorrow.
+
+[Alice]: No wait, I mean next Friday. February 27th.
+
+[Eve]: February 27th works.
+
+[Frank]: I'm good for next Friday.
+
+[Bob]: What time?
+
+[Alice]: 10 AM. Should be two hours max.
+
+[Carol]: 10 AM Friday works for me.
+
+[Dave]: Same.
+
+[Alice]: Perfect. Second thing — Bob, Frank, and Grace need to do a technical handoff. That doesn't involve the rest of us.
+
+[Frank]: Right, the API documentation handoff. When Bob?
+
+[Bob]: Grace is available Tuesday morning. How about 9 AM?
+
+[Frank]: 9 AM Tuesday works for me. How long?
+
+[Bob]: An hour and a half should cover it.
+
+[Frank]: Done.
+
+[Eve]: Are Carol, Dave, Alice and I completely out of the technical one?
+
+[Alice]: Yes, just Bob, Frank, and Grace on that one.
+
+[Carol]: Works for me — lighter calendar!
+
+[Dave]: Ha, agreed.
+
+[Alice]: Great. So everyone mark next Friday at 10 AM, and Bob and Frank add Tuesday at 9 AM.

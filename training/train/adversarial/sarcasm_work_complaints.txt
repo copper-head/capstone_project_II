@@ -1,0 +1,15 @@
+[Alice]: Bob, can you believe they want another status update meeting this week?
+
+[Bob]: Oh yeah, because that's clearly the best use of everyone's time. Let's all sit in a room and watch a slideshow for ninety minutes.
+
+[Alice]: Exactly. And hey, while we're at it, let's schedule a midnight call to review the Q4 numbers. Nothing like sacrificing sleep for spreadsheets.
+
+[Bob]: Brilliant idea. And then maybe a 6 AM sync on Saturday to go over the synergy action items.
+
+[Alice]: Ha. At this rate we'll be living at the office. Did you at least finish the client brief I asked for?
+
+[Bob]: Yeah, submitted it this morning. Should be in the shared drive under client docs.
+
+[Alice]: Perfect. Thanks for getting that done. I'll review it before end of day.
+
+[Bob]: No problem. Let me know if you need any changes.

@@ -1,0 +1,36 @@
+{
+  "description": "Carol helps coordinate a mentoring session but explicitly confirms she will not attend. Attendees list must exclude Carol.",
+  "category": "multi_speaker",
+  "tolerance": "moderate",
+  "owner": "Alice",
+  "reference_datetime": "2026-02-20T10:00:00",
+  "calendar_context": [],
+  "expected_events": [
+    {
+      "action": "create",
+      "title": "Mentoring Session",
+      "start_time": "2026-02-26T14:00:00",
+      "end_time": "2026-02-26T15:00:00",
+      "location": "Mentorship lounge",
+      "attendees_contain": ["Bob"]
+    }
+  ],
+  "mock_llm_response": {
+    "events": [
+      {
+        "title": "Mentoring Session",
+        "start_time": "2026-02-26T14:00:00",
+        "end_time": "2026-02-26T15:00:00",
+        "location": "Mentorship lounge",
+        "attendees": "Bob, Lena, Sam",
+        "confidence": "high",
+        "reasoning": "Carol coordinates a mentoring session between Bob and new grads Lena and Sam on Thursday at 2 PM for 1 hour in the mentorship lounge. Carol explicitly says she will not attend, only coordinating. Alice and Carol are also not attending.",
+        "assumptions": "",
+        "action": "create",
+        "existing_event_id": null
+      }
+    ],
+    "summary": "Found 1 event: mentoring session on Thursday at 2 PM. Carol is the coordinator but will not attend."
+  },
+  "notes": "Reference datetime is Friday 2026-02-20. Thursday=Feb 26. Carol explicitly states she is not attending. Alice is also not attending. Lena and Sam are mentioned but are not speakers."
+}

@@ -15,6 +15,7 @@ def build_system_prompt(
     owner_name: str,
     current_datetime: str,
     calendar_context: str = "",
+    memory_context: str = "",
 ) -> str:
     """Build the system prompt for the Gemini extraction call.
 
@@ -33,6 +34,12 @@ def build_system_prompt(
             When non-empty, it is appended near the end of the prompt
             so the LLM can match conversation references to existing
             events.  Defaults to ``""`` (no context).
+        memory_context: Pre-formatted memory context text (from
+            :func:`~cal_ai.memory.formatter.format_memory_context`).
+            When non-empty, it is appended before the calendar context
+            section.  The formatter already includes the section header,
+            so this string is appended as-is.  Defaults to ``""``
+            (no memory context).
 
     Returns:
         The complete system prompt string.
@@ -441,6 +448,12 @@ events array with a summary explaining why no events were found.
   action is "update" or "delete" and a matching existing event has been
   identified from "Your Calendar". For "create" actions, omit or set to null.
 """
+
+    # ------------------------------------------------------------------
+    # Memory context (placed before calendar -- persistent background)
+    # ------------------------------------------------------------------
+    if memory_context:
+        prompt += f"\n{memory_context}"
 
     # ------------------------------------------------------------------
     # Calendar context (placed near end -- lost-in-the-middle effect)

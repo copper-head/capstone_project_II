@@ -1,0 +1,15 @@
+[Alice]: I don't want to schedule anything else this week. My calendar is already a disaster.
+
+[Dave]: Completely understand. Don't put anything else on it, seriously.
+
+[Alice]: Yeah, let's just let things breathe for once. No more meetings, no more syncs, nothing.
+
+[Dave]: Agreed. Async only from here on out this week.
+
+[Alice]: Exactly. Oh — actually, wait. I completely forgot. Can you do Thursday at four? It's not really optional, legal needs us both in the room for the contract review. Thirty minutes max.
+
+[Dave]: Oh, yeah, that one I can't skip. Thursday at four works. Where is it?
+
+[Alice]: Conference room B. I'll send the invite now.
+
+[Dave]: Great, I'll be there.

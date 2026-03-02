@@ -1,0 +1,13 @@
+[Alice]: Carol, couple of calendar updates needed.
+
+[Carol]: Sure, go ahead.
+
+[Alice]: First, cancel the Friday all-hands. Leadership decided to skip it this week.
+
+[Carol]: Friday all-hands cancelled. Got it. What's the second?
+
+[Alice]: Set up a team retrospective for Monday at 11 AM. We'll do it in Room 202. I need you and Bob there.
+
+[Carol]: Monday at 11 in Room 202 for the retro. Done. Anything else?
+
+[Alice]: That's it, thanks Carol.

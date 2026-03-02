@@ -1,0 +1,36 @@
+{
+  "description": "Alice organizes a Saturday volunteering session at the Community Food Bank from 10 AM to 1 PM with Carol.",
+  "category": "crud",
+  "tolerance": "strict",
+  "owner": "Alice",
+  "reference_datetime": "2026-02-20T10:00:00",
+  "calendar_context": [],
+  "expected_events": [
+    {
+      "action": "create",
+      "title": "Volunteering at Community Food Bank",
+      "start_time": "2026-02-21T10:00:00",
+      "end_time": "2026-02-21T13:00:00",
+      "location": "Community Food Bank",
+      "attendees_contain": ["Alice", "Carol"]
+    }
+  ],
+  "mock_llm_response": {
+    "events": [
+      {
+        "title": "Volunteering at Community Food Bank",
+        "start_time": "2026-02-21T10:00:00",
+        "end_time": "2026-02-21T13:00:00",
+        "location": "Community Food Bank, Elm Street",
+        "attendees": "Alice, Carol",
+        "confidence": "high",
+        "reasoning": "Alice and Carol confirmed volunteering at the Community Food Bank on Saturday at 10 AM, wrapping up around 1 PM. Bob was mentioned as possible but unconfirmed.",
+        "assumptions": "Bob not included as an attendee since he 'might come but hasn't confirmed'. End time set to 1 PM based on Alice's statement.",
+        "action": "create",
+        "existing_event_id": null
+      }
+    ],
+    "summary": "Found 1 event: volunteering at Community Food Bank on Saturday 10 AM to 1 PM."
+  },
+  "notes": "Reference datetime is 2026-02-20 (Friday), so 'Saturday' resolves to 2026-02-21 (tomorrow). Bob excluded as unconfirmed attendee."
+}

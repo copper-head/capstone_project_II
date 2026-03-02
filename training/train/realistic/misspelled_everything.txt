@@ -1,0 +1,19 @@
+[Alice]: bob can we schedul a meating for wendsay? i need to discus the marketting campain
+
+[Bob]: sure wat time werks for you
+
+[Alice]: how bout 11 in the mornig? the confrence rom on the therd flor
+
+[Bob]: the confernce rom? you meen the bord rom?
+
+[Alice]: ya ya the bord rom. sory i always mix thos up
+
+[Bob]: no worys. wensday at 11 in the bord rom. ill send a calander invte
+
+[Alice]: perfact. it shuld be about an hour or so to go over evreything
+
+[Bob]: k sounds good. shud i invte dave too
+
+[Alice]: ya invte dave defintley. he handels the marketting budegt
+
+[Bob]: alredy on it. see u wendsay

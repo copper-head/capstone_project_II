@@ -1,0 +1,25 @@
+[Alice]: The strategy offsite is on the calendar for Thursday at 9 AM, but I need to move it.
+
+[Bob]: Yeah, I saw that. What's the new time?
+
+[Carol]: I heard there might be a conflict with the investor call Thursday morning.
+
+[Alice]: Exactly. Can we do Thursday afternoon instead? Say 2 PM?
+
+[Bob]: 2 PM Thursday works for me.
+
+[Carol]: Same. Should we keep it at 3 hours?
+
+[Alice]: Let's actually cut it to 2 hours this time. We covered a lot last session.
+
+[Bob]: 2 PM to 4 PM Thursday. That works.
+
+[Carol]: Agreed.
+
+[Alice]: I'll update the calendar event. The location stays the same — offsite conference center.
+
+[Bob]: Great. And it's still all three of us?
+
+[Alice]: Yes, same attendees.
+
+[Carol]: Perfect, see you both Thursday afternoon then.

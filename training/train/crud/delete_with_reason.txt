@@ -1,0 +1,13 @@
+[Alice]: Dave, I'm going to have to cancel the lunch meeting with the marketing team on Wednesday.
+
+[Dave]: What happened?
+
+[Alice]: I just got pulled into a last-minute investor call that I can't get out of. It conflicts directly with the noon slot.
+
+[Dave]: Understood. I'll let the marketing team know. Want me to propose a reschedule?
+
+[Alice]: Yes, suggest sometime next week. But for now, please remove it from the calendar.
+
+[Dave]: Done. Marketing lunch on Wednesday is cancelled. I'll reach out to them about next week.
+
+[Alice]: Perfect, thank you.

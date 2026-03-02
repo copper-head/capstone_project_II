@@ -1,0 +1,52 @@
+{
+  "description": "Alice asks to move 'my 2 PM today' to 4 PM, then clarifies it is the performance review. Tests time-reference-based event identification.",
+  "category": "crud",
+  "tolerance": "moderate",
+  "owner": "Alice",
+  "reference_datetime": "2026-02-20T10:00:00",
+  "calendar_context": [
+    {
+      "id": "gcal-evt-budget-call-001",
+      "summary": "Budget Call",
+      "start": "2026-02-20T11:00:00",
+      "end": "2026-02-20T11:30:00",
+      "location": null
+    },
+    {
+      "id": "gcal-evt-performance-review-002",
+      "summary": "Performance Review",
+      "start": "2026-02-20T14:00:00",
+      "end": "2026-02-20T15:00:00",
+      "location": "Room 3C"
+    }
+  ],
+  "expected_events": [
+    {
+      "action": "update",
+      "title": "Performance Review",
+      "start_time": "2026-02-20T16:00:00",
+      "end_time": "2026-02-20T17:00:00",
+      "existing_event_id_required": true,
+      "location": "Room 3C",
+      "attendees_contain": ["Alice", "Eve"]
+    }
+  ],
+  "mock_llm_response": {
+    "events": [
+      {
+        "title": "Performance Review",
+        "start_time": "2026-02-20T16:00:00",
+        "end_time": "2026-02-20T17:00:00",
+        "location": "Room 3C",
+        "attendees": "Alice, Eve",
+        "confidence": "high",
+        "reasoning": "Alice moves the performance review from 2 PM to 4 PM today. The 2 PM slot corresponds to the Performance Review in calendar context. Location and duration unchanged. Matches calendar event [2].",
+        "assumptions": "Duration preserved as 1 hour. Location unchanged per Alice's confirmation.",
+        "action": "update",
+        "existing_event_id": 2
+      }
+    ],
+    "summary": "Moved performance review from 2 PM to 4 PM today."
+  },
+  "notes": "Reference datetime is 2026-02-20 (Friday). Alice initially references '2 PM' then clarifies it is the Performance Review. Performance Review is calendar_context[1] so existing_event_id=2. Budget Call at 11 AM is not touched."
+}

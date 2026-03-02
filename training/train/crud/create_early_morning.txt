@@ -1,0 +1,15 @@
+[Alice]: Frank, I need to do an early morning sync with the Singapore team on Tuesday. They're 13 hours ahead so we have to do it at 7 AM our time.
+
+[Frank]: 7 AM? That's early.
+
+[Alice]: I know, but it's the only window that works for them. It should just be 30 minutes.
+
+[Frank]: Okay, do you want me on that call?
+
+[Alice]: Yes please, I'll need you for the technical questions. Tuesday at 7 AM, half an hour.
+
+[Frank]: I'll set an alarm. Is this a video call or just audio?
+
+[Alice]: Video call. I'll send the link separately.
+
+[Frank]: Works for me. See you at 7 AM Tuesday.

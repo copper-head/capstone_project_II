@@ -1,0 +1,13 @@
+[Alice]: Bob, I need to add Eve to the Monday planning meeting.
+
+[Bob]: The one at 2 PM?
+
+[Alice]: Yes, that's the one. Eve's team is now involved in the project, so she should be in the loop from the start.
+
+[Bob]: Makes sense. I'll add her. Anything else changing about the meeting?
+
+[Alice]: No, everything else stays the same. Same time, same room, just add Eve.
+
+[Bob]: Got it. Eve's added to the Monday 2 PM planning meeting.
+
+[Alice]: Great, thanks Bob.

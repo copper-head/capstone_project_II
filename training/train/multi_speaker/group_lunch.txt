@@ -1,0 +1,37 @@
+[Alice]: Team lunch this week! I want to do something nice before the product launch crunch.
+
+[Bob]: I'm in. What day?
+
+[Carol]: Wednesday would be great. I have more bandwidth midweek.
+
+[Dave]: Wednesday works for me too.
+
+[Eve]: Same. Wednesday is perfect.
+
+[Alice]: Wednesday it is. Let's do noon. Is that good for everyone?
+
+[Bob]: Noon Wednesday, yes.
+
+[Carol]: Perfect.
+
+[Dave]: Works for me.
+
+[Eve]: I'll be there!
+
+[Alice]: Great. I was thinking Olive Garden — they have good options for everyone.
+
+[Bob]: Love it. They have gluten-free pasta, right? I have a sensitivity.
+
+[Carol]: Yes they do. Also good vegetarian options for me.
+
+[Alice]: Yep, I checked their menu. Everyone should be covered. I'll make a reservation for 5.
+
+[Dave]: Should we meet there or at the office first?
+
+[Alice]: Let's just meet at the restaurant at noon. It's the one on Fifth Avenue.
+
+[Eve]: Got it, Olive Garden on Fifth at noon Wednesday.
+
+[Alice]: I'll send a calendar invite with the reservation details.
+
+[Carol]: Wonderful, looking forward to it!

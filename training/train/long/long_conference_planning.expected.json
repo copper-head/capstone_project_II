@@ -1,0 +1,113 @@
+{
+  "description": "86-line conference planning conversation with 4 speakers coordinating travel and schedule for a 3-day developer conference. Tests extracting team events from logistical planning, distinguishing shared calendar events from personal session bookings.",
+  "category": "long",
+  "tolerance": "relaxed",
+  "owner": "Alice",
+  "reference_datetime": "2026-02-20T10:00:00",
+  "calendar_context": [],
+  "expected_events": [
+    {
+      "action": "create",
+      "title": "DevConf Networking Reception",
+      "start_time": "2026-03-02T19:00:00",
+      "end_time": "2026-03-02T21:00:00",
+      "location": "Meridian Hotel, Chicago",
+      "attendees_contain": ["Alice", "Bob", "Carol", "Dave"]
+    },
+    {
+      "action": "create",
+      "title": "DevConf Speaker Reception",
+      "start_time": "2026-03-03T18:00:00",
+      "end_time": "2026-03-03T19:00:00",
+      "location": "Meridian Hotel, Chicago",
+      "attendees_contain": ["Alice", "Bob", "Carol", "Dave"]
+    },
+    {
+      "action": "create",
+      "title": "Panel Prep Dinner",
+      "start_time": "2026-03-03T19:30:00",
+      "end_time": "2026-03-03T21:00:00",
+      "attendees_contain": ["Alice", "Bob", "Carol", "Dave"]
+    },
+    {
+      "action": "create",
+      "title": "Distributed Caching Panel",
+      "start_time": "2026-03-04T11:00:00",
+      "end_time": "2026-03-04T12:00:00",
+      "attendees_contain": ["Dave"]
+    },
+    {
+      "action": "create",
+      "title": "Conference Debrief",
+      "start_time": "2026-03-06T14:00:00",
+      "end_time": "2026-03-06T15:00:00",
+      "attendees_contain": ["Alice", "Bob", "Carol", "Dave"]
+    }
+  ],
+  "mock_llm_response": {
+    "events": [
+      {
+        "title": "DevConf Networking Reception",
+        "start_time": "2026-03-02T19:00:00",
+        "end_time": "2026-03-02T21:00:00",
+        "location": "Meridian Hotel Rooftop, Chicago",
+        "attendees": "Alice, Bob, Carol, Dave",
+        "confidence": "high",
+        "reasoning": "Bob mentions the opening networking reception at 7 PM Sunday at the conference hotel rooftop. Alice plans for the whole team to arrive by 6 PM and attend together. All four confirm they are going.",
+        "assumptions": "Duration assumed 2 hours",
+        "action": "create",
+        "existing_event_id": null
+      },
+      {
+        "title": "Speaker Reception",
+        "start_time": "2026-03-03T18:00:00",
+        "end_time": "2026-03-03T19:00:00",
+        "location": "Meridian Hotel Ballroom, Chicago",
+        "attendees": "Alice, Bob, Carol, Dave",
+        "confidence": "high",
+        "reasoning": "Dave mentions a speaker reception Monday at 6 PM in the ballroom. He can bring the others as guests and Alice confirms everyone should attend.",
+        "assumptions": "Duration approximately 1 hour based on context",
+        "action": "create",
+        "existing_event_id": null
+      },
+      {
+        "title": "Panel Prep Dinner",
+        "start_time": "2026-03-03T19:30:00",
+        "end_time": "2026-03-03T21:00:00",
+        "location": null,
+        "attendees": "Alice, Bob, Carol, Dave",
+        "confidence": "high",
+        "reasoning": "Alice and Dave agree to a Monday evening dinner at 7:30 PM (updated from 7 PM to accommodate the speaker reception) for Dave to walk through his panel talking points. All four will attend.",
+        "assumptions": "Duration assumed 90 minutes",
+        "action": "create",
+        "existing_event_id": null
+      },
+      {
+        "title": "Distributed Caching Panel",
+        "start_time": "2026-03-04T11:00:00",
+        "end_time": "2026-03-04T12:00:00",
+        "location": "DevConf, Chicago",
+        "attendees": "Alice, Bob, Carol, Dave",
+        "confidence": "high",
+        "reasoning": "Dave is on the distributed caching panel at 11 AM Tuesday March 4th for approximately 1 hour. Alice and Carol both confirm they will attend to support him.",
+        "assumptions": "Duration approximately 1 hour",
+        "action": "create",
+        "existing_event_id": null
+      },
+      {
+        "title": "Conference Debrief",
+        "start_time": "2026-03-06T14:00:00",
+        "end_time": "2026-03-06T15:00:00",
+        "location": "Team Room",
+        "attendees": "Alice, Bob, Carol, Dave",
+        "confidence": "high",
+        "reasoning": "Alice schedules a post-conference debrief for Thursday March 6th at 2 PM for 1 hour in the team room for all four team members to share learnings and define action items.",
+        "assumptions": "",
+        "action": "create",
+        "existing_event_id": null
+      }
+    ],
+    "summary": "Found 5 team calendar events: Sunday networking reception (Mar 2 7 PM), Monday speaker reception (Mar 3 6 PM) and panel prep dinner (Mar 3 7:30 PM), Tuesday Dave's panel (Mar 4 11 AM), and Thursday conference debrief (Mar 6 2 PM). Individual conference sessions (Bob's Kubernetes workshop, Carol's Figma workshop) are personal and not included as shared events."
+  },
+  "notes": "Reference datetime is Friday 2026-02-20. Conference is March 3-5 in Chicago with travel on March 2. Individual sessions like Bob's Kubernetes workshop (Mon 1-4 PM) and Carol's Figma workshop (Tue 2-5 PM) are explicitly called out as personal calendar items, not team events. The pre-conference dinner reservation is a personal booking handled outside the calendar."
+}

@@ -1,0 +1,14 @@
+{
+  "description": "Scheduling discussion entirely contingent on budget approval that hasn't happened yet. No commitment is made — both parties explicitly decide to wait before booking anything.",
+  "category": "adversarial",
+  "tolerance": "moderate",
+  "owner": "Alice",
+  "reference_datetime": "2026-02-20T10:00:00",
+  "calendar_context": [],
+  "expected_events": [],
+  "mock_llm_response": {
+    "events": [],
+    "summary": "No actionable calendar events found. All scheduling references are conditional on unresolved budget committee approval. The conversation explicitly concludes with 'let's hold off' and 'no point planning around something that might not happen'."
+  },
+  "notes": "Conditional scheduling with explicit unresolved dependency. The condition (budget approval) has not been met, and both parties agree not to book anything. Classic if-then-maybe pattern with no commitment."
+}

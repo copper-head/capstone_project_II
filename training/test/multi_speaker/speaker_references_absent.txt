@@ -1,0 +1,29 @@
+[Alice]: Before Marcus gets back from his sabbatical, we need to schedule the knowledge transfer session. He mentioned he wants it done by end of next week.
+
+[Bob]: Right, Marcus said he'd work with Priya and Kenji on that. They're the ones taking over his accounts.
+
+[Carol]: I spoke with Priya yesterday. She said Wednesday at 10 AM is best for her and Kenji.
+
+[Alice]: Does that work with Marcus's schedule?
+
+[Bob]: I texted him. He said Wednesday 10 AM is perfect.
+
+[Carol]: Great. How long should we block?
+
+[Alice]: Marcus said three hours minimum. There's a lot to transfer.
+
+[Bob]: Wednesday 10 AM to 1 PM then.
+
+[Carol]: Should any of us be there?
+
+[Alice]: I'll attend briefly at the start, maybe the first 30 minutes, but then it's really just Marcus, Priya, and Kenji.
+
+[Bob]: I'll skip it. Same for you Carol?
+
+[Carol]: Yeah, not necessary for me.
+
+[Alice]: I'll book a room and send the invite to Marcus, Priya, and Kenji. I'll add myself as optional.
+
+[Bob]: Good plan.
+
+[Carol]: Sounds sorted.

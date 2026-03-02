@@ -288,6 +288,7 @@ def run_benchmark(
                 owner_name=owner_name,
                 current_datetime=reference_dt,
                 calendar_context=calendar_context_text,
+                memory_context="",
             )
             sr.extraction = extraction
             sr.latency_s = time.monotonic() - t0

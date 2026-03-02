@@ -9,6 +9,7 @@ for rendering by the demo output formatter.
 from __future__ import annotations
 
 import logging
+import os
 import time
 from dataclasses import dataclass, field
 from datetime import datetime
@@ -18,9 +19,12 @@ from cal_ai.calendar.auth import get_calendar_credentials
 from cal_ai.calendar.client import GoogleCalendarClient
 from cal_ai.calendar.context import CalendarContext, fetch_calendar_context
 from cal_ai.calendar.exceptions import CalendarNotFoundError
-from cal_ai.config import load_settings
+from cal_ai.config import _slugify_owner, load_settings
 from cal_ai.exceptions import ExtractionError
 from cal_ai.llm import GeminiClient
+from cal_ai.memory.extraction import run_memory_write
+from cal_ai.memory.formatter import format_memory_context
+from cal_ai.memory.store import MemoryStore
 from cal_ai.models.extraction import ExtractedEvent, ValidatedEvent
 from cal_ai.parser import parse_transcript_file
 
@@ -93,6 +97,10 @@ class PipelineResult:
         event_meta: Mapping from integer IDs to event metadata dicts
             (``title``, ``start_time``).  Used by the demo output
             formatter to show matched event info.
+        memories_added: Count of memory ADD actions dispatched.
+        memories_updated: Count of memory UPDATE actions dispatched.
+        memories_deleted: Count of memory DELETE actions dispatched.
+        memory_usage_metadata: Token usage from both memory LLM calls.
     """
 
     transcript_path: Path
@@ -106,6 +114,10 @@ class PipelineResult:
     dry_run: bool = False
     id_map: dict[int, str] = field(default_factory=dict)
     event_meta: dict[int, dict[str, str]] = field(default_factory=dict)
+    memories_added: int = 0
+    memories_updated: int = 0
+    memories_deleted: int = 0
+    memory_usage_metadata: list = field(default_factory=list)
 
 
 # ---------------------------------------------------------------------------
@@ -182,10 +194,31 @@ def run_pipeline(
         return result
 
     # ------------------------------------------------------------------
-    # Stage 1b: Build calendar client and fetch context
+    # Stage 1b: Load memories from SQLite
     # ------------------------------------------------------------------
     settings = load_settings()
 
+    memory_context_text = ""
+    try:
+        # Derive memory DB path from the runtime owner for consistency,
+        # unless an explicit MEMORY_DB_PATH env var is set.
+        memory_db_path = _resolve_memory_db_path(owner, settings)
+        memory_store = MemoryStore(memory_db_path)
+        try:
+            memories = memory_store.load_all()
+            memory_context_text = format_memory_context(memories, owner)
+            if memories:
+                logger.info("Memory context loaded: %d memorie(s)", len(memories))
+        finally:
+            memory_store.close()
+    except Exception as exc:
+        msg = f"Memory load failed, continuing without memory context: {exc}"
+        result.warnings.append(msg)
+        logger.warning(msg)
+
+    # ------------------------------------------------------------------
+    # Stage 1c: Build calendar client and fetch context
+    # ------------------------------------------------------------------
     calendar_context = CalendarContext()
     client: GoogleCalendarClient | None = None
 
@@ -213,34 +246,34 @@ def run_pipeline(
     # Build the transcript text for the LLM from the parsed utterances.
     transcript_text = _build_transcript_text(parse_result.utterances)
 
+    extraction = None
     try:
         extraction = gemini.extract_events(
             transcript_text=transcript_text,
             owner_name=owner,
             current_datetime=now,
             calendar_context=calendar_context.events_text,
+            memory_context=memory_context_text,
         )
         result.events_extracted = list(extraction.events)
     except ExtractionError as exc:
         msg = f"LLM extraction failed: {exc}"
         result.warnings.append(msg)
         logger.error(msg)
-        result.duration_seconds = time.monotonic() - start_time
-        return result
+        # Continue to memory write path -- conversations with no
+        # scheduling content can still contain memory-worthy facts.
 
     logger.info(
         "Stage 2 complete: %d event(s) extracted",
         len(result.events_extracted),
     )
 
-    if not result.events_extracted:
-        result.duration_seconds = time.monotonic() - start_time
-        return result
-
     # ------------------------------------------------------------------
     # Stage 3: Sync to Calendar
     # ------------------------------------------------------------------
-    if dry_run:
+    if not result.events_extracted:
+        logger.info("Stage 3: No events to sync, skipping calendar sync")
+    elif dry_run:
         logger.info("Stage 3: Dry-run mode -- skipping calendar sync")
         for event in result.events_extracted:
             matched_title, matched_time = _lookup_matched_event(
@@ -301,14 +334,58 @@ def run_pipeline(
                 )
                 result.events_failed.append(FailedEvent(event=event, error=str(exc)))
 
-    logger.info(
-        "Stage 3 complete: %d synced, %d failed",
-        len(result.events_synced),
-        len(result.events_failed),
-    )
+    if result.events_extracted:
+        logger.info(
+            "Stage 3 complete: %d synced, %d failed",
+            len(result.events_synced),
+            len(result.events_failed),
+        )
 
     # ------------------------------------------------------------------
-    # Stage 4: Summary
+    # Stage 4: Memory Write Path
+    # ------------------------------------------------------------------
+    if dry_run:
+        logger.info("Stage 4: Dry-run mode -- skipping memory write")
+    else:
+        logger.info("Stage 4: Running memory write path")
+        try:
+            memory_db_path = _resolve_memory_db_path(owner, settings)
+            memory_write_store = MemoryStore(memory_db_path)
+            try:
+                write_result = run_memory_write(
+                    gemini_client=gemini,
+                    store=memory_write_store,
+                    transcript_text=transcript_text,
+                    extracted_events=list(result.events_extracted),
+                    owner_name=owner,
+                    transcript_path=transcript_path,
+                )
+                result.memories_added = write_result.memories_added
+                result.memories_updated = write_result.memories_updated
+                result.memories_deleted = write_result.memories_deleted
+                result.memory_usage_metadata = write_result.usage_metadata
+
+                # Console summary line.
+                logger.info(
+                    "Memory: +%d added, %d updated, %d deleted",
+                    write_result.memories_added,
+                    write_result.memories_updated,
+                    write_result.memories_deleted,
+                )
+                print(
+                    f"Memory: +{write_result.memories_added} added, "
+                    f"{write_result.memories_updated} updated, "
+                    f"{write_result.memories_deleted} deleted"
+                )
+            finally:
+                memory_write_store.close()
+        except Exception as exc:
+            msg = f"Memory write failed, continuing without memory update: {exc}"
+            result.warnings.append(msg)
+            logger.warning(msg)
+
+    # ------------------------------------------------------------------
+    # Stage 5: Summary
     # ------------------------------------------------------------------
     result.duration_seconds = time.monotonic() - start_time
     logger.info("Pipeline complete in %.1fs", result.duration_seconds)
@@ -319,6 +396,28 @@ def run_pipeline(
 # ---------------------------------------------------------------------------
 # Internal helpers
 # ---------------------------------------------------------------------------
+
+
+def _resolve_memory_db_path(owner: str, settings) -> str:
+    """Resolve the memory DB path, binding to the runtime owner.
+
+    When ``MEMORY_DB_PATH`` is explicitly set in the environment, its
+    value is used directly (via ``settings.memory_db_path``).  Otherwise,
+    the path is derived from the runtime *owner* name -- not from
+    ``settings.owner_name`` -- so that a ``--owner`` CLI override
+    consistently selects the correct per-owner database.
+
+    Args:
+        owner: The runtime owner name (from CLI args or settings).
+        settings: Application :class:`~cal_ai.config.Settings`.
+
+    Returns:
+        The resolved memory DB file path.
+    """
+    if os.environ.get("MEMORY_DB_PATH", "").strip():
+        return settings.memory_db_path
+    slug = _slugify_owner(owner)
+    return f"data/memory_{slug}.db"
 
 
 def _lookup_matched_event(

@@ -1,0 +1,75 @@
+{
+  "description": "Team splits into two subgroups scheduling parallel work sessions, plus a full-group Thursday sync.",
+  "category": "multi_speaker",
+  "tolerance": "moderate",
+  "owner": "Alice",
+  "reference_datetime": "2026-02-20T10:00:00",
+  "calendar_context": [],
+  "expected_events": [
+    {
+      "action": "create",
+      "title": "Frontend Work Session",
+      "start_time": "2026-02-25T13:00:00",
+      "end_time": "2026-02-25T15:00:00",
+      "location": "Creative studio",
+      "attendees_contain": ["Bob", "Carol"]
+    },
+    {
+      "action": "create",
+      "title": "Backend Integration Session",
+      "start_time": "2026-02-24T10:00:00",
+      "end_time": "2026-02-24T12:00:00",
+      "location": "Server room",
+      "attendees_contain": ["Alice", "Dave"]
+    },
+    {
+      "action": "create",
+      "title": "Full Group Sync",
+      "start_time": "2026-02-26T15:00:00",
+      "end_time": "2026-02-26T16:00:00",
+      "attendees_contain": ["Alice", "Bob", "Carol", "Dave"]
+    }
+  ],
+  "mock_llm_response": {
+    "events": [
+      {
+        "title": "Frontend Work Session",
+        "start_time": "2026-02-25T13:00:00",
+        "end_time": "2026-02-25T15:00:00",
+        "location": "Creative studio",
+        "attendees": "Bob, Carol",
+        "confidence": "high",
+        "reasoning": "Bob and Carol form one subgroup for frontend work. They agree on Wednesday at 1 PM for 2 hours in the creative studio.",
+        "assumptions": "",
+        "action": "create",
+        "existing_event_id": null
+      },
+      {
+        "title": "Backend Integration Session",
+        "start_time": "2026-02-24T10:00:00",
+        "end_time": "2026-02-24T12:00:00",
+        "location": "Server room",
+        "attendees": "Alice, Dave",
+        "confidence": "high",
+        "reasoning": "Alice and Dave form the second subgroup for backend integration. Alice sets Tuesday at 10 AM for 2 hours in the server room. Dave confirms.",
+        "assumptions": "",
+        "action": "create",
+        "existing_event_id": null
+      },
+      {
+        "title": "Full Group Sync",
+        "start_time": "2026-02-26T15:00:00",
+        "end_time": "2026-02-26T16:00:00",
+        "location": null,
+        "attendees": "Alice, Bob, Carol, Dave",
+        "confidence": "high",
+        "reasoning": "Alice proposes a full group sync on Thursday at 3 PM to share findings. All four speakers confirm.",
+        "assumptions": "Assumed 1-hour duration",
+        "action": "create",
+        "existing_event_id": null
+      }
+    ],
+    "summary": "Found 3 events: two parallel subgroup sessions and a full group sync on Thursday."
+  },
+  "notes": "Reference datetime is Friday 2026-02-20. Tuesday=Feb 24, Wednesday=Feb 25, Thursday=Feb 26. Alice and Dave are not in the frontend session; Bob and Carol are not in the backend session."
+}

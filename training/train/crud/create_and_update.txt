@@ -1,0 +1,13 @@
+[Alice]: Two things to handle, Bob. First, can you set up an onboarding session for the new hire on Tuesday at 10 AM? It'll be in HR Conference Room 1.
+
+[Bob]: Tuesday at 10, HR Conference Room 1. Who's the new hire?
+
+[Alice]: Her name's Emily. Just put it on my calendar for now and I'll add her later.
+
+[Bob]: Done. What's the second thing?
+
+[Alice]: The weekly check-in on Thursday — can we move it to 4 PM? It's currently at 2.
+
+[Bob]: Thursday check-in from 2 to 4 PM, got it. I'll update it.
+
+[Alice]: Thanks. That's all.

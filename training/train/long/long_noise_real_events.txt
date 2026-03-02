@@ -1,0 +1,184 @@
+[Alice]: Oh my god, did you see what happened at the all-hands last week? When the projector died right in the middle of the CFO's slide?
+
+[Bob]: Yes! I was in the second row. His face was something else.
+
+[Alice]: I felt bad laughing but Carol was next to me making faces the whole time.
+
+[Carol]: I was not making faces. I was trying not to sneeze. The air conditioning in that room is terrible.
+
+[Bob]: That room has always been cold. I bring a jacket every time.
+
+[Alice]: Same. The green jacket I keep under my desk is specifically for that room.
+
+[Carol]: Smart. I've been keeping a cardigan in my drawer since October.
+
+[Bob]: Did you all catch the game on Sunday? I know Alice doesn't follow football but still.
+
+[Carol]: It was wild. That last-minute field goal, I screamed.
+
+[Bob]: My neighbor banged on the wall. I think I woke up his whole family.
+
+[Alice]: I was making pasta. I had absolutely no idea what was happening with the game. My husband was losing his mind though.
+
+[Carol]: Honestly the food at the game watch party at Della's place was incredible. She made three kinds of chili.
+
+[Bob]: I heard about that. Gutted I missed it. How many people were there?
+
+[Carol]: Maybe fifteen? Her living room was packed. We were sitting on the floor by the end.
+
+[Alice]: Sounds like a good time. You know Della is leaving the company next month, right?
+
+[Bob]: Wait, really? I didn't know that.
+
+[Carol]: She told me a few weeks ago. She got a director role at a startup in Austin.
+
+[Bob]: Good for her honestly. She's been here forever.
+
+[Alice]: Six years. We should do something for her before she leaves. Anyway.
+
+[Carol]: Agreed. Should we organize something?
+
+[Bob]: Birthday style send-off. I'm in.
+
+[Alice]: Let's think about that separately. Okay so I actually had something to ask you both while I have you.
+
+[Carol]: What's up?
+
+[Alice]: I need you two at a vendor review meeting. The Cloudbridge people are coming in — you know them, the data pipeline vendor we've been evaluating.
+
+[Bob]: Oh the ones who were supposed to come in last month and cancelled?
+
+[Alice]: Yes, them. They've finally confirmed. It's Thursday the 26th at 2 PM. One hour, the big conference room.
+
+[Carol]: Thursday the 26th at 2 PM. Yeah, I can do that.
+
+[Bob]: Same. Is it just us or is the whole team coming?
+
+[Alice]: Just us three plus Martin from data engineering. He's the one who actually has to integrate with their API.
+
+[Carol]: Good. Martin will ask the hard questions.
+
+[Bob]: He will. Remember when he interrogated that AWS rep for forty-five minutes about latency guarantees?
+
+[Carol]: And the guy couldn't answer. Classic Martin.
+
+[Alice]: He's thorough. Okay so that's the 26th at 2 PM. Put it in your calendar.
+
+[Bob]: Done mentally. I'll add it properly after this.
+
+[Alice]: Also I want to mention there's a training session coming up that I think you both should attend.
+
+[Carol]: Training on what?
+
+[Alice]: Data privacy compliance. Legal is rolling it out to everyone who touches customer data, which is basically both of your teams.
+
+[Bob]: Is this mandatory?
+
+[Alice]: Pretty much. Legal said optional but I'm calling it mandatory for us. It's Tuesday February 24th, 11 AM, the compliance training room on the second floor. Two hours.
+
+[Carol]: Tuesday the 24th at 11. I have to check but I think I'm free. I'll move my 11 AM standup.
+
+[Bob]: I can do it. A little annoying but whatever, compliance is compliance.
+
+[Alice]: I know. It's not the most exciting two hours but we have to stay current on this stuff.
+
+[Carol]: Is it the same module as last year or is it updated?
+
+[Alice]: Updated. GDPR changes from last quarter are in it now. There's a short quiz at the end too.
+
+[Bob]: Of course there is.
+
+[Alice]: You'll pass Bob, it's not hard.
+
+[Bob]: I know, I know. Just the principle of it.
+
+[Carol]: Speaking of training, have you heard anything about the new engineering onboarding process? I heard they're redesigning it.
+
+[Bob]: I heard the same thing. Apparently the old process took three weeks and half of it was outdated.
+
+[Alice]: Yeah HR has been working on that for a while. The new version is supposed to be a week shorter and actually relevant to how we work now.
+
+[Carol]: About time. The old one had us setting up tools we don't even use anymore.
+
+[Bob]: Subversion. They still had Subversion setup instructions when I joined.
+
+[Alice]: That's embarrassing.
+
+[Carol]: I think I still have the laminated reference card from onboarding in my desk somewhere.
+
+[Bob]: Artifact. You should frame it.
+
+[Alice]: On that note, how's the new person working out? Priya?
+
+[Bob]: Priya is excellent. She ramped up way faster than I expected. Already making PRs.
+
+[Carol]: She asked me some great design questions last week. Really thoughtful.
+
+[Alice]: Great. I was hoping she'd fit in well. The last hire before her took almost three months to really get going.
+
+[Bob]: Different situation I think. He came from a very different tech stack.
+
+[Alice]: True. Anyway I also want to flag something for next week. I have my performance review with the VP on Wednesday February 25th at 3 PM. I'll be offline for at least two hours during that.
+
+[Carol]: Got it. I won't schedule anything with you during that window.
+
+[Bob]: Same. Should we do our team sync before or after?
+
+[Alice]: Let's do it before. Like 10 AM on Wednesday the 25th? That works better.
+
+[Bob]: 10 AM Wednesday, sure.
+
+[Carol]: I'll move my dentist appointment. It's just a cleaning, rescheduling isn't a big deal.
+
+[Alice]: Don't reschedule a dentist appointment for me Carol.
+
+[Carol]: No really it's fine. The appointment is at 10:30 and I've already pushed it twice. I'll just go to a different slot.
+
+[Alice]: Okay if you're sure.
+
+[Carol]: Totally sure.
+
+[Alice]: Alright, Wednesday the 25th at 10 AM, team sync, one hour.
+
+[Bob]: The usual room?
+
+[Alice]: Yeah, the small room on four.
+
+[Bob]: Perfect.
+
+[Carol]: What should we cover? Is this a regular one or a specific agenda?
+
+[Alice]: Regular weekly sync. Status updates, blockers, quick planning.
+
+[Carol]: Got it.
+
+[Bob]: Should I prepare a demo of the dashboard changes?
+
+[Alice]: Yes actually, that would be great. Quick demo, five to ten minutes.
+
+[Bob]: I'll have something ready.
+
+[Carol]: Same, I can show the new modal designs I've been working on.
+
+[Alice]: Perfect. Okay I think that covers everything I had. Anyone else have things to add?
+
+[Bob]: I don't think so. I'm going to grab lunch actually. The Thai place around the corner has this new special on Fridays.
+
+[Carol]: Which one? The one on Main or the one on 5th?
+
+[Bob]: Main Street. The green curry with crispy tofu. It's incredible.
+
+[Alice]: I've been meaning to go there. Maybe next Friday.
+
+[Carol]: Count me in for next Friday lunch.
+
+[Bob]: Let's do it. Friday lunch crew.
+
+[Alice]: Deal. Alright I'll let you go. Bob, enjoy your Thai.
+
+[Bob]: Will do. See you both.
+
+[Carol]: Bye guys!
+
+[Alice]: Later.
+

@@ -1,0 +1,168 @@
+[Alice]: Okay everyone, thanks for jumping on this call. I know we've all been heads-down this week but we need to start planning the Horizon launch properly.
+
+[Bob]: Yeah, I've been waiting for this conversation. There's a lot to coordinate.
+
+[Carol]: Same. I have a whole list of things I've been holding back on until we had a proper kickoff.
+
+[Dave]: I blocked off the next two hours so we have time to actually go through everything.
+
+[Alice]: Good. Let's start big picture and then get into the scheduling. Dave, can you give everyone a quick overview of where we are on the technical side?
+
+[Dave]: Sure. So the core API is about 80% done. We have the authentication layer working, the data models are solid, and we're into integration testing now. The main thing left is the reporting module and the export functionality.
+
+[Bob]: How long do you think that takes?
+
+[Dave]: Realistically? If nothing blows up, we could have the reporting module done by end of next week. Export is trickier, probably another week after that.
+
+[Carol]: That actually aligns well with my design timeline. The UI for reports is ready to go once the API endpoints are stable.
+
+[Alice]: Okay good. So that puts us at roughly March 6th for feature complete, which gives us two weeks before the target launch on March 20th. That's tight but workable.
+
+[Bob]: Two weeks for QA and stabilization. We've done it before.
+
+[Dave]: We should probably schedule a proper tech review once the reporting module is done. Like a structured session where we walk through the entire API.
+
+[Alice]: Absolutely. Let's put that on the calendar. Dave, if you're targeting end of next week for reporting, can we do a technical review on Monday the second of March?
+
+[Dave]: That should work. Give me a little buffer — how about March 2nd at 2 PM?
+
+[Alice]: Perfect. Two hours?
+
+[Dave]: Yeah, two hours minimum. Could go longer.
+
+[Alice]: Let's block 2 to 4 PM then. Bob, Carol, you both need to be there.
+
+[Bob]: On it.
+
+[Carol]: I'll be there.
+
+[Alice]: Good. Now, the other thing I want to start doing is weekly syncs specifically for Horizon. Not the general team standup, a dedicated Horizon sync.
+
+[Bob]: What cadence are you thinking?
+
+[Alice]: Weekly, Tuesdays. Starting next week, so February 24th. Let's say 10 AM, an hour.
+
+[Carol]: That works for me. Standing meeting?
+
+[Alice]: Yeah, recurring. Every Tuesday at 10 AM, one hour, all four of us.
+
+[Dave]: I might be a little late on some weeks because I have a recurring infrastructure review on Tuesday mornings, but I'll always be there by 10:15 at the latest.
+
+[Alice]: That's fine. Now let's talk about the stakeholder side. Marketing needs to be kept in the loop, and our VP wants a preview before we launch.
+
+[Bob]: I talked to Sarah in marketing last week. She's excited but she needs a working demo to write copy around. She's been asking for dates.
+
+[Alice]: Let's plan an internal demo for the team and stakeholders around March 9th. That would be a Monday, which is good because it gives us the weekend before to polish.
+
+[Carol]: March 9th at what time?
+
+[Alice]: Let's say 2 PM, Monday March 9th. Two hours. We'll do a full walkthrough — Dave presents the technical architecture, Carol walks through the UI, and Bob does the product narrative.
+
+[Bob]: Who's invited?
+
+[Alice]: Everyone in this call plus Sarah from marketing, our VP, and maybe two or three others from the exec team. I'll send the invites.
+
+[Dave]: Should I prep slides or just a live demo?
+
+[Alice]: Both. Live demo first, then a few slides on the tech stack. Keep it to 20 minutes on the technical side.
+
+[Carol]: I can help Dave polish the UI for that specific demo session if we have some time the week before.
+
+[Alice]: That's a great idea. Let's schedule a demo prep session. How about Friday February 27th, in the afternoon? Say 3 PM?
+
+[Carol]: Works for me.
+
+[Dave]: I can do 3 PM Friday.
+
+[Bob]: Same.
+
+[Alice]: Great. Demo prep, February 27th at 3 PM, one hour, all four of us.
+
+[Bob]: Speaking of stakeholders, I want to flag that we should probably do a separate session with the customer success team before launch. They need to know the product inside and out for onboarding.
+
+[Alice]: Agreed. That's a good point. Let's plan a customer success training session for the week of March 16th, a few days before launch. How does March 16th at 1 PM work?
+
+[Bob]: Monday the 16th, 1 PM, yes. That should be me, Alice, and whoever from CS can make it.
+
+[Alice]: I'll reach out to Linda in CS to get the right people on it. Let's block two hours for that.
+
+[Carol]: Is that one I need to be in?
+
+[Alice]: Probably not unless you want to be. More of a product and CS thing.
+
+[Carol]: Okay I'll skip it but keep me posted if anything design-related comes up.
+
+[Alice]: Will do. Now let's talk about the launch day itself. March 20th, which is a Friday.
+
+[Dave]: I'm actually a little nervous about launching on a Friday. If something breaks over the weekend, we're scrambling with a skeleton crew.
+
+[Bob]: Dave has a point. Thursday launch would give us a full day of monitoring before the weekend.
+
+[Alice]: You know what, that's smart. Let's call it March 19th then. Thursday.
+
+[Dave]: Thursday the 19th. That gives us Wednesday as a buffer day to fix last-minute issues.
+
+[Alice]: Good call. Alright, so launch is officially Thursday March 19th. We should do a launch readiness review the day before. Wednesday March 18th, let's say 9 AM, 90 minutes.
+
+[Bob]: 9 AM Wednesday March 18th. Is that the whole team?
+
+[Alice]: Yeah, everyone on this call. And I'd want the QA lead there too. I'll ping Marcus.
+
+[Dave]: Makes sense. By then we should know if everything is green.
+
+[Carol]: What about a post-launch retrospective? We should capture learnings.
+
+[Alice]: One week after launch. So March 26th. Thursday, same day of the week. Let's say 2 PM, 90 minutes.
+
+[Bob]: Thursday March 26th, 2 PM. I'll be there.
+
+[Carol]: Same.
+
+[Dave]: Works for me.
+
+[Alice]: Perfect. So let me recap everything we've scheduled: Technical review on March 2nd, Horizon weekly syncs starting February 24th every Tuesday, demo prep on February 27th, internal stakeholder demo on March 9th, customer success training on March 16th, launch readiness review March 18th, and post-launch retro March 26th.
+
+[Bob]: And the target launch date is March 19th.
+
+[Alice]: Right, though we aren't putting that on the calendar as a meeting — it's just the go-live date.
+
+[Dave]: What about code freeze? We should have a hard deadline.
+
+[Alice]: Good point. Let's say code freeze is March 14th, end of day. That gives us March 17th and 18th for final QA and the readiness review.
+
+[Bob]: March 14th code freeze. I'll add that to my project tracker.
+
+[Carol]: I'll note it too. No new UI changes after the 14th.
+
+[Alice]: Exactly. If we need to change something after freeze, it requires sign-off from me.
+
+[Dave]: Understood. That's how it should work.
+
+[Bob]: Alice, one thing I wanted to raise — should we do a press embargo lift call with the journalist who's been covering us? She's been patient.
+
+[Alice]: Oh right, I nearly forgot about that. Yes, let's plan that for launch morning. March 19th, early, like 8 AM, just me and her.
+
+[Bob]: I can set that up on my end with her PR person.
+
+[Alice]: That would be great, thanks Bob.
+
+[Carol]: Okay I think that's a solid plan. A lot of meetings but it's a launch, so.
+
+[Dave]: Agreed. At least now I know what to prep for and when.
+
+[Alice]: Exactly. Having it all on the calendar means no surprises. Alright, anything else before we wrap?
+
+[Bob]: I think we're good. This was productive.
+
+[Carol]: Yeah agreed. Thanks for organizing this Alice.
+
+[Dave]: I'll start drafting the technical review agenda this afternoon.
+
+[Alice]: Perfect. I'll get all these calendar invites out by end of day. Thanks everyone.
+
+[Bob]: Sounds good. Talk to you all Tuesday.
+
+[Carol]: Later!
+
+[Dave]: Bye.
+

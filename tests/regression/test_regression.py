@@ -20,6 +20,7 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
+from cal_ai.memory.formatter import format_memory_context
 from cal_ai.models.extraction import ExtractionResult
 from cal_ai.pipeline import run_pipeline
 from tests.regression.loader import build_calendar_context
@@ -77,6 +78,18 @@ def test_mock_extraction(
 
     mock_resp = _build_mock_response(sidecar)
 
+    # Build memory patches: inject sidecar memory_context when present.
+    memory_entries = sidecar.memory_context or []
+    mock_memory_store = MagicMock()
+    mock_memory_store.load_all.return_value = memory_entries
+    mock_memory_store_cls = MagicMock(return_value=mock_memory_store)
+
+    # Use the real formatter so memory_context flows into the prompt
+    # identically to production, but with sidecar data.
+    mock_format_memory = MagicMock(
+        side_effect=lambda memories, owner: format_memory_context(memories, owner)
+    )
+
     with (
         patch(
             "cal_ai.llm.genai.Client",
@@ -88,6 +101,27 @@ def test_mock_extraction(
         patch(
             "cal_ai.pipeline.get_calendar_credentials",
             return_value=MagicMock(),
+        ),
+        patch(
+            "cal_ai.pipeline.MemoryStore",
+            mock_memory_store_cls,
+        ),
+        patch(
+            "cal_ai.pipeline.format_memory_context",
+            mock_format_memory,
+        ),
+        patch(
+            "cal_ai.pipeline._resolve_memory_db_path",
+            return_value="/tmp/regression_test_memory.db",
+        ),
+        patch(
+            "cal_ai.pipeline.run_memory_write",
+            return_value=MagicMock(
+                memories_added=0,
+                memories_updated=0,
+                memories_deleted=0,
+                usage_metadata=[],
+            ),
         ),
     ):
         # Wire the mocked generate_content onto the client instance.
@@ -146,6 +180,16 @@ def test_live_extraction(
     ref_dt = datetime.fromisoformat(sidecar.reference_datetime)
     cal_ctx = build_calendar_context(sidecar)
 
+    # Build memory patches for live tests (same as mock mode).
+    memory_entries = sidecar.memory_context or []
+    mock_memory_store = MagicMock()
+    mock_memory_store.load_all.return_value = memory_entries
+    mock_memory_store_cls = MagicMock(return_value=mock_memory_store)
+
+    mock_format_memory = MagicMock(
+        side_effect=lambda memories, owner: format_memory_context(memories, owner)
+    )
+
     with (
         patch(
             "cal_ai.pipeline.fetch_calendar_context",
@@ -154,6 +198,18 @@ def test_live_extraction(
         patch(
             "cal_ai.pipeline.get_calendar_credentials",
             return_value=MagicMock(),
+        ),
+        patch(
+            "cal_ai.pipeline.MemoryStore",
+            mock_memory_store_cls,
+        ),
+        patch(
+            "cal_ai.pipeline.format_memory_context",
+            mock_format_memory,
+        ),
+        patch(
+            "cal_ai.pipeline._resolve_memory_db_path",
+            return_value="/tmp/regression_test_memory.db",
         ),
     ):
         result = run_pipeline(

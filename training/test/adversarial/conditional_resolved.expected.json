@@ -1,0 +1,36 @@
+{
+  "description": "Conditional scheduling ('if legal approves') where the condition is met mid-conversation. The event begins as hypothetical but becomes real when legal approval arrives and Alice confirms the meeting with 'let's make Monday real'.",
+  "category": "adversarial",
+  "tolerance": "moderate",
+  "owner": "Alice",
+  "reference_datetime": "2026-02-20T10:00:00",
+  "calendar_context": [],
+  "expected_events": [
+    {
+      "action": "create",
+      "title": "Partner Announcement Kickoff",
+      "start_time": "2026-02-23T09:00:00",
+      "end_time": "2026-02-23T10:00:00",
+      "location": "Conference Room A",
+      "attendees_contain": ["Alice", "Bob", "Sarah", "Priya"]
+    }
+  ],
+  "mock_llm_response": {
+    "events": [
+      {
+        "title": "Partner Announcement Kickoff",
+        "start_time": "2026-02-23T09:00:00",
+        "end_time": "2026-02-23T10:00:00",
+        "location": "Conference Room A",
+        "attendees": "Alice, Bob, Sarah, Priya",
+        "confidence": "high",
+        "reasoning": "The meeting starts as conditional ('if legal gives us the green light') but the condition is resolved mid-conversation when Bob reports that legal has signed off. Alice immediately converts the conditional to a confirmed event: 'let's make Monday real. Nine AM with Sarah's comms team.' Bob confirms he will send calendar invites and specifies the full attendee list.",
+        "assumptions": "Monday = Feb 23; 1-hour default block; Sarah's full team not individually named so only Sarah listed by role",
+        "action": "create",
+        "existing_event_id": null
+      }
+    ],
+    "summary": "One event extracted: partner announcement kickoff on Monday Feb 23 at 9:00 AM in Conference Room A. The condition (legal approval) was met during the conversation, converting a hypothetical into a confirmed scheduled event."
+  },
+  "notes": "Conditional resolved pattern. The model must track that the condition ('if legal gives us the green light') is explicitly resolved mid-conversation, converting the hypothetical into a real event. The pivot phrase 'let's make Monday real' is the key confirmation signal."
+}

@@ -23,3 +23,9 @@ htmlcov/
 
 # Benchmark reports
 reports/
+
+# Memory database files
+data/
+
+# Test artifacts
+MagicMock/

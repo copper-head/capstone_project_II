@@ -1,0 +1,21 @@
+{
+  "branch_name": "fn-9-img",
+  "created_at": "2026-03-01T01:14:20.886940Z",
+  "default_impl": null,
+  "default_review": null,
+  "default_sync": null,
+  "depends_on_epics": [
+    "fn-1-fgh",
+    "fn-3-4ho",
+    "fn-5-vqs",
+    "fn-6-m69"
+  ],
+  "id": "fn-9-img",
+  "next_task": 1,
+  "plan_review_status": "ship",
+  "plan_reviewed_at": "2026-03-01T02:41:56.305648Z",
+  "spec_path": ".flow/specs/fn-9-img.md",
+  "status": "open",
+  "title": "Long-Term Memory System",
+  "updated_at": "2026-03-01T02:41:56.305659Z"
+}

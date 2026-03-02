@@ -1,0 +1,14 @@
+{
+  "description": "Conversation consisting entirely of rhetorical questions and complaints about meetings. No events are scheduled — the whole point is questioning whether meetings should exist at all.",
+  "category": "adversarial",
+  "tolerance": "moderate",
+  "owner": "Alice",
+  "reference_datetime": "2026-02-20T10:00:00",
+  "calendar_context": [],
+  "expected_events": [],
+  "mock_llm_response": {
+    "events": [],
+    "summary": "No actionable calendar events found. The conversation consists entirely of rhetorical questions ('who even has time?', 'should we even bother?', 'why are we doing this?') expressing anti-meeting sentiment. No scheduling intent exists."
+  },
+  "notes": "Rhetorical question pattern. Questions like 'who has time for meetings?' and 'should we even bother?' are expressions of frustration, not requests to schedule. The conclusion is explicitly anti-scheduling."
+}

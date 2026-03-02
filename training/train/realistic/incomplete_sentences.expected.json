@@ -1,0 +1,36 @@
+{
+  "description": "Conversation full of trailing off, interrupted thoughts, and mid-sentence redirections. New hire orientation on Thursday at 2 PM in the training room.",
+  "category": "realistic",
+  "tolerance": "moderate",
+  "owner": "Alice",
+  "reference_datetime": "2026-02-20T10:00:00",
+  "calendar_context": [],
+  "expected_events": [
+    {
+      "action": "create",
+      "title": "New Hire Orientation",
+      "start_time": "2026-02-26T14:00:00",
+      "end_time": "2026-02-26T15:00:00",
+      "location": "Training Room",
+      "attendees_contain": ["Alice", "Carol"]
+    }
+  ],
+  "mock_llm_response": {
+    "events": [
+      {
+        "title": "New Hire Orientation",
+        "start_time": "2026-02-26T14:00:00",
+        "end_time": "2026-02-26T15:00:00",
+        "location": "Training Room",
+        "attendees": "Alice, Carol",
+        "confidence": "high",
+        "reasoning": "Despite numerous trailing sentences and mid-thought corrections, Alice and Carol settle on Thursday at 2 PM in the training room on the third floor for a new hire orientation.",
+        "assumptions": "Duration assumed 1 hour per Alice's 'I don't know, an hour'. 'Training room on three' interpreted as Training Room, third floor.",
+        "action": "create",
+        "existing_event_id": null
+      }
+    ],
+    "summary": "Found 1 event: new hire orientation on Thursday at 2 PM in the training room with Alice and Carol."
+  },
+  "notes": "Reference datetime is Friday 2026-02-20. Thursday = 2026-02-26. Challenge: sentence fragments ending in '...', mid-sentence pivots, and wandering from Wednesday to Thursday before landing on a final answer."
+}

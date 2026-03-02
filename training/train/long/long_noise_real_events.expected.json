@@ -1,0 +1,74 @@
+{
+  "description": "92-line conversation dominated by social chatter (football, departing colleague, onboarding, new hire, lunch plans) with only 3 real calendar events buried in the noise. Tests the model's ability to filter irrelevant content and extract only confirmed scheduling.",
+  "category": "long",
+  "tolerance": "relaxed",
+  "owner": "Alice",
+  "reference_datetime": "2026-02-20T10:00:00",
+  "calendar_context": [],
+  "expected_events": [
+    {
+      "action": "create",
+      "title": "Vendor Review - Cloudbridge",
+      "start_time": "2026-02-26T14:00:00",
+      "end_time": "2026-02-26T15:00:00",
+      "location": "Big Conference Room",
+      "attendees_contain": ["Alice", "Bob", "Carol"]
+    },
+    {
+      "action": "create",
+      "title": "Data Privacy Compliance Training",
+      "start_time": "2026-02-24T11:00:00",
+      "end_time": "2026-02-24T13:00:00",
+      "attendees_contain": ["Alice", "Bob", "Carol"]
+    },
+    {
+      "action": "create",
+      "title": "Team Sync",
+      "start_time": "2026-02-25T10:00:00",
+      "end_time": "2026-02-25T11:00:00",
+      "attendees_contain": ["Alice", "Bob", "Carol"]
+    }
+  ],
+  "mock_llm_response": {
+    "events": [
+      {
+        "title": "Vendor Review - Cloudbridge",
+        "start_time": "2026-02-26T14:00:00",
+        "end_time": "2026-02-26T15:00:00",
+        "location": "Big Conference Room",
+        "attendees": "Alice, Bob, Carol, Martin",
+        "confidence": "high",
+        "reasoning": "Alice explicitly requests Bob and Carol attend the Cloudbridge vendor review on Thursday the 26th at 2 PM for 1 hour in the big conference room. Martin from data engineering is also attending.",
+        "assumptions": "Duration stated as 1 hour",
+        "action": "create",
+        "existing_event_id": null
+      },
+      {
+        "title": "Data Privacy Compliance Training",
+        "start_time": "2026-02-24T11:00:00",
+        "end_time": "2026-02-24T13:00:00",
+        "location": "Compliance Training Room, 2nd Floor",
+        "attendees": "Alice, Bob, Carol",
+        "confidence": "high",
+        "reasoning": "Alice mandates that Bob and Carol attend the legal compliance training on Tuesday February 24th at 11 AM for 2 hours in the compliance training room on the second floor.",
+        "assumptions": "",
+        "action": "create",
+        "existing_event_id": null
+      },
+      {
+        "title": "Team Sync",
+        "start_time": "2026-02-25T10:00:00",
+        "end_time": "2026-02-25T11:00:00",
+        "location": "Small Room, 4th Floor",
+        "attendees": "Alice, Bob, Carol",
+        "confidence": "high",
+        "reasoning": "Alice schedules a regular weekly team sync on Wednesday February 25th at 10 AM for 1 hour in the small room on the fourth floor. Bob will demo dashboard changes; Carol will show modal designs.",
+        "assumptions": "Duration assumed 1 hour based on 'regular weekly sync' context",
+        "action": "create",
+        "existing_event_id": null
+      }
+    ],
+    "summary": "Found 3 events despite 92 lines of mostly social conversation: vendor review (Feb 26 2 PM), compliance training (Feb 24 11 AM), and weekly team sync (Feb 25 10 AM). The football discussion, departing colleague, new hire updates, onboarding redesign, and lunch plans contain no calendar events."
+  },
+  "notes": "Reference datetime is Friday 2026-02-20. The majority of the transcript is social/office chatter with no scheduling content. Alice's performance review (Feb 25 3 PM) is mentioned but it is her private event with the VP and she only mentions it to signal unavailability; it is intentionally not included as a created event since she is not scheduling it here. The Friday lunch plan is casual and without a confirmed time/place."
+}

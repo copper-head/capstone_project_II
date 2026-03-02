@@ -1,0 +1,54 @@
+{
+  "description": "Six speakers converge on only two events despite much discussion; one is company-wide, one is a subgroup technical session.",
+  "category": "multi_speaker",
+  "tolerance": "moderate",
+  "owner": "Alice",
+  "reference_datetime": "2026-02-20T10:00:00",
+  "calendar_context": [],
+  "expected_events": [
+    {
+      "action": "create",
+      "title": "Stakeholder Product Demo",
+      "start_time": "2026-02-27T10:00:00",
+      "end_time": "2026-02-27T12:00:00",
+      "attendees_contain": ["Alice", "Bob", "Carol", "Dave", "Eve", "Frank"]
+    },
+    {
+      "action": "create",
+      "title": "API Documentation Handoff",
+      "start_time": "2026-02-24T09:00:00",
+      "end_time": "2026-02-24T10:30:00",
+      "attendees_contain": ["Bob", "Frank"]
+    }
+  ],
+  "mock_llm_response": {
+    "events": [
+      {
+        "title": "Stakeholder Product Demo",
+        "start_time": "2026-02-27T10:00:00",
+        "end_time": "2026-02-27T12:00:00",
+        "location": null,
+        "attendees": "Alice, Bob, Carol, Dave, Eve, Frank",
+        "confidence": "high",
+        "reasoning": "All six speakers confirm the stakeholder product demo on Friday February 27 at 10 AM for 2 hours. Alice corrects herself from 'this Friday' to 'next Friday' (Feb 27).",
+        "assumptions": "",
+        "action": "create",
+        "existing_event_id": null
+      },
+      {
+        "title": "API Documentation Handoff",
+        "start_time": "2026-02-24T09:00:00",
+        "end_time": "2026-02-24T10:30:00",
+        "location": null,
+        "attendees": "Bob, Frank, Grace",
+        "confidence": "high",
+        "reasoning": "Bob and Frank schedule an API documentation handoff on Tuesday at 9 AM for 90 minutes. Grace is included but is not a speaker. Alice explicitly states the other four speakers are not in this meeting.",
+        "assumptions": "",
+        "action": "create",
+        "existing_event_id": null
+      }
+    ],
+    "summary": "Found 2 events: all-hands product demo on Friday and a subgroup technical handoff on Tuesday."
+  },
+  "notes": "Reference datetime is Friday 2026-02-20. Tuesday=Feb 24, Friday Feb 27. Grace is a non-speaker attendee of the technical handoff. Alice corrects herself on the date."
+}

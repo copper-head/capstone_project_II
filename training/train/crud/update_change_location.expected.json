@@ -1,0 +1,45 @@
+{
+  "description": "Alice changes the location of the Wednesday team lunch from the main cafeteria to the rooftop terrace. Time and attendees remain the same.",
+  "category": "crud",
+  "tolerance": "moderate",
+  "owner": "Alice",
+  "reference_datetime": "2026-02-20T10:00:00",
+  "calendar_context": [
+    {
+      "id": "gcal-evt-team-lunch-001",
+      "summary": "Team Lunch",
+      "start": "2026-02-25T12:00:00",
+      "end": "2026-02-25T13:00:00",
+      "location": "Main cafeteria"
+    }
+  ],
+  "expected_events": [
+    {
+      "action": "update",
+      "title": "Team Lunch",
+      "start_time": "2026-02-25T12:00:00",
+      "end_time": "2026-02-25T13:00:00",
+      "existing_event_id_required": true,
+      "location": "rooftop terrace",
+      "attendees_contain": ["Alice", "Dave"]
+    }
+  ],
+  "mock_llm_response": {
+    "events": [
+      {
+        "title": "Team Lunch",
+        "start_time": "2026-02-25T12:00:00",
+        "end_time": "2026-02-25T13:00:00",
+        "location": "Rooftop terrace",
+        "attendees": "Alice, Dave",
+        "confidence": "high",
+        "reasoning": "Alice moves the Wednesday team lunch location from the main cafeteria to the rooftop terrace. Time and duration remain unchanged. Matches calendar event [1].",
+        "assumptions": "Time and duration kept as original. Only location changed.",
+        "action": "update",
+        "existing_event_id": 1
+      }
+    ],
+    "summary": "Updated team lunch location to rooftop terrace for Wednesday at noon."
+  },
+  "notes": "Reference datetime is 2026-02-20 (Friday), so 'Wednesday' resolves to 2026-02-25. Only the location field changes in this update. calendar_context[0] so existing_event_id=1."
+}

@@ -1,0 +1,45 @@
+{
+  "description": "Alice adds Eve as an attendee to the Monday 2 PM planning meeting. No other changes.",
+  "category": "crud",
+  "tolerance": "moderate",
+  "owner": "Alice",
+  "reference_datetime": "2026-02-20T10:00:00",
+  "calendar_context": [
+    {
+      "id": "gcal-evt-planning-001",
+      "summary": "Planning Meeting",
+      "start": "2026-02-23T14:00:00",
+      "end": "2026-02-23T15:00:00",
+      "location": "Room 4A"
+    }
+  ],
+  "expected_events": [
+    {
+      "action": "update",
+      "title": "Planning Meeting",
+      "start_time": "2026-02-23T14:00:00",
+      "end_time": "2026-02-23T15:00:00",
+      "existing_event_id_required": true,
+      "location": "Room 4A",
+      "attendees_contain": ["Alice", "Bob", "Eve"]
+    }
+  ],
+  "mock_llm_response": {
+    "events": [
+      {
+        "title": "Planning Meeting",
+        "start_time": "2026-02-23T14:00:00",
+        "end_time": "2026-02-23T15:00:00",
+        "location": "Room 4A",
+        "attendees": "Alice, Bob, Eve",
+        "confidence": "high",
+        "reasoning": "Alice asks to add Eve to the Monday 2 PM planning meeting. Time, location, and all other details remain unchanged. Matches calendar event [1].",
+        "assumptions": "Existing attendees (Alice, Bob) retained; Eve added as new attendee.",
+        "action": "update",
+        "existing_event_id": 1
+      }
+    ],
+    "summary": "Added Eve to the Monday planning meeting at 2 PM."
+  },
+  "notes": "Reference datetime is 2026-02-20 (Friday), so 'Monday' resolves to 2026-02-23. Only attendees change; time and location preserved. calendar_context[0] so existing_event_id=1."
+}

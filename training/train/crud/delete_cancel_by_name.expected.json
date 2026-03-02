@@ -1,0 +1,42 @@
+{
+  "description": "Alice cancels the quarterly review on Thursday because the client pushed it to next month.",
+  "category": "crud",
+  "tolerance": "moderate",
+  "owner": "Alice",
+  "reference_datetime": "2026-02-20T10:00:00",
+  "calendar_context": [
+    {
+      "id": "gcal-evt-quarterly-review-001",
+      "summary": "Quarterly Review",
+      "start": "2026-02-26T10:00:00",
+      "end": "2026-02-26T11:30:00",
+      "location": null
+    }
+  ],
+  "expected_events": [
+    {
+      "action": "delete",
+      "title": "Quarterly Review",
+      "start_time": "2026-02-26T10:00:00",
+      "existing_event_id_required": true
+    }
+  ],
+  "mock_llm_response": {
+    "events": [
+      {
+        "title": "Quarterly Review",
+        "start_time": "2026-02-26T10:00:00",
+        "end_time": "2026-02-26T11:30:00",
+        "location": null,
+        "attendees": "Alice, Carol",
+        "confidence": "high",
+        "reasoning": "Alice cancels the quarterly review on Thursday because the client postponed it to next month. Matches calendar event [1] by name.",
+        "assumptions": "",
+        "action": "delete",
+        "existing_event_id": 1
+      }
+    ],
+    "summary": "Cancelled the quarterly review on Thursday."
+  },
+  "notes": "Reference datetime is 2026-02-20 (Friday), so 'Thursday' resolves to 2026-02-26. Event matched by name 'Quarterly Review'. calendar_context[0] so existing_event_id=1."
+}

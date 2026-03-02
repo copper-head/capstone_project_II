@@ -1,0 +1,36 @@
+{
+  "description": "Five speakers coordinate a group team lunch with dietary preferences discussed; single event with full team attendance.",
+  "category": "multi_speaker",
+  "tolerance": "moderate",
+  "owner": "Alice",
+  "reference_datetime": "2026-02-20T10:00:00",
+  "calendar_context": [],
+  "expected_events": [
+    {
+      "action": "create",
+      "title": "Team Lunch",
+      "start_time": "2026-02-25T12:00:00",
+      "end_time": "2026-02-25T13:00:00",
+      "location": "Olive Garden on Fifth Avenue",
+      "attendees_contain": ["Alice", "Bob", "Carol", "Dave", "Eve"]
+    }
+  ],
+  "mock_llm_response": {
+    "events": [
+      {
+        "title": "Team Lunch",
+        "start_time": "2026-02-25T12:00:00",
+        "end_time": "2026-02-25T13:00:00",
+        "location": "Olive Garden on Fifth Avenue",
+        "attendees": "Alice, Bob, Carol, Dave, Eve",
+        "confidence": "high",
+        "reasoning": "All five speakers agree to a team lunch at noon on Wednesday at Olive Garden on Fifth Avenue. Alice will make a reservation for 5 and send the invite. Dietary needs (gluten-free, vegetarian) are discussed but do not affect the event itself.",
+        "assumptions": "Assumed 1-hour duration",
+        "action": "create",
+        "existing_event_id": null
+      }
+    ],
+    "summary": "Found 1 event: team lunch on Wednesday at noon at Olive Garden on Fifth Avenue."
+  },
+  "notes": "Reference datetime is Friday 2026-02-20. Wednesday=Feb 25. Dietary preferences discussed are not calendar event fields — they are informational."
+}

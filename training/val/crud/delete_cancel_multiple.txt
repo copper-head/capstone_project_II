@@ -1,0 +1,15 @@
+[Alice]: Frank, I need to clear out two meetings this week. Things have gotten really hectic.
+
+[Frank]: Which ones?
+
+[Alice]: The Tuesday afternoon design review at 3 PM — cancel that one.
+
+[Frank]: Tuesday 3 PM design review, cancelled. What's the other?
+
+[Alice]: Also cancel the Wednesday morning status update. It's at 9 AM.
+
+[Frank]: Wednesday 9 AM status update, also cancelled. Should I notify the other attendees?
+
+[Alice]: Yes please, let them all know. Both meetings are off this week.
+
+[Frank]: Will do. Both removed from the calendar.

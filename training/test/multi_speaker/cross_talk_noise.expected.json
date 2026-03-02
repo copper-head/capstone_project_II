@@ -1,0 +1,55 @@
+{
+  "description": "Substantial off-topic social chatter (weekend activities, TV shows) surrounds two real calendar events that must be identified and extracted without noise contamination.",
+  "category": "multi_speaker",
+  "tolerance": "moderate",
+  "owner": "Alice",
+  "reference_datetime": "2026-02-20T10:00:00",
+  "calendar_context": [],
+  "expected_events": [
+    {
+      "action": "create",
+      "title": "Pricing Model Sync",
+      "start_time": "2026-02-24T11:00:00",
+      "end_time": "2026-02-24T11:30:00",
+      "attendees_contain": ["Alice", "Bob"]
+    },
+    {
+      "action": "create",
+      "title": "Vendor Demo",
+      "start_time": "2026-02-26T16:00:00",
+      "end_time": "2026-02-26T17:00:00",
+      "location": "Demo room",
+      "attendees_contain": ["Carol", "Dave"]
+    }
+  ],
+  "mock_llm_response": {
+    "events": [
+      {
+        "title": "Pricing Model Sync",
+        "start_time": "2026-02-24T11:00:00",
+        "end_time": "2026-02-24T11:30:00",
+        "location": null,
+        "attendees": "Alice, Bob",
+        "confidence": "high",
+        "reasoning": "Alice asks Bob to sync on the pricing model on Tuesday at 11 AM for 30 minutes. Bob confirms. Carol is explicitly excluded.",
+        "assumptions": "",
+        "action": "create",
+        "existing_event_id": null
+      },
+      {
+        "title": "Vendor Demo",
+        "start_time": "2026-02-26T16:00:00",
+        "end_time": "2026-02-26T17:00:00",
+        "location": "Demo room",
+        "attendees": "Carol, Dave",
+        "confidence": "high",
+        "reasoning": "Dave and Carol agree on a vendor (Salesforce CRM) demo on Thursday at 4 PM for 1 hour in the demo room. Carol will book the room.",
+        "assumptions": "",
+        "action": "create",
+        "existing_event_id": null
+      }
+    ],
+    "summary": "Found 2 real events buried in social chatter: pricing sync on Tuesday and vendor demo on Thursday."
+  },
+  "notes": "Reference datetime is Friday 2026-02-20. Tuesday=Feb 24, Thursday=Feb 26. Weekend plans, TV show recommendations, and general banter are not calendar events. Bob wanting a summary after the demo is not a calendar event."
+}

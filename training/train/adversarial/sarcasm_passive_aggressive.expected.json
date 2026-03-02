@@ -1,0 +1,14 @@
+{
+  "description": "Passive-aggressive sarcasm about clearing a schedule for an unreasonable request. The exaggerated scheduling promises are sarcastic venting. Alice's actual plan (a real 5-minute call) is mentioned but remains vague — tomorrow morning, no confirmed time.",
+  "category": "adversarial",
+  "tolerance": "moderate",
+  "owner": "Alice",
+  "reference_datetime": "2026-02-20T10:00:00",
+  "calendar_context": [],
+  "expected_events": [],
+  "mock_llm_response": {
+    "events": [],
+    "summary": "No actionable calendar events found. The scheduling language ('clear my entire afternoon', 'reschedule my one-on-ones', 'stay late') is clearly sarcastic. Alice's actual plan to offer a quick call 'tomorrow morning' is too vague — no specific time is agreed upon and it has not yet been accepted by Frank."
+  },
+  "notes": "Passive-aggressive sarcasm with a near-real event at the end. Alice mentions offering a 'five-minute call tomorrow morning' but this is still a proposal she's about to send, not a confirmed event. No time specified, no acceptance — not schedulable."
+}

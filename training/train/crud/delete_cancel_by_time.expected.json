@@ -1,0 +1,42 @@
+{
+  "description": "Alice asks to cancel whatever is on her calendar at 3 PM today, without naming the event specifically.",
+  "category": "crud",
+  "tolerance": "moderate",
+  "owner": "Alice",
+  "reference_datetime": "2026-02-20T10:00:00",
+  "calendar_context": [
+    {
+      "id": "gcal-evt-team-sync-001",
+      "summary": "Team Sync",
+      "start": "2026-02-20T15:00:00",
+      "end": "2026-02-20T16:00:00",
+      "location": null
+    }
+  ],
+  "expected_events": [
+    {
+      "action": "delete",
+      "title": "Team Sync",
+      "start_time": "2026-02-20T15:00:00",
+      "existing_event_id_required": true
+    }
+  ],
+  "mock_llm_response": {
+    "events": [
+      {
+        "title": "Team Sync",
+        "start_time": "2026-02-20T15:00:00",
+        "end_time": "2026-02-20T16:00:00",
+        "location": null,
+        "attendees": "Alice, Bob",
+        "confidence": "high",
+        "reasoning": "Alice asks to cancel her 3 PM today. The calendar context shows a Team Sync at 3 PM today (2026-02-20). Matched by time reference. Matches calendar event [1].",
+        "assumptions": "Identified event by time reference '3 PM today' matching the calendar context entry at 15:00.",
+        "action": "delete",
+        "existing_event_id": 1
+      }
+    ],
+    "summary": "Cancelled the Team Sync at 3 PM today."
+  },
+  "notes": "Reference datetime is 2026-02-20 (Friday). 'My 3 PM today' matches calendar_context[0] at 15:00. Event identified by time alone, not by name. existing_event_id=1."
+}

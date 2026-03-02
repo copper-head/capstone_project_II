@@ -1,0 +1,11 @@
+[Alice]: Bob, the meeting we called "Internal Sync" on Monday — can we rename it to "Sprint Kickoff"?
+
+[Bob]: Sure, why the change?
+
+[Alice]: We're officially kicking off the new sprint that day, so the name should reflect that. Everything else stays the same.
+
+[Bob]: Makes sense. Monday's "Internal Sync" becomes "Sprint Kickoff". Same time, same people?
+
+[Alice]: Exactly. 10 AM, same attendees, just the title changes.
+
+[Bob]: Done. It's now "Sprint Kickoff".

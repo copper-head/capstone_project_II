@@ -1,0 +1,44 @@
+{
+  "description": "Alice extends the Tuesday strategy session from 1 hour (10-11 AM) to 2 hours (10 AM-noon).",
+  "category": "crud",
+  "tolerance": "moderate",
+  "owner": "Alice",
+  "reference_datetime": "2026-02-20T10:00:00",
+  "calendar_context": [
+    {
+      "id": "gcal-evt-strategy-001",
+      "summary": "Strategy Session",
+      "start": "2026-02-24T10:00:00",
+      "end": "2026-02-24T11:00:00",
+      "location": null
+    }
+  ],
+  "expected_events": [
+    {
+      "action": "update",
+      "title": "Strategy Session",
+      "start_time": "2026-02-24T10:00:00",
+      "end_time": "2026-02-24T12:00:00",
+      "existing_event_id_required": true,
+      "attendees_contain": ["Alice", "Frank"]
+    }
+  ],
+  "mock_llm_response": {
+    "events": [
+      {
+        "title": "Strategy Session",
+        "start_time": "2026-02-24T10:00:00",
+        "end_time": "2026-02-24T12:00:00",
+        "location": null,
+        "attendees": "Alice, Frank",
+        "confidence": "high",
+        "reasoning": "Alice and Frank agree to extend the Tuesday strategy session from 1 hour to 2 hours. Start remains 10 AM, end moves from 11 AM to noon. Matches calendar event [1].",
+        "assumptions": "Start time unchanged. Duration extended to 2 hours as explicitly agreed.",
+        "action": "update",
+        "existing_event_id": 1
+      }
+    ],
+    "summary": "Extended strategy session on Tuesday from 10-11 AM to 10 AM-noon."
+  },
+  "notes": "Reference datetime is 2026-02-20 (Friday), so 'Tuesday' resolves to 2026-02-24. Only the end_time changes in this update. calendar_context[0] so existing_event_id=1."
+}

@@ -1,0 +1,13 @@
+[Alice]: Bob, the training session I had scheduled for Tuesday — let's cancel it and reschedule it for Thursday instead.
+
+[Bob]: Cancel Tuesday's training and move it to Thursday. Same time?
+
+[Alice]: Same time, yes. 1 PM. Just a different day.
+
+[Bob]: Alright, so cancel the Tuesday 1 PM training session and create a new one Thursday at 1 PM?
+
+[Alice]: Exactly. Same duration, same location — just Thursday.
+
+[Bob]: The Tuesday training is off and the Thursday one is on the calendar at 1 PM. Same details carried over.
+
+[Alice]: Perfect.

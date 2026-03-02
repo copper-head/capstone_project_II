@@ -6,3 +6,4 @@ services:
       - ./credentials.json:/app/credentials.json:ro
       - ./token.json:/app/token.json
       - ./samples:/app/samples:ro
+      - ./data:/app/data

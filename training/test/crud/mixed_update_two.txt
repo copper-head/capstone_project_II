@@ -1,0 +1,17 @@
+[Alice]: Carol, I need two updates on the calendar today.
+
+[Carol]: Sure, what's changing?
+
+[Alice]: The client call on Tuesday — move it from 10 AM to 11 AM.
+
+[Carol]: Tuesday client call from 10 to 11. Got it. What's the second?
+
+[Alice]: The Friday team lunch — change the location to the Skyline Room. It's currently in the Ground Floor Café.
+
+[Carol]: Friday team lunch moving from Ground Floor Café to Skyline Room. Confirmed.
+
+[Alice]: Exactly. Two time and location tweaks.
+
+[Carol]: Both updates are in. Anything else?
+
+[Alice]: That's it, thanks.

@@ -1,0 +1,14 @@
+{
+  "description": "Coffee chat proposed then immediately cancelled in the same conversation. Alice suggests coffee tomorrow, then retracts it after realizing she has a conflict. No rescheduled time is agreed upon.",
+  "category": "adversarial",
+  "tolerance": "moderate",
+  "owner": "Alice",
+  "reference_datetime": "2026-02-20T10:00:00",
+  "calendar_context": [],
+  "expected_events": [],
+  "mock_llm_response": {
+    "events": [],
+    "summary": "No actionable calendar events found. A coffee chat was briefly proposed for tomorrow morning but immediately retracted when Alice remembered a scheduling conflict. No alternative time was confirmed — the conversation ends with a vague 'I'll reach out when things settle down'."
+  },
+  "notes": "Propose-then-cancel pattern. The initial proposal ('tomorrow morning') is superseded by the immediate retraction. The vague follow-up ('I'll reach out when things settle down') does not constitute a schedulable commitment."
+}

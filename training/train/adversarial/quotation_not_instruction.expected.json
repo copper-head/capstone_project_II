@@ -1,0 +1,14 @@
+{
+  "description": "Alice quotes what Marcus said about a potential Wednesday team lunch, but both speakers dismiss it as non-serious. The event is explicitly doubted and not endorsed by the calendar owner.",
+  "category": "adversarial",
+  "tolerance": "moderate",
+  "owner": "Alice",
+  "reference_datetime": "2026-02-20T10:00:00",
+  "calendar_context": [],
+  "expected_events": [],
+  "mock_llm_response": {
+    "events": [],
+    "summary": "No actionable calendar events found. The Wednesday team lunch is a quote of what Marcus said, not a scheduling directive from Alice. Both speakers explicitly doubt the event will happen ('I don't think he was seriously proposing it', 'I'll believe it when I see the calendar invite')."
+  },
+  "notes": "Quotation vs. instruction distinction. Alice is relaying what someone else said, not making a scheduling request herself. The additional context ('never actually follows through', 'don't hold your breath') makes clear there is no real commitment."
+}

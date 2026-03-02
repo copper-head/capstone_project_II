@@ -1,0 +1,14 @@
+{
+  "description": "Wistful conversation about someday having a team offsite. No specific dates, times, or commitments are made. Pure hypothetical future-wishing.",
+  "category": "adversarial",
+  "tolerance": "moderate",
+  "owner": "Alice",
+  "reference_datetime": "2026-02-20T10:00:00",
+  "calendar_context": [],
+  "expected_events": [],
+  "mock_llm_response": {
+    "events": [],
+    "summary": "No actionable calendar events found. The offsite discussion uses language like 'someday', 'wouldn't it be nice', and 'maybe once the project wraps up', indicating aspirational thinking with no concrete scheduling commitment."
+  },
+  "notes": "Classic someday/wouldn't-it-be-nice hypothetical. No dates, no times, no commitments. The model must resist extracting a vague offsite event."
+}

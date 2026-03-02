@@ -42,6 +42,7 @@ def clean_env(monkeypatch: pytest.MonkeyPatch) -> None:
         "OWNER_NAME",
         "LOG_LEVEL",
         "TIMEZONE",
+        "MEMORY_DB_PATH",
     ):
         monkeypatch.delenv(key, raising=False)
 

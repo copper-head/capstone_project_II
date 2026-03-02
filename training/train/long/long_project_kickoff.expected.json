@@ -1,0 +1,149 @@
+{
+  "description": "84-line project kickoff planning session with 4 speakers scheduling 8 events for a product launch spanning the next 5 weeks. Tests multi-week date tracking and distinguishing scheduled meetings from planning discussion.",
+  "category": "long",
+  "tolerance": "relaxed",
+  "owner": "Alice",
+  "reference_datetime": "2026-02-20T10:00:00",
+  "calendar_context": [],
+  "expected_events": [
+    {
+      "action": "create",
+      "title": "Horizon Weekly Sync",
+      "start_time": "2026-02-24T10:00:00",
+      "end_time": "2026-02-24T11:00:00",
+      "attendees_contain": ["Alice", "Bob", "Carol", "Dave"]
+    },
+    {
+      "action": "create",
+      "title": "Demo Prep Session",
+      "start_time": "2026-02-27T15:00:00",
+      "end_time": "2026-02-27T16:00:00",
+      "attendees_contain": ["Alice", "Bob", "Carol", "Dave"]
+    },
+    {
+      "action": "create",
+      "title": "Technical Review",
+      "start_time": "2026-03-02T14:00:00",
+      "end_time": "2026-03-02T16:00:00",
+      "attendees_contain": ["Alice", "Bob", "Carol", "Dave"]
+    },
+    {
+      "action": "create",
+      "title": "Internal Stakeholder Demo",
+      "start_time": "2026-03-09T14:00:00",
+      "end_time": "2026-03-09T16:00:00",
+      "attendees_contain": ["Alice", "Bob", "Carol", "Dave"]
+    },
+    {
+      "action": "create",
+      "title": "Customer Success Training",
+      "start_time": "2026-03-16T13:00:00",
+      "end_time": "2026-03-16T15:00:00",
+      "attendees_contain": ["Alice", "Bob"]
+    },
+    {
+      "action": "create",
+      "title": "Launch Readiness Review",
+      "start_time": "2026-03-18T09:00:00",
+      "end_time": "2026-03-18T10:30:00",
+      "attendees_contain": ["Alice", "Bob", "Carol", "Dave"]
+    },
+    {
+      "action": "create",
+      "title": "Post-Launch Retrospective",
+      "start_time": "2026-03-26T14:00:00",
+      "end_time": "2026-03-26T15:30:00",
+      "attendees_contain": ["Alice", "Bob", "Carol", "Dave"]
+    }
+  ],
+  "mock_llm_response": {
+    "events": [
+      {
+        "title": "Horizon Weekly Sync",
+        "start_time": "2026-02-24T10:00:00",
+        "end_time": "2026-02-24T11:00:00",
+        "location": null,
+        "attendees": "Alice, Bob, Carol, Dave",
+        "confidence": "high",
+        "reasoning": "Alice establishes a recurring Tuesday 10 AM Horizon sync starting February 24th, 1 hour, all four team members.",
+        "assumptions": "Only the first occurrence is created; recurrence noted",
+        "action": "create",
+        "existing_event_id": null
+      },
+      {
+        "title": "Demo Prep Session",
+        "start_time": "2026-02-27T15:00:00",
+        "end_time": "2026-02-27T16:00:00",
+        "location": null,
+        "attendees": "Alice, Bob, Carol, Dave",
+        "confidence": "high",
+        "reasoning": "Alice schedules a demo prep session for Friday February 27th at 3 PM for 1 hour with all four team members.",
+        "assumptions": "Duration assumed 1 hour",
+        "action": "create",
+        "existing_event_id": null
+      },
+      {
+        "title": "Technical Review",
+        "start_time": "2026-03-02T14:00:00",
+        "end_time": "2026-03-02T16:00:00",
+        "location": null,
+        "attendees": "Alice, Bob, Carol, Dave",
+        "confidence": "high",
+        "reasoning": "Dave and Alice agree on a technical review for March 2nd at 2 PM for 2 hours, with Bob and Carol also attending.",
+        "assumptions": "",
+        "action": "create",
+        "existing_event_id": null
+      },
+      {
+        "title": "Internal Stakeholder Demo",
+        "start_time": "2026-03-09T14:00:00",
+        "end_time": "2026-03-09T16:00:00",
+        "location": null,
+        "attendees": "Alice, Bob, Carol, Dave",
+        "confidence": "high",
+        "reasoning": "Alice plans a 2-hour internal demo on Monday March 9th at 2 PM for the full team plus marketing and exec stakeholders.",
+        "assumptions": "",
+        "action": "create",
+        "existing_event_id": null
+      },
+      {
+        "title": "Customer Success Training",
+        "start_time": "2026-03-16T13:00:00",
+        "end_time": "2026-03-16T15:00:00",
+        "location": null,
+        "attendees": "Alice, Bob",
+        "confidence": "high",
+        "reasoning": "Alice and Bob plan a 2-hour customer success training session on Monday March 16th at 1 PM with the CS team.",
+        "assumptions": "Carol explicitly opts out",
+        "action": "create",
+        "existing_event_id": null
+      },
+      {
+        "title": "Launch Readiness Review",
+        "start_time": "2026-03-18T09:00:00",
+        "end_time": "2026-03-18T10:30:00",
+        "location": null,
+        "attendees": "Alice, Bob, Carol, Dave",
+        "confidence": "high",
+        "reasoning": "Alice schedules a 90-minute launch readiness review for Wednesday March 18th at 9 AM with the full team and QA lead.",
+        "assumptions": "",
+        "action": "create",
+        "existing_event_id": null
+      },
+      {
+        "title": "Post-Launch Retrospective",
+        "start_time": "2026-03-26T14:00:00",
+        "end_time": "2026-03-26T15:30:00",
+        "location": null,
+        "attendees": "Alice, Bob, Carol, Dave",
+        "confidence": "high",
+        "reasoning": "Alice schedules a post-launch retrospective for Thursday March 26th at 2 PM for 90 minutes, one week after launch.",
+        "assumptions": "",
+        "action": "create",
+        "existing_event_id": null
+      }
+    ],
+    "summary": "Found 7 events: Horizon weekly sync (Feb 24), demo prep (Feb 27), technical review (Mar 2), internal stakeholder demo (Mar 9), customer success training (Mar 16), launch readiness review (Mar 18), and post-launch retrospective (Mar 26). The launch date of March 19th and code freeze of March 14th are planning markers, not calendar meetings."
+  },
+  "notes": "Reference datetime is Friday 2026-02-20. Events span 5 weeks. The journalist press call (March 19th 8 AM) was mentioned briefly and is intentionally omitted from expected_events due to ambiguity in scope; relaxed tolerance accommodates this. Code freeze (March 14th) is a deadline marker, not a meeting event."
+}

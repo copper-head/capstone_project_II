@@ -1,0 +1,73 @@
+{
+  "description": "Four speakers plan three consecutive meetings on Thursday with rotating attendee sets, like a relay schedule.",
+  "category": "multi_speaker",
+  "tolerance": "moderate",
+  "owner": "Alice",
+  "reference_datetime": "2026-02-20T10:00:00",
+  "calendar_context": [],
+  "expected_events": [
+    {
+      "action": "create",
+      "title": "Team Kickoff",
+      "start_time": "2026-02-26T09:00:00",
+      "end_time": "2026-02-26T10:00:00",
+      "attendees_contain": ["Alice", "Bob", "Carol", "Dave"]
+    },
+    {
+      "action": "create",
+      "title": "Technical Breakdown",
+      "start_time": "2026-02-26T10:00:00",
+      "end_time": "2026-02-26T11:30:00",
+      "attendees_contain": ["Bob", "Dave"]
+    },
+    {
+      "action": "create",
+      "title": "Client Readiness Review",
+      "start_time": "2026-02-26T12:00:00",
+      "end_time": "2026-02-26T13:00:00",
+      "attendees_contain": ["Alice", "Carol"]
+    }
+  ],
+  "mock_llm_response": {
+    "events": [
+      {
+        "title": "Team Kickoff",
+        "start_time": "2026-02-26T09:00:00",
+        "end_time": "2026-02-26T10:00:00",
+        "location": null,
+        "attendees": "Alice, Bob, Carol, Dave",
+        "confidence": "high",
+        "reasoning": "All four speakers attend the kickoff from 9 to 10 AM on Thursday.",
+        "assumptions": "",
+        "action": "create",
+        "existing_event_id": null
+      },
+      {
+        "title": "Technical Breakdown",
+        "start_time": "2026-02-26T10:00:00",
+        "end_time": "2026-02-26T11:30:00",
+        "location": null,
+        "attendees": "Bob, Dave",
+        "confidence": "high",
+        "reasoning": "Bob and Dave do a deep dive on architecture from 10 to 11:30 AM. Carol is explicitly excused during this session.",
+        "assumptions": "",
+        "action": "create",
+        "existing_event_id": null
+      },
+      {
+        "title": "Client Readiness Review",
+        "start_time": "2026-02-26T12:00:00",
+        "end_time": "2026-02-26T13:00:00",
+        "location": null,
+        "attendees": "Alice, Carol",
+        "confidence": "high",
+        "reasoning": "Alice and Carol meet from noon to 1 PM for the client readiness review. Bob and Dave are free by this time.",
+        "assumptions": "",
+        "action": "create",
+        "existing_event_id": null
+      }
+    ],
+    "summary": "Found 3 back-to-back meetings on Thursday with rotating attendee sets."
+  },
+  "notes": "Reference datetime is Friday 2026-02-20. Thursday=Feb 26. Carol is not in the technical breakdown; Bob and Dave are not in the client readiness review."
+}

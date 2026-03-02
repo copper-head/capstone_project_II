@@ -1,0 +1,21 @@
+[Alice]: Carol, can you help me set up a mentoring session between Bob and the two new grads, Lena and Sam?
+
+[Carol]: Sure. Bob, what does your schedule look like Thursday afternoon?
+
+[Bob]: Thursday afternoon is open. What time works for Lena and Sam?
+
+[Carol]: I spoke to them yesterday. They said any time after 1 PM Thursday is fine.
+
+[Bob]: Great, let's say 2 PM then. An hour should be enough for an intro.
+
+[Carol]: 2 PM Thursday, one hour. I'll book the mentorship lounge for them.
+
+[Alice]: Perfect. Carol, you don't need to attend though, right? This is just Bob and the grads.
+
+[Carol]: Right, I'm just coordinating. I won't be there.
+
+[Bob]: Sounds good. I'll come prepared with an overview of the team and current projects.
+
+[Alice]: Fantastic. Thanks Carol for setting this up.
+
+[Carol]: Happy to help!

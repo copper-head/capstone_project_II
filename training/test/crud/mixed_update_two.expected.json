@@ -1,0 +1,72 @@
+{
+  "description": "Alice updates two existing events: moves the Tuesday client call from 10 AM to 11 AM, and changes the Friday team lunch location from Ground Floor Café to Skyline Room.",
+  "category": "crud",
+  "tolerance": "moderate",
+  "owner": "Alice",
+  "reference_datetime": "2026-02-20T10:00:00",
+  "calendar_context": [
+    {
+      "id": "gcal-evt-client-call-001",
+      "summary": "Client Call",
+      "start": "2026-02-24T10:00:00",
+      "end": "2026-02-24T11:00:00",
+      "location": null
+    },
+    {
+      "id": "gcal-evt-team-lunch-002",
+      "summary": "Team Lunch",
+      "start": "2026-02-27T12:00:00",
+      "end": "2026-02-27T13:00:00",
+      "location": "Ground Floor Café"
+    }
+  ],
+  "expected_events": [
+    {
+      "action": "update",
+      "title": "Client Call",
+      "start_time": "2026-02-24T11:00:00",
+      "end_time": "2026-02-24T12:00:00",
+      "existing_event_id_required": true,
+      "attendees_contain": ["Alice", "Carol"]
+    },
+    {
+      "action": "update",
+      "title": "Team Lunch",
+      "start_time": "2026-02-27T12:00:00",
+      "end_time": "2026-02-27T13:00:00",
+      "existing_event_id_required": true,
+      "location": "Skyline Room",
+      "attendees_contain": ["Alice", "Carol"]
+    }
+  ],
+  "mock_llm_response": {
+    "events": [
+      {
+        "title": "Client Call",
+        "start_time": "2026-02-24T11:00:00",
+        "end_time": "2026-02-24T12:00:00",
+        "location": null,
+        "attendees": "Alice, Carol",
+        "confidence": "high",
+        "reasoning": "Alice moves the Tuesday client call from 10 AM to 11 AM. Duration preserved. Matches calendar event [1].",
+        "assumptions": "Duration preserved as 1 hour from the original event.",
+        "action": "update",
+        "existing_event_id": 1
+      },
+      {
+        "title": "Team Lunch",
+        "start_time": "2026-02-27T12:00:00",
+        "end_time": "2026-02-27T13:00:00",
+        "location": "Skyline Room",
+        "attendees": "Alice, Carol",
+        "confidence": "high",
+        "reasoning": "Alice changes the Friday team lunch location from Ground Floor Café to Skyline Room. Time unchanged. Matches calendar event [2].",
+        "assumptions": "Only the location changes; time and duration preserved.",
+        "action": "update",
+        "existing_event_id": 2
+      }
+    ],
+    "summary": "Two updates: client call moved to 11 AM Tuesday, team lunch location changed to Skyline Room Friday."
+  },
+  "notes": "Reference datetime is 2026-02-20 (Friday). Tuesday = 2026-02-24, Friday = 2026-02-27. Client Call is calendar_context[0] so existing_event_id=1. Team Lunch is calendar_context[1] so existing_event_id=2."
+}

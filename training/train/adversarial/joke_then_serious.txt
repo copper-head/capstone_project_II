@@ -1,0 +1,17 @@
+[Alice]: What if we held our planning meeting at the bottom of the ocean? Really immersive deep-dive experience.
+
+[Bob]: Ha! Or in a hot air balloon. Nothing like altitude to get those creative juices flowing.
+
+[Alice]: Ooh, or a midnight gondola ride. Very strategic, very productive.
+
+[Bob]: The agenda items would really float to the surface.
+
+[Alice]: Terrible pun. Okay, joking aside — can you actually lock in Wednesday at ten for the sprint planning? I know we keep dancing around it but we need to get it on the calendar before everyone's schedules fill up.
+
+[Bob]: Yes, let's do it. Wednesday at ten. I'll make sure the whole team is there.
+
+[Alice]: Perfect. Use the big conference room, we'll need the whiteboard space.
+
+[Bob]: Done. I'll send the invite this afternoon.
+
+[Alice]: Thanks. About time we stopped joking and just did the thing.

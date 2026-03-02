@@ -1,0 +1,172 @@
+[Alice]: Good morning Bob. Do you have a few minutes? I need to go through some calendar changes with you before the day gets away from us.
+
+[Bob]: Sure, I was just looking at my calendar actually. It's a mess this week.
+
+[Alice]: Tell me about it. Okay so first thing — the product strategy workshop that's on Tuesday, we need to move that.
+
+[Bob]: The 2 PM one? What's happening?
+
+[Alice]: Legal needs the big conference room that afternoon for a mediation session that got scheduled at the last minute. I talked to the team and everyone can do Tuesday morning instead.
+
+[Bob]: How early are we talking?
+
+[Alice]: 10 AM. It's a two-hour workshop, so 10 to noon. Same content, same attendees, just different time.
+
+[Bob]: That actually works better for me. I had a conflict at 2:30 anyway that I was dreading.
+
+[Alice]: Perfect. So the product strategy workshop moves from Tuesday 2 PM to Tuesday 10 AM. February 24th.
+
+[Bob]: Got it. Sounds good.
+
+[Alice]: Now the weekly engineering standup on Wednesday. That's been at 9 AM, right?
+
+[Bob]: 9 AM Wednesday, yes. It's been that way forever.
+
+[Alice]: We're changing it. The new team member, Priya, has a standing conflict Wednesday mornings from 8 to 9:30. So we're pushing the standup to 10 AM starting this week.
+
+[Bob]: This Wednesday? That's February 25th.
+
+[Alice]: Yes. 10 AM Wednesday February 25th. And going forward.
+
+[Bob]: Okay I'll update the recurring event.
+
+[Alice]: Actually I'll update it on the shared calendar. You just need to know.
+
+[Bob]: Works for me.
+
+[Alice]: Also I need to cancel the vendor evaluation meeting we had scheduled for Thursday. The vendor — it was Synthex, right?
+
+[Bob]: Yeah, the Synthex data tools demo. Thursday at 3 PM.
+
+[Alice]: They've been acquired. By one of our existing vendors ironically. So there's no point in the evaluation anymore. We're going to cancel it.
+
+[Bob]: Makes sense. Good riddance honestly. Their sales rep was pushy.
+
+[Alice]: Ha. Yeah. So the Synthex demo on Thursday February 26th is off.
+
+[Bob]: I'll block some time for something else in that slot then.
+
+[Alice]: Speaking of Thursday, I want to add a new meeting. Now that the Synthex thing is done, I want us to do a proper vendor landscape review. It's been two years since we looked at the whole ecosystem.
+
+[Bob]: That's overdue honestly.
+
+[Alice]: Let's schedule it for Thursday February 26th at 2 PM. Two hours. You, me, and Carol.
+
+[Bob]: Thursday the 26th at 2 PM. Yes. Two hours, so 2 to 4 PM.
+
+[Alice]: That's right. I'll send the invite.
+
+[Bob]: Should Dave be on it?
+
+[Alice]: Good point. Let's add Dave too. He has the most context on the data infrastructure side.
+
+[Bob]: Dave is usually pretty buried on Thursdays though.
+
+[Alice]: I'll reach out to him separately and see. But the meeting is happening regardless.
+
+[Bob]: Fair enough.
+
+[Alice]: What's Dave's Thursday conflict usually?
+
+[Bob]: He has a recurring architecture sync with the infrastructure team. But I think it ends by 1:30, so 2 PM should work.
+
+[Alice]: Good. I'll ping him now. He's usually responsive in the mornings.
+
+[Bob]: Very much so. The man is always online.
+
+[Alice]: I noticed. Sometimes I wonder if he sleeps.
+
+[Bob]: I'm pretty sure he has automated scripts that respond to Slack while he naps.
+
+[Alice]: Ha! Okay I believe it.
+
+[Alice]: Okay now I have a new one to add to the calendar entirely. I've been thinking about this for a while and I finally talked to HR. We're going to start doing structured skip-level meetings.
+
+[Bob]: Oh interesting. What does that mean for my team?
+
+[Alice]: It means I'll meet with each person on your team individually, without you, about once a quarter. Just to hear what's going on, any feedback, blockers that aren't making it up the chain.
+
+[Bob]: That makes sense. I'm supportive of that.
+
+[Alice]: Good. Because the first one is with Priya. She's the newest and I want to make sure she's settling in well.
+
+[Bob]: She's doing great but it would be good for her to have that channel.
+
+[Alice]: Exactly. I've already talked to her and she's up for it. We're doing it Friday February 27th at 11 AM. 45 minutes.
+
+[Bob]: Friday the 27th at 11 AM. She knows?
+
+[Alice]: She does. It's just between her and me.
+
+[Bob]: Of course.
+
+[Alice]: Now one more new thing. We've been talking about doing lunch-and-learn sessions for a while. We had it on the roadmap for Q4 last year and it never happened.
+
+[Bob]: I remember. It kept getting bumped.
+
+[Alice]: Well it's happening now. I'm committing to it. First one is Monday March 2nd at noon.
+
+[Bob]: Nice! What's the topic?
+
+[Alice]: I'm doing it. Presenting on how I think about product prioritization. It's been a topic people have been asking about.
+
+[Bob]: I've been curious about that too honestly. Your framework seems different from what I've seen before.
+
+[Alice]: I'll walk through it from first principles. It should be about 45 minutes of content and then 15 minutes for Q&A.
+
+[Bob]: So noon to 1 PM.
+
+[Alice]: Exactly. In the main breakout space. Open to anyone in the building.
+
+[Bob]: I'll spread the word.
+
+[Alice]: Great. Lunch provided, obviously.
+
+[Bob]: Obviously. That's how you get butts in seats.
+
+[Alice]: Ha. Exactly. And we've been promising the team we'd do these for literally a year, so it's long overdue.
+
+[Bob]: Agreed. People will appreciate it.
+
+[Alice]: I hope so. It's also good for me honestly. Getting me out of back-to-back meetings and into something I actually enjoy — talking about strategy.
+
+[Bob]: You should enjoy it. You're genuinely good at explaining complex tradeoffs in a way that's accessible.
+
+[Alice]: That's very kind Bob.
+
+[Bob]: I mean it.
+
+[Alice]: Okay thank you. Let's not get too sentimental, we have things to cover.
+
+[Bob]: Right, right.
+
+[Alice]: I think that covers everything. Let me run through it: product strategy workshop is moving to Tuesday 10 AM, engineering standup moves to Wednesday 10 AM, Synthex demo Thursday is cancelled, new vendor landscape review Thursday 2 PM, skip-level with Priya Friday 11 AM, and first lunch-and-learn Monday March 2nd at noon.
+
+[Bob]: That's a good list. Actually wait, I want to flag something too. The retrospective from last sprint — it's still on the calendar for Monday February 23rd at 3 PM. But last time I checked, Dave is travelling that day.
+
+[Alice]: Really? I didn't know that.
+
+[Bob]: Yeah he mentioned it to me. He's visiting the Chicago office.
+
+[Alice]: Okay then we need to reschedule the retro. Dave has to be there.
+
+[Bob]: Can we push it to Monday the 23rd in the evening when he's back, or is that too late?
+
+[Alice]: Let's do Tuesday the 24th instead. Morning, before the workshop. Say 9 AM. One hour.
+
+[Bob]: Tuesday February 24th at 9 AM. Sprint retrospective. And the workshop is still at 10 so it'd flow right into it.
+
+[Alice]: Exactly. I'll update the retro invite.
+
+[Bob]: Good catch on my part.
+
+[Alice]: Yes, thank you for flagging that. Okay now I'm really done.
+
+[Bob]: Good meeting. Very efficient.
+
+[Alice]: My goal. Have a good rest of your morning Bob.
+
+[Bob]: You too Alice. See you later.
+
+[Alice]: Bye.
+

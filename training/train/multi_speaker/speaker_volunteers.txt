@@ -1,0 +1,33 @@
+[Alice]: We need three things covered for the product launch prep. Who can take what?
+
+[Bob]: What are the tasks?
+
+[Alice]: Customer demo prep, press kit review, and internal QA walkthrough. Each needs a dedicated session this week.
+
+[Carol]: I can do the customer demo prep. That's my area.
+
+[Alice]: Perfect Carol. When?
+
+[Carol]: Tuesday at 2 PM. I'll lead it with the sales team. Two hours.
+
+[Alice]: Great. Bob, can you handle the press kit review?
+
+[Bob]: Sure. I'll do that Thursday morning. 10 AM, one hour?
+
+[Alice]: Thursday 10 AM, one hour — perfect.
+
+[Dave]: I can take the internal QA walkthrough. I'm the most familiar with the QA process anyway.
+
+[Alice]: Dave, you're a lifesaver. When?
+
+[Dave]: Wednesday at 3 PM. I'll need 90 minutes.
+
+[Alice]: Wednesday at 3, 90 minutes. Done.
+
+[Bob]: Should you attend any of these, Alice?
+
+[Alice]: I'll drop into the QA walkthrough with Dave, but the demo prep and press kit are in good hands without me.
+
+[Dave]: Got it, Alice joins QA on Wednesday.
+
+[Alice]: I'll send all three invites.
