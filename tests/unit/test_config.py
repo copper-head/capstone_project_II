@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import pytest
 
-from cal_ai.config import ConfigError, load_settings
+from cal_ai.config import ConfigError, _slugify_owner, load_memory_settings, load_settings
 
 
 class TestLoadSettingsHappyPath:
@@ -197,3 +197,89 @@ class TestConfigError:
         error = ConfigError("something went wrong")
 
         assert str(error) == "something went wrong"
+
+
+class TestSlugifyOwner:
+    """Tests for the _slugify_owner helper."""
+
+    def test_simple_name(self) -> None:
+        """Simple two-word name produces lowercase underscore slug."""
+        assert _slugify_owner("Alice Smith") == "alice_smith"
+
+    def test_special_characters(self) -> None:
+        """Special characters are replaced with underscores."""
+        assert _slugify_owner("Bob's Calendar!") == "bob_s_calendar"
+
+    def test_consecutive_specials_collapsed(self) -> None:
+        """Multiple consecutive special chars collapse to one underscore."""
+        assert _slugify_owner("Alice---Smith") == "alice_smith"
+
+    def test_leading_trailing_stripped(self) -> None:
+        """Leading/trailing underscores are stripped."""
+        assert _slugify_owner("  Alice  ") == "alice"
+
+    def test_empty_slug_raises(self) -> None:
+        """All non-ASCII name produces empty slug and raises ConfigError."""
+        with pytest.raises(ConfigError, match="empty slug"):
+            _slugify_owner("日本語")
+
+    def test_emoji_only_raises(self) -> None:
+        """Emoji-only name produces empty slug and raises ConfigError."""
+        with pytest.raises(ConfigError, match="empty slug"):
+            _slugify_owner("🎉🎊")
+
+
+class TestLoadMemorySettings:
+    """Tests for load_memory_settings (lightweight memory-only config)."""
+
+    def test_returns_path_from_owner_name(
+        self, clean_env: None, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        """With only OWNER_NAME set, returns auto-generated path."""
+        monkeypatch.setenv("OWNER_NAME", "Alice Smith")
+
+        result = load_memory_settings()
+
+        assert result == "data/memory_alice_smith.db"
+
+    def test_does_not_require_api_keys(
+        self, clean_env: None, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        """Does not raise when GEMINI_API_KEY and GOOGLE_ACCOUNT_EMAIL are missing."""
+        monkeypatch.setenv("OWNER_NAME", "Alice")
+
+        result = load_memory_settings()
+
+        assert result == "data/memory_alice.db"
+
+    def test_memory_db_path_override(
+        self, clean_env: None, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        """MEMORY_DB_PATH env var overrides auto-generated path."""
+        monkeypatch.setenv("MEMORY_DB_PATH", "/tmp/custom.db")
+
+        result = load_memory_settings()
+
+        assert result == "/tmp/custom.db"
+
+    def test_memory_db_path_override_without_owner(
+        self, clean_env: None, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        """MEMORY_DB_PATH works even without OWNER_NAME."""
+        monkeypatch.setenv("MEMORY_DB_PATH", "/tmp/custom.db")
+
+        result = load_memory_settings()
+
+        assert result == "/tmp/custom.db"
+
+    def test_missing_owner_and_path_raises(self, clean_env: None) -> None:
+        """Missing both OWNER_NAME and MEMORY_DB_PATH raises ConfigError."""
+        with pytest.raises(ConfigError, match="OWNER_NAME"):
+            load_memory_settings()
+
+    def test_empty_owner_raises(self, clean_env: None, monkeypatch: pytest.MonkeyPatch) -> None:
+        """Whitespace-only OWNER_NAME without MEMORY_DB_PATH raises ConfigError."""
+        monkeypatch.setenv("OWNER_NAME", "   ")
+
+        with pytest.raises(ConfigError, match="OWNER_NAME"):
+            load_memory_settings()

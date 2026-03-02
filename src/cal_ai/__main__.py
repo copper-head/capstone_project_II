@@ -22,7 +22,7 @@ import os
 import sys
 from pathlib import Path
 
-from cal_ai.config import ConfigError, load_settings
+from cal_ai.config import ConfigError, load_memory_settings, load_settings
 from cal_ai.demo_output import print_pipeline_result
 from cal_ai.log import setup_logging
 from cal_ai.pipeline import run_pipeline
@@ -286,12 +286,12 @@ def _handle_memory(_args: argparse.Namespace) -> int:
     from cal_ai.memory.store import MemoryStore
 
     try:
-        settings = load_settings()
+        memory_db_path = load_memory_settings()
     except ConfigError as exc:
         print(f"Error: {exc}", file=sys.stderr)
         return 1
 
-    store = MemoryStore(settings.memory_db_path)
+    store = MemoryStore(memory_db_path)
     try:
         memories = store.load_all()
     finally:

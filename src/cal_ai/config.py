@@ -28,6 +28,11 @@ def _slugify_owner(name: str) -> str:
     slug = name.lower()
     slug = re.sub(r"[^a-z0-9]+", "_", slug)
     slug = slug.strip("_")
+    if not slug:
+        raise ConfigError(
+            f"OWNER_NAME {name!r} produces an empty slug "
+            "(must contain at least one ASCII letter or digit)"
+        )
     return slug
 
 
@@ -122,3 +127,33 @@ def load_settings() -> Settings:
         values["memory_db_path"] = f"data/memory_{slug}.db"
 
     return Settings(**values)
+
+
+def load_memory_settings() -> str:
+    """Load only the memory DB path from environment variables.
+
+    Unlike :func:`load_settings`, this does **not** require
+    ``GEMINI_API_KEY`` or ``GOOGLE_ACCOUNT_EMAIL``, making it suitable
+    for read-only memory inspection in offline or CI environments.
+
+    Returns:
+        The resolved memory database path.
+
+    Raises:
+        ConfigError: If ``OWNER_NAME`` is missing (and ``MEMORY_DB_PATH``
+            is not set), or if the owner name produces an empty slug.
+    """
+    load_dotenv()
+
+    memory_db_path = os.environ.get("MEMORY_DB_PATH", "").strip()
+    if memory_db_path:
+        return memory_db_path
+
+    owner_name = os.environ.get("OWNER_NAME", "").strip()
+    if not owner_name:
+        raise ConfigError(
+            "Missing required environment variable: OWNER_NAME (or set MEMORY_DB_PATH directly)"
+        )
+
+    slug = _slugify_owner(owner_name)
+    return f"data/memory_{slug}.db"
