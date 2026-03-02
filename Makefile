@@ -1,4 +1,4 @@
-.PHONY: install lint format test test-cov test-regression test-regression-live benchmark build run clean clean-memory
+.PHONY: install lint format test test-cov test-regression test-regression-live benchmark build run clean clean-memory serve serve-dev
 
 install:
 	pip install -e ".[dev]"
@@ -39,3 +39,9 @@ clean:
 
 clean-memory:
 	rm -f data/memory*.db data/memory*.db-wal data/memory*.db-shm
+
+serve:
+	python -m cal_ai serve
+
+serve-dev:
+	python -m cal_ai serve -v

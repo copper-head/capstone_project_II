@@ -24,6 +24,7 @@ from cal_ai.exceptions import ExtractionError
 from cal_ai.llm import GeminiClient
 from cal_ai.memory.extraction import run_memory_write
 from cal_ai.memory.formatter import format_memory_context
+from cal_ai.memory.models import MemoryAction
 from cal_ai.memory.store import MemoryStore
 from cal_ai.models.extraction import ExtractedEvent, ValidatedEvent
 from cal_ai.parser import parse_transcript_file
@@ -101,6 +102,8 @@ class PipelineResult:
         memories_updated: Count of memory UPDATE actions dispatched.
         memories_deleted: Count of memory DELETE actions dispatched.
         memory_usage_metadata: Token usage from both memory LLM calls.
+        memory_actions: Per-action memory details from the write path.
+        extraction_usage_metadata: Token usage from the extraction LLM call.
     """
 
     transcript_path: Path
@@ -118,6 +121,8 @@ class PipelineResult:
     memories_updated: int = 0
     memories_deleted: int = 0
     memory_usage_metadata: list = field(default_factory=list)
+    memory_actions: list[MemoryAction] = field(default_factory=list)
+    extraction_usage_metadata: list = field(default_factory=list)
 
 
 # ---------------------------------------------------------------------------
@@ -256,6 +261,7 @@ def run_pipeline(
             memory_context=memory_context_text,
         )
         result.events_extracted = list(extraction.events)
+        result.extraction_usage_metadata = list(extraction.usage_metadata)
     except ExtractionError as exc:
         msg = f"LLM extraction failed: {exc}"
         result.warnings.append(msg)
@@ -364,6 +370,7 @@ def run_pipeline(
                 result.memories_updated = write_result.memories_updated
                 result.memories_deleted = write_result.memories_deleted
                 result.memory_usage_metadata = write_result.usage_metadata
+                result.memory_actions = list(write_result.actions)
 
                 # Console summary line.
                 logger.info(

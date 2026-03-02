@@ -1,0 +1,16 @@
+{
+  "branch_name": "fn-10-7x6",
+  "created_at": "2026-03-02T02:16:34.318418Z",
+  "default_impl": null,
+  "default_review": null,
+  "default_sync": null,
+  "depends_on_epics": [],
+  "id": "fn-10-7x6",
+  "next_task": 1,
+  "plan_review_status": "ship",
+  "plan_reviewed_at": "2026-03-02T02:36:00.063626Z",
+  "spec_path": ".flow/specs/fn-10-7x6.md",
+  "status": "open",
+  "title": "Web frontend (FastAPI + vanilla HTML/JS)",
+  "updated_at": "2026-03-02T05:05:03.838438Z"
+}
