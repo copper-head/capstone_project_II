@@ -265,21 +265,12 @@ class TestMemoryPage:
         assert "No memories yet" in html
         assert "Run a pipeline to start building memory" in html
 
-    def test_memory_renders_accordion_with_entries(
+    def test_memory_page_includes_client_side_js(
         self,
         monkeypatch: pytest.MonkeyPatch,
-        tmp_path: Path,
     ) -> None:
-        """GET /memory renders server-side accordion sections with entries."""
-        from cal_ai.memory.store import MemoryStore
-
-        db_path = tmp_path / "test_memory.db"
-        store = MemoryStore(str(db_path))
-        store.upsert("preferences", "coffee", "likes lattes", "high")
-        store.upsert("people", "bob", "prefers mornings", "medium")
-        store.close()
-
-        monkeypatch.setenv("MEMORY_DB_PATH", str(db_path))
+        """GET /memory includes memory.js for client-side rendering."""
+        monkeypatch.delenv("GEMINI_API_KEY", raising=False)
 
         with patch("cal_ai.web.app.load_dotenv"):
             app = create_app()
@@ -288,18 +279,12 @@ class TestMemoryPage:
         response = client.get("/memory")
         html = response.text
 
-        # Accordion sections rendered server-side.
-        assert "memory-category" in html
-        assert "memory-entry" in html
-        # Entry content rendered.
-        assert "coffee" in html
-        assert "likes lattes" in html
-        assert "badge-confidence--high" in html
-        assert "bob" in html
-        assert "prefers mornings" in html
-        assert "badge-confidence--medium" in html
-        # Empty state NOT shown.
-        assert "No memories yet" not in html
+        # Page loads successfully with client-side rendering containers.
+        assert response.status_code == 200
+        assert "memory-container" in html
+        assert "memory-empty" in html
+        # memory.js is included for client-side fetch + accordion rendering.
+        assert "memory.js" in html
 
 
 class TestConfigWarningRendering:

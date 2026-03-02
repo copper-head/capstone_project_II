@@ -64,9 +64,8 @@ async def index_page(request: Request) -> HTMLResponse:
 async def memory_page(request: Request) -> HTMLResponse:
     """Serve the memory viewer page.
 
-    Loads memories from the per-owner SQLite DB and passes them to the
-    template grouped by category.  Passes ``config_warnings`` from
-    ``app.state`` so the base layout can render the warning banner.
+    Memory data is loaded client-side via ``GET /api/memories``.
+    The template provides empty containers that ``memory.js`` populates.
 
     Args:
         request: The incoming HTTP request.
@@ -77,31 +76,10 @@ async def memory_page(request: Request) -> HTMLResponse:
     templates = request.app.state.templates
     config_warnings: list[str] = getattr(request.app.state, "config_warnings", [])
 
-    # Load memories for server-side rendering.
-    grouped: dict[str, list[dict[str, str]]] = {}
-    try:
-        memory_db_path = load_memory_settings()
-        if Path(memory_db_path).exists():
-            from cal_ai.memory.store import MemoryStore
-
-            store = MemoryStore(memory_db_path)
-            try:
-                for m in store.load_all():
-                    grouped.setdefault(m.category, []).append(
-                        {"key": m.key, "value": m.value, "confidence": m.confidence}
-                    )
-            finally:
-                store.close()
-    except ConfigError:
-        pass
-
     return templates.TemplateResponse(
         request=request,
         name="memory.html",
-        context={
-            "config_warnings": config_warnings,
-            "memory_groups": grouped,
-        },
+        context={"config_warnings": config_warnings},
     )
 
 

@@ -53,6 +53,8 @@
 
   // Track the last form data for retry functionality.
   var lastFormData = null;
+  // Track whether an error occurred during the current SSE run.
+  var runHadError = false;
 
   // -----------------------------------------------------------------------
   // Tab switching
@@ -202,6 +204,16 @@
     return div.innerHTML;
   }
 
+  // Normalize dry-run action names: "would_create" -> "create", etc.
+  function normalizeAction(action) {
+    if (!action) return "create";
+    var a = action.toLowerCase();
+    if (a.startsWith("would_")) {
+      a = a.substring(6);
+    }
+    return a;
+  }
+
   function renderResult(data) {
     var lines = [];
 
@@ -224,7 +236,7 @@
       // Render synced events.
       syncedEvents.forEach(function (s) {
         var ev = s.event;
-        var actionUpper = (s.action_taken || ev.action || "create").toUpperCase();
+        var actionUpper = normalizeAction(s.action_taken || ev.action).toUpperCase();
 
         // Status icon based on sync result.
         var icon;
@@ -283,7 +295,7 @@
       // Render failed events.
       failedEvents.forEach(function (f) {
         var ev = f.event;
-        var actionUpper = (ev.action || "create").toUpperCase();
+        var actionUpper = normalizeAction(ev.action).toUpperCase();
 
         lines.push("\u274c FAILED: " + ev.title);
         lines.push("   " + formatTimeRange(ev.start_time, ev.end_time));
@@ -363,7 +375,7 @@
     var deleted = 0;
     var failed = failedEvents.length;
     syncedEvents.forEach(function (s) {
-      var action = (s.action_taken || s.event.action || "create").toLowerCase();
+      var action = normalizeAction(s.action_taken || s.event.action);
       if (action === "create" || action === "created") created++;
       else if (action === "update" || action === "updated") updated++;
       else if (action === "delete" || action === "deleted") deleted++;
@@ -462,6 +474,7 @@
   // -----------------------------------------------------------------------
   function submitPipeline(formData) {
     lastFormData = formData;
+    runHadError = false;
 
     resetResultsUI();
     setRunning(true);
@@ -564,6 +577,7 @@
         break;
 
       case "error":
+        runHadError = true;
         var msg = evt.data.message || "An unknown error occurred.";
         // Mark any running stage as error.
         STAGE_ORDER.forEach(function (stageName) {
@@ -583,10 +597,12 @@
 
       case "done":
         setRunning(false);
-        // Clear input after successful completion (results stay visible).
-        transcriptText.value = "";
-        fileInput.value = "";
-        fileNameEl.textContent = "";
+        // Clear input only after successful completion (preserve on error for retry).
+        if (!runHadError) {
+          transcriptText.value = "";
+          fileInput.value = "";
+          fileNameEl.textContent = "";
+        }
         break;
     }
   }

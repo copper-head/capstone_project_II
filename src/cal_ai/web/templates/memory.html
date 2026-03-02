@@ -6,34 +6,11 @@
 <div class="memory-page">
   <h2 class="panel-heading">Memory Viewer</h2>
 
-  {% if memory_groups %}
-  <div id="memory-container" class="memory-container">
-    {% for category, entries in memory_groups.items() %}
-    <div class="memory-category memory-category--expanded">
-      <div class="memory-category__header" onclick="this.parentElement.classList.toggle('memory-category--expanded')">
-        <span class="memory-category__title">{{ category }}</span>
-        <span class="memory-category__count">{{ entries|length }} entr{{ "y" if entries|length == 1 else "ies" }}</span>
-        <span class="memory-category__toggle">&#9654;</span>
-      </div>
-      <div class="memory-category__body">
-        {% for entry in entries %}
-        <div class="memory-entry">
-          <span class="memory-entry__key">{{ entry.key }}</span>
-          <span class="memory-entry__value">{{ entry.value }}</span>
-          <span class="memory-entry__confidence">
-            <span class="badge-confidence badge-confidence--{{ entry.confidence }}">{{ entry.confidence }}</span>
-          </span>
-        </div>
-        {% endfor %}
-      </div>
-    </div>
-    {% endfor %}
-  </div>
-  {% else %}
-  <div id="memory-empty" class="memory-empty">
+  <div id="memory-container" class="memory-container" hidden></div>
+
+  <div id="memory-empty" class="memory-empty" hidden>
     <p class="memory-empty__text">No memories yet. Run a pipeline to start building memory about the calendar owner.</p>
   </div>
-  {% endif %}
 </div>
 {% endblock %}
 
