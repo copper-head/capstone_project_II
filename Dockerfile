@@ -12,5 +12,10 @@ RUN pip install --no-cache-dir .
 # Copy sample transcripts so the default CMD works out of the box
 COPY samples/ samples/
 
-ENTRYPOINT ["python", "-m", "cal_ai"]
-CMD ["samples/crud/simple_lunch.txt"]
+# Create data directory for memory DB (docker-compose mounts over this,
+# but standalone docker run needs it to exist).
+RUN mkdir -p /app/data
+
+EXPOSE 8000
+
+CMD ["python", "-m", "cal_ai", "serve", "--host", "0.0.0.0", "--port", "8000"]

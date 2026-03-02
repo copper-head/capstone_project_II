@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Cal-AI{% endblock %}</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <nav class="navbar">
+    <span class="navbar__brand">Cal-AI</span>
+    <div class="navbar__links">
+      <a href="/" class="navbar__link">Pipeline</a>
+      <a href="/memory" class="navbar__link">Memory</a>
+    </div>
+  </nav>
+
+  {% if config_warnings %}
+  <div class="config-warning-banner">
+    {% for warning in config_warnings %}
+    <p class="config-warning-banner__text">{{ warning }}</p>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <main class="main-content">
+    {% block content %}{% endblock %}
+  </main>
+
+  {% block scripts %}{% endblock %}
+</body>
+</html>

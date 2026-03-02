@@ -8,6 +8,7 @@ Subcommands:
     run       -- Default. Process a transcript and sync to calendar.
     benchmark -- Run the benchmark suite against sample transcripts.
     memory    -- Display current memories from the memory store.
+    serve     -- Start the FastAPI web server.
 
 Exit codes:
     0 -- Pipeline completed successfully (including zero events).
@@ -32,8 +33,8 @@ def build_parser() -> argparse.ArgumentParser:
     """Build and return the CLI argument parser with subcommands.
 
     Returns:
-        Configured :class:`argparse.ArgumentParser` with ``run`` and
-        ``benchmark`` subcommands.
+        Configured :class:`argparse.ArgumentParser` with ``run``,
+        ``benchmark``, ``memory``, and ``serve`` subcommands.
     """
     parser = argparse.ArgumentParser(
         prog="cal-ai",
@@ -103,6 +104,31 @@ def build_parser() -> argparse.ArgumentParser:
         help="Display current memories from the memory store.",
     )
 
+    # --- "serve" subcommand -------------------------------------------
+    serve_parser = subparsers.add_parser(
+        "serve",
+        help="Start the FastAPI web server.",
+    )
+    serve_parser.add_argument(
+        "--host",
+        type=str,
+        default="0.0.0.0",
+        help="Host to bind to (default: 0.0.0.0).",
+    )
+    serve_parser.add_argument(
+        "--port",
+        type=int,
+        default=8000,
+        help="Port to bind to (default: 8000).",
+    )
+    serve_parser.add_argument(
+        "-v",
+        "--verbose",
+        action="store_true",
+        default=False,
+        help="Enable debug-level logging.",
+    )
+
     return parser
 
 
@@ -124,7 +150,7 @@ def _resolve_command(
     Returns:
         Parsed :class:`argparse.Namespace`.
     """
-    known_subcommands = {"run", "benchmark", "memory"}
+    known_subcommands = {"run", "benchmark", "memory", "serve"}
     if not argv:
         # No arguments at all -- let the "run" subparser handle the error
         # so the user sees usage for the run subcommand.
@@ -315,6 +341,33 @@ def _handle_memory(_args: argparse.Namespace) -> int:
     return 0
 
 
+def _handle_serve(args: argparse.Namespace) -> int:
+    """Execute the ``serve`` subcommand.
+
+    Starts the FastAPI web server using uvicorn.
+
+    Args:
+        args: Parsed arguments from the ``serve`` subparser.
+
+    Returns:
+        Exit code: ``0`` on success.
+    """
+    import uvicorn
+
+    from cal_ai.web.app import create_app
+
+    app = create_app()
+    log_level = "debug" if args.verbose else "info"
+    uvicorn.run(
+        app,
+        host=args.host,
+        port=args.port,
+        log_level=log_level,
+        log_config=None,
+    )
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     """Run the cal-ai CLI.
 
@@ -337,6 +390,8 @@ def main(argv: list[str] | None = None) -> int:
         return _handle_benchmark(args)
     if args.command == "memory":
         return _handle_memory(args)
+    if args.command == "serve":
+        return _handle_serve(args)
 
     # Default: "run" subcommand (including implicit routing).
     return _handle_run(args)

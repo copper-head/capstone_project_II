@@ -16,7 +16,7 @@ Single-user demo product. See `docs/SPEC.md` for full specification.
 ```
 src/cal_ai/           # Main package (src layout)
   __init__.py          # Package init, __version__
-  __main__.py          # python -m cal_ai entrypoint (run, benchmark, memory subcommands)
+  __main__.py          # python -m cal_ai entrypoint (run, benchmark, memory, serve subcommands)
   config.py            # Settings dataclass, load_settings(), ConfigError, _slugify_owner()
   log.py               # setup_logging(), get_logger()
   benchmark/           # Benchmark suite (P/R/F1 scoring, reports, AI summary)
@@ -32,6 +32,20 @@ src/cal_ai/           # Main package (src layout)
     formatter.py       # Format memories for LLM prompt injection
     extraction.py      # Memory write path orchestration (run_memory_write)
     prompts.py         # Prompt builders for fact extraction + action decision
+  web/                 # Web frontend (FastAPI + vanilla HTML/JS)
+    __init__.py        # Exports create_app()
+    app.py             # FastAPI app factory, static/template config, config check
+    routes.py          # All route handlers (pages + API)
+    schemas.py         # Pydantic response models (serialize dataclasses -> JSON)
+    sse.py             # SSE log capture handler + async generator + stage state machine
+    templates/
+      base.html        # Base layout (nav, CSS, config warning banner, blocks)
+      index.html       # Pipeline page (split view: input left, results right)
+      memory.html      # Memory viewer (terminal-style accordion by category)
+    static/
+      style.css        # All styling (terminal aesthetic, split view, stage tracker)
+      app.js           # Pipeline page JS (SSE reader, rendering, drag-and-drop)
+      memory.js        # Memory page JS (fetch + render accordion)
 tests/                # Test suite (pytest)
   unit/                # Unit tests (test_config, test_log, test_package, test_memory_store)
   integration/         # Integration tests
@@ -71,8 +85,10 @@ make test-cov            # Run pytest with coverage report
 make test-regression     # Run regression suite only (mock mode)
 make test-regression-live # Run regression suite with live Gemini API
 make benchmark           # Run benchmark suite (live Gemini, writes to reports/)
+make serve               # Start web server (port 8000)
+make serve-dev           # Start web server with verbose logging
 make build               # Build Docker image (docker compose build)
-make run                 # Run container (docker compose up)
+make run                 # Run container (docker compose up, serves web UI on port 8000)
 make clean               # Remove caches, coverage, build artifacts
 make clean-memory        # Remove all memory DB files (data/memory*.db*)
 ```
@@ -80,6 +96,8 @@ make clean-memory        # Remove all memory DB files (data/memory*.db*)
 Direct commands (without make):
 ```bash
 python -m cal_ai              # Run the application
+python -m cal_ai serve        # Start web server (default: port 8000)
+python -m cal_ai serve --host 0.0.0.0 --port 8000 -v  # Start with custom host/port and verbose logging
 python -m cal_ai benchmark    # Run benchmark suite (default: samples/)
 python -m cal_ai benchmark /path/to/samples/ --output /tmp/reports/
 python -m cal_ai memory       # Display current memories (grouped by category)
@@ -90,7 +108,7 @@ pytest tests/regression/ --live -v  # Run regression suite (live Gemini API)
 pytest tests/regression/ -k crud -v # Run only CRUD category tests
 ruff check .                  # Lint
 ruff format --check .         # Check formatting
-docker compose up             # Run in Docker
+docker compose up             # Run in Docker (serves web UI on port 8000)
 ```
 
 ## Environment Variables
@@ -197,6 +215,36 @@ failure: if the summary call fails, the report is still complete.
 **Output**: Console summary (stdout), detailed markdown report with per-sample
 diffs (`reports/benchmark_YYYY-MM-DDTHH-MM-SS.md`), and JSONL history
 (`reports/benchmark_history.jsonl`).
+
+## Architecture: Web Frontend
+
+The web frontend (`python -m cal_ai serve`) provides a browser-based interface for
+the pipeline and memory system using FastAPI, Jinja2 templates, and vanilla JavaScript.
+
+**Pipeline page (split view):** Left panel has transcript input (file upload with
+drag-and-drop or text paste with tab toggle). Right panel shows real-time pipeline
+progress via a visual stage stepper and terminal-style results (monospace, dark
+background) with CRUD actions, AI reasoning, sync status, memory updates, and
+token/cost info.
+
+**Real-time streaming:** Pipeline progress is streamed via Server-Sent Events (SSE).
+A custom `logging.Handler` captures `cal_ai.*` log messages and pushes them to an
+`asyncio.Queue`. The SSE generator synthesizes stage events from log message patterns
+(e.g., "Stage 1:", "Memory context loaded") via a state machine. Raw log lines are
+also forwarded as `event: log` events for the expandable log viewer.
+
+**POST-based SSE:** Since `EventSource` only supports GET, the JS client uses
+`fetch()` + `ReadableStream.getReader()` to parse SSE events from the POST response.
+
+**Memory page:** Terminal-style accordion sections grouped by category, showing
+key/value/confidence for each memory entry. Auto-refreshes on page load.
+
+**Concurrency guard:** An `asyncio.Lock` prevents overlapping pipeline runs.
+Atomic acquisition via `asyncio.wait_for(lock.acquire(), timeout=0)` raises
+`TimeoutError` which maps to HTTP 409.
+
+**Docker:** Default CMD runs the web server (`python -m cal_ai serve --host 0.0.0.0
+--port 8000`). CLI override: `docker run cal-ai python -m cal_ai run samples/file.txt`.
 
 ## Key Conventions
 - Pipeline architecture: LLM outputs structured JSON, Python handles calendar ops
