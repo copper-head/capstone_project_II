@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}Cal-AI - Memory{% endblock %}
+
+{% block content %}
+<div class="memory-page">
+  <h2 class="panel-heading">Memory Viewer</h2>
+
+  <div id="memory-container" class="memory-container">
+    <!-- Populated by memory.js -->
+  </div>
+
+  <div id="memory-empty" class="memory-empty" hidden>
+    <p class="memory-empty__text">No memories yet. Run a pipeline to start building memory about the calendar owner.</p>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/memory.js"></script>
+{% endblock %}

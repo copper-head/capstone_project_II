@@ -1,0 +1,763 @@
+/* ==========================================================================
+   Cal-AI — Web Frontend Styles
+   Terminal aesthetic with split-view layout. Desktop only.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   CSS Custom Properties (Color Scheme)
+   -------------------------------------------------------------------------- */
+:root {
+  --bg-primary: #1e1e2e;
+  --bg-secondary: #181825;
+  --bg-surface: #313244;
+  --bg-page: #11111b;
+
+  --text-primary: #cdd6f4;
+  --text-secondary: #a6adc8;
+  --text-muted: #6c7086;
+  --text-heading: #cdd6f4;
+
+  --accent-blue: #89b4fa;
+  --accent-green: #a6e3a1;
+  --accent-yellow: #f9e2af;
+  --accent-red: #f38ba8;
+  --accent-orange: #fab387;
+  --accent-gray: #585b70;
+  --accent-lavender: #b4befe;
+
+  --border-color: #45475a;
+  --border-subtle: #313244;
+
+  --font-mono: "JetBrains Mono", "Fira Code", "Cascadia Code", "Consolas", monospace;
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+}
+
+/* --------------------------------------------------------------------------
+   Reset & Base
+   -------------------------------------------------------------------------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 15px;
+}
+
+body {
+  background-color: var(--bg-page);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+/* --------------------------------------------------------------------------
+   Navbar
+   -------------------------------------------------------------------------- */
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-md) var(--spacing-xl);
+  background-color: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.navbar__brand {
+  font-family: var(--font-mono);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--accent-lavender);
+  letter-spacing: 0.05em;
+}
+
+.navbar__links {
+  display: flex;
+  gap: var(--spacing-lg);
+}
+
+.navbar__link {
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  transition: color 0.2s;
+}
+
+.navbar__link:hover {
+  color: var(--accent-blue);
+}
+
+/* --------------------------------------------------------------------------
+   Config Warning Banner
+   -------------------------------------------------------------------------- */
+.config-warning-banner {
+  background-color: #3d3215;
+  border-bottom: 1px solid var(--accent-yellow);
+  padding: var(--spacing-sm) var(--spacing-xl);
+}
+
+.config-warning-banner__text {
+  color: var(--accent-yellow);
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+/* --------------------------------------------------------------------------
+   Main Content
+   -------------------------------------------------------------------------- */
+.main-content {
+  padding: var(--spacing-lg) var(--spacing-xl);
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* --------------------------------------------------------------------------
+   Panel Heading
+   -------------------------------------------------------------------------- */
+.panel-heading {
+  font-family: var(--font-mono);
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-heading);
+  margin-bottom: var(--spacing-md);
+  padding-bottom: var(--spacing-sm);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+/* --------------------------------------------------------------------------
+   Split View Layout
+   -------------------------------------------------------------------------- */
+.split-view {
+  display: grid;
+  grid-template-columns: 2fr 3fr;
+  gap: var(--spacing-xl);
+  min-height: calc(100vh - 120px);
+}
+
+.split-view__left,
+.split-view__right {
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+}
+
+/* --------------------------------------------------------------------------
+   Input Tabs
+   -------------------------------------------------------------------------- */
+.input-tabs {
+  display: flex;
+  gap: 0;
+  margin-bottom: var(--spacing-md);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.input-tabs__btn {
+  flex: 1;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background-color: var(--bg-surface);
+  color: var(--text-secondary);
+  border: none;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.input-tabs__btn:hover {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+.input-tabs__btn--active {
+  background-color: var(--accent-blue);
+  color: var(--bg-primary);
+}
+
+/* --------------------------------------------------------------------------
+   Tab Panel
+   -------------------------------------------------------------------------- */
+.tab-panel {
+  display: none;
+}
+
+.tab-panel--active {
+  display: block;
+}
+
+/* --------------------------------------------------------------------------
+   Drop Zone (File Upload)
+   -------------------------------------------------------------------------- */
+.drop-zone {
+  border: 2px dashed var(--border-color);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-xl);
+  text-align: center;
+  transition: border-color 0.2s, background-color 0.2s;
+}
+
+.drop-zone--active {
+  border-color: var(--accent-blue);
+  background-color: rgba(137, 180, 250, 0.05);
+}
+
+.drop-zone__text {
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  margin-bottom: var(--spacing-sm);
+}
+
+.drop-zone__subtext {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  margin-bottom: var(--spacing-sm);
+}
+
+.drop-zone__btn {
+  display: inline-block;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background-color: var(--bg-surface);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.drop-zone__btn:hover {
+  background-color: var(--accent-blue);
+  color: var(--bg-primary);
+}
+
+.drop-zone__filename {
+  color: var(--accent-green);
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  margin-top: var(--spacing-sm);
+}
+
+/* --------------------------------------------------------------------------
+   Textarea (Paste Input)
+   -------------------------------------------------------------------------- */
+.transcript-textarea {
+  width: 100%;
+  padding: var(--spacing-md);
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  line-height: 1.5;
+  resize: vertical;
+}
+
+.transcript-textarea::placeholder {
+  color: var(--text-muted);
+}
+
+.transcript-textarea:focus {
+  outline: none;
+  border-color: var(--accent-blue);
+}
+
+/* --------------------------------------------------------------------------
+   Form Options
+   -------------------------------------------------------------------------- */
+.form-options {
+  margin: var(--spacing-md) 0;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.checkbox-label input[type="checkbox"] {
+  accent-color: var(--accent-blue);
+}
+
+/* --------------------------------------------------------------------------
+   Submit Button
+   -------------------------------------------------------------------------- */
+.submit-btn {
+  width: 100%;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background-color: var(--accent-blue);
+  color: var(--bg-primary);
+  border: none;
+  border-radius: var(--radius-md);
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s, opacity 0.2s;
+}
+
+.submit-btn:hover {
+  background-color: var(--accent-lavender);
+}
+
+.submit-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* --------------------------------------------------------------------------
+   Concurrent Run Message
+   -------------------------------------------------------------------------- */
+.concurrent-msg {
+  color: var(--accent-yellow);
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  margin-top: var(--spacing-sm);
+  text-align: center;
+}
+
+/* --------------------------------------------------------------------------
+   Dry-Run Banner
+   -------------------------------------------------------------------------- */
+.dry-run-banner {
+  background-color: #2d2a1e;
+  border: 1px solid var(--accent-yellow);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-sm) var(--spacing-md);
+  color: var(--accent-yellow);
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  text-align: center;
+  margin-bottom: var(--spacing-md);
+}
+
+/* --------------------------------------------------------------------------
+   Stage Tracker (Vertical Stepper)
+   -------------------------------------------------------------------------- */
+.stage-tracker {
+  margin-bottom: var(--spacing-lg);
+}
+
+.stage {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-xs) 0;
+  position: relative;
+}
+
+.stage + .stage {
+  margin-top: var(--spacing-xs);
+}
+
+.stage__indicator {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  font-size: 0.7rem;
+  flex-shrink: 0;
+}
+
+.stage__label {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+/* Stage states */
+.stage--pending {
+  background-color: var(--bg-surface);
+  border: 2px solid var(--border-color);
+}
+
+.stage--running {
+  background-color: var(--accent-blue);
+  border: 2px solid var(--accent-blue);
+  animation: stage-pulse 1.2s ease-in-out infinite;
+}
+
+.stage--running::after {
+  content: "";
+  width: 10px;
+  height: 10px;
+  border: 2px solid var(--bg-primary);
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: stage-spin 0.8s linear infinite;
+}
+
+.stage--complete {
+  background-color: var(--accent-green);
+  border: 2px solid var(--accent-green);
+}
+
+.stage--complete::after {
+  content: "\2713";
+  color: var(--bg-primary);
+  font-weight: 700;
+  font-size: 0.75rem;
+}
+
+.stage--error {
+  background-color: var(--accent-red);
+  border: 2px solid var(--accent-red);
+}
+
+.stage--error::after {
+  content: "\2717";
+  color: var(--bg-primary);
+  font-weight: 700;
+  font-size: 0.75rem;
+}
+
+@keyframes stage-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+@keyframes stage-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* --------------------------------------------------------------------------
+   Terminal Output Block
+   -------------------------------------------------------------------------- */
+.terminal-output {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+  max-height: 600px;
+  overflow-y: auto;
+}
+
+.terminal-output__content {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  line-height: 1.6;
+  color: var(--text-primary);
+  white-space: pre-wrap;
+  word-break: break-word;
+  margin: 0;
+}
+
+/* --------------------------------------------------------------------------
+   Expandable Log Viewer
+   -------------------------------------------------------------------------- */
+.log-viewer {
+  margin-top: var(--spacing-sm);
+}
+
+.log-viewer__summary {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: var(--spacing-sm) 0;
+  transition: color 0.2s;
+}
+
+.log-viewer__summary:hover {
+  color: var(--accent-blue);
+}
+
+.log-viewer__content {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  line-height: 1.5;
+  color: var(--text-muted);
+  white-space: pre-wrap;
+  word-break: break-word;
+  max-height: 400px;
+  overflow-y: auto;
+  margin: 0;
+  margin-top: var(--spacing-sm);
+}
+
+/* --------------------------------------------------------------------------
+   Error Display
+   -------------------------------------------------------------------------- */
+.error-display {
+  background-color: rgba(243, 139, 168, 0.1);
+  border: 1px solid var(--accent-red);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md);
+  text-align: center;
+}
+
+.error-display__message {
+  color: var(--accent-red);
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  margin-bottom: var(--spacing-sm);
+}
+
+.retry-btn {
+  padding: var(--spacing-xs) var(--spacing-md);
+  background-color: transparent;
+  color: var(--accent-red);
+  border: 1px solid var(--accent-red);
+  border-radius: var(--radius-md);
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.retry-btn:hover {
+  background-color: rgba(243, 139, 168, 0.15);
+}
+
+/* --------------------------------------------------------------------------
+   Confidence Badges
+   -------------------------------------------------------------------------- */
+.badge-confidence {
+  display: inline-block;
+  padding: 1px 8px;
+  border-radius: 10px;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.badge-confidence--high {
+  background-color: rgba(166, 227, 161, 0.15);
+  color: var(--accent-green);
+  border: 1px solid var(--accent-green);
+}
+
+.badge-confidence--medium {
+  background-color: rgba(249, 226, 175, 0.15);
+  color: var(--accent-yellow);
+  border: 1px solid var(--accent-yellow);
+}
+
+.badge-confidence--low {
+  background-color: rgba(243, 139, 168, 0.15);
+  color: var(--accent-red);
+  border: 1px solid var(--accent-red);
+}
+
+/* --------------------------------------------------------------------------
+   Action Badges (CREATE / UPDATE / DELETE / SKIP)
+   -------------------------------------------------------------------------- */
+.badge-action {
+  display: inline-block;
+  padding: 1px 8px;
+  border-radius: 10px;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.badge-action--create {
+  background-color: rgba(137, 180, 250, 0.15);
+  color: var(--accent-blue);
+  border: 1px solid var(--accent-blue);
+}
+
+.badge-action--update {
+  background-color: rgba(250, 179, 135, 0.15);
+  color: var(--accent-orange);
+  border: 1px solid var(--accent-orange);
+}
+
+.badge-action--delete {
+  background-color: rgba(243, 139, 168, 0.15);
+  color: var(--accent-red);
+  border: 1px solid var(--accent-red);
+}
+
+.badge-action--skip {
+  background-color: rgba(88, 91, 112, 0.15);
+  color: var(--accent-gray);
+  border: 1px solid var(--accent-gray);
+}
+
+/* --------------------------------------------------------------------------
+   Sync Status Indicators
+   -------------------------------------------------------------------------- */
+.sync-status {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+}
+
+.sync-status--synced {
+  color: var(--accent-green);
+}
+
+.sync-status--dry-run {
+  color: var(--accent-yellow);
+}
+
+.sync-status--failed {
+  color: var(--accent-red);
+}
+
+/* --------------------------------------------------------------------------
+   Memory Page
+   -------------------------------------------------------------------------- */
+.memory-page {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.memory-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+/* Memory accordion sections */
+.memory-category {
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.memory-category__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-md);
+  background-color: var(--bg-surface);
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.memory-category__header:hover {
+  background-color: var(--border-color);
+}
+
+.memory-category__title {
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--accent-lavender);
+  text-transform: capitalize;
+}
+
+.memory-category__count {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.memory-category__toggle {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  transition: transform 0.2s;
+}
+
+.memory-category--expanded .memory-category__toggle {
+  transform: rotate(90deg);
+}
+
+.memory-category__body {
+  display: none;
+  padding: var(--spacing-sm);
+}
+
+.memory-category--expanded .memory-category__body {
+  display: block;
+}
+
+/* Memory entries */
+.memory-entry {
+  display: flex;
+  align-items: baseline;
+  gap: var(--spacing-md);
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-bottom: 1px solid var(--border-subtle);
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+}
+
+.memory-entry:last-child {
+  border-bottom: none;
+}
+
+.memory-entry__key {
+  font-weight: 700;
+  color: var(--accent-blue);
+  min-width: 140px;
+  flex-shrink: 0;
+}
+
+.memory-entry__value {
+  color: var(--text-primary);
+  flex: 1;
+}
+
+.memory-entry__confidence {
+  flex-shrink: 0;
+}
+
+/* Memory empty state */
+.memory-empty {
+  text-align: center;
+  padding: var(--spacing-xl) var(--spacing-md);
+}
+
+.memory-empty__text {
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  line-height: 1.8;
+}
+
+/* --------------------------------------------------------------------------
+   Scrollbar Styling
+   -------------------------------------------------------------------------- */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: var(--bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--border-color);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--text-muted);
+}

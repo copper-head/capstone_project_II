@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+
+{% block title %}Cal-AI - Pipeline{% endblock %}
+
+{% block content %}
+<div class="split-view">
+  <!-- Left panel: Input -->
+  <div class="split-view__left">
+    <h2 class="panel-heading">Input</h2>
+
+    <div class="input-tabs">
+      <button type="button" class="input-tabs__btn input-tabs__btn--active" data-tab="upload">Upload File</button>
+      <button type="button" class="input-tabs__btn" data-tab="paste">Paste Text</button>
+    </div>
+
+    <form id="pipeline-form" class="pipeline-form">
+      <!-- File upload tab -->
+      <div id="tab-upload" class="tab-panel tab-panel--active">
+        <div id="drop-zone" class="drop-zone">
+          <p class="drop-zone__text">Drag &amp; drop a transcript file here</p>
+          <p class="drop-zone__subtext">or</p>
+          <label class="drop-zone__btn">
+            Choose file
+            <input type="file" id="file-input" accept=".txt,.text" hidden>
+          </label>
+          <p id="file-name" class="drop-zone__filename"></p>
+        </div>
+      </div>
+
+      <!-- Text paste tab -->
+      <div id="tab-paste" class="tab-panel">
+        <textarea id="transcript-text" class="transcript-textarea"
+                  rows="12"
+                  placeholder="[Alice]: Hey, let's schedule a meeting tomorrow at 2pm..."></textarea>
+      </div>
+
+      <div class="form-options">
+        <label class="checkbox-label">
+          <input type="checkbox" id="dry-run-checkbox">
+          Dry run (no calendar changes)
+        </label>
+      </div>
+
+      <button type="submit" id="submit-btn" class="submit-btn">Run Pipeline</button>
+      <p id="concurrent-msg" class="concurrent-msg" hidden>A pipeline is already running. Please wait.</p>
+    </form>
+  </div>
+
+  <!-- Right panel: Results -->
+  <div class="split-view__right">
+    <h2 class="panel-heading">Results</h2>
+
+    <!-- Dry-run indicator banner -->
+    <div id="dry-run-banner" class="dry-run-banner" hidden>
+      DRY RUN -- no calendar changes made
+    </div>
+
+    <!-- Stage tracker -->
+    <div id="stage-tracker" class="stage-tracker" hidden>
+      <div class="stage" id="stage-1" data-stage="parse">
+        <span class="stage__indicator stage--pending"></span>
+        <span class="stage__label">Parsing Transcript</span>
+      </div>
+      <div class="stage" id="stage-1b" data-stage="memory-load">
+        <span class="stage__indicator stage--pending"></span>
+        <span class="stage__label">Loading Memories</span>
+      </div>
+      <div class="stage" id="stage-1c" data-stage="calendar-fetch">
+        <span class="stage__indicator stage--pending"></span>
+        <span class="stage__label">Fetching Calendar</span>
+      </div>
+      <div class="stage" id="stage-2" data-stage="extract">
+        <span class="stage__indicator stage--pending"></span>
+        <span class="stage__label">Extracting Events (LLM)</span>
+      </div>
+      <div class="stage" id="stage-3" data-stage="sync">
+        <span class="stage__indicator stage--pending"></span>
+        <span class="stage__label">Syncing Calendar</span>
+      </div>
+      <div class="stage" id="stage-4" data-stage="memory-write">
+        <span class="stage__indicator stage--pending"></span>
+        <span class="stage__label">Updating Memory</span>
+      </div>
+    </div>
+
+    <!-- Terminal output -->
+    <div id="terminal-output" class="terminal-output" hidden>
+      <pre id="terminal-content" class="terminal-output__content"></pre>
+    </div>
+
+    <!-- Expandable log viewer -->
+    <details id="log-viewer" class="log-viewer" hidden>
+      <summary class="log-viewer__summary">Raw Pipeline Logs</summary>
+      <pre id="log-content" class="log-viewer__content"></pre>
+    </details>
+
+    <!-- Error display -->
+    <div id="error-display" class="error-display" hidden>
+      <p id="error-message" class="error-display__message"></p>
+      <button type="button" id="retry-btn" class="retry-btn">Retry</button>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/app.js"></script>
+{% endblock %}
