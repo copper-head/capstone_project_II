@@ -64,8 +64,9 @@ async def index_page(request: Request) -> HTMLResponse:
 async def memory_page(request: Request) -> HTMLResponse:
     """Serve the memory viewer page.
 
-    Passes ``config_warnings`` from ``app.state`` to the template context
-    so the base layout can render the warning banner when needed.
+    Loads memories from the per-owner SQLite DB and passes them to the
+    template grouped by category.  Passes ``config_warnings`` from
+    ``app.state`` so the base layout can render the warning banner.
 
     Args:
         request: The incoming HTTP request.
@@ -75,10 +76,32 @@ async def memory_page(request: Request) -> HTMLResponse:
     """
     templates = request.app.state.templates
     config_warnings: list[str] = getattr(request.app.state, "config_warnings", [])
+
+    # Load memories for server-side rendering.
+    grouped: dict[str, list[dict[str, str]]] = {}
+    try:
+        memory_db_path = load_memory_settings()
+        if Path(memory_db_path).exists():
+            from cal_ai.memory.store import MemoryStore
+
+            store = MemoryStore(memory_db_path)
+            try:
+                for m in store.load_all():
+                    grouped.setdefault(m.category, []).append(
+                        {"key": m.key, "value": m.value, "confidence": m.confidence}
+                    )
+            finally:
+                store.close()
+    except ConfigError:
+        pass
+
     return templates.TemplateResponse(
         request=request,
         name="memory.html",
-        context={"config_warnings": config_warnings},
+        context={
+            "config_warnings": config_warnings,
+            "memory_groups": grouped,
+        },
     )
 
 
@@ -150,6 +173,13 @@ async def pipeline_run(
         return JSONResponse(
             status_code=422,
             content={"detail": "Provide either a file upload or text, not both."},
+        )
+
+    # Check text input size (same limit as file uploads).
+    if has_text and len(text.encode("utf-8")) > _MAX_UPLOAD_BYTES:  # type: ignore[union-attr]
+        return JSONResponse(
+            status_code=422,
+            content={"detail": "Text input exceeds 10 MB limit."},
         )
 
     # --- Atomic lock acquisition -------------------------------------------
@@ -254,7 +284,7 @@ async def pipeline_run(
                 handler_ready_event.set()
                 # Wait for thread to finish before cleanup.
                 with contextlib.suppress(Exception):
-                    await asyncio.wrap_future(future)
+                    await future
                 yield _sse_event(
                     "error",
                     {"message": "Pipeline thread failed to start."},
@@ -290,7 +320,7 @@ async def pipeline_run(
                         continue
 
                 # Pipeline finished -- get the result or exception.
-                result = await asyncio.wrap_future(future)
+                result = await future
 
                 # Terminal rule: mark last stage complete.
                 handler.mark_complete()
@@ -347,7 +377,7 @@ async def pipeline_run(
             # not catch it.
             if future is not None and not future.done():
                 with contextlib.suppress(BaseException):
-                    await asyncio.shield(asyncio.wrap_future(future))
+                    await asyncio.shield(future)
             pipeline_lock.release()
             if tmp_path is not None:
                 with contextlib.suppress(OSError):

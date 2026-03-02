@@ -247,14 +247,59 @@ class TestMemoryPage:
 
     def test_memory_contains_empty_state(self) -> None:
         """GET /memory response contains instructional empty state message."""
-        app = create_app()
+        from cal_ai.config import ConfigError
+
+        with (
+            patch("cal_ai.web.app.load_dotenv"),
+            patch(
+                "cal_ai.web.routes.load_memory_settings",
+                side_effect=ConfigError("no config"),
+            ),
+        ):
+            app = create_app()
+            client = TestClient(app)
+
+            response = client.get("/memory")
+            html = response.text
+
+        assert "No memories yet" in html
+        assert "Run a pipeline to start building memory" in html
+
+    def test_memory_renders_accordion_with_entries(
+        self,
+        monkeypatch: pytest.MonkeyPatch,
+        tmp_path: Path,
+    ) -> None:
+        """GET /memory renders server-side accordion sections with entries."""
+        from cal_ai.memory.store import MemoryStore
+
+        db_path = tmp_path / "test_memory.db"
+        store = MemoryStore(str(db_path))
+        store.upsert("preferences", "coffee", "likes lattes", "high")
+        store.upsert("people", "bob", "prefers mornings", "medium")
+        store.close()
+
+        monkeypatch.setenv("MEMORY_DB_PATH", str(db_path))
+
+        with patch("cal_ai.web.app.load_dotenv"):
+            app = create_app()
         client = TestClient(app)
 
         response = client.get("/memory")
         html = response.text
 
-        assert "No memories yet" in html
-        assert "Run a pipeline to start building memory" in html
+        # Accordion sections rendered server-side.
+        assert "memory-category" in html
+        assert "memory-entry" in html
+        # Entry content rendered.
+        assert "coffee" in html
+        assert "likes lattes" in html
+        assert "badge-confidence--high" in html
+        assert "bob" in html
+        assert "prefers mornings" in html
+        assert "badge-confidence--medium" in html
+        # Empty state NOT shown.
+        assert "No memories yet" not in html
 
 
 class TestConfigWarningRendering:
