@@ -4,7 +4,7 @@ Provides:
 
 - :class:`PipelineLogCapture` -- a :class:`logging.Handler` that captures
   log messages from ``cal_ai.*`` loggers, synthesizes stage events from
-  log message patterns, and forwards everything to an :class:`asyncio.Queue`.
+  log message patterns, and forwards everything to a thread-safe queue.
 - :func:`pipeline_sse_generator` -- an async generator that drains the
   queue and yields SSE-formatted strings.
 
@@ -27,9 +27,9 @@ Terminal rule: on pipeline completion, mark any still-running stage
 
 from __future__ import annotations
 
-import asyncio
 import json
 import logging
+import queue
 import threading
 from collections.abc import AsyncGenerator
 from typing import Any
@@ -41,25 +41,21 @@ class PipelineLogCapture(logging.Handler):
     Filters by thread ID for isolation when multiple pipelines could run
     (though the lock prevents concurrency, the filter is good practice).
 
-    Pushes events to an :class:`asyncio.Queue` via
-    ``loop.call_soon_threadsafe`` since the pipeline runs in a background
-    thread while the SSE generator runs in the async event loop.
+    Uses a thread-safe :class:`queue.Queue` so events are immediately
+    available regardless of event loop scheduling.
 
     Args:
-        queue: The asyncio queue to push events into.
-        loop: The running asyncio event loop.
+        event_queue: The thread-safe queue to push events into.
         thread_id: The thread ID to filter on.
     """
 
     def __init__(
         self,
-        queue: asyncio.Queue[dict[str, Any]],
-        loop: asyncio.AbstractEventLoop,
+        event_queue: queue.Queue[dict[str, Any] | None],
         thread_id: int,
     ) -> None:
         super().__init__()
-        self._queue = queue
-        self._loop = loop
+        self._queue = event_queue
         self._thread_id = thread_id
 
         # Stage synthesis state.
@@ -81,7 +77,7 @@ class PipelineLogCapture(logging.Handler):
         message = record.getMessage()
 
         # --- Stage synthesis ---
-        self._synthesize_stages(message, record)
+        self._synthesize_stages(message)
 
         # --- Forward raw log line ---
         self._push_event(
@@ -106,7 +102,7 @@ class PipelineLogCapture(logging.Handler):
             )
             self._current_stage = None
 
-    def _synthesize_stages(self, message: str, record: logging.LogRecord) -> None:
+    def _synthesize_stages(self, message: str) -> None:
         """Map log message patterns to stage events."""
         # Stage 1: Loading and parsing transcript
         if message.startswith("Stage 1:"):
@@ -174,26 +170,31 @@ class PipelineLogCapture(logging.Handler):
         )
 
     def _push_event(self, event_type: str, data: dict[str, Any]) -> None:
-        """Push an event dict to the async queue via the event loop."""
+        """Push an event dict to the thread-safe queue."""
         event = {"type": event_type, "data": data}
-        self._loop.call_soon_threadsafe(self._queue.put_nowait, event)
+        self._queue.put_nowait(event)
 
 
 async def pipeline_sse_generator(
-    queue: asyncio.Queue[dict[str, Any]],
+    event_queue: queue.Queue[dict[str, Any] | None],
 ) -> AsyncGenerator[str, None]:
     """Async generator that drains the event queue and yields SSE strings.
 
-    Reads events from *queue* until a sentinel ``None`` is received.
+    Reads events from *event_queue* until a sentinel ``None`` is received.
     Each event is formatted as an SSE ``event:`` / ``data:`` pair.
 
     Yields:
         SSE-formatted strings (``"event: <type>\\ndata: <json>\\n\\n"``).
     """
     while True:
-        event = await queue.get()
+        try:
+            event = event_queue.get_nowait()
+        except queue.Empty:
+            import asyncio
+
+            await asyncio.sleep(0.05)
+            continue
         if event is None:
-            # Sentinel: generator done.
             break
         event_type = event["type"]
         data = event["data"]

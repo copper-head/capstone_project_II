@@ -9,8 +9,10 @@ Provides page-serving routes (``GET /``, ``GET /memory``) and API endpoints:
 from __future__ import annotations
 
 import asyncio
+import contextlib
 import json
 import logging
+import queue
 import tempfile
 import threading
 from pathlib import Path
@@ -19,17 +21,16 @@ from typing import Any
 from fastapi import APIRouter, File, Form, Request, UploadFile
 from fastapi.responses import HTMLResponse, JSONResponse, StreamingResponse
 
+from cal_ai.config import ConfigError, load_memory_settings, load_settings
+from cal_ai.pipeline import run_pipeline
 from cal_ai.web.schemas import (
     MemoryResponse,
     PipelineResultResponse,
 )
-from cal_ai.web.sse import PipelineLogCapture, pipeline_sse_generator
+from cal_ai.web.sse import PipelineLogCapture
 
 router = APIRouter()
 logger = logging.getLogger(__name__)
-
-# Concurrency guard: only one pipeline run at a time.
-_pipeline_lock = asyncio.Lock()
 
 
 # ---------------------------------------------------------------------------
@@ -99,9 +100,9 @@ async def health() -> dict[str, str]:
 @router.post("/api/pipeline/run")
 async def pipeline_run(
     request: Request,
-    file: UploadFile | None = File(None),
-    text: str | None = Form(None),
-    dry_run: bool = Form(False),
+    file: UploadFile | None = File(None),  # noqa: B008
+    text: str | None = Form(None),  # noqa: B008
+    dry_run: bool = Form(False),  # noqa: B008
 ) -> StreamingResponse:
     """Run the pipeline and stream results via Server-Sent Events.
 
@@ -141,8 +142,9 @@ async def pipeline_run(
         )
 
     # --- Atomic lock acquisition -------------------------------------------
+    pipeline_lock: asyncio.Lock = request.app.state.pipeline_lock
     try:
-        await asyncio.wait_for(_pipeline_lock.acquire(), timeout=0)
+        await asyncio.wait_for(pipeline_lock.acquire(), timeout=0.01)
     except TimeoutError:
         return JSONResponse(
             status_code=409,
@@ -151,19 +153,23 @@ async def pipeline_run(
 
     # --- Build the SSE generator -------------------------------------------
     async def _generate() -> Any:
-        queue: asyncio.Queue[dict[str, Any] | None] = asyncio.Queue()
+        event_queue: queue.Queue[dict[str, Any] | None] = queue.Queue()
         tmp_path: Path | None = None
 
         try:
-            # Write input to a temporary file (run_pipeline requires a Path).
+            # Write input to a temporary file (run_pipeline needs a Path).
             if has_file:
                 content = await file.read()  # type: ignore[union-attr]
-                suffix = Path(file.filename).suffix if file.filename else ".txt"  # type: ignore[union-attr]
+                suffix = (
+                    Path(file.filename).suffix  # type: ignore[union-attr]
+                    if file.filename  # type: ignore[union-attr]
+                    else ".txt"
+                )
             else:
                 content = text.encode("utf-8")  # type: ignore[union-attr]
                 suffix = ".txt"
 
-            tmp = tempfile.NamedTemporaryFile(
+            tmp = tempfile.NamedTemporaryFile(  # noqa: SIM115
                 delete=False, suffix=suffix, mode="wb"
             )
             tmp.write(content)
@@ -171,8 +177,6 @@ async def pipeline_run(
             tmp_path = Path(tmp.name)
 
             # Resolve owner name.
-            from cal_ai.config import ConfigError, load_settings
-
             try:
                 settings = load_settings()
                 owner = settings.owner_name
@@ -181,19 +185,17 @@ async def pipeline_run(
                 yield _sse_event("done", {})
                 return
 
-            # Set up log capture.
-            loop = asyncio.get_running_loop()
-
-            # We need the thread ID before the thread starts, so we
-            # capture it inside the thread function and signal back.
+            # Two-phase synchronization: the thread reports its ID,
+            # then waits for the handler to be attached before running
+            # the pipeline.  This avoids losing early log messages.
             thread_id_event = threading.Event()
+            handler_ready_event = threading.Event()
             thread_id_holder: list[int] = []
 
             def _run_in_thread() -> Any:
                 thread_id_holder.append(threading.get_ident())
                 thread_id_event.set()
-
-                from cal_ai.pipeline import run_pipeline
+                handler_ready_event.wait(timeout=10)
 
                 return run_pipeline(
                     transcript_path=tmp_path,  # type: ignore[arg-type]
@@ -202,33 +204,49 @@ async def pipeline_run(
                 )
 
             # Start the pipeline in a background thread.
+            loop = asyncio.get_running_loop()
             future = loop.run_in_executor(None, _run_in_thread)
 
-            # Wait for the thread to report its ID.
-            thread_id_event.wait(timeout=5)
+            # Wait for the thread to report its ID (poll to avoid
+            # blocking the event loop or exhausting the thread pool).
+            for _ in range(50):  # 50 * 0.1s = 5s max
+                if thread_id_event.is_set():
+                    break
+                await asyncio.sleep(0.1)
             if not thread_id_holder:
-                yield _sse_event("error", {"message": "Pipeline thread failed to start."})
+                handler_ready_event.set()
+                yield _sse_event(
+                    "error",
+                    {"message": "Pipeline thread failed to start."},
+                )
                 yield _sse_event("done", {})
                 return
 
-            # Attach the log handler.
+            # Attach log handler, then unblock the pipeline thread.
             handler = PipelineLogCapture(
-                queue=queue,
-                loop=loop,
+                event_queue=event_queue,
                 thread_id=thread_id_holder[0],
             )
             root_logger = logging.getLogger("cal_ai")
+            # Ensure INFO-level pipeline messages reach our handler
+            # even when setup_logging() has not been called (the
+            # effective level may inherit WARNING from the root logger).
+            saved_level = root_logger.level
+            if root_logger.getEffectiveLevel() > logging.DEBUG:
+                root_logger.setLevel(logging.DEBUG)
             root_logger.addHandler(handler)
+            handler_ready_event.set()
 
             try:
                 # Drain the queue while the pipeline runs.
                 while not future.done():
                     try:
-                        event = await asyncio.wait_for(queue.get(), timeout=0.1)
+                        event = event_queue.get_nowait()
                         if event is None:
                             break
                         yield _sse_event(event["type"], event["data"])
-                    except TimeoutError:
+                    except queue.Empty:
+                        await asyncio.sleep(0.05)
                         continue
 
                 # Pipeline finished -- get the result or exception.
@@ -237,25 +255,33 @@ async def pipeline_run(
                 # Terminal rule: mark last stage complete.
                 handler.mark_complete()
 
-                # Drain any remaining events in the queue.
-                while not queue.empty():
-                    event = queue.get_nowait()
+                # Drain any remaining events in the queue.  Use a
+                # timeout-based get to handle the case where the
+                # pipeline thread has put events but the queue hasn't
+                # propagated to this thread yet (observable under
+                # coverage tracing or high-contention workloads).
+                while True:
+                    try:
+                        event = event_queue.get(timeout=0.05)
+                    except queue.Empty:
+                        break
                     if event is None:
                         break
                     yield _sse_event(event["type"], event["data"])
 
                 # Emit the result.
-                response_model = PipelineResultResponse.from_pipeline_result(result)
-                yield _sse_event("result", response_model.model_dump())
+                resp = PipelineResultResponse.from_pipeline_result(result)
+                yield _sse_event("result", resp.model_dump())
                 yield _sse_event("done", {})
 
             except Exception as exc:
-                # Pipeline raised -- emit error.
                 handler.mark_complete()
 
-                # Drain remaining events.
-                while not queue.empty():
-                    event = queue.get_nowait()
+                while True:
+                    try:
+                        event = event_queue.get(timeout=0.05)
+                    except queue.Empty:
+                        break
                     if event is None:
                         break
                     yield _sse_event(event["type"], event["data"])
@@ -265,15 +291,13 @@ async def pipeline_run(
 
             finally:
                 root_logger.removeHandler(handler)
+                root_logger.setLevel(saved_level)
 
         finally:
-            _pipeline_lock.release()
-            # Clean up temp file.
+            pipeline_lock.release()
             if tmp_path is not None:
-                try:
+                with contextlib.suppress(OSError):
                     tmp_path.unlink(missing_ok=True)
-                except OSError:
-                    pass
 
     return StreamingResponse(
         _generate(),
@@ -296,7 +320,6 @@ async def list_memories() -> list[MemoryResponse]:
     Returns an empty array when no memories exist or when config is
     unavailable.
     """
-    from cal_ai.config import ConfigError, load_memory_settings
     from cal_ai.memory.store import MemoryStore
 
     try:
@@ -304,7 +327,6 @@ async def list_memories() -> list[MemoryResponse]:
     except ConfigError:
         return []
 
-    # Check if the DB file exists before trying to open it.
     if not Path(memory_db_path).exists():
         return []
 
@@ -326,13 +348,5 @@ async def list_memories() -> list[MemoryResponse]:
 
 
 def _sse_event(event_type: str, data: dict[str, Any]) -> str:
-    """Format a single SSE event string.
-
-    Args:
-        event_type: The SSE event name (e.g., ``"stage"``, ``"log"``).
-        data: The event data dict to JSON-serialize.
-
-    Returns:
-        A formatted SSE event string.
-    """
+    """Format a single SSE event string."""
     return f"event: {event_type}\ndata: {json.dumps(data)}\n\n"

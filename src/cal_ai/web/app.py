@@ -6,6 +6,7 @@ serving, a config warning check, and API routes.
 
 from __future__ import annotations
 
+import asyncio
 import os
 from pathlib import Path
 
@@ -41,6 +42,9 @@ def create_app() -> FastAPI:
     # --- Jinja2 templates -------------------------------------------------
     templates = Jinja2Templates(directory=str(_TEMPLATE_DIR))
     app.state.templates = templates
+
+    # --- Pipeline concurrency lock ----------------------------------------
+    app.state.pipeline_lock = asyncio.Lock()
 
     # --- Config warning check ---------------------------------------------
     config_warnings: list[str] = []
