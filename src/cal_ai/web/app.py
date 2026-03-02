@@ -9,6 +9,7 @@ from __future__ import annotations
 import os
 from pathlib import Path
 
+from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
@@ -33,6 +34,9 @@ def create_app() -> FastAPI:
         A configured :class:`FastAPI` instance.
     """
     app = FastAPI(title="Cal-AI", description="Conversation-to-Calendar AI")
+
+    # --- Load .env so config checks see the same values as the pipeline ---
+    load_dotenv()
 
     # --- Jinja2 templates -------------------------------------------------
     templates = Jinja2Templates(directory=str(_TEMPLATE_DIR))

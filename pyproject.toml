@@ -36,7 +36,7 @@ dev = [
 where = ["src"]
 
 [tool.setuptools.package-data]
-"cal_ai.web" = ["templates/*.html", "static/*.css", "static/*.js"]
+"cal_ai.web" = ["templates/*.html", "templates/.keep", "static/*.css", "static/*.js", "static/.keep"]
 
 [tool.ruff]
 target-version = "py312"

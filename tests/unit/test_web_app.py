@@ -6,6 +6,8 @@ configuration, and config warning check when GEMINI_API_KEY is missing.
 
 from __future__ import annotations
 
+from unittest.mock import patch
+
 import pytest
 from fastapi.testclient import TestClient
 
@@ -57,7 +59,8 @@ class TestConfigWarningCheck:
     ) -> None:
         """When GEMINI_API_KEY is not set, config_warnings contains a warning."""
         monkeypatch.delenv("GEMINI_API_KEY", raising=False)
-        app = create_app()
+        with patch("cal_ai.web.app.load_dotenv"):
+            app = create_app()
 
         assert len(app.state.config_warnings) >= 1
         assert any("GEMINI_API_KEY" in w for w in app.state.config_warnings)
@@ -68,6 +71,7 @@ class TestConfigWarningCheck:
     ) -> None:
         """When GEMINI_API_KEY is set, config_warnings is empty."""
         monkeypatch.setenv("GEMINI_API_KEY", "test-key-12345")
-        app = create_app()
+        with patch("cal_ai.web.app.load_dotenv"):
+            app = create_app()
 
         assert app.state.config_warnings == []
