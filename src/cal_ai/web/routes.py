@@ -97,6 +97,12 @@ async def health() -> dict[str, str]:
     return {"status": "ok"}
 
 
+# Maximum upload size (10 MB).  Requests exceeding this return 413.
+_MAX_UPLOAD_BYTES = 10 * 1024 * 1024
+# Chunk size for streaming file uploads into the temp file.
+_UPLOAD_CHUNK_SIZE = 64 * 1024
+
+
 @router.post("/api/pipeline/run")
 async def pipeline_run(
     request: Request,
@@ -122,6 +128,7 @@ async def pipeline_run(
         A :class:`StreamingResponse` with ``text/event-stream`` media type.
 
     Raises:
+        413: If the uploaded file exceeds ``_MAX_UPLOAD_BYTES``.
         422: If neither file nor text is provided, or both are provided.
         409: If a pipeline is already running.
     """
@@ -152,28 +159,54 @@ async def pipeline_run(
         )
 
     # --- Build the SSE generator -------------------------------------------
-    async def _generate() -> Any:
+    async def _generate() -> Any:  # noqa: C901
         event_queue: queue.Queue[dict[str, Any] | None] = queue.Queue()
         tmp_path: Path | None = None
+        future: asyncio.Future[Any] | None = None
 
         try:
-            # Write input to a temporary file (run_pipeline needs a Path).
+            # Write input to a temporary file (run_pipeline needs a
+            # Path).  File uploads are streamed in chunks with a size
+            # guard to prevent memory amplification.
             if has_file:
-                content = await file.read()  # type: ignore[union-attr]
                 suffix = (
                     Path(file.filename).suffix  # type: ignore[union-attr]
                     if file.filename  # type: ignore[union-attr]
                     else ".txt"
                 )
+                tmp = tempfile.NamedTemporaryFile(  # noqa: SIM115
+                    delete=False, suffix=suffix, mode="wb"
+                )
+                bytes_written = 0
+                while True:
+                    chunk = await file.read(  # type: ignore[union-attr]
+                        _UPLOAD_CHUNK_SIZE
+                    )
+                    if not chunk:
+                        break
+                    bytes_written += len(chunk)
+                    if bytes_written > _MAX_UPLOAD_BYTES:
+                        tmp.close()
+                        Path(tmp.name).unlink(missing_ok=True)
+                        yield _sse_event(
+                            "error",
+                            {"message": "Upload exceeds 10 MB limit."},
+                        )
+                        yield _sse_event("done", {})
+                        return
+                    tmp.write(chunk)
+                tmp.close()
             else:
-                content = text.encode("utf-8")  # type: ignore[union-attr]
+                content = (
+                    text.encode("utf-8")  # type: ignore[union-attr]
+                )
                 suffix = ".txt"
+                tmp = tempfile.NamedTemporaryFile(  # noqa: SIM115
+                    delete=False, suffix=suffix, mode="wb"
+                )
+                tmp.write(content)
+                tmp.close()
 
-            tmp = tempfile.NamedTemporaryFile(  # noqa: SIM115
-                delete=False, suffix=suffix, mode="wb"
-            )
-            tmp.write(content)
-            tmp.close()
             tmp_path = Path(tmp.name)
 
             # Resolve owner name.
@@ -215,6 +248,9 @@ async def pipeline_run(
                 await asyncio.sleep(0.1)
             if not thread_id_holder:
                 handler_ready_event.set()
+                # Wait for thread to finish before cleanup.
+                with contextlib.suppress(Exception):
+                    await asyncio.wrap_future(future)
                 yield _sse_event(
                     "error",
                     {"message": "Pipeline thread failed to start."},
@@ -294,6 +330,14 @@ async def pipeline_run(
                 root_logger.setLevel(saved_level)
 
         finally:
+            # Ensure the worker thread has finished before releasing
+            # the lock or deleting the temp file.  This prevents a
+            # second request from starting while the worker is still
+            # running and avoids deleting the file while the worker
+            # still reads it.
+            if future is not None and not future.done():
+                with contextlib.suppress(Exception):
+                    await asyncio.wrap_future(future)
             pipeline_lock.release()
             if tmp_path is not None:
                 with contextlib.suppress(OSError):

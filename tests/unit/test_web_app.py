@@ -542,6 +542,46 @@ class TestPipelineSSE:
         assert "1b_memory" in stage_names
         assert "1c_calendar" in stage_names
 
+    def test_pipeline_rejects_oversized_upload(
+        self,
+        monkeypatch: pytest.MonkeyPatch,
+    ) -> None:
+        """POST /api/pipeline/run returns error SSE event for files > 10 MB."""
+        monkeypatch.setenv("GEMINI_API_KEY", "test-key")
+        monkeypatch.setenv("GOOGLE_ACCOUNT_EMAIL", "test@example.com")
+        monkeypatch.setenv("OWNER_NAME", "TestOwner")
+
+        # Create a file just over the 10 MB limit.
+        import io
+
+        from cal_ai.web.routes import _MAX_UPLOAD_BYTES
+
+        oversized = b"x" * (_MAX_UPLOAD_BYTES + 1)
+
+        with patch("cal_ai.web.app.load_dotenv"):
+            app = create_app()
+            client = TestClient(app)
+
+            with client.stream(
+                "POST",
+                "/api/pipeline/run",
+                files={
+                    "file": (
+                        "big.txt",
+                        io.BytesIO(oversized),
+                        "text/plain",
+                    )
+                },
+            ) as response:
+                body = response.read().decode("utf-8")
+
+        events = _parse_sse_events(body)
+        event_types = [e["type"] for e in events]
+        assert "error" in event_types
+        assert "done" in event_types
+        error_event = next(e for e in events if e["type"] == "error")
+        assert "10 MB" in error_event["data"]["message"]
+
     def test_pipeline_error_returns_error_event(
         self,
         monkeypatch: pytest.MonkeyPatch,
