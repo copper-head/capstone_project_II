@@ -97,7 +97,7 @@ async def health() -> dict[str, str]:
     return {"status": "ok"}
 
 
-# Maximum upload size (10 MB).  Requests exceeding this return 413.
+# Maximum upload size (10 MB).  Exceeded uploads emit an SSE error event.
 _MAX_UPLOAD_BYTES = 10 * 1024 * 1024
 # Chunk size for streaming file uploads into the temp file.
 _UPLOAD_CHUNK_SIZE = 64 * 1024
@@ -128,9 +128,13 @@ async def pipeline_run(
         A :class:`StreamingResponse` with ``text/event-stream`` media type.
 
     Raises:
-        413: If the uploaded file exceeds ``_MAX_UPLOAD_BYTES``.
         422: If neither file nor text is provided, or both are provided.
         409: If a pipeline is already running.
+
+    Note:
+        Oversized uploads (exceeding ``_MAX_UPLOAD_BYTES``) are detected
+        inside the SSE stream and reported as ``event: error`` with an
+        ``event: done`` terminator (HTTP 200 is already committed).
     """
     # --- Validate input: exactly one of file or text -----------------------
     has_file = file is not None and file.filename
