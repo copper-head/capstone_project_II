@@ -5,8 +5,8 @@ Provides:
 - :class:`PipelineLogCapture` -- a :class:`logging.Handler` that captures
   log messages from ``cal_ai.*`` loggers, synthesizes stage events from
   log message patterns, and forwards everything to a thread-safe queue.
-- :func:`pipeline_sse_generator` -- an async generator that drains the
-  queue and yields SSE-formatted strings.
+The queue is drained by the route handler's inline ``_generate()`` async
+  generator in :mod:`cal_ai.web.routes`.
 
 Stage synthesis state machine
 -----------------------------
@@ -27,11 +27,9 @@ Terminal rule: on pipeline completion, mark any still-running stage
 
 from __future__ import annotations
 
-import json
 import logging
 import queue
 import threading
-from collections.abc import AsyncGenerator
 from typing import Any
 
 
@@ -173,29 +171,3 @@ class PipelineLogCapture(logging.Handler):
         """Push an event dict to the thread-safe queue."""
         event = {"type": event_type, "data": data}
         self._queue.put_nowait(event)
-
-
-async def pipeline_sse_generator(
-    event_queue: queue.Queue[dict[str, Any] | None],
-) -> AsyncGenerator[str, None]:
-    """Async generator that drains the event queue and yields SSE strings.
-
-    Reads events from *event_queue* until a sentinel ``None`` is received.
-    Each event is formatted as an SSE ``event:`` / ``data:`` pair.
-
-    Yields:
-        SSE-formatted strings (``"event: <type>\\ndata: <json>\\n\\n"``).
-    """
-    while True:
-        try:
-            event = event_queue.get_nowait()
-        except queue.Empty:
-            import asyncio
-
-            await asyncio.sleep(0.05)
-            continue
-        if event is None:
-            break
-        event_type = event["type"]
-        data = event["data"]
-        yield f"event: {event_type}\ndata: {json.dumps(data)}\n\n"

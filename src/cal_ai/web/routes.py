@@ -347,19 +347,27 @@ async def pipeline_run(
             # second request from starting while the worker is still
             # running and avoids deleting the file while the worker
             # still reads it.
-            #
-            # Use asyncio.shield() so that task cancellation (e.g.
-            # client disconnect) does not prevent us from waiting for
-            # the worker.  In Python 3.12+ CancelledError is a
-            # BaseException, so plain ``suppress(Exception)`` would
-            # not catch it.
             if future is not None and not future.done():
-                with contextlib.suppress(BaseException):
-                    await asyncio.shield(future)
-            pipeline_lock.release()
-            if tmp_path is not None:
-                with contextlib.suppress(OSError):
-                    tmp_path.unlink(missing_ok=True)
+                # Client disconnected while pipeline is running.
+                # We cannot await the future here because the generator
+                # is being cancelled.  Instead, register a callback to
+                # release the lock and clean up the temp file once the
+                # pipeline thread actually finishes.
+                _tmp = tmp_path  # capture for closure
+
+                def _deferred_cleanup(_fut: Any) -> None:
+                    pipeline_lock.release()
+                    if _tmp is not None:
+                        with contextlib.suppress(OSError):
+                            _tmp.unlink(missing_ok=True)
+
+                future.add_done_callback(_deferred_cleanup)
+            else:
+                # Normal completion or thread never started.
+                pipeline_lock.release()
+                if tmp_path is not None:
+                    with contextlib.suppress(OSError):
+                        tmp_path.unlink(missing_ok=True)
 
     return StreamingResponse(
         _generate(),

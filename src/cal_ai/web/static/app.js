@@ -638,8 +638,24 @@
   // Retry button
   // -----------------------------------------------------------------------
   retryBtn.addEventListener("click", function () {
-    if (lastFormData) {
+    // Rebuild FormData from current inputs instead of reusing stale data
+    // (the user may have edited the textarea since the failed run).
+    var formData = new FormData();
+    var text = transcriptText.value.trim();
+    if (text) {
+      formData.append("text", text);
+    } else if (fileInput.files && fileInput.files.length > 0) {
+      formData.append("file", fileInput.files[0]);
+    } else if (lastFormData) {
+      // Fallback: reuse last submission if inputs are empty.
       submitPipeline(lastFormData);
+      return;
+    } else {
+      return;
     }
+    if (dryRunCheckbox.checked) {
+      formData.append("dry_run", "true");
+    }
+    submitPipeline(formData);
   });
 })();
