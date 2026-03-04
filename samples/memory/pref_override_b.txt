@@ -1,7 +1,7 @@
-[Alice]: Team, let's do 9am on Friday for the sprint planning sync.
+[Alice]: Team, let's do 9am next Friday for the sprint planning sync.
 
-[Bob]: 9am Friday works for me.
+[Bob]: 9am next Friday works for me.
 
 [Sarah]: Same here, I'll be there.
 
-[Alice]: Great. It should take about an hour. See everyone Friday morning.
+[Alice]: Great. It should take about an hour. See everyone next Friday morning.

@@ -31,7 +31,7 @@
         "location": null,
         "attendees": "Alice, Bob, Sarah",
         "confidence": "high",
-        "reasoning": "Alice explicitly scheduled the sprint planning sync for 9am Friday. The explicit time takes precedence over any general preferences.",
+        "reasoning": "Alice explicitly scheduled the sprint planning sync for 9am next Friday. The explicit time takes precedence over any general preferences.",
         "assumptions": "",
         "action": "create",
         "existing_event_id": null
@@ -57,7 +57,7 @@
         "location": null,
         "attendees": "Alice, Bob, Sarah",
         "confidence": "high",
-        "reasoning": "Alice scheduled the sprint planning sync for 9am on Friday with Bob and Sarah. Duration is about an hour.",
+        "reasoning": "Alice scheduled the sprint planning sync for 9am next Friday with Bob and Sarah. Duration is about an hour.",
         "assumptions": "",
         "action": "create",
         "existing_event_id": null
@@ -65,5 +65,5 @@
     ],
     "summary": "Found 1 team sync event for Friday at 9am."
   },
-  "notes": "Reference datetime is 2026-02-20 (Friday), so 'Friday' resolves to 2026-02-27 (next Friday). Zero delta: explicit time (9am) overrides afternoon preference in both passes. expected_events == expected_events_no_memory."
+  "notes": "Reference datetime is 2026-02-20 (Friday), so 'next Friday' resolves to 2026-02-27. Zero delta: explicit time (9am) overrides afternoon preference in both passes. expected_events == expected_events_no_memory."
 }
