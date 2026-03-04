@@ -71,9 +71,8 @@ Reuse patches from `test_regression.py:81-126`: `fetch_calendar_context`, `_reso
 - [ ] `make lint` passes
 
 ## Done summary
-TBD
-
+Built memory round-trip test infrastructure: extended SidecarSpec with dual-outcome fields (expected_events_no_memory, mock_llm_response_no_memory, expected_memory_facts), isolated samples/memory/ from existing suite discovery, created test_memory_roundtrip.py with inline pytest_generate_tests and dual-pass mock/live test functions, added Makefile targets and pytest marker.
 ## Evidence
-- Commits:
-- Tests:
+- Commits: 8c8909a43bb695a7a41823a3cd6a03cd8cdbc22f, e2fcaa3
+- Tests: make lint, pytest tests/ -v --tb=short (609 passed, 42 skipped), make test-memory (2 skipped - no samples yet)
 - PRs:

@@ -1,0 +1,9 @@
+[Alice]: How was your 1:1 with Jake today?
+
+[Mark]: It went well, but it ran a bit long. We went over an hour.
+
+[Alice]: Yeah, my 1:1s are usually 30 minutes. That's plenty of time to cover everything if you stay focused.
+
+[Mark]: That's a good point. I should probably keep mine shorter too.
+
+[Alice]: Definitely. Half an hour is the sweet spot for a 1:1 in my experience. Keeps things efficient.

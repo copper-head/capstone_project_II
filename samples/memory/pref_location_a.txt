@@ -1,0 +1,9 @@
+[Alice]: I had the best coffee this morning at Starbucks on Main St.
+
+[David]: Oh nice, is that your usual spot?
+
+[Alice]: Yeah, I always go to Starbucks on Main St for coffee meetings. It's quiet in the mornings and they have great wifi.
+
+[David]: Good to know! I'll keep that in mind next time we need to meet up for coffee.
+
+[Alice]: Definitely, it's my go-to place.

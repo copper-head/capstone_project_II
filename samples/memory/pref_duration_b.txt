@@ -1,0 +1,11 @@
+[Alice]: David, we need to schedule our 1:1 for next Thursday.
+
+[David]: Sure thing. What time works for you?
+
+[Alice]: Let's do 11am.
+
+[David]: 11am Thursday, got it. How long do we need?
+
+[Alice]: The usual amount of time should work.
+
+[David]: Okay, I'll block it off. See you then.

@@ -1,0 +1,69 @@
+{
+  "description": "Coffee meeting with vague location reference. With memory: title includes Starbucks on Main St. Without memory: generic title.",
+  "category": "memory",
+  "tolerance": "moderate",
+  "owner": "Alice",
+  "reference_datetime": "2026-02-20T10:00:00",
+  "calendar_context": [],
+  "memory_context": [
+    {
+      "category": "preferences",
+      "key": "coffee_meeting_location",
+      "value": "Starbucks on Main St",
+      "confidence": "high"
+    }
+  ],
+  "expected_events": [
+    {
+      "action": "create",
+      "title": "Coffee with Sarah at Starbucks on Main St",
+      "start_time": "2026-02-25T10:00:00",
+      "end_time": "2026-02-25T11:00:00",
+      "attendees_contain": ["Sarah"]
+    }
+  ],
+  "mock_llm_response": {
+    "events": [
+      {
+        "title": "Coffee with Sarah at Starbucks on Main St",
+        "start_time": "2026-02-25T10:00:00",
+        "end_time": "2026-02-25T11:00:00",
+        "location": "Starbucks on Main St",
+        "attendees": "Alice, Sarah",
+        "confidence": "high",
+        "reasoning": "Alice and Sarah agreed to meet for coffee on Wednesday at 10am. Alice mentioned 'our usual coffee spot', which based on her known preference is Starbucks on Main St.",
+        "assumptions": "Location inferred from Alice's known coffee meeting preference.",
+        "action": "create",
+        "existing_event_id": null
+      }
+    ],
+    "summary": "Found 1 coffee meeting for Wednesday at Starbucks on Main St."
+  },
+  "expected_events_no_memory": [
+    {
+      "action": "create",
+      "title": "Coffee with Sarah",
+      "start_time": "2026-02-25T10:00:00",
+      "end_time": "2026-02-25T11:00:00",
+      "attendees_contain": ["Sarah"]
+    }
+  ],
+  "mock_llm_response_no_memory": {
+    "events": [
+      {
+        "title": "Coffee with Sarah",
+        "start_time": "2026-02-25T10:00:00",
+        "end_time": "2026-02-25T11:00:00",
+        "location": null,
+        "attendees": "Alice, Sarah",
+        "confidence": "high",
+        "reasoning": "Alice and Sarah agreed to meet for coffee on Wednesday at 10am to discuss the marketing plan.",
+        "assumptions": "Location not specified, 'usual coffee spot' is ambiguous without additional context.",
+        "action": "create",
+        "existing_event_id": null
+      }
+    ],
+    "summary": "Found 1 coffee meeting for Wednesday morning."
+  },
+  "notes": "Reference datetime is 2026-02-20 (Friday), so 'Wednesday' resolves to 2026-02-25. Delta: title differs (location-enriched vs generic). Do NOT rely solely on location field."
+}

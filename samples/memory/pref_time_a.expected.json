@@ -1,0 +1,21 @@
+{
+  "description": "Alice establishes a preference for afternoon meetings around 2-3pm. No calendar events to extract.",
+  "category": "memory",
+  "tolerance": "moderate",
+  "owner": "Alice",
+  "reference_datetime": "2026-02-20T10:00:00",
+  "calendar_context": [],
+  "expected_events": [],
+  "mock_llm_response": {
+    "events": [],
+    "summary": "No calendar events to extract. Alice mentioned a general preference for afternoon meetings."
+  },
+  "expected_memory_facts": [
+    {
+      "category": "preferences",
+      "key": "meeting_time",
+      "value": "Prefers afternoon meetings around 2-3pm",
+      "confidence": "high"
+    }
+  ]
+}
