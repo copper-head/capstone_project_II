@@ -1,0 +1,16 @@
+{
+  "assignee": null,
+  "claim_note": "",
+  "claimed_at": null,
+  "created_at": "2026-03-03T21:14:49.260716Z",
+  "depends_on": [
+    "fn-11-ovf.1"
+  ],
+  "epic": "fn-11-ovf",
+  "id": "fn-11-ovf.4",
+  "priority": null,
+  "spec_path": ".flow/tasks/fn-11-ovf.4.md",
+  "status": "todo",
+  "title": "Pattern transcript pairs (3 pairs) + docs updates",
+  "updated_at": "2026-03-03T21:38:29.790875Z"
+}

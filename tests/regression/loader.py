@@ -34,6 +34,10 @@ def discover_samples(base_dir: str | Path) -> list[tuple[Path, SidecarSpec]]:
     results: list[tuple[Path, SidecarSpec]] = []
 
     for txt_path in sorted(base.rglob("*.txt")):
+        # Exclude files under a ``memory`` directory (e.g., samples/memory/).
+        # Memory round-trip samples have their own dedicated test runner.
+        if "memory" in txt_path.relative_to(base).parts:
+            continue
         sidecar_path = txt_path.with_suffix(".expected.json")
         if sidecar_path.exists():
             sidecar = load_sidecar(sidecar_path)

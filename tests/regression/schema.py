@@ -96,6 +96,14 @@ class SidecarSpec(BaseModel):
             pipeline via patched ``MemoryStore.load_all()``.  When ``None``
             (default), the pipeline uses its normal empty-DB behavior.
         mock_llm_response: Raw JSON dict the mocked LLM should return.
+        expected_events_no_memory: Expected extraction results when memory
+            is NOT injected (empty ``load_all``).  Used by the memory
+            round-trip test runner for the no-memory pass.  ``None`` default.
+        mock_llm_response_no_memory: Mock LLM response for the no-memory
+            extraction pass.  ``None`` default.
+        expected_memory_facts: Documentation-only list of memory facts that
+            the A-transcript would produce.  NOT programmatically asserted
+            (``dry_run=True`` skips Stage 4).  ``None`` default.
         notes: Optional notes about the test scenario.
     """
 
@@ -108,4 +116,7 @@ class SidecarSpec(BaseModel):
     expected_events: list[SidecarExpectedEvent] = Field(default_factory=list)
     memory_context: list[SidecarMemoryEntry] | None = None
     mock_llm_response: dict[str, Any] = Field(default_factory=dict)
+    expected_events_no_memory: list[SidecarExpectedEvent] | None = None
+    mock_llm_response_no_memory: dict[str, Any] | None = None
+    expected_memory_facts: list[SidecarMemoryEntry] | None = None
     notes: str | None = None

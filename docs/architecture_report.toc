@@ -1,0 +1,29 @@
+\contentsline {section}{\numberline {1}Introduction}{2}{section.1}%
+\contentsline {section}{\numberline {2}System Architecture}{2}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Design Philosophy}{2}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}Pipeline Overview}{2}{subsection.2.2}%
+\contentsline {subsection}{\numberline {2.3}Stage Descriptions}{3}{subsection.2.3}%
+\contentsline {paragraph}{Stage 1: Parse Transcript.}{3}{section*.2}%
+\contentsline {paragraph}{Stage 1b: Load Memories.}{3}{section*.3}%
+\contentsline {paragraph}{Stage 1c: Fetch Calendar Context.}{3}{section*.4}%
+\contentsline {paragraph}{Stage 2: LLM Extraction.}{3}{section*.5}%
+\contentsline {paragraph}{Stage 3: Calendar Sync.}{3}{section*.6}%
+\contentsline {paragraph}{Stage 4: Memory Write.}{4}{section*.7}%
+\contentsline {paragraph}{Stage 5: Aggregate Results.}{4}{section*.8}%
+\contentsline {subsection}{\numberline {2.4}Memory System}{4}{subsection.2.4}%
+\contentsline {subsection}{\numberline {2.5}Web Frontend}{4}{subsection.2.5}%
+\contentsline {subsection}{\numberline {2.6}Deployment}{4}{subsection.2.6}%
+\contentsline {section}{\numberline {3}Prompt Engineering \& Fine-Tuning}{5}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Prompt Structure}{5}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}Iteration Process}{5}{subsection.3.2}%
+\contentsline {subsection}{\numberline {3.3}Iteration Results}{5}{subsection.3.3}%
+\contentsline {subsection}{\numberline {3.4}Key Prompt Engineering Insights}{5}{subsection.3.4}%
+\contentsline {section}{\numberline {4}Performance Results}{6}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Final Benchmark (Full Suite)}{6}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}Per-Category Breakdown}{6}{subsection.4.2}%
+\contentsline {subsection}{\numberline {4.3}Confidence Calibration}{7}{subsection.4.3}%
+\contentsline {subsection}{\numberline {4.4}Cost and Latency}{7}{subsection.4.4}%
+\contentsline {subsection}{\numberline {4.5}Evaluation Methodology}{7}{subsection.4.5}%
+\contentsline {section}{\numberline {5}Improvement Trajectory}{7}{section.5}%
+\contentsline {section}{\numberline {6}Known Limitations}{8}{section.6}%
+\contentsline {section}{\numberline {7}Conclusion}{8}{section.7}%
