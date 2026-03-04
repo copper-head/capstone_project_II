@@ -71,9 +71,13 @@ def pytest_generate_tests(metafunc: pytest.Metafunc) -> None:
     argvalues: list[tuple[Path, SidecarSpec]] = []
 
     for b_txt in b_files:
-        # Derive A-partner.
+        # Derive A-partner and validate its sidecar exists and parses.
         a_txt = b_txt.with_name(b_txt.name.replace("_b.txt", "_a.txt"))
         assert a_txt.exists(), f"Memory pair missing A-file: {a_txt} (partner for {b_txt})"
+
+        a_sidecar_path = a_txt.with_suffix(".expected.json")
+        assert a_sidecar_path.exists(), f"Memory pair missing A-sidecar: {a_sidecar_path}"
+        load_sidecar(a_sidecar_path)  # Validate schema; A-sidecar is documentation-only.
 
         # Load B-sidecar.
         b_sidecar_path = b_txt.with_suffix(".expected.json")
