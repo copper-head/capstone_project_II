@@ -67,9 +67,8 @@ Create 3 pattern transcript pairs in `samples/memory/` testing recurring meeting
 - [ ] Final validation: `make test-memory-live` passes with real Gemini API
 
 ## Done summary
-TBD
-
+Created 3 pattern memory transcript pairs (pattern_recurring, pattern_habitual, pattern_change) testing recurring meetings, habitual activities, and a pattern change negative case. Updated CLAUDE.md and README.md with samples/memory/ in project structure, test-memory commands, memory round-trip testing convention, and samples table.
 ## Evidence
-- Commits:
-- Tests:
+- Commits: 53ba7b6, c3ae6ff
+- Tests: make test-memory, make lint, make test
 - PRs:
