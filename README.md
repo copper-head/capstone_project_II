@@ -114,7 +114,7 @@ make clean-memory
 
 ### Sample Transcripts
 
-40 sample transcripts organized by category under `samples/`, each paired with a `.expected.json` sidecar for regression testing:
+40+ sample transcripts organized by category under `samples/`, each paired with a `.expected.json` sidecar for regression testing:
 
 | Category | Count | Examples |
 |---|---|---|
@@ -123,6 +123,7 @@ make clean-memory
 | `adversarial/` | 7 | `no_events` (no calendar content), `sarcasm` (absurd suggestions), `negation` (all events declined), `hypothetical` (no concrete plans), `past_tense` (already happened), `vague_reference` |
 | `realistic/` | 7 | `ambiguous_time` (vague times), `typos_informal` (heavy typos), `slang_abbreviations` (internet slang), `interruptions` (incomplete sentences), `filler_tangents` (off-topic noise), `callback_rescheduling` |
 | `long/` | 5 | `long_meeting_notes` (80+ lines, 3 events), `long_many_events` (100+ lines, 11 events), `long_circular_planning` (plans change mid-conversation), `long_noise_few_events` (mostly small talk) |
+| `memory/` | 11 pairs | Paired A/B transcripts testing memory influence. A establishes facts (preferences, people, patterns), B tests recall. Categories: `pref_time`, `pref_location`, `pref_duration`, `pref_override` (negative), `people_relationship`, `people_nickname`, `people_contact`, `people_unknown` (negative), `pattern_recurring`, `pattern_habitual`, `pattern_change` (negative) |
 
 ## Development
 
@@ -158,6 +159,25 @@ make test-regression-live         # Run regression suite (live mode)
 ```
 
 Tolerance levels per sample: **strict** (exact match), **moderate** (fuzzy titles, +/-2hr times), **relaxed** (broad matching, +/-1day times).
+
+### Memory Round-Trip Testing
+
+The memory test suite validates that the memory system influences LLM extraction by running dual-pass tests on paired sample transcripts in `samples/memory/`.
+
+Each pair consists of:
+- **A-transcript**: Establishes memory-worthy facts (e.g., "I prefer afternoon meetings")
+- **B-transcript**: References those facts ambiguously (e.g., "let's find a time to meet")
+
+The test runner executes two extraction passes per B-sample:
+1. **With memory**: Memory context injected, asserts against `expected_events`
+2. **Without memory**: Empty memory, asserts against `expected_events_no_memory`
+
+If both passes succeed against their respective expected events, the memory system demonstrably changed the outcome. Negative cases (override, unknown person, pattern change) have identical expected events in both passes, proving memory does not override explicit instructions.
+
+```bash
+make test-memory              # Run memory tests (mock mode, deterministic)
+make test-memory-live         # Run memory tests (live Gemini API)
+```
 
 ### Benchmarking
 
@@ -224,14 +244,16 @@ tests/
     ├── schema.py        # SidecarSpec Pydantic model
     ├── loader.py        # Sample discovery and sidecar loading
     ├── tolerance.py     # Tolerance assertion engine (strict/moderate/relaxed)
-    └── test_regression.py
+    ├── test_regression.py
+    └── test_memory_roundtrip.py  # Memory round-trip dual-pass tests
 
-samples/                 # 40 transcripts organized by category
+samples/                 # 40+ transcripts organized by category
 ├── crud/                # 14 basic CRUD operations
 ├── multi_speaker/       # 7 multi-speaker conversations
 ├── adversarial/         # 7 edge cases (sarcasm, negation, hypotheticals)
 ├── realistic/           # 7 real-world patterns (typos, slang, interruptions)
-└── long/                # 5 long transcripts (80+ lines)
+├── long/                # 5 long transcripts (80+ lines)
+└── memory/              # 11 paired A/B transcripts (memory round-trip testing)
 
 training/                # 100 additional transcripts (train/test/val splits)
 data/                    # Per-owner memory SQLite DBs (gitignored)

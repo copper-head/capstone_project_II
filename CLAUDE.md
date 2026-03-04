@@ -55,12 +55,14 @@ tests/                # Test suite (pytest)
     loader.py          # Sample discovery and sidecar loading
     tolerance.py       # Tolerance assertion engine (strict/moderate/relaxed)
     test_regression.py # Parametrized regression tests
+    test_memory_roundtrip.py # Memory round-trip tests (dual-pass with/without memory)
 samples/              # Test transcripts organized by category
   crud/                # Basic CRUD operations (create, update, delete)
   multi_speaker/       # Multi-speaker conversations
   adversarial/         # Edge cases (sarcasm, negation, hypotheticals)
   realistic/           # Real-world patterns (typos, slang, interruptions)
   long/                # Long transcripts (80+ lines)
+  memory/              # Memory round-trip pairs (A establishes fact, B tests recall)
 docs/SPEC.md          # System specification
 pyproject.toml        # Metadata, deps, ruff/pytest config
 Makefile              # Dev workflow targets
@@ -84,6 +86,8 @@ make test                # Run pytest (all tests including regression mock mode)
 make test-cov            # Run pytest with coverage report
 make test-regression     # Run regression suite only (mock mode)
 make test-regression-live # Run regression suite with live Gemini API
+make test-memory         # Run memory round-trip tests (mock mode)
+make test-memory-live    # Run memory round-trip tests (live Gemini API)
 make benchmark           # Run benchmark suite (live Gemini, writes to reports/)
 make serve               # Start web server (port 8000)
 make serve-dev           # Start web server with verbose logging
@@ -106,6 +110,8 @@ pytest                        # Run tests (all including regression mock mode)
 pytest tests/regression/ -v   # Run regression suite only (mock mode)
 pytest tests/regression/ --live -v  # Run regression suite (live Gemini API)
 pytest tests/regression/ -k crud -v # Run only CRUD category tests
+pytest tests/regression/test_memory_roundtrip.py -v  # Run memory round-trip tests (mock)
+pytest tests/regression/test_memory_roundtrip.py --live -v  # Run memory round-trip tests (live)
 ruff check .                  # Lint
 ruff format --check .         # Check formatting
 docker compose up             # Run in Docker (serves web UI on port 8000)
@@ -256,6 +262,7 @@ Atomic acquisition via `asyncio.wait_for(lock.acquire(), timeout=0)` raises
 - Each sample transcript (`samples/<category>/<name>.txt`) has a sidecar `<name>.expected.json` containing: tolerance level (strict/moderate/relaxed), calendar context, expected events, and a `mock_llm_response` for deterministic mock-mode testing
 - Regression tests auto-discover samples via `pytest_generate_tests`; mock mode is the default, `--live` flag enables real Gemini API calls
 - Memory formatter accepts duck-typed objects with `category`/`key`/`value` attributes (works with both `MemoryRecord` and test `SidecarMemoryEntry`)
+- Memory round-trip testing: paired samples in `samples/memory/` (A establishes facts, B tests recall). B-sidecars contain dual outcomes (`expected_events` + `expected_events_no_memory`) and dual mock responses. Test runner runs two passes per pair: with memory injected and without. Negative cases have identical expected events in both passes, proving memory does not override explicit instructions.
 
 ## Security
 - Never commit `.env`, `credentials.json`, `token.json`, or `memory*.db` files

@@ -1,0 +1,21 @@
+{
+  "description": "Alice establishes a habitual yoga schedule: every Tuesday and Thursday at 6pm, 1 hour, downtown studio on Main Street. No specific event to extract.",
+  "category": "memory",
+  "tolerance": "moderate",
+  "owner": "Alice",
+  "reference_datetime": "2026-02-20T10:00:00",
+  "calendar_context": [],
+  "expected_events": [],
+  "mock_llm_response": {
+    "events": [],
+    "summary": "No specific calendar events to extract. Alice mentioned a recurring yoga schedule: Tuesday and Thursday at 6pm at the downtown studio."
+  },
+  "expected_memory_facts": [
+    {
+      "category": "patterns",
+      "key": "yoga_schedule",
+      "value": "Every Tuesday and Thursday at 6pm, 1 hour, downtown studio on Main Street",
+      "confidence": "high"
+    }
+  ]
+}

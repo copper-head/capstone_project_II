@@ -62,9 +62,8 @@ Create 4 people transcript pairs in `samples/memory/` testing relationship resol
 - [ ] Transcripts demonstrate natural speech with names and relationships
 
 ## Done summary
-TBD
-
+Created 4 people memory transcript pairs (16 files) in samples/memory/: relationship resolution (boss->Bob), nickname aliasing (Bobby->Robert Smith), contact context (Sarah->Dr. Sarah Chen), and unknown person negative case (zero delta). All 8 mock memory tests pass, full suite (617 tests) passes with no regressions.
 ## Evidence
-- Commits:
-- Tests:
+- Commits: 7a04f882f2b7dcff5e0ed04c2ce1a5f2fc1faa3f, 62d33cba90b4f05486505c8adfbd1e8a2047f963
+- Tests: make test-memory, make lint, make test
 - PRs:
