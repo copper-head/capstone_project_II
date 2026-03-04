@@ -1,0 +1,21 @@
+{
+  "description": "Alice establishes a recurring team standup: every Monday at 9am in the huddle room, 30 minutes. No specific event to extract (general pattern statement).",
+  "category": "memory",
+  "tolerance": "moderate",
+  "owner": "Alice",
+  "reference_datetime": "2026-02-20T10:00:00",
+  "calendar_context": [],
+  "expected_events": [],
+  "mock_llm_response": {
+    "events": [],
+    "summary": "No specific calendar events to extract. Alice established a recurring team standup pattern: every Monday at 9am in the huddle room, 30 minutes."
+  },
+  "expected_memory_facts": [
+    {
+      "category": "patterns",
+      "key": "team_standup",
+      "value": "Every Monday at 9am in the huddle room, 30 minutes",
+      "confidence": "high"
+    }
+  ]
+}

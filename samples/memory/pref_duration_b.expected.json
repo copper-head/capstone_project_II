@@ -1,0 +1,69 @@
+{
+  "description": "1:1 meeting with ambiguous duration. With memory: 30-minute event. Without memory: 60-minute default.",
+  "category": "memory",
+  "tolerance": "moderate",
+  "owner": "Alice",
+  "reference_datetime": "2026-02-20T10:00:00",
+  "calendar_context": [],
+  "memory_context": [
+    {
+      "category": "preferences",
+      "key": "one_on_one_duration",
+      "value": "30 minutes",
+      "confidence": "high"
+    }
+  ],
+  "expected_events": [
+    {
+      "action": "create",
+      "title": "1:1 with David",
+      "start_time": "2026-02-26T11:00:00",
+      "end_time": "2026-02-26T11:30:00",
+      "attendees_contain": ["David"]
+    }
+  ],
+  "mock_llm_response": {
+    "events": [
+      {
+        "title": "1:1 with David",
+        "start_time": "2026-02-26T11:00:00",
+        "end_time": "2026-02-26T11:30:00",
+        "location": null,
+        "attendees": "Alice, David",
+        "confidence": "high",
+        "reasoning": "Alice and David agreed to a 1:1 on Thursday at 11am. Based on Alice's known preference, her 1:1s are 30 minutes.",
+        "assumptions": "Duration set to 30 minutes based on Alice's known 1:1 preference.",
+        "action": "create",
+        "existing_event_id": null
+      }
+    ],
+    "summary": "Found 1 meeting event: 30-minute 1:1 on Thursday at 11am."
+  },
+  "expected_events_no_memory": [
+    {
+      "action": "create",
+      "title": "1:1 with David",
+      "start_time": "2026-02-26T11:00:00",
+      "end_time": "2026-02-26T12:00:00",
+      "attendees_contain": ["David"]
+    }
+  ],
+  "mock_llm_response_no_memory": {
+    "events": [
+      {
+        "title": "1:1 with David",
+        "start_time": "2026-02-26T11:00:00",
+        "end_time": "2026-02-26T12:00:00",
+        "location": null,
+        "attendees": "Alice, David",
+        "confidence": "high",
+        "reasoning": "Alice and David agreed to a 1:1 meeting on Thursday at 11am. No duration specified, using default 1 hour.",
+        "assumptions": "Duration not specified, defaulting to 60 minutes.",
+        "action": "create",
+        "existing_event_id": null
+      }
+    ],
+    "summary": "Found 1 meeting event: 1-hour 1:1 on Thursday at 11am."
+  },
+  "notes": "Reference datetime is 2026-02-20 (Friday), so 'next Thursday' resolves to 2026-02-26. Delta: end_time differs (11:30 vs 12:00 — 30min vs 60min duration)."
+}

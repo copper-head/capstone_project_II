@@ -1,0 +1,21 @@
+{
+  "description": "Alice establishes that Bob is her manager/boss. No calendar events to extract.",
+  "category": "memory",
+  "tolerance": "moderate",
+  "owner": "Alice",
+  "reference_datetime": "2026-02-20T10:00:00",
+  "calendar_context": [],
+  "expected_events": [],
+  "mock_llm_response": {
+    "events": [],
+    "summary": "No calendar events to extract. Alice mentioned Bob is her new manager."
+  },
+  "expected_memory_facts": [
+    {
+      "category": "people",
+      "key": "Bob",
+      "value": "Alice's manager/boss, moved from the platform team",
+      "confidence": "high"
+    }
+  ]
+}

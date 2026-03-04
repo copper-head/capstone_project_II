@@ -1,0 +1,88 @@
+{
+  "description": "Ambiguous 'usual yoga time' reference. With memory: creates 2 events (Tuesday 6pm and Thursday 6pm). Without memory: creates 1 generic yoga event.",
+  "category": "memory",
+  "tolerance": "moderate",
+  "owner": "Alice",
+  "reference_datetime": "2026-02-20T10:00:00",
+  "calendar_context": [],
+  "memory_context": [
+    {
+      "category": "patterns",
+      "key": "yoga_schedule",
+      "value": "Every Tuesday and Thursday at 6pm, 1 hour, downtown studio on Main Street",
+      "confidence": "high"
+    }
+  ],
+  "expected_events": [
+    {
+      "action": "create",
+      "title": "Yoga",
+      "start_time": "2026-02-24T18:00:00",
+      "end_time": "2026-02-24T19:00:00",
+      "attendees_contain": []
+    },
+    {
+      "action": "create",
+      "title": "Yoga",
+      "start_time": "2026-02-26T18:00:00",
+      "end_time": "2026-02-26T19:00:00",
+      "attendees_contain": []
+    }
+  ],
+  "mock_llm_response": {
+    "events": [
+      {
+        "title": "Yoga",
+        "start_time": "2026-02-24T18:00:00",
+        "end_time": "2026-02-24T19:00:00",
+        "location": "Downtown Studio, Main Street",
+        "attendees": "Alice",
+        "confidence": "high",
+        "reasoning": "Alice wants to block off her regular yoga time. Based on her known pattern, yoga is every Tuesday at 6pm for 1 hour at the downtown studio.",
+        "assumptions": "Using stored pattern: Tuesday at 6pm, 1 hour.",
+        "action": "create",
+        "existing_event_id": null
+      },
+      {
+        "title": "Yoga",
+        "start_time": "2026-02-26T18:00:00",
+        "end_time": "2026-02-26T19:00:00",
+        "location": "Downtown Studio, Main Street",
+        "attendees": "Alice",
+        "confidence": "high",
+        "reasoning": "Alice wants to block off her regular yoga time. Based on her known pattern, yoga is every Thursday at 6pm for 1 hour at the downtown studio.",
+        "assumptions": "Using stored pattern: Thursday at 6pm, 1 hour.",
+        "action": "create",
+        "existing_event_id": null
+      }
+    ],
+    "summary": "Found 2 yoga events: Tuesday and Thursday at 6pm based on Alice's regular schedule."
+  },
+  "expected_events_no_memory": [
+    {
+      "action": "create",
+      "title": "Yoga",
+      "start_time": "2026-02-24T18:00:00",
+      "end_time": "2026-02-24T19:00:00",
+      "attendees_contain": []
+    }
+  ],
+  "mock_llm_response_no_memory": {
+    "events": [
+      {
+        "title": "Yoga",
+        "start_time": "2026-02-24T18:00:00",
+        "end_time": "2026-02-24T19:00:00",
+        "location": null,
+        "attendees": "Alice",
+        "confidence": "medium",
+        "reasoning": "Alice mentioned needing to block off yoga time next week. No specific schedule details given. Creating one yoga block for the upcoming week.",
+        "assumptions": "No specific days or times mentioned. Defaulting to one session on next Tuesday at 6pm as a common yoga time.",
+        "action": "create",
+        "existing_event_id": null
+      }
+    ],
+    "summary": "Found 1 yoga event for next week."
+  },
+  "notes": "Reference datetime is 2026-02-20 (Friday). 'Next week' Tuesday is 2026-02-24 and Thursday is 2026-02-26. Delta: different number of expected_events (2 vs 1). With memory, both Tuesday and Thursday yoga sessions are created at 6pm. Without memory, only 1 generic yoga event (days and time unknown)."
+}

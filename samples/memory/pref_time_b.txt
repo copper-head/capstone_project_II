@@ -1,0 +1,11 @@
+[Bob]: Hey Alice, we need to get together next Tuesday to review the project proposal.
+
+[Alice]: Sure, Tuesday works for me. Let's find a time.
+
+[Bob]: Great, I'm flexible. What time should we meet?
+
+[Alice]: Hmm, let me think. Tuesday should be open for me.
+
+[Bob]: Alright, just pick a time and I'll be there. Maybe an hour or so?
+
+[Alice]: Sounds good, let's do it.

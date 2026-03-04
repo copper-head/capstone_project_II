@@ -1,0 +1,7 @@
+[Alice]: Hey Sarah, I need to schedule a meeting with my boss next Tuesday to go over the quarterly goals.
+
+[Sarah]: Sure thing. How long do you think you'll need?
+
+[Alice]: Probably an hour. We have a lot to cover.
+
+[Sarah]: Got it, I'll block off an hour on Tuesday for you and your boss.

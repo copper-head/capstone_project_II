@@ -1,0 +1,69 @@
+{
+  "description": "Explicit 9am time overrides Alice's afternoon preference. Zero delta: both passes produce identical results.",
+  "category": "memory",
+  "tolerance": "moderate",
+  "owner": "Alice",
+  "reference_datetime": "2026-02-20T10:00:00",
+  "calendar_context": [],
+  "memory_context": [
+    {
+      "category": "preferences",
+      "key": "meeting_time",
+      "value": "Prefers afternoon meetings around 2-3pm",
+      "confidence": "high"
+    }
+  ],
+  "expected_events": [
+    {
+      "action": "create",
+      "title": "Sprint Planning Sync",
+      "start_time": "2026-02-27T09:00:00",
+      "end_time": "2026-02-27T10:00:00",
+      "attendees_contain": ["Bob", "Sarah"]
+    }
+  ],
+  "mock_llm_response": {
+    "events": [
+      {
+        "title": "Sprint Planning Sync",
+        "start_time": "2026-02-27T09:00:00",
+        "end_time": "2026-02-27T10:00:00",
+        "location": null,
+        "attendees": "Alice, Bob, Sarah",
+        "confidence": "high",
+        "reasoning": "Alice explicitly scheduled the sprint planning sync for 9am next Friday. The explicit time takes precedence over any general preferences.",
+        "assumptions": "",
+        "action": "create",
+        "existing_event_id": null
+      }
+    ],
+    "summary": "Found 1 team sync event for Friday at 9am."
+  },
+  "expected_events_no_memory": [
+    {
+      "action": "create",
+      "title": "Sprint Planning Sync",
+      "start_time": "2026-02-27T09:00:00",
+      "end_time": "2026-02-27T10:00:00",
+      "attendees_contain": ["Bob", "Sarah"]
+    }
+  ],
+  "mock_llm_response_no_memory": {
+    "events": [
+      {
+        "title": "Sprint Planning Sync",
+        "start_time": "2026-02-27T09:00:00",
+        "end_time": "2026-02-27T10:00:00",
+        "location": null,
+        "attendees": "Alice, Bob, Sarah",
+        "confidence": "high",
+        "reasoning": "Alice scheduled the sprint planning sync for 9am next Friday with Bob and Sarah. Duration is about an hour.",
+        "assumptions": "",
+        "action": "create",
+        "existing_event_id": null
+      }
+    ],
+    "summary": "Found 1 team sync event for Friday at 9am."
+  },
+  "notes": "Reference datetime is 2026-02-20 (Friday), so 'next Friday' resolves to 2026-02-27. Zero delta: explicit time (9am) overrides afternoon preference in both passes. expected_events == expected_events_no_memory."
+}

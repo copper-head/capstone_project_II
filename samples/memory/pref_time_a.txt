@@ -1,0 +1,9 @@
+[Alice]: Hey Sarah, thanks for setting up that meeting yesterday.
+
+[Sarah]: No problem! What time works best for you in general? I want to make sure I schedule things at a good time.
+
+[Alice]: I'm definitely more of an afternoon person. I prefer meetings around 2 or 3pm if possible.
+
+[Sarah]: Got it, that's good to know. I'll keep that in mind for future scheduling.
+
+[Alice]: Thanks, I appreciate it. Mornings are usually when I do my deep work, so afternoons are much better for meetings.

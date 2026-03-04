@@ -1,0 +1,11 @@
+[Alice]: Hey Sarah, we should grab coffee on Wednesday to catch up on the marketing plan.
+
+[Sarah]: That sounds great! What time works?
+
+[Alice]: How about 10am?
+
+[Sarah]: Perfect, 10am Wednesday it is. Where should we meet?
+
+[Alice]: Let's just do our usual coffee spot.
+
+[Sarah]: Sounds good, see you there!

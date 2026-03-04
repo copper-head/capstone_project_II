@@ -1,0 +1,11 @@
+[Alice]: Hey team, I want to lock in a regular standup time.
+
+[Bob]: Good idea. What works for everyone?
+
+[Alice]: Let's do every Monday at 9am in the huddle room. That way we start the week aligned.
+
+[Sarah]: Monday 9am works great for me.
+
+[Bob]: Same here. Huddle room, every Monday, 9am. Got it.
+
+[Alice]: Perfect. We'll keep it to 30 minutes max.

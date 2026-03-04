@@ -1,0 +1,9 @@
+[Alice]: Hey, do you know Robert Smith from the design team?
+
+[Sarah]: Oh yeah, everyone calls him Bobby. He's been on the design team for like three years now.
+
+[Alice]: Bobby? Good to know. I've only seen him listed as Robert Smith in the directory.
+
+[Sarah]: Yeah, his full name is Robert Smith but he goes by Bobby. Just use Bobby and everyone will know who you mean.
+
+[Alice]: Got it, Bobby it is. I'll remember that.

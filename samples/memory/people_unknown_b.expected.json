@@ -1,0 +1,69 @@
+{
+  "description": "Meeting with Carlos (not in memory). Zero delta: memory about Bob does NOT apply to Carlos. Both passes produce identical results.",
+  "category": "memory",
+  "tolerance": "moderate",
+  "owner": "Alice",
+  "reference_datetime": "2026-02-20T10:00:00",
+  "calendar_context": [],
+  "memory_context": [
+    {
+      "category": "people",
+      "key": "Bob",
+      "value": "Alice's manager/boss, moved from the platform team",
+      "confidence": "high"
+    }
+  ],
+  "expected_events": [
+    {
+      "action": "create",
+      "title": "Vendor Proposals Review with Carlos Rodriguez",
+      "start_time": "2026-02-24T14:00:00",
+      "end_time": "2026-02-24T15:00:00",
+      "attendees_contain": ["Carlos"]
+    }
+  ],
+  "mock_llm_response": {
+    "events": [
+      {
+        "title": "Vendor Proposals Review with Carlos Rodriguez",
+        "start_time": "2026-02-24T14:00:00",
+        "end_time": "2026-02-24T15:00:00",
+        "location": null,
+        "attendees": "Alice, Carlos Rodriguez",
+        "confidence": "high",
+        "reasoning": "Alice needs to meet with Carlos Rodriguez from procurement next Tuesday at 2pm to review vendor proposals. Duration is one hour.",
+        "assumptions": "Carlos Rodriguez identified from the conversation context.",
+        "action": "create",
+        "existing_event_id": null
+      }
+    ],
+    "summary": "Found 1 meeting with Carlos Rodriguez for Tuesday afternoon."
+  },
+  "expected_events_no_memory": [
+    {
+      "action": "create",
+      "title": "Vendor Proposals Review with Carlos Rodriguez",
+      "start_time": "2026-02-24T14:00:00",
+      "end_time": "2026-02-24T15:00:00",
+      "attendees_contain": ["Carlos"]
+    }
+  ],
+  "mock_llm_response_no_memory": {
+    "events": [
+      {
+        "title": "Vendor Proposals Review with Carlos Rodriguez",
+        "start_time": "2026-02-24T14:00:00",
+        "end_time": "2026-02-24T15:00:00",
+        "location": null,
+        "attendees": "Alice, Carlos Rodriguez",
+        "confidence": "high",
+        "reasoning": "Alice needs to meet with Carlos Rodriguez next Tuesday at 2pm to review vendor proposals. Duration is one hour.",
+        "assumptions": "Carlos Rodriguez identified from the conversation context.",
+        "action": "create",
+        "existing_event_id": null
+      }
+    ],
+    "summary": "Found 1 meeting with Carlos Rodriguez for Tuesday afternoon."
+  },
+  "notes": "Reference datetime is 2026-02-20 (Friday), so 'next Tuesday' resolves to 2026-02-24. Zero delta: Carlos is explicitly named in the transcript and not in memory. Memory about Bob has no relevance. expected_events == expected_events_no_memory."
+}

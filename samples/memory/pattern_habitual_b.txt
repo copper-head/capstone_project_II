@@ -1,0 +1,7 @@
+[Alice]: Hey, I need to block off my usual yoga time next week so nobody schedules over it.
+
+[Bob]: Sure, which times do you need?
+
+[Alice]: Just my regular yoga slots. You know how it is.
+
+[Bob]: Got it, I'll make sure nothing conflicts next week.

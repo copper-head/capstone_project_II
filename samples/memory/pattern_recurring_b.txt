@@ -1,0 +1,7 @@
+[Alice]: Hey Bob, don't forget about standup next Monday.
+
+[Bob]: Right, is that still happening? I lost track.
+
+[Alice]: Yes, same as always. Make sure you're there next Monday.
+
+[Bob]: Will do.

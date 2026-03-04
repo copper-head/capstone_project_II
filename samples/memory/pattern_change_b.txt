@@ -1,0 +1,7 @@
+[Alice]: Team, we're changing up standup. Starting next week, it's moving to Wednesday at 10am.
+
+[Bob]: Next Wednesday at 10am? Works for me.
+
+[Sarah]: Same here. Conference room B still?
+
+[Alice]: Yes, same room. Just the day and time are changing. See you all next Wednesday at 10.

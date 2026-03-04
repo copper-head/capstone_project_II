@@ -1,0 +1,7 @@
+[Alice]: Just a heads up, our team standup is every Monday at 9am.
+
+[Bob]: Got it. Where do we meet?
+
+[Alice]: Conference room B. We keep it short, about 30 minutes.
+
+[Bob]: Sounds good. Monday 9am, conference room B.

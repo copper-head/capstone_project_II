@@ -1,0 +1,7 @@
+[Alice]: I need to set up a meeting with Carlos next Tuesday afternoon. We're going to review the vendor proposals.
+
+[Bob]: Carlos from procurement?
+
+[Alice]: Yeah, Carlos Rodriguez. Let's do 2pm, about an hour should be enough.
+
+[Bob]: Alright, I'll get that scheduled.

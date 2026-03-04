@@ -1,0 +1,16 @@
+{
+  "branch_name": "fn-11-ovf",
+  "created_at": "2026-03-03T18:36:09.957482Z",
+  "default_impl": null,
+  "default_review": null,
+  "default_sync": null,
+  "depends_on_epics": [],
+  "id": "fn-11-ovf",
+  "next_task": 1,
+  "plan_review_status": "ship",
+  "plan_reviewed_at": "2026-03-03T21:39:17.311919Z",
+  "spec_path": ".flow/specs/fn-11-ovf.md",
+  "status": "open",
+  "title": "Memory system round-trip testing",
+  "updated_at": "2026-03-03T21:39:17.311948Z"
+}
