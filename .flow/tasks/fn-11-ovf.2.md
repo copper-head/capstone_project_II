@@ -69,9 +69,8 @@ Each pair follows the A/B pattern:
 - [ ] Transcripts are realistic and natural
 
 ## Done summary
-TBD
-
+Created 4 preference memory transcript pairs (pref_time, pref_location, pref_duration, pref_override) with 16 total files in samples/memory/. Each pair follows the A/B convention with dual-outcome sidecars for mock and live testing. All 4 mock tests pass, lint is clean, and the full test suite (613 tests) remains green.
 ## Evidence
-- Commits:
-- Tests:
+- Commits: 347e84e6514e0461977ced1f77ec90737970bddc, 3993f79
+- Tests: make test-memory, make lint, make test
 - PRs:

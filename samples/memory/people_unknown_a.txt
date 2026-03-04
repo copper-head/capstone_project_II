@@ -1,0 +1,11 @@
+[Alice]: Hey Sarah, did you hear about the new org chart changes?
+
+[Sarah]: Yeah, I saw the email. Looks like there are some reporting changes.
+
+[Alice]: Right. Bob is officially my manager now. He moved over from the platform team last week.
+
+[Sarah]: Oh nice, Bob's great. I worked with him on the migration project.
+
+[Alice]: Yeah, I'm looking forward to it. He's my boss starting Monday, so we'll see how it goes.
+
+[Sarah]: I'm sure it'll be good. He's super organized.

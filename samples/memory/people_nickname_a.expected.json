@@ -1,0 +1,21 @@
+{
+  "description": "Alice learns that Robert Smith from design goes by the nickname Bobby. No calendar events.",
+  "category": "memory",
+  "tolerance": "moderate",
+  "owner": "Alice",
+  "reference_datetime": "2026-02-20T10:00:00",
+  "calendar_context": [],
+  "expected_events": [],
+  "mock_llm_response": {
+    "events": [],
+    "summary": "No calendar events to extract. Alice learned that Robert Smith goes by Bobby."
+  },
+  "expected_memory_facts": [
+    {
+      "category": "people",
+      "key": "Bobby",
+      "value": "Robert Smith (nickname Bobby), on the design team",
+      "confidence": "high"
+    }
+  ]
+}

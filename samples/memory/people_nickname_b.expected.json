@@ -1,0 +1,69 @@
+{
+  "description": "Alice schedules lunch with Bobby. With memory: resolves to Robert Smith. Without memory: uses Bobby as-is.",
+  "category": "memory",
+  "tolerance": "moderate",
+  "owner": "Alice",
+  "reference_datetime": "2026-02-20T10:00:00",
+  "calendar_context": [],
+  "memory_context": [
+    {
+      "category": "people",
+      "key": "Bobby",
+      "value": "Robert Smith (nickname Bobby), on the design team",
+      "confidence": "high"
+    }
+  ],
+  "expected_events": [
+    {
+      "action": "create",
+      "title": "Lunch with Robert Smith",
+      "start_time": "2026-02-27T12:00:00",
+      "end_time": "2026-02-27T13:00:00",
+      "attendees_contain": ["Robert Smith"]
+    }
+  ],
+  "mock_llm_response": {
+    "events": [
+      {
+        "title": "Lunch with Robert Smith",
+        "start_time": "2026-02-27T12:00:00",
+        "end_time": "2026-02-27T13:00:00",
+        "location": null,
+        "attendees": "Alice, Robert Smith",
+        "confidence": "high",
+        "reasoning": "Alice wants lunch with Bobby on Friday at noon. Based on memory, Bobby is Robert Smith from the design team. Using full name for the calendar event.",
+        "assumptions": "Resolved nickname Bobby to Robert Smith based on known alias.",
+        "action": "create",
+        "existing_event_id": null
+      }
+    ],
+    "summary": "Found 1 lunch meeting with Robert Smith (Bobby) for Friday."
+  },
+  "expected_events_no_memory": [
+    {
+      "action": "create",
+      "title": "Lunch with Bobby",
+      "start_time": "2026-02-27T12:00:00",
+      "end_time": "2026-02-27T13:00:00",
+      "attendees_contain": ["Bobby"]
+    }
+  ],
+  "mock_llm_response_no_memory": {
+    "events": [
+      {
+        "title": "Lunch with Bobby",
+        "start_time": "2026-02-27T12:00:00",
+        "end_time": "2026-02-27T13:00:00",
+        "location": null,
+        "attendees": "Alice, Bobby",
+        "confidence": "high",
+        "reasoning": "Alice wants to have lunch with Bobby on Friday at noon to discuss brand guidelines. Duration is one hour.",
+        "assumptions": "Using the name Bobby as provided. No additional context about this person.",
+        "action": "create",
+        "existing_event_id": null
+      }
+    ],
+    "summary": "Found 1 lunch meeting with Bobby for Friday."
+  },
+  "notes": "Reference datetime is 2026-02-20 (Friday), so 'Friday' resolves to 2026-02-27 (next Friday). Delta: title differs (Robert Smith vs Bobby), attendees_contain both non-empty and differ (both positively assertable)."
+}

@@ -1,0 +1,7 @@
+[Alice]: I need to schedule my dental checkup. Can you help me set something up with Sarah for next Wednesday?
+
+[Bob]: Sure, what time works?
+
+[Alice]: Morning would be good, maybe 10am. It's just a routine cleaning so probably 30 minutes.
+
+[Bob]: Got it, I'll put it on the calendar for you.
