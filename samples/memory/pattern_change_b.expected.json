@@ -31,7 +31,7 @@
         "location": "Conference Room B",
         "attendees": "Alice, Bob, Sarah",
         "confidence": "high",
-        "reasoning": "Alice announced standup is moving to Wednesday at 10am starting this week. The explicit instruction overrides the previous Monday 9am pattern. Same room (conference room B).",
+        "reasoning": "Alice announced standup is moving to Wednesday at 10am starting next week. The explicit instruction overrides the previous Monday 9am pattern. Same room (conference room B).",
         "assumptions": "Duration kept at 30 minutes consistent with previous standup format.",
         "action": "create",
         "existing_event_id": null
@@ -57,7 +57,7 @@
         "location": "Conference Room B",
         "attendees": "Alice, Bob, Sarah",
         "confidence": "high",
-        "reasoning": "Alice announced standup is moving to Wednesday at 10am this week. Bob and Sarah confirmed. Meeting in conference room B.",
+        "reasoning": "Alice announced standup is moving to Wednesday at 10am next week. Bob and Sarah confirmed. Meeting in conference room B.",
         "assumptions": "Duration assumed to be 30 minutes based on typical standup length.",
         "action": "create",
         "existing_event_id": null
@@ -65,5 +65,5 @@
     ],
     "summary": "Found 1 standup event for Wednesday at 10am."
   },
-  "notes": "Reference datetime is 2026-02-20 (Friday), so 'this week' Wednesday resolves to 2026-02-25. Zero delta: explicit Wednesday 10am instruction in transcript overrides stored Monday 9am pattern. expected_events == expected_events_no_memory."
+  "notes": "Reference datetime is 2026-02-20 (Friday), so 'next week' Wednesday resolves to 2026-02-25. Zero delta: explicit Wednesday 10am instruction in transcript overrides stored Monday 9am pattern. expected_events == expected_events_no_memory."
 }

@@ -76,13 +76,13 @@
         "location": null,
         "attendees": "Alice",
         "confidence": "medium",
-        "reasoning": "Alice mentioned needing to block off yoga time this week. No specific schedule details given. Creating one yoga block for the upcoming week.",
-        "assumptions": "No specific days or times mentioned. Defaulting to one session on Tuesday at 6pm as a common yoga time.",
+        "reasoning": "Alice mentioned needing to block off yoga time next week. No specific schedule details given. Creating one yoga block for the upcoming week.",
+        "assumptions": "No specific days or times mentioned. Defaulting to one session on next Tuesday at 6pm as a common yoga time.",
         "action": "create",
         "existing_event_id": null
       }
     ],
-    "summary": "Found 1 yoga event for this week."
+    "summary": "Found 1 yoga event for next week."
   },
-  "notes": "Reference datetime is 2026-02-20 (Friday). 'This week' next Tuesday is 2026-02-24 and Thursday is 2026-02-26. Delta: different number of expected_events (2 vs 1). With memory, both Tuesday and Thursday yoga sessions are created. Without memory, only 1 generic yoga event."
+  "notes": "Reference datetime is 2026-02-20 (Friday). 'Next week' Tuesday is 2026-02-24 and Thursday is 2026-02-26. Delta: different number of expected_events (2 vs 1). With memory, both Tuesday and Thursday yoga sessions are created at 6pm. Without memory, only 1 generic yoga event (days and time unknown)."
 }

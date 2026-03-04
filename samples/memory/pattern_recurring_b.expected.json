@@ -31,7 +31,7 @@
         "location": "Huddle Room",
         "attendees": "Alice, Bob",
         "confidence": "high",
-        "reasoning": "Alice reminded Bob about standup this week. Based on the known pattern, team standup is every Monday at 9am in the huddle room for 30 minutes.",
+        "reasoning": "Alice reminded Bob about standup next Monday. Based on the known pattern, team standup is every Monday at 9am in the huddle room for 30 minutes.",
         "assumptions": "Using stored pattern: Monday 9am, huddle room, 30 minutes.",
         "action": "create",
         "existing_event_id": null
@@ -57,7 +57,7 @@
         "location": null,
         "attendees": "Alice, Bob",
         "confidence": "medium",
-        "reasoning": "Alice mentioned standup this week with Bob. No specific time given. Assuming a typical Monday morning standup at 10am for 30 minutes.",
+        "reasoning": "Alice mentioned standup next Monday with Bob. No specific time given. Assuming a typical Monday morning standup at 10am for 30 minutes.",
         "assumptions": "No time specified. Defaulting to Monday 10am as a typical standup slot.",
         "action": "create",
         "existing_event_id": null
@@ -65,5 +65,5 @@
     ],
     "summary": "Found 1 standup meeting for Monday morning."
   },
-  "notes": "Reference datetime is 2026-02-20 (Friday), so 'this week' Monday resolves to 2026-02-23. Delta: start_time differs (9am from memory vs 10am default), title differs ('Team Standup' vs 'Standup')."
+  "notes": "Reference datetime is 2026-02-20 (Friday), so 'next Monday' resolves to 2026-02-23. Delta: start_time differs (9am from memory vs 10am default), title differs ('Team Standup' vs 'Standup')."
 }
